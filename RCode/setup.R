@@ -18,6 +18,7 @@ require(gdata)
 require(reshape)
 require(plyr)
 require(WDI)
+require(doBy)
 
 require(lme4)
 
