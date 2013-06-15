@@ -19,7 +19,7 @@ require(reshape)
 require(plyr)
 require(WDI)
 
-require(lmer)
+require(lme4)
 
 # Setting seed
 set.seed(6886)
