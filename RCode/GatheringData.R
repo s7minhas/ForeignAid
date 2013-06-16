@@ -56,9 +56,9 @@ vars = c("year", "sftgcode", "sftgname",
 	'bnkv126', 'bnkv98', 'bnkv99', 'bnkv100', 'bnkv101', 
 	'bnkv102', 'bnkv103', 'bnkv104', 'bnkv105')
 banksData <- sort22v3[,vars]
-names(vars) <- c("year", "sftgcode", "sftgname",
-	'coups', 'assassinations', 'strikes', 'guerilla', 'govtCrises', 'purges',
-	'revolutions', 'antigovDemon')
+colnames(banksData) <- c("year", "sftgcode", "sftgname",
+	'coups', 'assassinations', 'strikes', 'guerilla', 'govtCrises',
+	'purges', 'riots', 'revolutions', 'antigovDemon')
 
 setwd(pathData)
 save(OECDdata, UNDPdata,
