@@ -4,12 +4,12 @@ rm(list=ls())
 
 # Setting working directory
 if(Sys.info()["user"]=="janus829")
-{pathMain="~/Dropbox/Research/WardProjects/bitformation";
-	pathGraphics="~/Dropbox/Research/WardProjects/bitformation/Graphics";
-	pathData="~/Dropbox/Research/WardProjects/bitformation/Data";
-	pathResultsYrly="~/Dropbox/Research/WardProjects/bitFormation/Results/Yrly";
+{pathMain="~/Dropbox/Research/ButheProjects/ForeignAid/AlesinaDollarReplication";
+	pathGraphics="~/Dropbox/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/Graphics";
+	pathData="~/Dropbox/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/Data";
+	pathResults="~/Dropbox/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/Results";
 	pathFunctions="~/Desktop/Prog Notes/R Functions";
-	pathCode="~/Desktop/Research/WardProjects/bitFormation/RCode" }
+	pathCode="~/Desktop/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/RCode" }
 
 # Loading libraries and functions
 require(foreign)
