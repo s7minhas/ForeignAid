@@ -2,7 +2,15 @@
 ## Author: SM
 
 ### Load setup
-source('/Users/janus829/Desktop/Research/WardProjects/bitFormation/RCode/setup.R')
+source('/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/RCode/setup.R')
+
+### Load data
+setwd(pathData)
+aid <- read.csv('datasetSM.csv')
+
+### Subsetting to relevant vars
+aid <- aid[,c(1:2, 11:31)]
+
 
 ### Load data
 setwd(pathData)

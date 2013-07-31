@@ -2,7 +2,7 @@
 ## Author: SM
 
 ### Load setup
-source('/Users/janus829/Desktop/Research/WardProjects/bitFormation/RCode/setup.R')
+source('/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/AlesinaDollarReplication/RCode/setup.R')
 
 ### Load data
 setwd(pathData)
