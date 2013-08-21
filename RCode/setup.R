@@ -11,16 +11,27 @@ Sys.info()["user"]=="janus829"
   pathFunctions="~/Desktop/Prog Notes/R Functions"}
 
 # Loading libraries and functions
-require(countrycode)
+library(foreign)
+library(WDI)
+library(cshapes)
+library(plm)
+library(MASS)
+library(mvtnorm)
+library(reshape)
+library(gtools)
+library(ggplot2)
+theme_set(theme_bw())
+library(scales)
+library(gridExtra)
+library(plyr)
+library(tikzDevice)
 setwd(pathFunctions)
-require(xlsx)
-require(gdata)
-require(reshape)
-require(plyr)
-require(WDI)
-require(doBy)
-
-require(lme4)
+source("rwish.R")
+source("theme_border.R")
+library(lme4)
+library(arm)
+# source("hdr_2d.R")
+# source("scatterHist.R")
 
 # Setting seed
 set.seed(6886)
