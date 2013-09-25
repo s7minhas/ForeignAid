@@ -14,7 +14,7 @@ for(ii in 1:length(fnames)){
 	temp2=data.frame(apply(temp[,2:ncol(temp)], 2, function(x) FUN=numSM(x)))
 	temp=cbind(Country=as.character(temp[,1]), temp2)
 	names(temp) = c('Country', 1960:2012)
-	cleaned=cleanWbData(temp, 'aid')
+	cleaned=cleanAidData(temp, 'aid')
 	aidData = rbind(aidData, cbind(Sender=names(aidList)[ii], cleaned)) }
 
 senderNames = data.frame(cbind(Sender=as.character(unique(aidData$Sender)), 

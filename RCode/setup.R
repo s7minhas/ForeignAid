@@ -64,12 +64,30 @@ rescale <- function(x,new_max,new_min){
 numSM <- function(x){ as.numeric(as.character(x)) }
 
 # Fx for Melting/Cleaning WB Data for Merge
-cleanWbData <- function(data, variable){
+cleanAidData <- function(data, variable){
 	var <- variable
 	mdata <- melt(data, id='Country')
 	names(mdata)[3] <- var
 	mdata$year <-  numSM(mdata$variable)
 	mdata <- mdata[,c(1,3,4)]
+
+	# Setting standardized countryname for WB data
+	mdata$Country <- as.character(mdata$Country)
+	mdata$cname <- countrycode(mdata$Country, 'country.name', 'country.name')
+	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
+
+	# Adding in codes from panel
+	mdata$ccode <- panel$ccode[match(mdata$cname,panel$cname)]
+	mdata$cyear <- paste(mdata$ccode, mdata$year, sep='')
+	mdata }
+
+### Fx for Melting/Cleaning WB Data for Merge
+cleanWbData <- function(data, variable){
+	var <- variable
+	mdata <- melt(data, id=c('Country.Name', 'Country.Code'))
+	names(mdata)[4] <- var
+	mdata$year <-  as.numeric(as.character(substring(mdata$variable,2)))
+	mdata <- mdata[,c(1,2,5,4)]
 
 	# Remove non-country observations and small islands/territories
 	drop <- c('Arab World', 'Caribbean small states', 
@@ -101,16 +119,16 @@ cleanWbData <- function(data, variable){
 		 "Puerto Rico",               "Sint Maarten (Dutch part)",
 		 "St. Martin (French part)",  "Turks and Caicos Islands", 
 		 "Virgin Islands (U.S.)",     "West Bank and Gaza")
-	mdata <- mdata[which(!mdata$Country %in% drop),]
+	mdata <- mdata[which(!mdata$Country.Name %in% drop),]
 
 	# Setting standardized countryname for WB data
-	mdata$Country <- as.character(mdata$Country)
-	mdata$Country[mdata$Country=='Korea, Dem. Rep.'] <- 'North Korea' 
-	mdata$Country[mdata$Country=='Korea, Rep.'] <- 'South Korea' 
-	mdata$cname <- countrycode(mdata$Country, 'country.name', 'country.name')
+	mdata$Country.Name <- as.character(mdata$Country.Name)
+	mdata$Country.Name[mdata$Country.Name=='Korea, Dem. Rep.'] <- 'North Korea' 
+	mdata$Country.Name[mdata$Country.Name=='Korea, Rep.'] <- 'South Korea' 
+	mdata$cname <- countrycode(mdata$Country.Name, 'country.name', 'country.name')
 	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
-
+	
 	# Adding in codes from panel
 	mdata$ccode <- panel$ccode[match(mdata$cname,panel$cname)]
 	mdata$cyear <- paste(mdata$ccode, mdata$year, sep='')
-	mdata }
+	mdata }	
