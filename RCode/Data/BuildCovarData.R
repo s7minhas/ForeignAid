@@ -9,6 +9,15 @@ WBgdpgr <- read.csv('NY.GDP.MKTP.KD.ZG_Indicator_MetaData_en_EXCEL.csv')
 WBfdi <- read.csv('BX.KLT.DINV.CD.WD_Indicator_MetaData_en_EXCEL.csv')
 WBfdiGdp <- read.csv('BX.KLT.DINV.WD.GD.ZS_Indicator_MetaData_en_EXCEL.csv')
 WBpop <- read.csv('SP.POP.TOTL_Indicator_MetaData_en_EXCEL.csv')
+setwd(paste(pathData, '/Components/NeedsData',sep=''))
+life = read.csv('life_expectancy.csv')
+litAdult=read.csv('literacy_adult.csv')
+litYouth=read.csv('literacy_youth.csv')
+malHeight=read.csv('malnutrition_height.csv')
+malWeight=read.csv('malnutrition_weight.csv')
+mort5=read.csv('mortality_under5.csv')
+schPre=read.csv('schoolenrollment_preprimary.csv')
+schPri=read.csv('schoolenrollment_primary.csv')
 
 WBgdpClean <- cleanWbData(WBgdp, 'gdp')
 WBgdpCapClean <- cleanWbData(WBgdpCap, 'gdpCAP')
@@ -16,6 +25,14 @@ WBgdpgrClean <- cleanWbData(WBgdpgr, 'gdpGR')
 WBfdiClean <- cleanWbData(WBfdi, 'fdi')
 WBfdiGdpClean <- cleanWbData(WBfdiGdp, 'fdiGDP')
 WBpopClean <- cleanWbData(WBpop, 'population')
+lifeClean=cleanWbData(life, 'lifeExpect')
+litAdultClean=cleanWbData(litAdult, 'litAdult')
+litYouthClean=cleanWbData(litYouth, 'litYouth')
+malHeightClean=cleanWbData(malHeight, 'malHeight')
+malWeightClean=cleanWbData(malWeight, 'malWeight')
+mort5Clean=cleanWbData(mort5, 'mort5')
+schPreClean=cleanWbData(schPre, 'schPre')
+schPriClean=cleanWbData(schPri, 'schPri')
 
 # Make sure order matches
 sum(WBfdiClean$cyear!=WBfdiGdpClean$cyear)
@@ -23,6 +40,14 @@ sum(WBfdiClean$cyear!=WBgdpClean$cyear)
 sum(WBfdiClean$cyear!=WBgdpCapClean$cyear)
 sum(WBfdiClean$cyear!=WBgdpgrClean$cyear)
 sum(WBfdiClean$cyear!=WBpopClean$cyear)
+sum(WBfdiClean$cyear!=lifeClean$cyear)
+sum(WBfdiClean$cyear!=litAdultClean$cyear)
+sum(WBfdiClean$cyear!=litYouthClean$cyear)
+sum(WBfdiClean$cyear!=malHeightClean$cyear)
+sum(WBfdiClean$cyear!=malWeightClean$cyear)
+sum(WBfdiClean$cyear!=mort5Clean$cyear)
+sum(WBfdiClean$cyear!=schPreClean$cyear)
+sum(WBfdiClean$cyear!=schPriClean$cyear)
 
 # combine data
 setwd(pathData)
@@ -31,7 +56,16 @@ wbData <- data.frame(cbind(WBgdpClean,
 	gdpGR=WBgdpgrClean[,4],
 	fdi=WBfdiClean[,4],
 	fdiGdp=WBfdiGdpClean[,4],
-	population=WBpopClean[,4] ) )
+	population=WBpopClean[,4],
+	lifeExpect=lifeClean[,4],
+	litAdult=litAdultClean[,4],
+	litYouth=litYouthClean[,4],	
+	malHeight=malHeightClean[,4],
+	malWeight=malWeightClean[,4],
+	mort5=mort5Clean[,4],
+	schPre=schPreClean[,4],
+	schPri=schPriClean[,4]
+	 ) )
 ###############################################################
 
 ###############################################################
@@ -116,10 +150,17 @@ civwar <- civwar[civwar$SideA!='Hyderabad',]
 civwar$SideA[civwar$SideA=='United Arab Emirate'] <- 'United Arab Emirates'
 civwar$SideA[civwar$SideA=='Rumania'] <- 'Romania'
 civwar$SideA[civwar$SideA=='Serbia (Yugoslavia)'] <- 'SERBIA'
-civwar$cname <- countrycode(civwar$SideA, 'country.name', 'country.name')
+civwar$SideA[civwar$SideA=='DR Congo (Zaire) ']='Congo, Democratic Republic of'
+
+civwar$cname <- cname(civwar$SideA)
 civwar$cname[civwar$cname=='Czechoslovakia'] <- 'CZECH REPUBLIC'
+civwar$cnameYear=paste(civwar$cname,civwar$YEAR,sep='')
+names(table(civwar$cnameYear)[table(civwar$cnameYear)>1])
+
 civwar$ccode <- panel$ccode[match(civwar$cname,panel$cname)]
 civwar$cyear <- paste(civwar$ccode, civwar$YEAR, sep='')
+names(table(civwar$cyear)[table(civwar$cyear)>1])
+
 civwar$civwar <- 1
 ###############################################################
 
@@ -212,6 +253,45 @@ table(fh$cyear)[table(fh$cyear)>1] # Dupe check
 ###############################################################
 
 ###############################################################
+# food supply
+setwd(paste(pathData, '/Components/NeedsData',sep=''))
+food = read.csv('foodsupply.csv')
+
+food2=melt(food[,c(1,7:ncol(food))], id='countries')
+names(food2)=c('Country', 'year', 'food')
+food2$year=num(substr(food2$year,2,5))
+
+food2$drop=0
+food2[food2$Country=='Ethiopia PDR' & food2$year>=1993,'drop']=1
+food2[food2$Country=='Ethiopia' & food2$year<1993,'drop']=1
+food2[food2$Country=='Belgium-Luxembourg' & food2$year>=2000,'drop']=1
+food2[food2$Country=='Luxembourg' & food2$year<2000,'drop']=1
+food2[food2$Country=='USSR' & food2$year>=1992,'drop']=1
+food2[food2$Country=='Russian Federation' & food2$year<1992,'drop']=1
+food2[food2$Country=='Yugoslav SFR' & food2$year>=1992,'drop']=1
+food2[food2$Country=='Serbia and Montenegro' & food2$year<1992,'drop']=1
+food2[food2$Country=='Serbia and Montenegro' & food2$year>=2006,'drop']=1
+food2[food2$Country=='Serbia' & food2$year<2006,'drop']=1
+food2[food2$Country=='Czechoslovakia' & food2$year>=1993,'drop']=1
+food2[food2$Country=='Czech Republic' & food2$year<1993,'drop']=1
+food2=food2[food2$drop!=1,]; food2=food2[,1:(ncol(food2)-1)]
+
+food2$cname=cname(food2$Country)
+food2$cname[food2$Country=="Yugoslav SFR"]='SERBIA'
+food2$cname[food2$Country=="Czechoslovakia"]='CZECH REPUBLIC'
+food2$cname[food2$Country=="Democratic People's Republic of Korea"]="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+food2$cname[food2$Country=="Republic of Korea"]="KOREA, REPUBLIC OF"
+food2$cnameYear=paste(food2$cname, food2$year, sep='')
+names(table(food2$cnameYear)[table(food2$cnameYear)>1])
+
+food2$ccode=panel$ccode[match(food2$cname,panel$cname)]
+food2$cyear=paste(food2$ccode,food2$year,sep='')
+drop=unique(food2[is.na(food2$ccode),'cname'])
+food2=food2[which(!food2$cname %in% drop),]
+names(table(food2$cyear)[table(food2$cyear)>1])
+###############################################################
+
+###############################################################
 # Combining data
 frame <- unique(panel[,c('ccode', 'cname')])
 dframe <- NULL; frame$year <- NA; years <- seq(1960,2012,1)
@@ -219,21 +299,21 @@ for(ii in 1:length(years)){
 	frame$year <- years[ii]; dframe <- rbind(dframe, frame) }
 dframe$cyear <- paste(dframe$ccode, dframe$year, sep='')
 dim(dframe)
-monadData <- merge(dframe, wbData[,c(4,8:ncol(wbData))],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-monadData <- merge(monadData, polity2[,c(7:35,ncol(polity2))],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-monadData <- merge(monadData, icrg2[,c(5:16,ncol(icrg2))],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-monadData <- merge(monadData, banks2[,c(5:13,ncol(banks2))],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-monadData <- merge(monadData, constraints2[,c(1,8:10)],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-monadData <- merge(monadData, civwar[,5:ncol(civwar)],by='cyear',all.x=T,all.y=F)
-unique(monadData[is.na(monadData$ccode), 1:5]); dim(monadData)
-
-monadData <- monadData[monadData$year>=1960 & monadData$year<=2012,]
+covData <- merge(dframe, wbData[,c(4,8:ncol(wbData))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, polity2[,c(7:10,12:20,ncol(polity2))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, icrg2[,c(5:16,ncol(icrg2))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, banks2[,c(5:13,ncol(banks2))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, civwar[,6:7],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, fh[,c(3:5,ncol(fh))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData <- merge(covData, food2[,c(3,ncol(food2))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 
 setwd(pathData)
-save(monadData, file='monadData.rda')
+save(covData, file='covData.rda')
 ###############################################################

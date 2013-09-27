@@ -11,7 +11,7 @@ aidData = NULL
 for(ii in 1:length(fnames)){
 	temp=aidList[[ii]]
 	temp=temp[-1,-c(ncol(temp), 2)]
-	temp2=data.frame(apply(temp[,2:ncol(temp)], 2, function(x) FUN=numSM(x)))
+	temp2=data.frame(apply(temp[,2:ncol(temp)], 2, function(x) FUN=num(x)))
 	temp=cbind(Country=as.character(temp[,1]), temp2)
 	names(temp) = c('Country', 1960:2012)
 	cleaned=cleanAidData(temp, 'aid')

@@ -61,19 +61,22 @@ rescale <- function(x,new_max,new_min){
  xResc }
 
 # turn variables into numeric
-numSM <- function(x){ as.numeric(as.character(x)) }
+num <- function(x){ as.numeric(as.character(x)) }
+
+# Convert to cname
+cname <- function(x){
+	require(countrycode); x <- as.character(x)
+	y <- countrycode(x, 'country.name', 'country.name') }
 
 # Fx for Melting/Cleaning WB Data for Merge
-cleanAidData <- function(data, variable){
-	var <- variable
-	mdata <- melt(data, id='Country')
+cleanAidData <- function(data, var, id, time){
+	mdata <- melt(data, id=id)
 	names(mdata)[3] <- var
-	mdata$year <-  numSM(mdata$variable)
-	mdata <- mdata[,c(1,3,4)]
+	mdata$year <-  num(mdata[,var])
+	mdata <- mdata[,c(id,time,var)]
 
 	# Setting standardized countryname for WB data
-	mdata$Country <- as.character(mdata$Country)
-	mdata$cname <- countrycode(mdata$Country, 'country.name', 'country.name')
+	mdata$cname <- cname(mdata$Country)
 	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
 
 	# Adding in codes from panel
@@ -108,6 +111,11 @@ cleanWbData <- function(data, variable){
 		'Small states', 'South Asia', 
 		'Sub-Saharan Africa (all income levels)', 
 		'Sub-Saharan Africa (developing only)', 'Upper middle income', 
+		"East Asia and the Pacific (IFC classification)",
+		"Europe and Central Asia (IFC classification)",
+		"Latin America and the Caribbean (IFC classification)",
+		"Middle East and North Africa (IFC classification)",
+		"South Asia (IFC classification)", "Sub-Saharan Africa (IFC classification)",
 		'World',
 		 "American Samoa",            "Aruba",                    
 		 "Bermuda",                   "Cayman Islands", "Channel Islands",          
@@ -125,7 +133,7 @@ cleanWbData <- function(data, variable){
 	mdata$Country.Name <- as.character(mdata$Country.Name)
 	mdata$Country.Name[mdata$Country.Name=='Korea, Dem. Rep.'] <- 'North Korea' 
 	mdata$Country.Name[mdata$Country.Name=='Korea, Rep.'] <- 'South Korea' 
-	mdata$cname <- countrycode(mdata$Country.Name, 'country.name', 'country.name')
+	mdata$cname <- cname(mdata$Country.Name)
 	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
 	
 	# Adding in codes from panel
