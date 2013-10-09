@@ -65,7 +65,9 @@ aidData$ccodeRyr=paste(aidData$ccodeR, aidData$year, sep='')
 table(aidData$ccodeRyr)[table(aidData$ccodeRyr)>43]
 
 # Account for country existence
-
+# To do this we will essentially drop all 
+# receiver country cases that are not in the panel dataset
+aidData=aidData[which(aidData$ccodeRyr %in% panel$ccodeYear),]
 
 setwd(pathData)
 save(aidData, file='aidData.rda')
