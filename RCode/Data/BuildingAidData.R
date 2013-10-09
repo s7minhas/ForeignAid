@@ -31,11 +31,41 @@ senderNames$SenderClean[35] = 'Slovakia'
 senderNames$SenderClean[42] = 'United Kingdom'
 senderNames$SenderClean[43] = 'United States'
 
-senderNames$cname = countrycode(senderNames$SenderClean, 'country.name', 
-	'country.name')
+senderNames$cname = cname(senderNames$SenderClean)
+aidData$cnameS = senderNames$cname[match(aidData$Sender, senderNames$Sender)]
+aidData$ccodeS = panel$ccode[match(aidData$cnameS, panel$cname)]
 
-aidData$cname = senderNames$cname[match(aidData$Sender, senderNames$Sender)]
-aidData$ccode = panel$ccode[match(aidData$cname, panel$cname)]
+# Cleaning up Receiver labels
+aidData$cnameR = cname(aidData$Country)
+# Dropping following receiver cases:
+# East African Community Mekong Delta Project   Sts Ex-Yugo. Unspec. 
+aidData = aidData[!is.na(aidData$cnameR),]
+
+# Removing dupes
+aidData$cnameR[aidData$Country=="Korea, Dem. Rep."]="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+aidData=aidData[aidData$Country!='Chinese Taipei',]
+
+# Dealing with duplicate labels
+aidData$cnameRyr=paste(aidData$cnameR, aidData$year, sep='')
+table(aidData$cnameRyr)[table(aidData$cnameRyr)>43]
+
+aidData$ccodeR = panel$ccode[match(aidData$cnameR, panel$cname)]
+# Dropping following small country cases
+#  [1] Anguilla               Aruba                  Bermuda               
+#  [4] Cayman Islands         Cook Islands           Falkland Islands      
+#  [7] French Polynesia       Gibraltar              Hong Kong, China      
+# [10] Macao                  Mayotte                Montserrat            
+# [13] Netherlands Antilles   New Caledonia          Niue                  
+# [16] Northern Marianas      St. Helena             Tokelau               
+# [19] Turks & Caicos Islands
+aidData = aidData[!is.na(aidData$ccodeR),]
+
+# Dealing with duplicate codes
+aidData$ccodeRyr=paste(aidData$ccodeR, aidData$year, sep='')
+table(aidData$ccodeRyr)[table(aidData$ccodeRyr)>43]
+
+# Account for country existence
+
 
 setwd(pathData)
 save(aidData, file='aidData.rda')
