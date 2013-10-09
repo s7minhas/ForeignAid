@@ -6,33 +6,40 @@ aidList = list()
 for(ii in 1:length(fnames)){ aidList[[ii]] = read.csv(fnames[ii]) }
 names(aidList) = gsub('.csv','',fnames)
 
-# Collapsing to panel format
-aidData = NULL
-for(ii in 1:length(fnames)){
-	temp=aidList[[ii]]
-	temp=temp[-1,-c(ncol(temp), 2)]
-	temp2=data.frame(apply(temp[,2:ncol(temp)], 2, function(x) FUN=num(x)))
-	temp=cbind(Country=as.character(temp[,1]), temp2)
-	names(temp) = c('Country', 1960:2012)
-	cleaned=cleanAidData(temp, 'aid')
-	aidData = rbind(aidData, cbind(Sender=names(aidList)[ii], cleaned)) }
+# 
+food2=melt(food[,c(1,7:ncol(food))], id='countries')
+names(food2)=c('Country', 'year', 'food')
+food2$year=num(substr(food2$year,2,5))
 
-senderNames = data.frame(cbind(Sender=as.character(unique(aidData$Sender)), 
-	SenderClean=as.character(unique(aidData$Sender))))
-senderNames$SenderClean = as.character(senderNames$SenderClean)
 
-senderNames$SenderClean[7] = 'Czech Republic'
-senderNames$SenderClean[28] = 'New Zealand'
-senderNames$SenderClean[34] = 'Saudi Arabia'
-senderNames$SenderClean[35] = 'Slovakia'
-senderNames$SenderClean[42] = 'United Kingdom'
-senderNames$SenderClean[43] = 'United States'
 
-senderNames$cname = countrycode(senderNames$SenderClean, 'country.name', 
-	'country.name')
+# # Collapsing to panel format
+# aidData = NULL
+# for(ii in 1:length(fnames)){
+# 	temp=aidList[[ii]]
+# 	temp=temp[-1,-c(ncol(temp), 2)]
+# 	temp2=data.frame(apply(temp[,2:ncol(temp)], 2, function(x) FUN=num(x)))
+# 	temp=cbind(Country=as.character(temp[,1]), temp2)
+# 	names(temp) = c('Country', 1960:2012)
+# 	cleaned=cleanAidData(temp, 'aid')
+# 	aidData = rbind(aidData, cbind(Sender=names(aidList)[ii], cleaned)) }
 
-aidData$cname = senderNames$cname[match(aidData$Sender, senderNames$Sender)]
-aidData$ccode = panel$ccode[match(aidData$cname, panel$cname)]
+# senderNames = data.frame(cbind(Sender=as.character(unique(aidData$Sender)), 
+# 	SenderClean=as.character(unique(aidData$Sender))))
+# senderNames$SenderClean = as.character(senderNames$SenderClean)
+
+# senderNames$SenderClean[7] = 'Czech Republic'
+# senderNames$SenderClean[28] = 'New Zealand'
+# senderNames$SenderClean[34] = 'Saudi Arabia'
+# senderNames$SenderClean[35] = 'Slovakia'
+# senderNames$SenderClean[42] = 'United Kingdom'
+# senderNames$SenderClean[43] = 'United States'
+
+# senderNames$cname = countrycode(senderNames$SenderClean, 'country.name', 
+# 	'country.name')
+
+# aidData$cname = senderNames$cname[match(aidData$Sender, senderNames$Sender)]
+# aidData$ccode = panel$ccode[match(aidData$cname, panel$cname)]
 
 setwd(pathData)
 save(aidData, file='aidData.rda')
