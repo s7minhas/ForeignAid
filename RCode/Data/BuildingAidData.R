@@ -69,5 +69,8 @@ table(aidData$ccodeRyr)[table(aidData$ccodeRyr)>43]
 # receiver country cases that are not in the panel dataset
 aidData=aidData[which(aidData$ccodeRyr %in% panel$ccodeYear),]
 
+# Subsetting to cases past 1970 due to missingness issues
+aidData=aidData[aidData$year>1970,]
+
 setwd(pathData)
 save(aidData, file='aidData.rda')
