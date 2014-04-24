@@ -56,4 +56,6 @@ steps:
 
 	narrow down contribution so we have some story to share
 
+	reading the literature on aid
+
 	 apply for isa: june
