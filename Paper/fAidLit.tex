@@ -1,2 +1,188 @@
-\subsection*{Literature Review}
+ \section*{Lit Review}
 \label{lit}
+
+
+
+
+In this literature review, I give a brief overview of the different potential reasons that donor countries distribute foreign aid as explored by existing literature. Note that for the most part, these reasons tend to be tied to characteristics of the recipient country rather characteristics of the donor countries. I then attempt to document how different scholars have operationalized these different potential motivations and their modelling strategy (to the extent that the modelling strategy may be methodolgically interesting to consider for our purposes).
+
+\subsection*{Why and When do Countries Give Foreign Aid?} 
+
+
+
+\subsubsection*{Objective Need:Humanitarian/Moral Motivations/Economic Motivations}
+
+
+
+ 
+\citet{lumsdaine:1993} makes a strong case for the `moral vision' being a driving factor in aid distribution. He also makes a case for foreign aid being a function of the colonial history, democratic status, and the income levels of a country. However, as \citet{alesina:2000} note, he presents only simple correlations in his analysis.   \\
+
+Using a cross national panel analysis, \citet{trumbull:1994} explore the extent to which foreign aid is given as a function of material physical security. They find that infant mortality (their measure of physical security) is associated with increased foreign aid. They further find that GNP per capita  (their measure of material security) is \textit{not} associated with increased foreign aid. 
+
+
+
+\subsubsection*{Strategic Motivations}
+
+\citet{maizels:1984}  find evidence to suggest that countries give aid for strategic interests.  Restricting their analysis to African countries, \citet{schraeder.etal:1998} also reject an altruistic motivation for donors.
+\citet{alesina:2000} also find that countries with a colonial past and political alliances\footnote{As measured by UN voting alliances}  to the sender are much more likely to receive foreign aid
+
+\citet{kuziemko:2006} find that nonpermanent members of the UN Security Council\footnote{10 of the 15 seats on the UNSC are held for non renewable 2 year terms} experience temporary increases in foreign aid when they serve on the council.\\
+
+
+\noindent Potential other variables: terrorism/terrorist threats?
+\subsubsection*{Ideological Reasons}
+
+Ideological motivations for sending foreign aid can in some ways be seen as a combination of humanitarian and strategic reasons. For example, if one frames the conflict between the US and USSR during the Cold War as an ideological struggle, the respective desires of each side to ensure the ideological allegiance of third party countries was as much a function of strategic reasons (i.e as illustrated in the policy of containment) as well as a function of humanitarian ones (i.e. the idea that capitalism/democracy was an inherently morally and politically superior system to communism or vice versa). \\
+
+To this end, \citet{alesina:2000} find that countries that democratize  (as measured by Freedom House) receive more aid with relatively more democratic countries receive 39 percent more aid. They find evidence to suggest that countries pay more attention to democracy strictly defined then broader definition of civil rights or law enforcement.\footnote{They find that US, Dutch, UK, the Nordic countries and Canada conform to this description while Germany and Japan only weakly conform to this description; France does not} This provides an interesting contrast to their finding for FDI which concentrates on rule of law but insensitive to democratic institutions They argue that in general FDI is more sensitive to economic incentives than foreign aid which responds more the political variables\\
+
+
+
+Using a cross national panel analysis, \citet{trumbull:1994} explore the extent to which foreign aid is given as a function of political rights. They find that an increase the political and civil rights (as measured by a precursor to the Freedom House index) is associated with an increase in foreign aid. 
+
+\subsubsection*{Variation across countries}
+
+To the extent that the current literature explores variation across donor countries, the literature suggests that different donors may be more motivated by some goals relative to others. \citet{schraeder.etal:1998} find for example that Japanese aid is more likely to be motivated by economic and trade interests, Swedish aid supports progressive, socialist-minded regimes and France's aid is almost exclusively targeted toward francophone countries \citep{werker:2012}. \\
+
+Focusing solely on aid allocation in the Arab world, \citet{neumayer:2003} finds that OPEC donors favor other Arab and non-Arab Muslim recipients. Countries that do not maintain diplomatic relations with Israel or with voting patterns similar to Saudi Arabia are also more likely to get more aid. He finds that donor interest, in particular Arab solidarity, is a strong determinant in whether a country gets aid and how much while recipient need (as measured by a country's level of income) only affects if the country gets aid, not how much aid they get. \\
+
+Focusing solely on China, \citet{dreher:2012} find that political and commercial considerations shape China's aid allocation. However they find that compared to other countries, China does not pay substantially more attention to politics nor do thy find evidence that China's aid allocation is motivated by natural resource concerns.\footnote{Note however that many projects that could be categorized as foreign aid is often doled out in the form of FDI.} In general they argue that China's aid allocation seems to be independent of democracy and governance considerations in recipient countries.
+
+
+
+
+
+
+\subsection*{Methods and Models} 
+
+\subsubsection*{Operationalizing the DV}
+\citet{trumbull:1994} operationalize the dependent variable as $log ( \frac{i\text{'s per capita ODA in year } t}{\text{sample average ODA for year }t})$ where $i$ denotes the recipient country.\\
+
+\citet{dreher:2012} operationalize the dependent variable as $\frac{i\text{'s ODA recieved from China in year} t}{\text{China's total aid in year }t}$ where $i$ denotes the recipient country.
+
+
+\subsubsection*{Common Covariates}
+
+ 
+\begin{landscape}
+
+\begin{table}
+\scriptsize
+\caption{ Covariates}
+\begin{tabular}{l|c|c|c|c|c|c|c}
+\hline
+ & Scope  & L(Pop)  & Political   & Objective   & Strategic   & Commerc. & Other \\
+ &    		  &  	   & Interests &   Need 	&   Interests 		&   Interests & \\
+\hline\hline
+\citet{dreher:2012}  &? & X &  Chiebub et al.  & L(GDP pc) & UN Voting; & log total & distance \\
+				&  China (donor) & &   (2010)'s  dummy& &    diplomatic relations & exports to China;\\
+				& 1956-2006  &  & & &  with Taiwan & log oil production\\
+
+\hline
+\citet{dollar:2006}  & $\approx$ 100 (recip) & X &  L(ICRG)  & L(GDP pc) &   &  \% donor exports to& colonial dummy \\
+ 				 &  22 donors &  &  L(FH)  & L(GDP pc) &   &   recipients & L(distance) \\
+ 				 &  1984-2003 (5yr avg) &  &  L(FH)  & L(GDP pc) &   &   recipients & L(distance) \\
+\hline
+\citet{kuziemko:2006}  & 100+(recip)  & &  Polity 2  & L(GDP pc) & UN Security  & & war ($>$1000 deaths) ;\\
+ 			 	  & US (donor) & &  &   & Council Member &   & NYT articles \\
+  				 &  1946-2001& &    &   &   &  & distance \\
+\hline
+\citet{neumayer:2003}  & ?& &  Socialist dummy; & L(GDP pc) &   &  l(imports from & Arab dummy \\
+   				& Arab aid, agg  & X 	&  UN Voting;  Israel  & &  & Kuwait, Saudi & African dummy \\
+  				 & 1974-1997 (3y avg) & 	&    diplomatic relations &   &    &Arabia, UAE) & Islamic dummy \\
+\hline
+\citet{alesina:2000}  & 181(recip)/ &   &  Rule of Law (PRS)  & L(GDP pc) & UN Voting; & proportion of  years & Egypt/Israel dummy ;\\
+              			 & 21(donor) &  X & /Pol \&Civil Rights  & & colony dummy;& country is open ;& \% 		
+				Catholic, Muslim \\
+				 & 1970-94 (5yr agg) &    & (FH)&&  years as colony& Net FDI inflows/GDP \\
+\hline 
+\citet{schraeder.etal:1998}  	  & 36(recip)/	& 	 			&  Marxist dum	 &   caloric intake; & mil spending (\% GDP);& L(GDP pc);& lagged DV ;\\
+              			 & 4(donor)*  &   	& Socialist dum  & avg life expectancy & mil force (\% pop);&L(imports from donor& colonial dummy  \\
+				 & 1980-89 &     &  Capitalist dum &&  ally dumy&  \ total imports ) & region dummy \\
+\hline
+\citet{trumbull:1994} & 86 countries   & X  & FH & L(Infant  Mortality); &   &  \\
+				&1984-89  & &  &  L(GNP pc) &   &  \\
+\hline
+\citet{maizels:1984} & 79(recip)  & X  &  &L(GNP pc); &  arms transfers &   stock of private direct investm.;\\
+				& /DAC(donor)  & &  &    BOP (current accts)& regional dummy  &  \# TNC subsidiaries/affiliates;  \\
+				&1969-70& &  &    GNP growth rate &   &Availability of   \\
+				&1978-80 & &  &   PQLI &   & strategic materials \\
+\hline
+\multicolumn{8}{l}{\tiny{* The 36 recipient countries were solely African countries and the 4 donor countries were the US, Japan, Sweden, France }}\\
+\multicolumn{8}{l}{\tiny{** Note that somewhat bizarrely, \citet{maizels:1984} runs separate regressions for recipient needs (objective need) and donor interests (security and commercial interests) }}\\
+\multicolumn{8}{l}{\tiny{Abbreviations: ICRG - International Country Risk Guide; FH -  Freedom House ; PQLI: Physical Quality of Life Index}}
+\end{tabular}
+\end{table}
+
+\end{landscape}
+
+
+\subsubsection*{Models}
+
+\citet{neumayer:2003} uses a two-step Heckman selection model. The first stage is the gate-keeping stage where it is determined which countries recieve aid; the second stage is a level stage where it is determined how much aid a country receives given that they receive any aid. In the Heckman two step estimator, the error terms of both stages are allowed to be correlated however it requries an exclusionary variable that is associated with the gatekeeping stage but not the level stage. \citet{neumayer:2003} uses the total amount of aid allocated in any given year as his exclusionary variable, arguing that the higher amount of total aid allocation increases the chances of receiving any aid at all. He notes that this variable is an imperfect one at best. 
+
+%\clearpage
+%\singlespacing
+%% run  pdfLaTex then Bibtex then pdflaTex again
+%\pagestyle{empty} % This tells LaTeX to make the bibliography without numbers.
+%%\singlespace      %Makes the references single spaced.
+%\bibliographystyle{apsr}
+%%\bibliography{/Users/cindycheng/Documents/Dissertation/Writing/Prospectus/masterlist}
+%\bibliography{/Users/cindycheng/Documents/Dissertation/Writing/masterlist}
+%%\bibliography{masterlist}
+%%\bibliography{~/Users/cindycheng/Documents/DissertationProspectus/latexprospectus/masterlist.bib}
+% 
+
+
+% but have there does not seem to be a clearly defined line in the literature between humanitarian and economic motivations. While giving foreign aid in the wake of a natural disaster can be relatively cleanly classified as being a result of a humanitarian impulse rather than an economic one, giving foreign aid to build schools or hospitals can be equally interpreted as either being motivated by humanitarian/moral reasons or being motivated by developmental/economic ones.
+
+% 
+%\begin{itemize}
+%\item Log Distance between Recipient and Donor Country
+%\begin{itemize}
+%\item \citet{dreher:2012} 
+%\end{itemize}
+%\item Log of population
+%\begin{itemize}
+%\item \citet{dreher:2012} ;\citet{trumbull:1994} 
+%\end{itemize}
+%\item Log GDP per capita
+%\begin{itemize}
+%\item \citet{dreher:2012}; \citet{trumbull:1994} (though note they use GNP per capita)
+%\end{itemize}
+%\item Political Covariates
+%\begin{itemize}
+%\item \citet{dreher:2012} (\citet{cheibub:2010}'s democracy dummy) ;\citet{trumbull:1994} (Freedom House)
+%\end{itemize}
+%\item Objective Need
+%\begin{itemize}
+%\item  ;\citet{trumbull:1994} (log of infant mortality)
+%\end{itemize}
+%\item Strategic Interests
+%\begin{itemize}
+%\item \citet{dreher:2012} (UNGA voting; diplomatic relations with Taiwan) ;
+%\end{itemize}
+%\item Commercial Interests
+%\begin{itemize}
+%\item \citet{dreher:2012} (log total exports from China to country j; recipients log oil production per day) ;
+%\end{itemize}
+%\end{itemize}
+%
+%
+%\subsection*{How does Foreign Aid Effect X?} 
+%Jepma (1997) [haven't been able to find online yet but referenced in \citet{alesina:2000}] concludes that foreign aid crowds out private saving, supports public consumption and has no significant impact on recipients macroeconomic policies and growth.
+%
+%•Cross country growth empirics: \citep{boone:1994,boone:1996} argues that foreign aid does not affect investment and growth; 
+%
+%Burnside and Dollar find that aid is beneficial to countries that adopt appropriate and stable policies and is otherwise wasted and no evidence of endogeneity. 
+%
+%Collier and Dollar (1998) show that under certain assumtptions, the allocation of aid that has the maximum effect on poverty reduction is a function of the recipeients level of poverty and quality of economic policies
+
+
+%
+%In general, it seems that there is no clear delineation between the different possible motivations for foreign aid. For example, in their review of the foreign aid literature, \citet{schraeder.etal:1998} identify 6 possible motivations for foreign aid giving: humanitarian reasons (as measured by average life expectancy and daily calorif intake) , strategic importance, economic potential (that is, if the recipient country is deemed to be most economically strong in the region, the implication being that the better their economy does, the better the donor economy's does), cultural similarity (as measured by colonial history), ideological stance, regional similarity (if countries are similar to each other, donors may use a similar foreign aid strategy for all of them). However it may be impossible to uniquely identify any one of these different measures from the other. Cultural similarity can bleed into regional similarity for example, or strategic importance and economic potential may be endogenous to each other. \\
+%
+%What this means in practice is that sometimes, scholars will use the same variables in their regressions but have different interpretations of them. Log GDP per capita has been alternatively used as a measure of objective need or as a measure of the economic potential of a country while the colonial dummy has been interpreted 
+%
+%
+% Leaving aside this distinction for now and categorizing the above as instances of 'objective need', the below gives an overview of the evidence thus far that suggests that foreign aid might (or might not be) a result of these humanitarian/developmental impulses.\\
