@@ -27,7 +27,7 @@ Using a cross national panel analysis, \citet{trumbull:1994} explore the extent 
 \citet{alesina:2000} also find that countries with a colonial past and political alliances\footnote{As measured by UN voting alliances}  to the sender are much more likely to receive foreign aid
 
 \citet{kuziemko:2006} find that nonpermanent members of the UN Security Council\footnote{10 of the 15 seats on the UNSC are held for non renewable 2 year terms} experience temporary increases in foreign aid when they serve on the council.\\
-
+\citet{berthelemy:2006} finds that on average, donors act for political or commercial reasons. However, they also tend to give aid to countries with better governance indicators, less conflict and higher growth.
 
 \noindent Potential other variables: terrorism/terrorist threats?
 \subsubsection*{Ideological Reasons}
@@ -36,8 +36,11 @@ Ideological motivations for sending foreign aid can in some ways be seen as a co
 
 To this end, \citet{alesina:2000} find that countries that democratize  (as measured by Freedom House) receive more aid with relatively more democratic countries receive 39 percent more aid. They find evidence to suggest that countries pay more attention to democracy strictly defined then broader definition of civil rights or law enforcement.\footnote{They find that US, Dutch, UK, the Nordic countries and Canada conform to this description while Germany and Japan only weakly conform to this description; France does not} This provides an interesting contrast to their finding for FDI which concentrates on rule of law but insensitive to democratic institutions They argue that in general FDI is more sensitive to economic incentives than foreign aid which responds more the political variables\\
 
+\citet{boutton:2013}
 
-
+\citet{barthel:2013}
+\citet{heinrich:2013}
+\citet{fuchs:2013}
 Using a cross national panel analysis, \citet{trumbull:1994} explore the extent to which foreign aid is given as a function of political rights. They find that an increase the political and civil rights (as measured by a precursor to the Freedom House index) is associated with an increase in foreign aid. 
 
 
@@ -45,17 +48,17 @@ Using a cross national panel analysis, \citet{trumbull:1994} explore the extent 
 
 \subsubsection*{Variation across countries}
 
-To the extent that the current literature explores variation across donor countries, the literature suggests that different donors may be more motivated by some goals relative to others. \citet{schraeder.etal:1998} find for example that Japanese aid is more likely to be motivated by economic and trade interests, Swedish aid supports progressive, socialist-minded regimes and France's aid is almost exclusively targeted toward francophone countries \citep{werker:2012}. \\
+To the extent that the current literature explores variation across donor countries, the literature suggests that different donors may be more motivated by some goals relative to others. \citet{schraeder.etal:1998} find for example that Japanese aid is more likely to be motivated by economic and trade interests, Swedish aid supports progressive, socialist-minded regimes and France's aid is almost exclusively targeted toward francophone countries \citep{werker:2012}. \citet{berthelemy:2006} finds that the Noridc countries, along with Switzerland and Ireland are more prone to be altruistic than other donors. \\
 
 Focusing solely on aid allocation in the Arab world, \citet{neumayer:2003} finds that OPEC donors favor other Arab and non-Arab Muslim recipients. Countries that do not maintain diplomatic relations with Israel or with voting patterns similar to Saudi Arabia are also more likely to get more aid. He finds that donor interest, in particular Arab solidarity, is a strong determinant in whether a country gets aid and how much while recipient need (as measured by a country's level of income) only affects if the country gets aid, not how much aid they get. \\
 
 Focusing solely on China, \citet{dreher:2012} find that political and commercial considerations shape China's aid allocation. However they find that compared to other countries, China does not pay substantially more attention to politics nor do thy find evidence that China's aid allocation is motivated by natural resource concerns.\footnote{Note however that many projects that could be categorized as foreign aid is often doled out in the form of FDI.} In general they argue that China's aid allocation seems to be independent of democracy and governance considerations in recipient countries.
 
+\citet{fleck:2010} investigate how the motivations for US aid have evolved over time. They find evidence to suggest that i) the probability of recieving US foreign aid before and following the War on terror increased with the level of development. Higher-developed countries were more likely to recieve aid at all, but this did not necessarily come at the expense of lower developed countries as the overall aid budget also increased  following the War on Terror ii) the level of US aid for the US' core foreign aid countries has been less a function of need following the War on Terror than before. 
 
+Of course the presumption in these models is that donor giving is completely independent; whether a country recieves aid from one donor does not affect whether it recieves aid from another donor. This assumption is naive at best and at worst seriously biases the estimated parameters. 
 
-
-
-
+% A way to see if donors allocation is not independent is to look at how much total aid a country gets per capita? 
 \subsection*{Methods and Models} 
 
 \subsubsection*{Operationalizing the DV}
@@ -80,15 +83,26 @@ Focusing solely on China, \citet{dreher:2012} find that political and commercial
 \citet{dreher:2012}  &? & X &  Chiebub et al.  & L(GDP pc) & UN Voting; & log total & distance \\
 				&  China (donor) & &   (2010)'s  dummy& &    diplomatic relations & exports to China;\\
 				& 1956-2006  &  & & &  with Taiwan & log oil production\\
-
+\hline
+\citet{fleck:2010}  & 119 (recip)& X &  lag polity ;& L(GDP pc) & US mil budget ;& l(exports)& interwar dum \\ 
+				&US (donor) &  & polity transition ;&  & recieved US mil &   & war terror dum \\ 
+				&1955-2006&  & political location    &   & aid dummy & &   \\ 
+				&1955-2006&  & Pres, Congress   &   &  & &   \\ 
 \hline
 \citet{dollar:2006}  & $\approx$ 100 (recip) & X &  L(ICRG)  & L(GDP pc) &   &  \% donor exports to& colonial dummy \\
- 				 &  22 donors &  &  L(FH)  & L(GDP pc) &   &   recipients & L(distance) \\
- 				 &  1984-2003 (5yr avg) &  &  L(FH)  & L(GDP pc) &   &   recipients & L(distance) \\
+ 				 &  22 donors &  &  L(FH)  &  &   &   recipients & L(distance) \\
+ 				 &  1984-2003 (5yr avg) &  &  &   &   &     &   \\
 \hline
-\citet{kuziemko:2006}  & 100+(recip)  & &  Polity 2  & L(GDP pc) & UN Security  & & war ($>$1000 deaths) ;\\
+\citet{kuziemko:2006}  & 137 (recip)  & &  Polity 2  & L(GDP pc) & UN Security  & & war ($>$1000 deaths) ;\\
  			 	  & US (donor) & &  &   & Council Member &   & NYT articles \\
   				 &  1946-2001& &    &   &   &  & distance \\
+\hline
+\citet{berthelemy:2006}  &  137 (recip)  & & FH  ;& L(GDP pc) & colony dummy  & lag  imports + & total donor\\
+					& 22 donor & &  conflicts(PRIO) ; &GDP growth & US-Egypt dummy &exports/GDP; &  aid\\
+					&  1980-99  & &  MAA ; & openness, gov deficit & US-Latin dummy & net debt/exports& ;\\
+					&    & &  aid by other  & inflation; life expectancy & Japan-Asia dummy & &  \\
+					&   & &  donors  & child mortality & EU- ACP dummy &  mil/GDP&  \\
+					&   & &     & lit rate, school enroll&  & & \\
 \hline
 \citet{neumayer:2003}  & ?& &  Socialist dummy; & L(GDP pc) &   &  l(imports from & Arab dummy \\
    				& Arab aid, agg  & X 	&  UN Voting;  Israel  & &  & Kuwait, Saudi & African dummy \\
@@ -119,7 +133,7 @@ Focusing solely on China, \citet{dreher:2012} find that political and commercial
 \hline
 \multicolumn{8}{l}{\tiny{* The 36 recipient countries were solely African countries and the 4 donor countries were the US, Japan, Sweden, France }}\\
 \multicolumn{8}{l}{\tiny{** Note that somewhat bizarrely, \citet{maizels:1984} runs separate regressions for recipient needs (objective need) and donor interests (security and commercial interests) }}\\
-\multicolumn{8}{l}{\tiny{Abbreviations: ICRG - International Country Risk Guide; FH -  Freedom House ; PQLI: Physical Quality of Life Index}}
+\multicolumn{8}{l}{\tiny{Abbreviations: ICRG - International Country Risk Guide; FH -  Freedom House ; PQLI: Physical Quality of Life Index; ACP -  Associated states from Africa, the Caribbean and the Pacific Ocean; MAA- Multilateral Assistance Acts}}
 \end{tabular}
 \end{table}
 

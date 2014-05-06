@@ -228,6 +228,13 @@
   url = {http://www.jstor.org/stable/2006912}
 }
 
+@TECHREPORT{alesina:1999,
+  author = {Alesina, Alberto and Weder, Beatrice},
+  title = {Do corrupt governments receive less foreign aid?},
+  institution = {National bureau of economic research},
+  year = {1999}
+}
+
 @ARTICLE{alfaro2010does,
   author = {Alfaro, L. and Chanda, A. and Kalemli-Ozcan, S. and Sayek, S.},
   title = {Does foreign direct investment promote growth? Exploring the role
@@ -461,6 +468,15 @@
   number = {2}
 }
 
+@TECHREPORT{barthel:2013,
+  author = {Barthel, Fabian and Neumayer, Eric and Nunnenkamp, Peter and Selaya,
+	Pablo},
+  title = {Competition for export markets and the allocation of foreign aid:
+	The role of spatial dependence among donor countries},
+  institution = {Kiel Working Paper},
+  year = {2013}
+}
+
 @ARTICLE{beck2001new,
   author = {Beck, Thorsten and Clarke, George and Groff, Alberto and Keefer,
 	Philip and Walsh, Patrick},
@@ -480,6 +496,18 @@
   year = {2007},
   author = {Berg-Schlosser, Dirk},
   volume = {1}
+}
+
+@ARTICLE{berthelemy:2006,
+  author = {Berth{\'e}lemy, Jean-Claude},
+  title = {Bilateral donors’ interest vs. recipients’ development motives in
+	aid allocation: do all donors behave the same?},
+  journal = {Review of Development Economics},
+  year = {2006},
+  volume = {10},
+  pages = {179--194},
+  number = {2},
+  publisher = {Wiley Online Library}
 }
 
 @BOOK{bhagwati2008termites,
@@ -668,6 +696,15 @@
 	a sufficient absorptive capability of the advanced technologies is
 	available in the host economy.},
   publisher = {Elsevier}
+}
+
+@ARTICLE{boutton:2013,
+  author = {Boutton, Andrew and Carter, David B},
+  title = {Fair-Weather Allies? Terrorism and the Allocation of US Foreign Aid},
+  journal = {Journal of Conflict Resolution},
+  year = {2013},
+  pages = {0022002713492649},
+  publisher = {SAGE Publications}
 }
 
 @ARTICLE{brada2006effects,
@@ -1332,6 +1369,18 @@
   year = {2006}
 }
 
+@ARTICLE{fleck:2010,
+  author = {Fleck, Robert K and Kilby, Christopher},
+  title = {Changing aid regimes? US foreign aid from the Cold War to the War
+	on Terror},
+  journal = {Journal of Development Economics},
+  year = {2010},
+  volume = {91},
+  pages = {185--197},
+  number = {2},
+  publisher = {Elsevier}
+}
+
 @ARTICLE{freund2000different,
   author = {Freund, C.},
   title = {Different paths to free trade: The gains from regionalism},
@@ -1341,6 +1390,14 @@
   pages = {1317--1341},
   number = {4},
   publisher = {Oxford University Press}
+}
+
+@TECHREPORT{fuchs:2013,
+  author = {Fuchs, Andreas and Nunnenkamp, Peter and {\"O}hler, Hannes},
+  title = {Why donors of foreign aid do not coordinate: The role of competition
+	for export markets and political support},
+  institution = {Kiel Working Paper},
+  year = {2013}
 }
 
 @BOOK{garg1984spotlight,
@@ -1720,6 +1777,17 @@
   publisher = {Lawrence Erlbaum},
   year = {1982},
   author = {Heider, F.}
+}
+
+@ARTICLE{heinrich:2013,
+  author = {Heinrich, Tobias},
+  title = {When is Foreign Aid Selfish, When is it Selfless?},
+  journal = {The Journal of Politics},
+  year = {2013},
+  volume = {75},
+  pages = {422--435},
+  number = {02},
+  publisher = {Cambridge Univ Press}
 }
 
 @ARTICLE{hellman1998winners,
