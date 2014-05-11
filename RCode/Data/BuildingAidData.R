@@ -9,7 +9,7 @@ names(aidList) = gsub('.csv','',fnames)
 # Cleaning aid dataset
 aidData=NULL
 for(ii in 1:length(aidList)){
-	temp=aidList[[10]]; temp=temp[-1,
+	temp=aidList[[ii]]; temp=temp[-1,
 		-which(names(temp) %in% c('Time.Period', 'X.1') ) ]
 	aid=melt( temp[,c(1,3:(ncol(temp)-1) ) ], id='X' )
 	names(aid)=c('Country', 'year', 'aid')
