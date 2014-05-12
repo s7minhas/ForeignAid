@@ -8,7 +8,14 @@ Sys.info()["user"]=="janus829"
   pathGraphics="~/Dropbox/Research/ButheProjects/ForeignAid/Graphics";
   pathData="~/Dropbox/Research/ButheProjects/ForeignAid/Data";
   pathCode="~/Desktop/Research/ButheProjects/ForeignAid/RCode";
-  pathFunctions="~/Desktop/Prog Notes/R Functions"}
+  pathFunctions="~/Desktop/Prog Notes/R Functions"
+  } else if  (Sys.info()["user"]=="cindycheng") {
+  pathMain="~/Dropbox/ForeignAid";
+  pathGraphics="~/Dropbox/ForeignAid/Graphics";
+  pathData="~/Dropbox/ForeignAid/Data";
+  pathCode="~/Documents/Papers/ForeignAid/RCode";
+  pathFunctions="~/Documents/Methods/R Functions"} 
+
 
 # Loading libraries and functions
 library(foreign)
@@ -27,16 +34,16 @@ library(gridExtra)
 library(plyr)
 library(doBy)
 library(tikzDevice)
-setwd(pathFunctions)
-source("rwish.R")
-source("theme_border.R")
+#setwd(pathFunctions)
+#source("rwish.R")
+#source("theme_border.R")
 library(lme4)
 library(arm)
 # source("hdr_2d.R")
 # source("scatterHist.R")
 
 # Helper dataser
-load('~/Desktop/Research/BuildingPanelData/panel.rda')
+#load('~/Desktop/Research/BuildingPanelData/panel.rda')
 
 # Setting seed
 set.seed(6886)
