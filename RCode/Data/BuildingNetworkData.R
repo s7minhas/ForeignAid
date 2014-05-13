@@ -75,13 +75,11 @@ names(t2011.adj)<-levels(aidData$Country)
 t2011.net = bipartite.network(t2011.adj, modes = c("donor", "receiver"))
 
 # plot network object in ggplot2
-ggnet(t2011.net, segment.size = edge.weights(t2011.adj, .25),segment.alpha = .5,node.group = get.vertex.attribute(t2011.net, "mode"), size = 5)
+ggnet(t2011.net, segment.size = edge.weights(t2011.adj, .25),segment.alpha = .5,node.group = get.vertex.attribute(t2011.net, "mode"), size = 5, label.nodes = c(levels(aidData$Sender), levels(aidData$Country)), label.size =2) # we can probably adjust the label colors later
  
     
     
-    
-    
-    
+   
     
     
     
