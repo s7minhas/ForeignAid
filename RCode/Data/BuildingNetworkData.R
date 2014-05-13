@@ -50,7 +50,7 @@ aidNet<-networkDynamic(base.net = emptyAid, edge.toggles = aidEdge)
 gplot(network(network.extract(aidNet, onset =41, terminus=41)), gmode="twomode", displaylabels=T) # can access different years by adjusting 'onset' and 'terminus'
 
 
-### Note: still need to figure out how to make weighted matrix. Have figured out how to add weight attribute (below) but not how to transform a network with weight attributes to a weighted adjacency matrix. Once you figure this out, can make ggplot of network
+### Note: I still need to figure out how to make weighted matrix. Have figured out how to add weight attribute (below) but not how to transform a network with weight attributes to a weighted adjacency matrix. Once I figure this out, can make ggplot of network
 # add weight attributes
 for (i in 1:max(aidData$year)) {
 if (i !=max(aidData$year)) {activate.edge.attribute(aidNet, 'weight', aid.nd[aid.nd$time==i,4], onset = i, terminus = i +1)}
