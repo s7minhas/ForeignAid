@@ -1,4 +1,4 @@
-source("/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/RCode/setup.R")
+if(Sys.info()["user"]=="janus829"){source("/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/RCode/setup.R")}
 
 setwd(paste(pathData, '/AidData', sep=''))
 fnames=list.files(); fnames=fnames[-which(fnames=='aidData.rda')]

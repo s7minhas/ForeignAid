@@ -42,8 +42,9 @@ library(arm)
 # source("hdr_2d.R")
 # source("scatterHist.R")
 
-# Helper dataser
-#load('~/Desktop/Research/BuildingPanelData/panel.rda')
+# Helper dataset
+setwd(pathData)
+load('panel.rda')
 
 # Setting seed
 set.seed(6886)
