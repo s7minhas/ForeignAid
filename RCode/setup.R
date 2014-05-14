@@ -71,6 +71,7 @@ rescale <- function(x,new_max,new_min){
 
 # turn variables into numeric
 num <- function(x){ as.numeric(as.character(x)) }
+char = function(x){as.character(x)}
 
 # Convert to cname
 cname <- function(x){
