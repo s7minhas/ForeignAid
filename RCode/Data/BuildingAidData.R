@@ -56,6 +56,7 @@ aidData = aidData[!is.na(aidData$ccodeR),]
 # Account for country existence
 # To do this I  drop all 
 # receiver country cases not in the panel dataset
+aidData$ccodeRyr=paste0(aidData$ccodeR, aidData$year)
 aidData=aidData[which(aidData$ccodeRyr %in% panel$ccodeYear),]
 
 # Subsetting to cases past 1970 due to missingness issues
