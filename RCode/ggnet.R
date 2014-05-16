@@ -85,6 +85,7 @@ ggnet <- function(
   arrow.size       = 0,         # set to 0 to remove from plot
   label.nodes      = FALSE,     # add vertex names in small print; can be a list of vertex names
   label.size       = size / 2,         # size of the vertex names
+  label.color      = "black",
   top8.nodes       = FALSE,     # color the top 8 nodes by weighting method with ColorBrewer Set1
   trim.labels      = TRUE,      # clean vertex names
   quantize.weights = FALSE,     # break weights to quartiles
@@ -310,7 +311,7 @@ ggnet <- function(
   
   # add text labels
   if(length(unique(plotcord$id)) > 1 | unique(plotcord$id)[1] != "") {
-    pnet <- pnet + geom_text(aes(label = id), size = label.size, ...)
+    pnet <- pnet + geom_text(aes(label = id), size = label.size, colour=label.color, ...)
   }
   
   # finalize: remove grid, axes and scales
