@@ -20,6 +20,8 @@ Summarizing hypotheses into Idealist & Neo-Realist/Realist Camps
 
 	* S1a, S1b, S2 
 
+* From the doc it seems that we have most of the data to test for the idealist already but we fall short on theories to test the realist perspective. One thing that we both mentioned is looking at similarity in UN voting records which should be easily available. We can also get data on alliances from COW. Is there other data that we should be collecting to test the realist perspective, specifically at the sender level?
+
 Recipient Characteristics
 ---
 
