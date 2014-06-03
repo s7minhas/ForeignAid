@@ -16,5 +16,6 @@
 *.csv
 *.xlsx
 *.xls
+*.pdf
 .DS_Store*
 .Rapp.history*
