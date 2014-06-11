@@ -10,7 +10,15 @@ Summarizing hypotheses into Idealist & Neo-Realist/Realist Camps
 
 * Realist
 
-	* R2, D2, D5 and R6/D7 (I think we're getting at the same thing) 
+	* R2, D2, D5 and R6/D7 (I think we're getting at the same thing)
+
+* Strategic motivations of sender states
+
+	* Cindy will look into the S-scores
+
+	* I'll take a peek at ICEWS
+
+	* Take a brief look at literature measuring rel. strategic importance
 
 * Ambiguous (to me at least)
 
