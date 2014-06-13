@@ -38,13 +38,19 @@ load('panel.rda')
 set.seed(6886)
 setwd(pathMain)
 
+################################################################
 # Helper functions
 trim = function (x) gsub("^\\s+|\\s+$", "", x)
 
 substrRight = function(x, n){
-  substr(x, nchar(x)-n+1, nchar(x))
-}
+  substr(x, nchar(x)-n+1, nchar(x)) }
 
+num = function(x){ as.numeric(as.character(x)) }
+
+char = function(x){as.character(x)}
+################################################################
+
+################################################################
 # Log transformations for vars with negative values
 logNeg = function(z){
 	x = z[!is.na(z)]; y = x
@@ -56,16 +62,16 @@ logNeg = function(z){
 rescale = function(x,new_max,new_min){
  xResc = (new_max - new_min) / (max(x,na.rm=T) - min(x,na.rm=T))*(x - min(x,na.rm=T)) + new_min
  xResc }
+ ################################################################
 
-# turn variables into numeric
-num = function(x){ as.numeric(as.character(x)) }
-char = function(x){as.character(x)}
-
+################################################################
 # Convert to cname
 cname = function(x){
 	require(countrycode); x = as.character(x)
 	y = countrycode(x, 'country.name', 'country.name') }
+################################################################	
 
+################################################################
 ### Fx for Melting/Cleaning WB Data for Merge
 cleanWbData = function(data, variable){
 	var = variable
@@ -122,3 +128,48 @@ cleanWbData = function(data, variable){
 	mdata$ccode = panel$ccode[match(mdata$cname,panel$cname)]
 	mdata$cyear = paste(mdata$ccode, mdata$year, sep='')
 	mdata }	
+################################################################	
+
+################################################################
+# Build adjacency matrices from dyadic data
+# Dyad data must identify countries by variables  
+# ccode_1 & ccode_2 and the time aspect by a variable called year
+# time is a simple vector of years
+# panel is a dataset with country codes
+DyadBuild <- function(variable, dyadData, cntry1, cntry2, time, pd, panel=panel, directed=FALSE){
+
+	countryList <- lapply(pd, function(x) FUN=panel[panel$year==x,'ccode'])
+	names(countryList) <- pd
+
+	Mats <- list()
+	for(ii in 1:length(pd)){
+	  countries <- countryList[[ii]]
+	  yearMatrix <- matrix(0, nrow=length(countries), ncol=length(countries))
+	  rownames(yearMatrix) <- colnames(yearMatrix) <- countries
+	  
+	  dyadData <- dyadData[,c(cntry1,cntry2,time,variable)]
+	  dyadData <- data.matrix(dyadData)
+	  data <- matrix(dyadData[which(dyadData[,time] %in% pd[ii]),], ncol=4, 
+	                 dimnames=list(NULL, c(cntry1,cntry2,time,variable)))
+	  
+	  for(jj in 1:nrow(yearMatrix)){
+	    slice <- matrix(data[which(data[,cntry1] %in% countries[jj]), c(cntry2,variable)], ncol=2, 
+	                    dimnames=list(NULL, c(cntry2,variable)))
+	    rownames(slice) <- slice[,cntry2]
+	    x <- intersect(countries, as.vector(slice[,cntry2]))
+	    slice2 <- matrix(slice[as.character(x),], ncol=2, 
+	                     dimnames=list(NULL, c(cntry2,variable)))
+	    rownames(slice2) <- slice2[,cntry2]
+	    
+	    yearMatrix[as.character(countries[jj]), rownames(slice2)] <- slice2[,variable]
+	    if(directed==FALSE){yearMatrix[rownames(slice2), as.character(countries[jj])] <- slice2[,variable]}
+	  }
+	  
+	  Mats[[ii]] <- yearMatrix
+	  print(pd[ii])
+	}
+
+	names(Mats) <- pd
+	Mats
+}
+################################################################
