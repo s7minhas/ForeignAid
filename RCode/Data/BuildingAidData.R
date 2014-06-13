@@ -28,7 +28,7 @@ aidData=merge(aidData,receivers,by.x='Receiver',by.y='cntry',all.x=T)
 aidData=aidData[which(!is.na(aidData$cnameS)),] # gets rid of IGO sending cases
 aidData=aidData[which(!is.na(aidData$cnameR)),] # gets rid of region/group recipients
 aidData=aidData[which(!is.na(aidData$ccodeR)),] # gets rid of small countries
-aidData=aidData[which(!is.na(aidData$ccodeR)),] # weird cases with taiwan as donor but no year and no commit figure
+aidData=aidData[which(!is.na(aidData$year)),] # weird cases with taiwan as donor but no year and no commit figure
 ################################################################
 
 ################################################################
