@@ -1,4 +1,4 @@
-source("/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/RCode/setup.R")
+source("/Users/janus829/Desktop/Research/ForeignAid/RCode/setup.R")
 
 ###############################################################
 # WB data
