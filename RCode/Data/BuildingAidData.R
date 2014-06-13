@@ -6,6 +6,7 @@ aidData=read.csv('aidDataAgg.csv')
 colnames(aidData)=c('Sender','Receiver','year','commitUSD09')
 ################################################################
 
+################################################################
 # Cleaning country names and adding ccodes
 senders=char(unique(aidData$Sender))
 senders=data.frame(cbind(cntry=senders,cnameS=cname(senders)))
@@ -27,7 +28,10 @@ aidData=merge(aidData,receivers,by.x='Receiver',by.y='cntry',all.x=T)
 aidData=aidData[which(!is.na(aidData$cnameS)),] # gets rid of IGO sending cases
 aidData=aidData[which(!is.na(aidData$cnameR)),] # gets rid of region/group recipients
 aidData=aidData[which(!is.na(aidData$ccodeR)),] # gets rid of small countries
+aidData=aidData[which(!is.na(aidData$ccodeR)),] # weird cases with taiwan as donor but no year and no commit figure
+################################################################
 
-
+################################################################
 setwd(pathData)
 save(aidData, file='aidData.rda')
+################################################################
