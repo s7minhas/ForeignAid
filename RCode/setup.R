@@ -4,10 +4,10 @@ rm(list=ls())
 # Setting working directory
 if(
 Sys.info()["user"]=="janus829"
-){pathMain="~/Dropbox/Research/ButheProjects/ForeignAid";
-  pathGraphics="~/Dropbox/Research/ButheProjects/ForeignAid/Graphics";
-  pathData="~/Dropbox/Research/ButheProjects/ForeignAid/Data";
-  pathCode="~/Desktop/Research/ButheProjects/ForeignAid/RCode";
+){pathMain="~/Google Drive/Research/ForeignAid";
+  pathGraphics="~/Google Drive/Research/ForeignAid/Graphics";
+  pathData="~/Google Drive/Research/ForeignAid/Data";
+  pathCode="~/Desktop/Research/ForeignAid/RCode";
   pathFunctions="~/Desktop/Prog Notes/R Functions"
   } else if  (Sys.info()["user"]=="cindycheng") {
   pathMain="~/Dropbox/ForeignAid";
@@ -18,29 +18,17 @@ Sys.info()["user"]=="janus829"
 
 
 # Loading libraries and functions
-library(foreign)
-library(WDI)
-library(cshapes)
-library(countrycode)
-library(plm)
-library(MASS)
-library(mvtnorm)
-library(reshape)
-library(gtools)
-library(ggplot2)
+require(foreign)
+require(cshapes)
+require(countrycode)
+
+require(reshape)
+require(gtools)
+require(ggplot2)
 theme_set(theme_bw())
-library(scales)
-library(gridExtra)
-library(plyr)
-library(doBy)
-library(tikzDevice)
-#setwd(pathFunctions)
-#source("rwish.R")
-#source("theme_border.R")
-library(lme4)
-library(arm)
-# source("hdr_2d.R")
-# source("scatterHist.R")
+
+require(doBy)
+require(tikzDevice)
 
 # Helper dataset
 setwd(pathData)
@@ -51,59 +39,43 @@ set.seed(6886)
 setwd(pathMain)
 
 # Helper functions
-trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+trim = function (x) gsub("^\\s+|\\s+$", "", x)
 
-substrRight <- function(x, n){
+substrRight = function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
 # Log transformations for vars with negative values
-logNeg <- function(z){
-	x <- z[!is.na(z)]; y <- x
-	y[x>0] <- log(x[x>0]); y[x<0] <- -log(abs(x[x<0])); y[x==0] <- 0
-	z[!is.na(z)] <- y; z
+logNeg = function(z){
+	x = z[!is.na(z)]; y = x
+	y[x>0] = log(x[x>0]); y[x<0] = -log(abs(x[x<0])); y[x==0] = 0
+	z[!is.na(z)] = y; z
 }
 
 # Rescaling variables
-rescale <- function(x,new_max,new_min){
- xResc <- (new_max - new_min) / (max(x,na.rm=T) - min(x,na.rm=T))*(x - min(x,na.rm=T)) + new_min
+rescale = function(x,new_max,new_min){
+ xResc = (new_max - new_min) / (max(x,na.rm=T) - min(x,na.rm=T))*(x - min(x,na.rm=T)) + new_min
  xResc }
 
 # turn variables into numeric
-num <- function(x){ as.numeric(as.character(x)) }
+num = function(x){ as.numeric(as.character(x)) }
 char = function(x){as.character(x)}
 
 # Convert to cname
-cname <- function(x){
-	require(countrycode); x <- as.character(x)
-	y <- countrycode(x, 'country.name', 'country.name') }
-
-# Fx for Melting/Cleaning WB Data for Merge
-cleanAidData <- function(data, var, id, time){
-	mdata <- melt(data, id=id)
-	names(mdata)[3] <- var
-	mdata$year <-  num(mdata[,var])
-	mdata <- mdata[,c(id,time,var)]
-
-	# Setting standardized countryname for WB data
-	mdata$cname <- cname(mdata$Country)
-	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
-
-	# Adding in codes from panel
-	mdata$ccode <- panel$ccode[match(mdata$cname,panel$cname)]
-	mdata$cyear <- paste(mdata$ccode, mdata$year, sep='')
-	mdata }
+cname = function(x){
+	require(countrycode); x = as.character(x)
+	y = countrycode(x, 'country.name', 'country.name') }
 
 ### Fx for Melting/Cleaning WB Data for Merge
-cleanWbData <- function(data, variable){
-	var <- variable
-	mdata <- melt(data, id=c('Country.Name', 'Country.Code'))
-	names(mdata)[4] <- var
-	mdata$year <-  as.numeric(as.character(substring(mdata$variable,2)))
-	mdata <- mdata[,c(1,2,5,4)]
+cleanWbData = function(data, variable){
+	var = variable
+	mdata = melt(data, id=c('Country.Name', 'Country.Code'))
+	names(mdata)[4] = var
+	mdata$year =  as.numeric(as.character(substring(mdata$variable,2)))
+	mdata = mdata[,c(1,2,5,4)]
 
 	# Remove non-country observations and small islands/territories
-	drop <- c('Arab World', 'Caribbean small states', 
+	drop = c('Arab World', 'Caribbean small states', 
 		'East Asia & Pacific (all income levels)', 
 		'East Asia & Pacific (developing only)', 'Euro area', 
 		'Europe & Central Asia (all income levels)', 
@@ -137,16 +109,16 @@ cleanWbData <- function(data, variable){
 		 "Puerto Rico",               "Sint Maarten (Dutch part)",
 		 "St. Martin (French part)",  "Turks and Caicos Islands", 
 		 "Virgin Islands (U.S.)",     "West Bank and Gaza")
-	mdata <- mdata[which(!mdata$Country.Name %in% drop),]
+	mdata = mdata[which(!mdata$Country.Name %in% drop),]
 
 	# Setting standardized countryname for WB data
-	mdata$Country.Name <- as.character(mdata$Country.Name)
-	mdata$Country.Name[mdata$Country.Name=='Korea, Dem. Rep.'] <- 'North Korea' 
-	mdata$Country.Name[mdata$Country.Name=='Korea, Rep.'] <- 'South Korea' 
-	mdata$cname <- cname(mdata$Country.Name)
-	mdata$cnameYear <- paste(mdata$cname, mdata$year, sep='')
+	mdata$Country.Name = as.character(mdata$Country.Name)
+	mdata$Country.Name[mdata$Country.Name=='Korea, Dem. Rep.'] = 'North Korea' 
+	mdata$Country.Name[mdata$Country.Name=='Korea, Rep.'] = 'South Korea' 
+	mdata$cname = cname(mdata$Country.Name)
+	mdata$cnameYear = paste(mdata$cname, mdata$year, sep='')
 	
 	# Adding in codes from panel
-	mdata$ccode <- panel$ccode[match(mdata$cname,panel$cname)]
-	mdata$cyear <- paste(mdata$ccode, mdata$year, sep='')
+	mdata$ccode = panel$ccode[match(mdata$cname,panel$cname)]
+	mdata$cyear = paste(mdata$ccode, mdata$year, sep='')
 	mdata }	
