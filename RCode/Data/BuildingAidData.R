@@ -63,8 +63,12 @@ impData=aidData[,impVars]
 
 # impute with gaussian copula [will incorporate imputation w/ other covars later]
 aidData_sbgcop=sbgcop.mcmc(impData, nsamp=5000, verb=TRUE, seed=1342)
-IaidData=aidData_sbgcop$Y.impute
-IaidData=IaidData[,names(aidData)[1:10]]
+
+# Setting up imputed dataframe
+IaidData=cbind(
+	aidData[,setdiff(names(aidData), colnames(aidData_sbgcop$Y.pmean))[-8]],
+	aidData_sbgcop$Y.pmean[,1:3]
+	)
 ################################################################
 
 ################################################################
