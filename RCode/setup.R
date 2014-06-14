@@ -133,6 +133,10 @@ cleanWbData = function(data, variable){
 
 ################################################################
 # Build adjacency matrices from dyadic data
+# Dyad data must identify countries by variables  
+# ccode_1 & ccode_2 and the time aspect by a variable called year
+# time is a simple vector of years
+# panel is a dataset with country codes
 DyadBuild <- function(variable, dyadData, cntry1, cntry2, time, pd, panel=panel, directed=FALSE){
 
 	countryList <- lapply(pd, function(x) FUN=panel[panel$year==x,'ccode'])
