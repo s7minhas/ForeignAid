@@ -40,13 +40,45 @@ aidData$ccodeS=num(aidData$ccodeS)
 ################################################################
 
 ################################################################
+# Impute remaining missingness through sbgcop
+aidData$id=num(paste0(aidData$ccodeS,aidData$ccodeR))
+aidData$idYr=num(paste0(aidData$id,aidData$year))
+
+# Add five lags to capture possible trends
+aidData=lagData(aidData, 'idYr', 'id', c('commitUSD09','year'))
+aidData=lagData(aidData, 'idYr', 'id', c('LcommitUSD09','year'))
+aidData=lagData(aidData, 'idYr', 'id', c('LLcommitUSD09','year'))
+aidData=lagData(aidData, 'idYr', 'id', c('LLLcommitUSD09','year'))
+aidData=lagData(aidData, 'idYr', 'id', c('LLLLcommitUSD09','year'))
+
+# vars and data  to use in imputation
+impVars=c(
+	# 'ccodeS','ccodeR',
+	'id','year','commitUSD09',
+	paste0(
+		unlist(lapply(1:5,function(x) FUN=paste0(rep('L',x),collapse=''))),
+		'commitUSD09' )
+	)
+impData=aidData[,impVars]
+
+# impute with gaussian copula [will incorporate imputation w/ other covars later]
+aidData_sbgcop=sbgcop.mcmc(impData, nsamp=5000, verb=TRUE, seed=1342)
+IaidData=aidData_sbgcop$Y.impute
+IaidData=IaidData[,names(aidData)[1:10]]
+################################################################
+
+################################################################
 # Build Aid adjacency matrices
 aidMats=DyadBuild(variable='commitUSD09', dyadData=aidData,
+	cntry1='ccodeS', cntry2='ccodeR', time='year',
+	pd=1970:2010, panel=panel, directed=TRUE)
+
+IaidMats=DyadBuild(variable='commitUSD09', dyadData=IaidData,
 	cntry1='ccodeS', cntry2='ccodeR', time='year',
 	pd=1970:2010, panel=panel, directed=TRUE)
 ################################################################
 
 ################################################################
 setwd(pathData)
-save(aidData, aidMats, file='aidData.rda')
+save(aidData, aidMats, IaidData, IaidMats, file='aidData.rda')
 ################################################################
