@@ -1,61 +1,34 @@
 ForeignAid
 ==========
 
-Goal is to predict aid flows from OECD to developing countries.
+## ToDos
 
-Data: 
+* Generate strategic interest variable
 
-	DAC - aid flows
+	* Approaches: 
 
-		different types of aid
+		* Run null GBME on alliance, UN votes, MIDs, IOs
 
-	Add in China
+			* Run GBME model on each of these variables at yearly level. From each model pull out the latent u'v term. 
 
-	Missingness
+			* Need to find some way, such as PCA, to find an underlying variable that explains the variation in each
 
-Problem: 
+			* Validation method: Compare aggregated measure to either the dyadic terms we generated or to S-scores or tau-b from Signorino and whoever. Just in case think of any other commonly used strategic interest variable in the literature to compare ours to. 
 
-	If the US gives Congo a million dollars this may give France incentive
+	* ToDos:
 
-	M x N
+		* Data gathered: we have alliance, IOs, MIDs, UN voting data
 
-	Bayesian random effects model
+		* Organizing and running GBME: 
 
-		higher order characteristics
+			* Cindy: alliance, IOs (undirected for both)
 
-		lower order characteristics dyad specific
+			* Shahryar: MIDs, UN voting
 
+* Modeling aid
 
-methodological contribution
+	* Approaches: 
 
-	two step model
+		* Dump network approach
 
-		first predict any aid, then level
-
-	estimating yearly models
-
-		imputation would be useful here
-
-	account somehow for dyadic dependence
-
-		bayesian approach?
-
-other explanations
-
-	disasters, data is available online at yearly level
-
-disaggregating need
-
-	that's where hdi and other stuff comes in
-
-steps: 
-
-	overall question: predict aid flows
-
-	what model we want to use
-
-	narrow down contribution so we have some story to share
-
-	reading the literature on aid
-
-	 apply for isa: june
+		* Consider Hierarchical Bayesian Model
