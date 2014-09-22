@@ -1,5 +1,8 @@
-if(Sys.info()['user']=='janus829'){ source("~/Desktop/Research/ForeignAid/RCode/setup.R") }
-if(Sys.info()['user']=='s7m'){ source("~/Research/ForeignAid/RCode/setup.R") }
+if(Sys.info()['user']=='janus829'){ 
+    pathCode='~/Desktop/Research/ForeignAid/RCode' }
+if(Sys.info()['user']=='s7m'){ 
+    pathCode='~/Research/ForeignAid/RCode' }
+source(paste0(pathCode, '/setup.R'))
 
 ###############################################################
 # Clean PRIO War Data [first rec'd war in 1946 last in 2012]
@@ -75,6 +78,9 @@ warFINAL$war = 1
 warMats <- DyadBuild(variable='war', dyadData=warFINAL,
     cntry1='ccode_1', 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
+
+setwd(pathData)
+save(warMats, file='stratInterestMatrics.rda')
 ###############################################################
 
 ###############################################################
@@ -83,5 +89,13 @@ setwd(paste0(pathData, '/Components/VoetenData/Raw data'))
 # unData=read.table('undata-213.tab', sep='\t', header=TRUE)
 # save(unData, file='unData.rda')
 load('unData.rda')
+
+# vote – Vote choice 
+# 1 – Yes 
+# 2 – Abstain 
+# 3 – No 
+# 8 – Absent 
+# 9 – Not a member 
+
 
 ###############################################################

@@ -1,6 +1,3 @@
-# Clearing workspace
-rm(list=ls())
-
 # Setting working directory
 if(
 Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
