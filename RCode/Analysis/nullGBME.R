@@ -12,8 +12,6 @@ load('stratInterestMatrics.rda')
 
 #######################################################
 source(paste0(pathCode, '/Analysis/gbme.asym.R')) 
-source(paste0(pathCode, '/Analysis/gbme_mixture.R')) 
-source(paste0(pathCode, '/Analysis/gbme_mix_ef.R')) 
 
 nullGBME=function(
 	matList, matName, yrs=names(matList),
@@ -35,16 +33,16 @@ nullGBME=function(
 			ufile=paste(matName, years[ii], 'U', sep='_')
 			vfile=paste(matName, years[ii], 'V', sep='_')
 				gbme(Y = Y, fam=family, k=2, directed=direct,
-					owrite=T, ofilename=ofile,
+					owrite=F, ofilename=ofile,
 					efilename=ufile, ffilename = vfile, 
-					awrite=T, bwrite=T, afilename=afile, bfilename=bfile,		
+					awrite=F, bwrite=F, afilename=afile, bfilename=bfile,		
 					NS = imps, odens = ods)
 			} 
 		else {
 			zfile=paste(matName, years[ii], 'Z', sep='_')
 				gbme(Y = Y, fam=family, k=2, directed=direct, 
-					owrite=T, ofilename=ofile, zwrite=T, zfilename=zfile, 
-					awrite=T, bwrite=T, afilename=afile, bfilename=bfile,
+					owrite=F, ofilename=ofile, zwrite=T, zfilename=zfile, 
+					awrite=F, bwrite=F, afilename=afile, bfilename=bfile,
 					NS = imps, odens = ods)
 		}
 	}

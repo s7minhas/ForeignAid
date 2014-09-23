@@ -13,18 +13,18 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 
 
 # Loading libraries and functions
-require(foreign)
-require(cshapes)
-require(countrycode)
+library(foreign)
+library(cshapes)
+library(countrycode)
 
-require(reshape)
-require(gtools)
-require(ggplot2)
+library(reshape)
+library(gtools)
+library(ggplot2)
 theme_set(theme_bw())
-require(tikzDevice)
+library(tikzDevice)
 
-require(doBy)
-require(sbgcop)
+library(doBy)
+library(sbgcop)
 
 # Helper dataset
 setwd(pathData)
@@ -63,7 +63,7 @@ rescale = function(x,new_max,new_min){
 ################################################################
 # Convert to cname
 cname = function(x){
-	require(countrycode); x = as.character(x)
+	library(countrycode); x = as.character(x)
 	y = countrycode(x, 'country.name', 'country.name') }
 ################################################################
 

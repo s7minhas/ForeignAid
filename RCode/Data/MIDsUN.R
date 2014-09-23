@@ -97,5 +97,16 @@ load('unData.rda')
 # 8 – Absent 
 # 9 – Not a member 
 
+# Add year variable to unData
+unData$date=as.Date(unData$date)
+unData$year=as.numeric(format(unData$date, "%Y"))
 
+# Clean up countrynames
+unData$cname=
+
+# Convert to dyadic-year dataset, where value of interest is 
+# the sum of times in a year that i-j voted yes on 
+# same bill
+
+# Apply dyadbuild function to get matrices necessary for GBME
 ###############################################################
