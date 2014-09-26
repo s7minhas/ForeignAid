@@ -1,5 +1,11 @@
 if(Sys.info()['user']=='janus829'){ pathCode='~/Desktop/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='s7m'){ pathCode='~/Research/ForeignAid/RCode' }
+
+if(Sys.info()['user']=='cindycheng'){ pathCode = '~/Documents/Papers/ForeignAid/RCode'
+									  pathData = '~/Google Drive/ForeignAid/Data'   }
+
+ 
+
 source(paste0(pathCode, '/setup.R'))
 
 ###############################################################
@@ -238,6 +244,43 @@ source(paste0(pathCode, '/setup.R'))
 ###############################################################
 
 ###############################################################
+# Clean UN data
+
+# vote – Vote choice 
+# 1 – Yes 
+# 2 – Abstain 
+# 3 – No 
+# 8 – Absent 
+# 9 – Not a member 
+ 
+# # setwd(paste0(pathData, '/Components/VoetenData/Affinity scores, cow country codes'))
+# unData = read.table("session_affinity_scores_un_67_02132013-cow.tab", header=T, stringsAsFactors=F)
+ 
+# # Create variable : i and j agree (no abstensions) / total instances where i and j vote (including abstensions)
+
+# unData$agree2un = as.numeric(unData$agree2un) 
+# unData$jointvotes2 = as.numeric(unData$jointvotes2)
+
+# unData$agree2unA<-unData$agree2un*unData$jointvotes2/unData$jointvotes3
+ 
+# # Clean up countrynames
+# unData$cname_1 = toupper(countrycode(unData$statea, "cown", "country.name"))
+# unData$cname_2 = toupper(countrycode(unData$stateb, "cown", "country.name")) 
+
+# unData$state_name1 = countrycode(unData$statea, "cown", "country.name")
+# unData$state_name2 = countrycode(unData$stateb, "cown", "country.name")
+
+# names(unData)[ which(names(unData) %in% c('statea', 'stateb'))]  <- c("ccode_1", "ccode_2")
+
+# unDataFINAL = unData[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'agree2un', 'agree2unA', 'agree3un')]
+
+
+# setwd(paste0(pathData, '/Components/VoetenData'))
+# save(unDataFINAL, file='un.rda')
+
+###############################################################
+
+###############################################################
 # Load cleaned data
 setwd(paste0(pathData, '/Components/COW_Alliances/version4.1_stata'))
 load('ally.rda')
@@ -247,7 +290,11 @@ load('igo.rda')
 
 setwd(paste0(pathData, '/Components/PRIO_ArmedConflict'))
 load('war.rda')
+ 
+setwd(paste0(pathData, '/Components/VoetenData'))
+load('un.rda')
 
+ls()
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
     cntry1='ccode_1', 'ccode_2', time='year',
@@ -260,35 +307,13 @@ igoMats = DyadBuild(variable='igo', dyadData=igoDataFINAL,
 warMats = DyadBuild(variable='war', dyadData=warFINAL,
     cntry1='ccode_1', 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
+    
+unMats = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
+    cntry1='ccode_1', 'ccode_2', time='year',
+    pd=1970:2010, panel=panel, directed=FALSE)
 
 setwd(pathData)
-save(allyMats, igoMats, warMats, file='stratInterestMatrics.rda')
+save(allyMats, igoMats, warMats, unMats, file='stratInterestMatrics.rda')
 ###############################################################
 
-###############################################################
-# Clean UN data
-setwd(paste0(pathData, '/Components/VoetenData/Raw data'))
-# unData=read.table('undata-213.tab', sep='\t', header=TRUE)
-# save(unData, file='unData.rda')
-load('unData.rda')
-
-# vote – Vote choice 
-# 1 – Yes 
-# 2 – Abstain 
-# 3 – No 
-# 8 – Absent 
-# 9 – Not a member 
-
-# Add year variable to unData
-unData$date=as.Date(unData$date)
-unData$year=as.numeric(format(unData$date, "%Y"))
-
-# Clean up countrynames
-unData$cname=
-
-# Convert to dyadic-year dataset, where value of interest is 
-# the sum of times in a year that i-j voted yes on 
-# same bill
-
-# Apply dyadbuild function to get matrices necessary for GBME
 ###############################################################

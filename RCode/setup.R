@@ -5,9 +5,9 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathGraphics="~/Google Drive/Research/ForeignAid/Graphics";
   pathData="~/Google Drive/Research/ForeignAid/Data"
   } else if  (Sys.info()["user"]=="cindycheng") {
-  pathMain="~/Dropbox/ForeignAid";
-  pathGraphics="~/Dropbox/ForeignAid/Graphics";
-  pathData="~/Dropbox/ForeignAid/Data";
+  pathMain="~/Google Drive/ForeignAid";
+  pathGraphics="~/Google Drive/ForeignAid/Graphics";
+  pathData="~/Google Drive/ForeignAid/Data";
   pathCode="~/Documents/Papers/ForeignAid/RCode";
   pathFunctions="~/Documents/Methods/R Functions"}
 
