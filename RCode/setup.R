@@ -192,3 +192,13 @@ lagData <- function(data, country_year, country, varsTOlag, lag=1)
   cbind(data, lagData)
 }
 ################################################################
+
+## Expand panel dataset to account for all years
+panelyear<-function(dataset, styear, endyear){
+fulldata<-list()
+for ( i in 1:length(dataset[,1])){
+	fulldata[[i]] <- cbind(dataset[i,], year=styear[i]:endyear[i], row.names = NULL)
+}
+fulldata1 <- do.call(rbind, fulldata)
+return(fulldata1)
+}

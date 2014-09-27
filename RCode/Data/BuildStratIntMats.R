@@ -281,6 +281,65 @@ source(paste0(pathCode, '/setup.R'))
 ###############################################################
 
 ###############################################################
+# # Clean MIDs data
+
+# # load data
+# setwd(paste0(pathData, '/Components/MIDs'))
+# mid<-read.csv("MIDDyadic_v3.10.csv", stringsAsFactors=F)
+
+# # clean up names
+# names(mid)<-tolower(names(mid))
+# names(mid)[which(names(mid) %in% c('ccodea', 'ccodeb'))]  = c("ccode_1", "ccode_2")
+ 
+# mid$cname_1 = toupper(countrycode(mid$ccode_1, "cown", "country.name")) 
+# mid$cname_2 = toupper(countrycode(mid$ccode_2, "cown", "country.name")) 
+
+# mid$state_name1 = countrycode(mid$ccode_1, "cown", "country.name") 
+# mid$state_name2 = countrycode(mid$ccode_2, "cown", "country.name")
+
+# ## Expand the dataset to account for conflicts over all years
+
+# mid1 = panelyear(mid, mid$styear, mid$endyear)
+# mid1$mid = 1
+
+
+# # select variables/years you want
+# midFINAL = mid1[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'mid', 'sideadya', 'sideadyb')]
+
+# save(midFINAL, file='mid.rda')
+
+
+# ###############################################################
+
+# ###############################################################
+
+# # Clean directed alliance data
+
+# setwd(paste0(pathData, '/Components/LeedsData'))
+# ally<-read.csv("alliance_v4.1_by_directed.csv", stringsAsFactors=F)
+
+ 
+# # clean up names
+# names(ally)[which(names(ally) %in% c('ccode1', 'ccode2'))]  = c("ccode_1", "ccode_2")
+ 
+# ally$cname_1 = toupper(countrycode(ally$ccode_1, "cown", "country.name")) 
+# ally$cname_2 = toupper(countrycode(ally$ccode_2, "cown", "country.name")) 
+
+ 
+# ## Expand the dataset to account for alliances over all years 
+# ally$dyad_end_year[which(is.na(ally$dyad_end_year))] = 2012
+# ally1 = panelyear(ally, ally$dyad_st_year, ally$dyad_end_year)
+# ally1$ally = 1
+
+# allyDirFINAL = ally1[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'ally')] 
+
+
+# save(allyDirFINAL, file ='allydir.rda') 
+ 
+###############################################################
+
+###############################################################
+
 # Load cleaned data
 setwd(paste0(pathData, '/Components/COW_Alliances/version4.1_stata'))
 load('ally.rda')
@@ -294,7 +353,13 @@ load('war.rda')
 setwd(paste0(pathData, '/Components/VoetenData'))
 load('un.rda')
 
-ls()
+setwd(paste0(pathData, '/Components/MIDs'))
+load('mid.rda')
+
+setwd(paste0(pathData, '/Components/LeedsData'))
+load('allydir.rda')
+
+
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
     cntry1='ccode_1', 'ccode_2', time='year',
@@ -311,9 +376,18 @@ warMats = DyadBuild(variable='war', dyadData=warFINAL,
 unMats = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
     cntry1='ccode_1', 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
+    
+midMats = DyadBuild(variable='mid', dyadData=midFINAL,
+    cntry1='ccode_1', 'ccode_2', time='year',
+    pd=1970:2001, panel=panel, directed=TRUE)
+
+allyDirMats = DyadBuild(variable='ally', dyadData=allyDirFINAL,
+    cntry1='ccode_1', 'ccode_2', time='year',
+    pd=1970:2010, panel=panel, directed=TRUE)
+    
 
 setwd(pathData)
-save(allyMats, igoMats, warMats, unMats, file='stratInterestMatrics.rda')
+save(allyMats, igoMats, warMats, unMats, midMats, allyDirMats, file='stratInterestMatrics.rda')
 ###############################################################
 
 ###############################################################
