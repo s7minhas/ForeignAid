@@ -13,18 +13,13 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 
 
 # Loading libraries and functions
-library(foreign)
-library(cshapes)
-library(countrycode)
-
-library(reshape)
-library(gtools)
-library(ggplot2)
-theme_set(theme_bw())
-library(tikzDevice)
-
-library(doBy)
-library(sbgcop)
+toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 'gtools', 
+       'ggplot2', 'doBy', 'sbgcop', 'tikzDevice')
+for(lib in toLoad){
+  if(!(lib %in% installed.packages()[,1])){ 
+  	install.packages(lib, repos='http://cran.rstudio.com/') }
+  library(lib, character.only=TRUE)
+}
 
 # Helper dataset
 setwd(pathData)
