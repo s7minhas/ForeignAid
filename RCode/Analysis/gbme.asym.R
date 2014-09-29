@@ -132,8 +132,12 @@ set.seed(seed)
 n<<-dim(Y)[1]
 rd<<-dim(Xd)[3]
 rs<<-dim(Xs)[2]
-rr<<-dim(Xr)[2]   
-diag(Y)<<-rep(0,n)
+rr<<-dim(Xr)[2]  
+diag(Y) = rep(0,n)
+ 
+
+
+
 ###
 
 ###column names for output file
