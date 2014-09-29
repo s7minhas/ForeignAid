@@ -20,7 +20,7 @@ source(paste0(pathCode, '/Analysis/gbme.asym.R'))
 # source('gbme.asym.R')
 
 nullGBME=function( matList, matName, yrs,
-	direct=FALSE, family='binomial', imps=3000, ods=2){
+	direct, family, imps=3000, ods=2){
   
   # 
   print(paste0('Running GBME on ', matName, ' network from ', 
@@ -32,11 +32,12 @@ nullGBME=function( matList, matName, yrs,
 		# DV
 		dv = matList[[t]]
 		n = nrow(dv)
-
+ 
 		# GBME
 		afile=paste(matName, yrs[t], 'A', sep='_')
 		bfile=paste(matName, yrs[t], 'B', sep='_')
 		ofile=paste(matName, yrs[t], 'OUT', sep='_')
+ 
 
 		if(direct){
 			ufile=paste(matName, yrs[t], 'U', sep='_')
@@ -63,3 +64,7 @@ nullGBME=function( matList, matName, yrs,
 results=nullGBME(matList=igoMats, matName='igo', yrs=names(igoMats), 
                  direct=FALSE,family='poisson')
 #######################################################
+ 
+				
+				
+				
