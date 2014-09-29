@@ -1,6 +1,6 @@
 rm(list=ls())
 if(Sys.info()['user']=='janus829'){ 
-	pathCode='~/Desktop/Research/ForeignAid/RCode' }
+	pathCode='~/Desktop/Research/ForeignAid/RCode'}
 if(Sys.info()['user']=='s7m'){ 
 	pathCode='~/Research/ForeignAid/RCode' }
 source(paste0(pathCode, '/setup.R')) 
@@ -25,9 +25,9 @@ nullGBME=function( matList, matName, yrs,
 	# Loop through matrices in list
 	for(t in 1:length(yrs)){
 
-		# DV
-		dv = matList[[t]]
-		n = nrow(dv)
+		# dv
+		Y = matList[[t]]
+		n = nrow(Y)
 
 		# GBME
 		afile=paste(matName, yrs[t], 'A', sep='_')
@@ -37,18 +37,18 @@ nullGBME=function( matList, matName, yrs,
 		if(direct){
 			ufile=paste(matName, yrs[t], 'U', sep='_')
 			vfile=paste(matName, yrs[t], 'V', sep='_')
-				gbme(Y = dv, fam=family, k=2, directed=direct,
-					owrite=F, ofilename=ofile,
-					efilename=ufile, ffilename = vfile, 
-					awrite=F, bwrite=F, afilename=afile, bfilename=bfile,		
-					NS = imps, odens = ods)
-			} 
-		else {
+			gbme(Y = Y, fam=family, k=2, directed=direct,
+				efilename=ufile, ffilename = vfile, 
+				owrite=F, awrite=F, bwrite=F, 
+				ofilename=ofile, afilename=afile, bfilename=bfile,
+				NS = imps, odens = ods)
+			} else {
 			zfile=paste(matName, yrs[t], 'Z', sep='_')
-			gbme(Y = dv, fam=family, k=2, directed=direct, 
-				owrite=F, ofilename=ofile, zwrite=T, zfilename=zfile, 
-				awrite=F, bwrite=F, afilename=afile, bfilename=bfile,
-				NS = imps)
+			gbme(Y = Y, fam=family, k=2, directed=direct, 
+				zwrite=T, zfilename=zfile, 
+				owrite=F, awrite=F, bwrite=F, 
+				# ofilename=ofile, afilename=afile, bfilename=bfile,
+				NS = imps, odens=ods, N=matrix(1,n,n))
 		}
     cat(paste0('\t\tYear ', yrs[t], ' finished...'))
 	}
@@ -56,6 +56,9 @@ nullGBME=function( matList, matName, yrs,
 #######################################################
 
 #######################################################
+results=nullGBME(matList=allyMats, matName='ally', yrs=names(allyMats), 
+                 direct=FALSE,family='binomial')
+
 results=nullGBME(matList=igoMats, matName='igo', yrs=names(igoMats), 
                  direct=FALSE,family='poisson')
 #######################################################
