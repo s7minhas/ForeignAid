@@ -111,16 +111,14 @@ gbme<-function(
  odens=100,         #output density
  owrite=T,          #write output to a file? 
  ofilename="OUT",   #name of output file 
- oround=5,          #rounding of output
+ oround=3,          #rounding of output
  zwrite=(k>0),      #write z to  file 
  zfilename="Z",     #outfile for z 
- efilename="U",     #outfile for z
- ffilename="V",     #outfile for z
  sdigz=3,           #rounding for z
  awrite=F,bwrite=F,
  afilename="A",
  bfilename="B"
-         )
+	       )
 {
 
 ###set seed
@@ -133,7 +131,7 @@ n<<-dim(Y)[1]
 rd<<-dim(Xd)[3]
 rs<<-dim(Xs)[2]
 rr<<-dim(Xr)[2]  
-diag(Y) = rep(0,n)
+diag(Y) = rep(0,n) 
 ###
 
 ###column names for output file
@@ -141,8 +139,7 @@ if(directed==T) {
 cnames<-c("k","scan","ll",paste("bd",seq(1,rd,length=rd),sep="")[0:rd],"b0",
                           paste("bs",seq(1,rs,length=rs),sep="")[0:rs],
                           paste("br",seq(1,rr,length=rr),sep="")[0:rr],
-  "s2a","sab","s2b","s2e","rho", paste("s2e",seq(1,k,length=k),sep="")[0:k],
-      paste("s2f",seq(1,k,length=k),sep="")[0:k] )
+  "s2a","sab","s2b","s2e","rho", paste("s2z",seq(1,k,length=k),sep="")[0:k] )
                 } 
             
 if(directed==F) {
@@ -169,7 +166,7 @@ UT<<-tmp
 
 
 ###get starting values and empirical bayes priors using a glm-type approach
-if(estart==T) {tmp<-gbme.glmstart(Y,Xd,Xs,Xr,fam,k,directed)
+if(estart==T) {tmp<-gbme.glmstart(Y,Xd,Xs,Xr,N=N,fam,k,directed)
                priors<-tmp$priors ; startv<-tmp$startv 
               }
 
@@ -178,7 +175,7 @@ if(directed==T) {
  pi.s2z<-priors$pi.s2z ; pim.bd<-priors$pim.bd ; piS.bd<-priors$piS.bd
  pim.b0sr<-priors$pim.b0sr ; piS.b0sr<-priors$piS.b0sr 
  beta.d<-startv$beta.d ; beta.u<-startv$beta.u 
- s<-startv$s ; r<-startv$r ; z<-startv$z ; e<-z ; f<-z
+ s<-startv$s ; r<-startv$r ; z<-startv$z
                }
 ###
 
@@ -230,14 +227,13 @@ if(fam=="gaussian"){ theta<-Y }
 for(ns in 1:NS){
 
 ###update value of theta
-if(fam!="gaussian"){theta<-
- theta.betaX.d.srE.ef(beta.d,Xd,s,s*(1-directed)+r*directed,E,e,f)  }
+if(fam!="gaussian"){theta<-theta.betaX.d.srE.z(beta.d,Xd,s,s*(1-directed)+r*directed,E,z)  }
 
 ###impute any missing values if gaussian
 if(fam=="gaussian" & any(is.na(Y))) {  
   rho<-(pi.s2u[2]-pi.s2v[2])/(pi.s2u[2]+pi.s2v[2])
   se<-(pi.s2u[2]+pi.s2v[2])/4
-  mu<-theta.betaX.d.srE.ef(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,e,f)
+  mu<-theta.betaX.d.srE.z(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,z)
   imiss<-(1:n)[ is.na(Y%*%rep(1,n))  ]
   for(i in imiss){
     for(j in (1:n)[is.na(Y[i,])]) {
@@ -251,7 +247,7 @@ else{theta[i,j]<-rmvnorm( mu[i,j]+rho*(theta[j,i]-mu[j,i]), sqrt(se*(1-rho^2)))}
 
 
 ###Update regression part
-tmp<-uv.E(theta-e%*%t(f)) #the regression part
+tmp<-uv.E(theta-z%*%t(z)) #the regression part
 u<-tmp$u                  #u=yij+yji,  i<j
 v<-tmp$v                  #v=yij-yji,  i<j
 
@@ -293,38 +289,28 @@ beta.u<-rbeta.s.gibbs(s,X.u,pim.b0s,piS.b0s,s2a)
 ###bilinear effects
 if(k>0){
 
-s2e<-1/rgamma(k,pi.s2z[,1]+n/2,pi.s2z[,2]+diag( t(e)%*%e)/2)
-s2f<-1/rgamma(k,pi.s2z[,1]+n/2,pi.s2z[,2]+diag( t(f)%*%f)/2)
-
+#update variance
+#tmp<-eigen(z%*%t(z))
+#z<-tmp$vec[,1:k]%*%sqrt(diag(tmp$val[1:k],nrow=k)) #make cols of z orthogonal  
+sz<-1/rgamma(k,pi.s2z[,1]+n/2,pi.s2z[,2]+diag( t(z)%*%z)/2)
 
 #Gibbs for zs, using regression
-res<-theta-theta.betaX.d.srE.ef(beta.d,Xd,s,s*(1-directed)+r*directed,0*E,
-                0*e,0*f) 
-s2u.res<-2*se*(1+rho)
-s2v.res<-2*se*(1-rho)
-
+res<-theta-theta.betaX.d.srE.z(beta.d,Xd,s,s*(1-directed)+r*directed,0*E,0*z) #theta-(beta*x+a+b)
+s.ares<-se*(1+rho)/2
 for(i in sample(1:n))      {
-u.res<-(res[i,-i]+res[-i,i])
-v.res<-(res[i,-i]-res[-i,i])
-
-alp.j<-cbind( f[-i,],e[-i,] )
-gam.j<-cbind( f[-i,],-e[-i,])
-
-Sef<-chol2inv(chol(   diag( 1/c(s2e,s2f),nrow=2*k)  +
-         t(alp.j)%*%alp.j/s2u.res + t(gam.j)%*%gam.j/s2v.res ))
-
-muef<-Sef%*%( t(alp.j)%*%u.res/s2u.res +
-              t(gam.j)%*%v.res/s2v.res  )
-ef<-t(rmvnorm(muef,Sef))
-e[i,]<-ef[1,1:k] ; f[i,]<-ef[1,k+1:k]
- }
+ares<-(res[i,-i]+res[-i,i])/2
+Zi<-z[-i,]
+Szi<-chol2inv(chol(diag(1/(sz),nrow=k) + 
+     t(Zi)%*%Zi/s.ares)) #cond variance of z[i,]
+muzi<-Szi%*%( t(Zi)%*%ares/s.ares )                      #cond mean of z[i,]
+z[i,]<-t(rmvnorm(muzi,Szi)) }
          }
 ###
 if(k==0){sz<-NULL }
 
 #update E
 if( fam!="gaussian"){
-E<-theta-theta.betaX.d.srE.ef(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,e,f) 
+E<-theta-theta.betaX.d.srE.z(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,z) 
       #current E|beta.d,Xd,s,r,z
 
 UU<-VV<-Y*0
@@ -376,8 +362,8 @@ if(fam=="binomial"){ lpy.th<-sum( dbinom(Y,N,exp(theta)/(1+exp(theta)),
                                     log=T),na.rm=T) }
 
 if(fam=="gaussian"){ 
-E<-theta-theta.betaX.d.srE.ef(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,e,f)
-tmp<-uv.E(theta-e%*%t(f)) #the regression part
+E<-theta-theta.betaX.d.srE.z(beta.d,Xd,s,s*(1-directed)+r*directed,E*0,z)
+tmp<-uv.E(theta-z%*%t(z)) #the regression part
 u<-tmp$u                  #u=yij+yji,  i<j
 v<-tmp$v                  #v=yij-yji,  i<j
 if(directed==T) {
@@ -388,7 +374,7 @@ if(directed==F) {lpy.th<-lpy.th/2
                  out<-round(c(k,ns,lpy.th,beta.d,beta.u,s2a,se,sz[0:k]),oround) }
 if(directed==T) {
 out<-round(c(k,ns,lpy.th,beta.d,beta.u,Sab[1,1],Sab[1,2],Sab[2,2],
-             se,rho,s2e[0:k],s2f[0:k]),oround) }
+             se,rho,sz[0:k]),oround) }
 
 if(owrite==T) { 
     if(ns==odens) { write.table(t(out),file=ofilename,quote=F,
@@ -397,9 +383,7 @@ if(owrite==T) {
                     row.names=F,col.names=F) }
               }
 if(owrite==F) {cat(out,"\n") }
-if(zwrite==T) { write.table(signif(e,sdigz),file=efilename,
-                      append=T*(ns>odens),quote=F,row.names=F,col.names=F) }
-if(zwrite==T) { write.table(signif(f,sdigz),file=ffilename,
+if(zwrite==T) { write.table(signif(z,sdigz),file=zfilename,
                       append=T*(ns>odens),quote=F,row.names=F,col.names=F) }
 
 
@@ -465,27 +449,11 @@ diag(tmp)<-0
 tmp}
 ####
 
-theta.betaX.d.srE.ef<-function(beta.d,X.d,s,r,E,e,f){
-m<-dim(X.d)[3]
-mu<-matrix(0,nrow=length(s),ncol=length(s))
-if(m>0){for(l in 1:m){ mu<-mu+beta.d[l]*X.d[,,l] }}
-tmp<-mu+reef(s,r,E,e,f)
-diag(tmp)<-0
-tmp}
-
-
-
 ####
 re<-function(a,b,E,z){
 n<-length(a)
 matrix(a,nrow=n,ncol=n,byrow=F)+matrix(b,nrow=n,ncol=n,byrow=T)+E+z%*%t(z) }
 ####
-
-reef<-function(a,b,E,e,f){
-n<-length(a)
-matrix(a,nrow=n,ncol=n,byrow=F)+matrix(b,nrow=n,ncol=n,byrow=T)+E+e%*%t(f) }
-####
-
 
 ####
 rbeta.d.sr.gibbs<-function(u,v,su,sv,piS.bd,mu,Sab){
@@ -549,7 +517,7 @@ rwish<-function(S0,nu){
 S<-S0*0
 for(i in 1:nu){ z<-rmvnorm(rep(0,dim(as.matrix(S0))[1]), S0)
                 S<-S+z%*%t(z)  }
-    S }
+		S }
 
 ###  Procrustes transformation: rotation and reflection
 proc.rr<-function(Y,X){
@@ -563,15 +531,26 @@ t(t(X)%*%Y%*%solve(Ahalf)%*%t(Y)) }
 
 
 
-gbme.glmstart<-function(Y,Xd,Xs,Xr,fam,k,directed){  
+gbme.glmstart<-function(Y,Xd,Xs,Xr,N=NULL,fam,k,directed){  
 #generate starting values and emp bayes priors from 
 #approximate mles
 
+if(fam!="binomial"){
 y<-x<-NULL
 for (i in 1:n) {
 for (j in (1:n)[-i]) {
 y<-c(y,Y[i,j])
 x<-rbind(x,c(i,j,Xd[i,j,])) }}
+                    }
+
+if(fam=="binomial"){
+y<-x<-NULL
+for (i in 1:n) {
+for (j in (1:n)[-i]) {
+y<-rbind(y,c(Y[i,j], N[i,j]-Y[i,j] ))
+x<-rbind(x,c(i,j,Xd[i,j,])) }}
+                    }
+
 
 if(rd>0) {
  fit1<-glm(y~-1+as.factor(x[,1])+as.factor(x[,2])+x[,-(1:2)],family=fam) }
@@ -702,3 +681,5 @@ S<-solve( solve(piS.b0s) + t(X.u)%*%iSa%*%X.u )
 mu<-S%*%(  solve(piS.b0s)%*%pim.b0s+ t(X.u)%*%iSa%*%s)
 rmvnorm( mu,S)
                                                }
+
+
