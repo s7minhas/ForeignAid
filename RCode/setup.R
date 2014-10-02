@@ -166,6 +166,48 @@ DyadBuild <- function(variable, dyadData, cntry1, cntry2, time, pd, panel=panel,
 ################################################################
 
 ################################################################
+# Calculate moving average or sum for network data
+matrixMatcher=function(matToMatch, toAdd){
+		addCntr=setdiff(toAdd,rownames( matToMatch ))
+		addRows=matrix(NA, nrow=length(addCntr),ncol=nrow(matToMatch), 
+			dimnames=list(c(addCntr), NULL))
+		matToMatch=rbind(matToMatch, addRows)
+		addCols=matrix(NA, ncol=length(addCntr),nrow=nrow(matToMatch), 
+			dimnames=list(NULL, c(addCntr)))
+		cbind(matToMatch, addCols) }
+
+mvaStatMat=function(years, wdow, mats, avg=TRUE){
+
+	matListStat=list()
+
+	for(ii in 1:length(years) ){
+
+		sy1=years[ii]-wdow+1; sy2=years[ii]
+		ys=as.character(sy1:sy2)
+		matList=mats[ys]
+		namL=names(matList); namL=namL[!is.na(namL)]
+		matList=mats[namL]
+		kmat=mats[as.character(sy2)][[1]]
+		cntries=rownames(kmat); lcnt=length(cntries)
+
+		matList=lapply(matList, function(x) FUN=matrixMatcher(x, cntries))
+		matList2=lapply(matList, function(x) FUN=x[cntries,cntries])
+
+		if(avg){matStat=rowMeans( 
+			array(unlist(matList2), dim = c(lcnt,lcnt,length(matList2))),
+			 dims=2, na.rm=T) }
+		if(!avg){matStat=rowSums( 
+			array(unlist(matList2), dim = c(lcnt,lcnt,length(matList2))),
+			 dims=2, na.rm=T) }		
+
+		matStat=matrix(matStat, nrow=lcnt, ncol=lcnt, dimnames=list(cntries, cntries))
+		matListStat[[ii]]=matStat; print(years[ii])
+		}
+	names(matListStat)=years; matListStat	
+}
+################################################################
+
+################################################################
 # This takes a dataset, a variable country year which is
 # a concatenation of the country identifier and year
 # Then a country variable
