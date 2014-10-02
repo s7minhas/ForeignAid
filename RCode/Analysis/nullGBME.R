@@ -63,6 +63,15 @@ nullGBME=function( matList, matName, yrs,
 results=nullGBME(matList=allyMats, matName='ally', yrs=names(allyMats), 
                  direct=FALSE,family='binomial')
 
+results=nullGBME(matList=allyDirMats, matName='allyDir', yrs=names(allyDirMats), 
+                 direct=TRUE,family='binomial')
+
 results=nullGBME(matList=igoMats, matName='igo', yrs=names(igoMats), 
+                 direct=FALSE,family='poisson')
+
+results=nullGBME(matList=unMats, matName='un', yrs=names(unMats), 
+                 direct=TRUE,family='gaussian')
+
+results=nullGBME(matList=warMatsMsum5, matName='warMsum5', yrs=names(warMatsMsum5), 
                  direct=FALSE,family='poisson')
 #######################################################

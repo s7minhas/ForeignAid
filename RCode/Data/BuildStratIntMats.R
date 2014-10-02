@@ -347,6 +347,6 @@ warMatsMsum5=mvaStatMat(1970:2010, 5, warMats, avg=FALSE)
 
 setwd(pathData)
 save(allyMats, allyDirMats, igoMats, 
-    warMats, warMatsMsum5, unMats, 
+    warMatsMsum5, unMats, 
     file='stratInterestMatrics.rda')
 ###############################################################
