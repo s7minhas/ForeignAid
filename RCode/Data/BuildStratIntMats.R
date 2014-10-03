@@ -246,48 +246,52 @@ source(paste0(pathCode, '/setup.R'))
 ###############################################################
 # Clean UN data
 
-vote – Vote choice 
-1 – Yes 
-2 – Abstain 
-3 – No 
-8 – Absent 
-9 – Not a member 
+# vote – Vote choice 
+# 1 – Yes 
+# 2 – Abstain 
+# 3 – No 
+# 8 – Absent 
+# 9 – Not a member 
  
-setwd(paste0(pathData, '/Components/VoetenData/Affinity scores, cow country codes'))
-unData = read.table("session_affinity_scores_un_67_02132013-cow.tab", header=T, stringsAsFactors=F)
+# setwd(paste0(pathData, '/Components/VoetenData/Affinity scores, cow country codes'))
+# unData = read.table("session_affinity_scores_un_67_02132013-cow.tab", header=T, stringsAsFactors=F)
+
  
-# Create variable : i and j agree (no abstensions) / total instances where i and j vote (including abstensions)
+# # Create variable : i and j agree (no abstensions) / total instances where i and j vote (including abstensions)
 
-unData$agree2un = as.numeric(unData$agree2un) 
-unData$jointvotes2 = as.numeric(unData$jointvotes2)
+# unData$agree2un = as.numeric(unData$agree2un) 
+# unData$jointvotes2 = as.numeric(unData$jointvotes2)
 
-unData$agree2unA<-unData$agree2un*unData$jointvotes2/unData$jointvotes3
+# unData$agree2unA<-unData$agree2un*unData$jointvotes2/unData$jointvotes3
  
-# Clean up countrynames
-unData$cname_1 = toupper(countrycode(unData$statea, "cown", "country.name"))
-unData$cname_2 = toupper(countrycode(unData$stateb, "cown", "country.name")) 
+# # Clean up countrynames
+# unData$cname_1 = toupper(countrycode(unData$statea, "cown", "country.name"))
+# unData$cname_2 = toupper(countrycode(unData$stateb, "cown", "country.name")) 
 
-unData$state_name1 = countrycode(unData$statea, "cown", "country.name")
-unData$state_name2 = countrycode(unData$stateb, "cown", "country.name")
+# unData$state_name1 = countrycode(unData$statea, "cown", "country.name")
+# unData$state_name2 = countrycode(unData$stateb, "cown", "country.name")
 
-names(unData)[ which(names(unData) %in% c('statea', 'stateb'))]  <- c("ccode_1", "ccode_2")
+# names(unData)[ which(names(unData) %in% c('statea', 'stateb'))]  <- c("ccode_1", "ccode_2")
 
-unDataFINAL = unData[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'agree2un', 'agree2unA', 'agree3un')]
+# unDataFINAL = unData[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'agree2un', 'agree2unA', 'agree3un')]
 
-unDataFINAL$agree2unA[which(is.na(unDataFINAL$agree2unA))]<-0
-unDataFINAL$cname_1Year <- paste(unDataFINAL$cname_1, unDataFINAL$year, sep="")
-unDataFINAL$cname_2Year <- paste(unDataFINAL$cname_2, unDataFINAL$year, sep="")
+# unDataFINAL = unDataFINAL[which(unDataFINAL$year > 1969),]
 
-unDataFINAL<-unDataFINAL[-which(unDataFINAL$cname_1Year %in% setdiff(unDataFINAL$cname_1Year, panel$cnameYear)), ]
-unDataFINAL<-unDataFINAL[-which(unDataFINAL$cname_2Year %in% setdiff(unDataFINAL$cname_2Year, panel$cnameYear)), ]
+# unDataFINAL$agree2unA[which(is.na(unDataFINAL$agree2unA))]<-0
+# unDataFINAL$cname_1Year <- paste(unDataFINAL$cname_1, unDataFINAL$year, sep="")
+# unDataFINAL$cname_2Year <- paste(unDataFINAL$cname_2, unDataFINAL$year, sep="")
 
 
-unique(panel$cname)
-panel$cnameYear[grep("German", panel$cnameYear)]
-setdiff(panel$cnameYear, unDataFINAL$cname_1Year )
+ unDataFINAL<-unDataFINAL[-c( 
+ which(unDataFINAL$cname_1Year %in% setdiff(unDataFINAL$cname_1Year, panel$cnameYear)),
+ which(unDataFINAL$cname_2Year %in% setdiff(unDataFINAL$cname_2Year, panel$cnameYear))),  ]
+ 
 
-setwd(paste0(pathData, '/Components/VoetenData'))
-save(unDataFINAL, file='un.rda')
+# setwd(paste0(pathData, '/Components/VoetenData'))
+# save(unDataFINAL, file='un.rda')
+
+
+
 
 ###############################################################
 
@@ -324,7 +328,7 @@ save(unDataFINAL, file='un.rda')
 
 # ###############################################################
 
-# # Clean directed alliance data
+# Clean directed alliance data
 
 # setwd(paste0(pathData, '/Components/LeedsData'))
 # ally<-read.csv("alliance_v4.1_by_directed.csv", stringsAsFactors=F)
@@ -343,6 +347,14 @@ save(unDataFINAL, file='un.rda')
 # ally1$ally = 1
 
 # allyDirFINAL = ally1[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'ally')] 
+
+
+# allyDirFINAL$cname_1Year <- paste(allyDirFINAL$cname_1, allyDirFINAL$year, sep = "")
+# allyDirFINAL$cname_2Year <- paste(allyDirFINAL$cname_2, allyDirFINAL$year, sep = "")
+
+# allyDirFINAL<-allyDirFINAL[-c( 
+ # which(allyDirFINAL$cname_1Year %in% setdiff(allyDirFINAL$cname_1Year, panel$cnameYear)),
+ # which(allyDirFINAL$cname_2Year %in% setdiff(allyDirFINAL$cname_2Year, panel$cnameYear))),  ]
 
 
 # save(allyDirFINAL, file ='allydir.rda') 
@@ -376,30 +388,30 @@ load('allydir.rda')
 
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
 
 igoMats = DyadBuild(variable='igo', dyadData=igoDataFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2005, panel=panel, directed=FALSE)
 
 warMats = DyadBuild(variable='war', dyadData=warFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
     
 unMats = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
     
 midMats = DyadBuild(variable='mid', dyadData=midFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2001, panel=panel, directed=TRUE)
 
 allyDirMats = DyadBuild(variable='ally', dyadData=allyDirFINAL,
-    cntry1='ccode_1', 'ccode_2', time='year',
+    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year',time='year',
     pd=1970:2010, panel=panel, directed=TRUE)
 
-unMats[[1]]
+
 setwd(pathData)
 save(allyMats, igoMats, warMats, unMats, midMats, allyDirMats, file='stratInterestMatrics.rda')
 ###############################################################
