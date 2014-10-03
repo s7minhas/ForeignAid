@@ -128,9 +128,13 @@ cleanWbData = function(data, variable){
 # ccode_1 & ccode_2 and the time aspect by a variable called year
 # time is a simple vector of years
 # panel is a dataset with country codes
-DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear, time, pd, panel=panel, directed=FALSE){
-
-	panelMatch <- panel[-which(panel$cnameYear %in% setdiff(panel$cnameYear, dyadData[,cntryYear])),]
+DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear = NA, time, pd, panel=panel, directed=FALSE){
+		if ( is.na(cntryYear) ==T){
+			panelMatch <- panel 
+		 }else  { 
+			panelMatch <- panel[-which(panel$cnameYear %in% setdiff(panel$cnameYear, 	
+			dyadData[,cntryYear])),] }
+			
 	countryList <- lapply(pd, function(x) FUN=panelMatch[panelMatch$year==x,'ccode'])
 	names(countryList) <- pd
  
