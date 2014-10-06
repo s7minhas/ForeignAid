@@ -125,7 +125,7 @@ gbme<-function(
 
 ###set seed
 set.seed(seed)
-                                                                                
+print("seed set")                                                                     
 
 
 ###dimensions of everything
@@ -134,6 +134,8 @@ rd<<-dim(Xd)[3]
 rs<<-dim(Xs)[2]
 rr<<-dim(Xr)[2]  
 diag(Y) = rep(0,n)
+
+print("" set")
 ###
 
 ###column names for output file

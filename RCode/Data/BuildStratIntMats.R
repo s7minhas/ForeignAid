@@ -275,16 +275,16 @@ source(paste0(pathCode, '/setup.R'))
 
 # unDataFINAL = unData[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'agree2un', 'agree2unA', 'agree3un')]
 
-# unDataFINAL = unDataFINAL[which(unDataFINAL$year > 1969),]
 
 # unDataFINAL$agree2unA[which(is.na(unDataFINAL$agree2unA))]<-0
+# unDataFINAL$agree2un[is.na(unDataFINAL$agree2un)] = 0
 # unDataFINAL$cname_1Year <- paste(unDataFINAL$cname_1, unDataFINAL$year, sep="")
 # unDataFINAL$cname_2Year <- paste(unDataFINAL$cname_2, unDataFINAL$year, sep="")
 
 
- unDataFINAL<-unDataFINAL[-c( 
- which(unDataFINAL$cname_1Year %in% setdiff(unDataFINAL$cname_1Year, panel$cnameYear)),
- which(unDataFINAL$cname_2Year %in% setdiff(unDataFINAL$cname_2Year, panel$cnameYear))),  ]
+# unDataFINAL<-unDataFINAL[-c( 
+# which(unDataFINAL$cname_1Year %in% setdiff(unDataFINAL$cname_1Year, panel$cnameYear)),
+# which(unDataFINAL$cname_2Year %in% setdiff(unDataFINAL$cname_2Year, panel$cnameYear))),  ]
  
 
 # setwd(paste0(pathData, '/Components/VoetenData'))
@@ -383,7 +383,7 @@ load('mid.rda')
 setwd(paste0(pathData, '/Components/LeedsData'))
 load('allydir.rda')
 
- 
+
  
 
 # Create matrices 
@@ -399,7 +399,15 @@ warMats = DyadBuild(variable='war', dyadData=warFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
     
-unMats = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
+unMats.agree2un = DyadBuild(variable='agree2un', dyadData=unDataFINAL,
+    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
+    pd=1970:2010, panel=panel, directed=FALSE)
+
+unMats.agree2unA = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
+    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
+    pd=1970:2010, panel=panel, directed=FALSE)
+    
+unMats.agree3un = DyadBuild(variable='agree3un', dyadData=unDataFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
     
@@ -413,7 +421,7 @@ allyDirMats = DyadBuild(variable='ally', dyadData=allyDirFINAL,
 
 
 setwd(pathData)
-save(allyMats, igoMats, warMats, unMats, midMats, allyDirMats, file='stratInterestMatrics.rda')
+save(allyMats, igoMats, warMats, unMats.agree2un, unMats.agree2unA, unMats.agree3un, midMats, allyDirMats, file='stratInterestMatrics.rda')
 ###############################################################
 
 ###############################################################
