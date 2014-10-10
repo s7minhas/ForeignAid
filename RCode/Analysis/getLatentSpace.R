@@ -9,7 +9,7 @@ results=nullGBME(matList=igoMats, matName='igo', yrs=names(igoMats),
 
 source('~/Research/ForeignAid/RCode/Analysis/nullGBME.R')
 results=nullGBME(matList=unMats, matName='un', yrs=names(unMats), 
-                 direct=TRUE,family='gaussian')
+                 direct=FALSE,family='gaussian')
 
 source('~/Research/ForeignAid/RCode/Analysis/nullGBME.R')
 results=nullGBME(matList=warMatsMsum5, matName='warMsum5', yrs=names(warMatsMsum5), 
