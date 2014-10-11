@@ -12,7 +12,6 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathCode="~/Documents/Papers/ForeignAid/RCode";
   pathFunctions="~/Documents/Methods/R Functions"}
 
-
 # Loading libraries and functions
 toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 'gtools', 
        'ggplot2', 'doBy', 'sbgcop', 'tikzDevice')

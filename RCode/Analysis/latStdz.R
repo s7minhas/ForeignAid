@@ -1,19 +1,39 @@
 #######################################################
 rm(list=ls())
-
 if(Sys.info()['user']=='janus829'){ 
 	pathCode='~/Desktop/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='s7m'){ 
 	pathCode='~/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='cindycheng'){ 
 	pathCode='~/Documents/Papers/ForeignAid/RCode' }
-
 setwd(pathCode); source('setup.R')
 load(paste0(pathData,'/stratInterestMatrics.rda'))
 #######################################################
 
 #######################################################
 # File Specific Functions
+
+# Run lat standardization to distance
+latToDist=function(yName, yList){
+	yrs=names(yList)
+	oNames=paste(yName, yrs, 'OUT', sep='_')
+	zNames=paste(yName, yrs, 'Z', sep='_')
+	res=NULL
+
+	for(ii in 1:length(yrs)){
+		yData=yList[[ii]]
+		ids=rownames(yData)
+		
+		pzMu=getPosInSpace(oNames[ii], zNames[ii], ids)
+		latDist=getDyadDist(pzMu, ids)
+		latDist=stdize(latDist)
+		res=rbind(res,meltSymm(latDist, yrs[ii], yName))
+		print(paste0('Distance calculated for ', yrs[ii]))
+	}
+	setwd(paste0(pathResults,'/gbmeLatDist'))
+	save(res, file=paste0(yName, 'Dist.rda'))
+	print(paste0('results saved for ', yName))
+}
 
 # Procrustes transformation: rotation and reflection
 proc.rr<-function(Y,X){
@@ -23,82 +43,66 @@ proc.rr<-function(Y,X){
 	Ahalf<-eA$vec[,1:k]%*%diag(sqrt(eA$val[1:k]),nrow=k)%*%t(eA$vec[,1:k])
 	t(t(X)%*%Y%*%solve(Ahalf)%*%t(Y)) }
 
-fileFinder=function(x, num, stuff,info=FALSE){
-	files=unlist(lapply(strsplit(stuff, '_'), 
-		function(z) z[[num]]))
-	stuff[which(files == x)]
+# Code from Hoff for trans latent space results to dyadic
+getPosInSpace=function(oname, zname, ids){
+	
+	# Load data
+	setwd(paste0(pathResults,'/gbmeLatSpace'))
+	OUT=read.table(oname, header=TRUE)
+	Z=read.table(zname)
+
+	#convert to an array
+	nss=dim(OUT)[1]
+	n=dim(Z)[1]/nss
+	k=dim(Z)[2]
+	PZ=array(dim=c(n,k,nss))
+	for(i in 1:nss) { PZ[,,i]=as.matrix(Z[ ((i-1)*n+1):(i*n) ,])  }
+
+	PZ=PZ[,,-(1:round(nss/2))]     #drop first half for burn in
+
+	#find posterior mean of Z %*% t(Z)
+	ZTZ=matrix(0,n,n)
+	for(i in 1:dim(PZ)[3] ) { ZTZ=ZTZ+PZ[,,i]%*%t(PZ[,,i]) }
+	ZTZ=ZTZ/dim(PZ)[3] 
+
+	#a configuration that approximates posterior mean of ZTZ
+	tmp=eigen(ZTZ)
+	Z.pm=tmp$vec[,1:k]%*%sqrt(diag(tmp$val[1:k]))
+
+	#now transform each sample Z to a common orientation
+	for(i in 1:dim(PZ)[3] ) { PZ[,,i]=proc.rr(PZ[,,i],Z.pm) }
+
+	# Find posterior mean of country positions
+	pzMu=apply(PZ, c(1,2), mean); rownames(pzMu)=ids
+	pzMu
 }
-#######################################################
 
-#######################################################
-# File objectives 
+# Euclidean distance between two points
+getDyadDist=function(posMatrix, ids){
+	n=nrow(posMatrix)
+	distMatrix = matrix(NA, nrow=n, ncol=n, dimnames=list(ids, ids))
+	for(ii in 1:length(ids)){
+	  for(jj in 1:length(ids)){
+	    distMatrix[ii,jj] = sqrt( (posMatrix[ids[ii],1] - posMatrix[ids[jj],1])^2 
+	      + (posMatrix[ids[ii],2] - posMatrix[ids[jj],2])^2 )
+	  }
+	}
+	distMatrix
+}
 
-	# Takes in a test name and out name for given var-year
+# Standardize
+stdize=function(x, divMean=TRUE){
+	mu=mean(x)
+	if(divMean){return(x/mu)}
+	if(!divMean){sig=sd(x); return((x-mu)/sig)}
+}
 
-	# Applied procrustrean transformation : DONE
-
-	# Need to find posterior mean for each country position: DONE
-
-	# Want to calculate euclidean distance between each country position
-
-	# THen we want to get a sense of the distribution of this
-
-	# We want to standardize the distance
-		
-		# Using either z score
-
-		# simon's approach of subtracting mean
-
-	# Output of all this should be the standardized dyadic distance
-
-		# Save output to file
-#######################################################
-
-#######################################################
-# ally, un, igo, warMsum5
-Y='ally'
-yMat=allyMats
-yrs=names(yMat)
-
-setwd(paste0(pathResults,'/gbmeLatSpace'))
-oNames=paste(Y, yrs, 'OUT', sep='_')
-zNames=paste(Y, yrs, 'Z', sep='_')
-
-# Load relev data
-yData=yMat[[yrs[1]]]; ids=rownames(yData)
-OUT=read.table(oNames[1], header=TRUE)
-Z=read.table(zNames[1])
-
-#convert to an array
-nss=dim(OUT)[1]
-n=dim(Z)[1]/nss
-k=dim(Z)[2]
-PZ=array(dim=c(n,k,nss))
-for(i in 1:nss) { PZ[,,i]=as.matrix(Z[ ((i-1)*n+1):(i*n) ,])  }
-
-PZ=PZ[,,-(1:round(nss/2))]     #drop first half for burn in
-
-#find posterior mean of Z %*% t(Z)
-ZTZ=matrix(0,n,n)
-for(i in 1:dim(PZ)[3] ) { ZTZ=ZTZ+PZ[,,i]%*%t(PZ[,,i]) }
-ZTZ=ZTZ/dim(PZ)[3] 
-
-#a configuration that approximates posterior mean of ZTZ
-tmp=eigen(ZTZ)
-Z.pm=tmp$vec[,1:k]%*%sqrt(diag(tmp$val[1:k]))
-
-#now transform each sample Z to a common orientation
-for(i in 1:dim(PZ)[3] ) { PZ[,,i]=proc.rr(PZ[,,i],Z.pm) }
-
-# Find posterior mean of country positions
-pzMu=apply(PZ, c(1,2), mean); rownames(pzMu)=ids
-
-# Now calculate euclidean distance between points
-latDist <- matrix(NA, nrow=n, ncol=n, dimnames=list(ids, ids))
-for(ii in 1:length(ids)){
-  for(jj in 1:length(ids)){
-    latDist[ii,jj] <- sqrt( (pzMu[ids[ii],1] - pzMu[ids[jj],1])^2 
-      + (pzMu[ids[ii],2] - pzMu[ids[jj],2])^2 )
-  }
+# Melt symmetric matrix
+meltSymm=function(x, yr, vnme){
+	library(igraph)
+	graph=graph.adjacency(x, mode='undirected',weighted=TRUE)
+	edgeVal=cbind(get.edgelist(graph), yr, E(graph)$weight)
+	colnames(edgeVal)=c('ccode1','ccode2','year',paste0(vnme,'Dist'))
+	apply(edgeVal, 2, num)
 }
 #######################################################
