@@ -2,22 +2,36 @@
 rm(list=ls())
 
 if(Sys.info()['user']=='janus829'){ 
-	pathData='~/Google Drive/Research/ForeignAid/Data'
-	pathCode='~/Desktop/Research/ForeignAid/RCode';
-	pathResults='~/Google Drive/Research/ForeignAid/Results'}
+	pathCode='~/Desktop/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='s7m'){ 
-	pathData='~/Google Drive/Research/ForeignAid/Data'	
-	pathCode='~/Research/ForeignAid/RCode';
-	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
-
+	pathCode='~/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='cindycheng'){ 
 	pathCode='~/Documents/Papers/ForeignAid/RCode' }
 
-setwd(paste0(pathCode, '/Analysis'))
-source('gbme.r')
+setwd(pathCode); source('setup.R')
+load(paste0(pathData,'/stratInterestMatrics.rda'))
 #######################################################
 
-# Function objectives 
+#######################################################
+# File Specific Functions
+
+# Procrustes transformation: rotation and reflection
+proc.rr<-function(Y,X){
+	k<-dim(X)[2]
+	A<-t(Y)%*%(  X%*%t(X)  )%*%Y
+	eA<-eigen(A,symmetric=T)
+	Ahalf<-eA$vec[,1:k]%*%diag(sqrt(eA$val[1:k]),nrow=k)%*%t(eA$vec[,1:k])
+	t(t(X)%*%Y%*%solve(Ahalf)%*%t(Y)) }
+
+fileFinder=function(x, num, stuff,info=FALSE){
+	files=unlist(lapply(strsplit(stuff, '_'), 
+		function(z) z[[num]]))
+	stuff[which(files == x)]
+}
+#######################################################
+
+#######################################################
+# File objectives 
 
 	# Takes in a test name and out name for given var-year
 
@@ -38,15 +52,22 @@ source('gbme.r')
 	# Output of all this should be the standardized dyadic distance
 
 		# Save output to file
+#######################################################
 
 #######################################################
-setwd(paste0(pathResults,'/gbmeLatSpace'))
-test= "un_1995_Z"
-outTest="un_1995_OUT"
+# ally, un, igo, warMsum5
+Y='ally'
+yMat=allyMats
+yrs=names(yMat)
 
-###analysis of latent positions
-Z=read.table(test)
-OUT=read.table(outTest, header=TRUE)
+setwd(paste0(pathResults,'/gbmeLatSpace'))
+oNames=paste(Y, yrs, 'OUT', sep='_')
+zNames=paste(Y, yrs, 'Z', sep='_')
+
+# Load relev data
+yData=yMat[[yrs[1]]]; ids=rownames(yData)
+OUT=read.table(oNames[1], header=TRUE)
+Z=read.table(zNames[1])
 
 #convert to an array
 nss=dim(OUT)[1]
@@ -70,8 +91,14 @@ Z.pm=tmp$vec[,1:k]%*%sqrt(diag(tmp$val[1:k]))
 for(i in 1:dim(PZ)[3] ) { PZ[,,i]=proc.rr(PZ[,,i],Z.pm) }
 
 # Find posterior mean of country positions
-test=apply(PZ, c(1,2), mean)
+pzMu=apply(PZ, c(1,2), mean); rownames(pzMu)=ids
 
 # Now calculate euclidean distance between points
-
+latDist <- matrix(NA, nrow=n, ncol=n, dimnames=list(ids, ids))
+for(ii in 1:length(ids)){
+  for(jj in 1:length(ids)){
+    latDist[ii,jj] <- sqrt( (pzMu[ids[ii],1] - pzMu[ids[jj],1])^2 
+      + (pzMu[ids[ii],2] - pzMu[ids[jj],2])^2 )
+  }
+}
 #######################################################

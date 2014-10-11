@@ -1,13 +1,14 @@
 # Setting working directory
 if(
 Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
-){pathMain="~/Google Drive/Research/ForeignAid";
-  pathGraphics="~/Google Drive/Research/ForeignAid/Graphics";
-  pathData="~/Google Drive/Research/ForeignAid/Data"
+){pathMain="~/Dropbox/Research/ForeignAid";
+  pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
+  pathResults='~/Dropbox/Research/ForeignAid/Results';
+  pathData="~/Dropbox/Research/ForeignAid/Data"
   } else if  (Sys.info()["user"]=="cindycheng") {
-  pathMain="~/Google Drive/ForeignAid";
-  pathGraphics="~/Google Drive/ForeignAid/Graphics";
-  pathData="~/Google Drive/ForeignAid/Data";
+  pathMain="~/Dropbox/ForeignAid";
+  pathGraphics="~/Dropbox/ForeignAid/Graphics";
+  pathData="~/Dropbox/ForeignAid/Data";
   pathCode="~/Documents/Papers/ForeignAid/RCode";
   pathFunctions="~/Documents/Methods/R Functions"}
 
@@ -239,6 +240,7 @@ lagData <- function(data, country_year, country, varsTOlag, lag=1)
 }
 ################################################################
 
+################################################################
 ## Expand panel dataset to account for all years
 panelyear<-function(dataset, styear, endyear){
 fulldata<-list()
@@ -248,3 +250,4 @@ for ( i in 1:length(dataset[,1])){
 fulldata1 <- do.call(rbind, fulldata)
 return(fulldata1)
 }
+################################################################

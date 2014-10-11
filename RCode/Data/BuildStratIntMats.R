@@ -1,11 +1,6 @@
 if(Sys.info()['user']=='janus829'){ pathCode='~/Desktop/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='s7m'){ pathCode='~/Research/ForeignAid/RCode' }
-
-if(Sys.info()['user']=='cindycheng'){ pathCode = '~/Documents/Papers/ForeignAid/RCode'
-									  pathData = '~/Google Drive/ForeignAid/Data'   }
-
- 
-
+if(Sys.info()['user']=='cindycheng'){ pathCode = '~/Documents/Papers/ForeignAid/RCode'}
 source(paste0(pathCode, '/setup.R'))
 
 ###############################################################
@@ -289,10 +284,6 @@ source(paste0(pathCode, '/setup.R'))
 
 # setwd(paste0(pathData, '/Components/VoetenData'))
 # save(unDataFINAL, file='un.rda')
-
-
-
-
 ###############################################################
 
 ###############################################################
@@ -322,12 +313,9 @@ source(paste0(pathCode, '/setup.R'))
 # midFINAL = mid1[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'mid', 'sideadya', 'sideadyb')]
 
 # save(midFINAL, file='mid.rda')
-
-
 # ###############################################################
 
 # ###############################################################
-
 # Clean directed alliance data
 
 # setwd(paste0(pathData, '/Components/LeedsData'))
@@ -358,33 +346,16 @@ source(paste0(pathCode, '/setup.R'))
 
 
 # save(allyDirFINAL, file ='allydir.rda') 
- 
 ###############################################################
 
 ###############################################################
-
 # Load cleaned data
-setwd(paste0(pathData, '/Components/COW_Alliances/version4.1_stata'))
-load('ally.rda')
- 
-
-setwd(paste0(pathData, '/Components/COW_IGO'))
-load('igo.rda')
-
-setwd(paste0(pathData, '/Components/PRIO_ArmedConflict'))
-load('war.rda')
- 
-setwd(paste0(pathData, '/Components/VoetenData'))
-load('un.rda')
-
-setwd(paste0(pathData, '/Components/MIDs'))
-load('mid.rda')
-
-setwd(paste0(pathData, '/Components/LeedsData'))
-load('allydir.rda')
-
-
- 
+setwd(paste0(pathData, '/Components/COW_Alliances/version4.1_stata')); load('ally.rda')
+setwd(paste0(pathData, '/Components/COW_IGO')); load('igo.rda')
+setwd(paste0(pathData, '/Components/PRIO_ArmedConflict')); load('war.rda')
+setwd(paste0(pathData, '/Components/VoetenData')); load('un.rda')
+setwd(paste0(pathData, '/Components/MIDs')); load('mid.rda')
+setwd(paste0(pathData, '/Components/LeedsData')); load('allydir.rda')
 
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
@@ -410,18 +381,12 @@ unMats.agree2unA = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
 unMats.agree3un = DyadBuild(variable='agree3un', dyadData=unDataFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
-    
-midMats = DyadBuild(variable='mid', dyadData=midFINAL,
-    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
-    pd=1970:2001, panel=panel, directed=TRUE)
 
-allyDirMats = DyadBuild(variable='ally', dyadData=allyDirFINAL,
-    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year',time='year',
-    pd=1970:2010, panel=panel, directed=TRUE)
-
+# Roll mats with gap years over five year window
+warMatsMsum5=mvaStatMat(1970:2010, 5, warMats, avg=FALSE)
 
 setwd(pathData)
-save(allyMats, igoMats, warMats, unMats.agree2un, unMats.agree2unA, unMats.agree3un, midMats, allyDirMats, file='stratInterestMatrics.rda')
-###############################################################
-
+save(allyMats, igoMats, warMatsMsum5, 
+    unMats.agree2un, unMats.agree2unA, unMats.agree3un,
+    file='stratInterestMatrics.rda')
 ###############################################################
