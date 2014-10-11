@@ -9,9 +9,12 @@ if(Sys.info()['user']=='s7m'){
 	pathData='~/Google Drive/Research/ForeignAid/Data'	
 	pathCode='~/Research/ForeignAid/RCode';
 	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
-
-if(Sys.info()['user']=='cindycheng'){ 
-	pathCode='~/Documents/Papers/ForeignAid/RCode' }
+setwd("~/Documents/Papers/ForeignAid/RCode/Analysis")
+	
+if(Sys.info()['user']=='cindy'){ 
+	pathData="/home/cindy"
+	pathCode="/home/cindy"
+	pathResults ="/home/cindy"}
 
 setwd(pathData)
 load('stratInterestMatrics.rda')
