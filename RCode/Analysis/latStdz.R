@@ -28,7 +28,7 @@ latToDist=function(yName, yList){
 		latDist=getDyadDist(pzMu, ids)
 		latDist=stdize(latDist)
 		res=rbind(res,meltSymm(latDist, yrs[ii], yName))
-		print(paste0('Distance calculated for ', yrs[ii]))
+		print(paste0('Distance calculated for ',yName,':',yrs[ii]))
 	}
 	setwd(paste0(pathResults,'/gbmeLatDist'))
 	save(res, file=paste0(yName, 'Dist.rda'))
@@ -43,7 +43,7 @@ proc.rr<-function(Y,X){
 	Ahalf<-eA$vec[,1:k]%*%diag(sqrt(eA$val[1:k]),nrow=k)%*%t(eA$vec[,1:k])
 	t(t(X)%*%Y%*%solve(Ahalf)%*%t(Y)) }
 
-# Code from Hoff for trans latent space results to dyadic
+# Code from Hoff to get latent space positions
 getPosInSpace=function(oname, zname, ids){
 	
 	# Load data
