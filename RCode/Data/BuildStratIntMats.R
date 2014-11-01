@@ -357,6 +357,11 @@ setwd(paste0(pathData, '/Components/VoetenData')); load('un.rda')
 setwd(paste0(pathData, '/Components/MIDs')); load('mid.rda')
 setwd(paste0(pathData, '/Components/LeedsData')); load('allydir.rda')
 
+
+panel[which(panel$ccode == 973),]
+
+panel[which(panel$CNTRY_NAME %in% unique(panel$CNTRY_NAME[-which(panel$ccode == panel$COWCODE)])),]
+ 
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
@@ -369,18 +374,11 @@ igoMats = DyadBuild(variable='igo', dyadData=igoDataFINAL,
 warMats = DyadBuild(variable='war', dyadData=warFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
-    
-unMats.agree2un = DyadBuild(variable='agree2un', dyadData=unDataFINAL,
-    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
-    pd=1970:2010, panel=panel, directed=FALSE)
 
 unMats.agree2unA = DyadBuild(variable='agree2unA', dyadData=unDataFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)
-    
-unMats.agree3un = DyadBuild(variable='agree3un', dyadData=unDataFINAL,
-    cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear = 'cname_1Year', time='year',
-    pd=1970:2010, panel=panel, directed=FALSE)
+
 
 # Roll mats with gap years over five year window
 warMatsMsum5=mvaStatMat(1970:2010, 5, warMats, avg=FALSE)

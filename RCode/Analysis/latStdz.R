@@ -6,6 +6,8 @@ if(Sys.info()['user']=='s7m'){
 	pathCode='~/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='cindycheng'){ 
 	pathCode='~/Documents/Papers/ForeignAid/RCode' }
+
+
 setwd(pathCode); source('setup.R')
 load(paste0(pathData,'/stratInterestMatrics.rda'))
 #######################################################
