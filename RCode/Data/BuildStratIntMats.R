@@ -358,10 +358,6 @@ setwd(paste0(pathData, '/Components/MIDs')); load('mid.rda')
 setwd(paste0(pathData, '/Components/LeedsData')); load('allydir.rda')
 
 
-panel[which(panel$ccode == 973),]
-
-panel[which(panel$CNTRY_NAME %in% unique(panel$CNTRY_NAME[-which(panel$ccode == panel$COWCODE)])),]
- 
 # Create matrices 
 allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',

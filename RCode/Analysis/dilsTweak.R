@@ -1,43 +1,30 @@
 
 # wrapper function for GenerateDilsNetwork
-getPCA <- function(yr){
+getPCA <- function(D, yr, n.sub){
 
-# merge data by year
-# D1 = merge(dplyr::select(dplyr::filter(allyDist, year == yr), -year), dplyr::select(dplyr::filter(igoDist, year ==yr), -year), by = c("ccode1", "ccode2"), all = T)
-# D2 = merge(dplyr::select(dplyr::filter(unDist, year == yr), -year), dplyr::select(dplyr::filter(warDist, year == yr), -year), by = c("ccode1", "ccode2"), all = T)
-# D = merge(D1, D2, by = c("ccode1", "ccode2"), all = T)
-
-D1 = merge(allyDist[which(allyDist$year == yr), -which(names(allyDist)=="year")], igoDist[which(igoDist$year ==yr), -which(names(igoDist)=="year")], by = c("ccode1", "ccode2"), all = T)
-D2 = merge(unDist[which(unDist$year == yr), -which(names(unDist)=="year")], warDist[which(warDist$year == yr), -which(names(warDist)=="year")], by = c("ccode1", "ccode2"), all = T)
-D = merge(D1, D2, by = c("ccode1", "ccode2"), all = T)
-
-
-# rescale warsum5Dist
-D$warRescale =  - D$warMsum5Dist + max(D$warMsum5Dist)
-D = dplyr::select(D, -warMsum5Dist)
-
+# subset the data per y
+D = D[which(D$year == yr), ]
 # get number of observations per year
 n = dim(D)[1]
 
-# impute where missing
-if(anyNA(D$unDist) == T) {
-    D$unDist[which(is.na(D$unDist))] = rowMeans(D[which(is.na(D$unDist)), c('allyDist','igoDist', 'warRescale')])
+# igoDist missing after 2005; remove from PCA analysis when after 2005 
+if(yr >2005){
+  D = D[, -which(names(D) == "igoDist")]
+}
+
+# impute unDist where missing
+if(any(is.na(D$unDist)) == T) {
+    D$unDist[which(is.na(D$unDist))] = rowMeans(D[which(is.na(D$unDist)), -which(names(D) %in% c( "unDist", "ccode1", "ccode2", "year"))])
     print(paste("impute unDist for",  yr ))
 }  
 
-# igoDist missing after 2005; remove from PCA analysis when after 2005 
-if (yr <=2005){
-    PCA = GenerateDilsNetwork(D, subsample = n, ignore.cols = c(1, 2), return.sds = T )
+    PCA = GenerateDilsNetwork(D, subsample = n, n.subsamples = n.sub, ignore.cols = c(1, 2, 3), return.sds = T)
     print(paste("Finished PCA for", yr))
-    } 
-
-else if (yr >2005 ){
-    PCA = GenerateDilsNetwork(D, subsample = n, ignore.cols = c(1, 2, 4), return.sds = T )
-    print(paste("Finished PCA for", yr))}
  
     return(PCA)
 
 }
+
 
 
 # adjust GenerateDilsNetwork to return standard deviations of eigenvalues; this allows you to compute the contribution of variance for the first component
@@ -63,7 +50,7 @@ GenerateDilsNetwork <- function (x, subsample = 10000, n.subsamples = 10000, ign
     comparitor.weights <- comparitor.weights/sum(comparitor.weights)
     out <- list(dils = dils.link.coefficients, dils.edgelist = cbind(x[, 
         -use.cols], dils.link.coefficients, dils.link.se.upper, dils.link.se.lower), coefficients = net.coefficients, 
-        weights = comparitor.weights, sds = net.sds, sdev = spca$sdev, bootstrap.sds = spca$bootstrap.sds)
+        weights = comparitor.weights, sdev = spca$sdev, bootstrap.sds = spca$bootstrap.sds)
     return(out)
 }
 
@@ -71,7 +58,6 @@ GenerateDilsNetwork <- function (x, subsample = 10000, n.subsamples = 10000, ign
  
 # change to set scale = T, center = T
 # rotate eigenvectors to the same directions across samples
-
 ScalablePCA <- function (x, filename = NULL, db = NULL, subsample = 10000, n.subsamples = 1000, 
     ignore.cols, use.cols, return.sds = FALSE, progress.bar = FALSE) 
 {
@@ -221,7 +207,7 @@ ScalablePCA <- function (x, filename = NULL, db = NULL, subsample = 10000, n.sub
     for (g in 1:n.subsamples) {
         samp <- pca.sample()
         pca.result <- prcomp(samp[, use.cols], center = TRUE, 
-            scale. = TRUE)
+            scale = TRUE)
         draws[g, ] <- pca.result$rotation[, 1]
         if (return.sds) {
             sd.draws[g, ] <- apply(samp[, use.cols], 2, sd)
