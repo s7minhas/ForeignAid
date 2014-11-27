@@ -15,7 +15,7 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 
 # Loading libraries and functions
 toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 'gtools', 
-       'ggplot2', 'doBy', 'sbgcop', 'tikzDevice')
+       'ggplot2', 'doBy', 'sbgcop', 'tikzDevice', 'igraph', 'bipartite')
 for(lib in toLoad){
   if(!(lib %in% installed.packages()[,1])){ 
   	install.packages(lib, repos='http://cran.rstudio.com/') }
