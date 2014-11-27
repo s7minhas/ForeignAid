@@ -1,27 +1,18 @@
 
+## Tweaks to PCA:
 
-# subsample = F returns an error
-# no option to return.sds in the wrapper function GenerateDilsNetwork
-# scale and center is turned to FALSE ; usually shouldn't data be centered before you do a PCA analysis?
-# unclear what weights value returns
-# does not sample with replacement, change code to fix this
+# 1) no option to return eigenvalues in the wrapper function GenerateDilsNetwork; changed code to do this which allows us to see how much variance each component explains
+# 2) scale and center is turned to FALSE ; usually shouldn't data be centered before you do a PCA analysis?
+# 3) does not sample with replacement, best practice with bootstrapping would seem to indicate that the sample size of each bootstrapped sample should be the same as the size of the original sample, change code to fix this http://www.stata.com/support/faqs/statistics/bootstrapped-samples-guidelines/
+# 4) eigenvectors are sometimes inverted relative to each other across samples (i.e. bootstrap 1 will return eigenvector (.5, .4, -.1) while bootstrap 2 will return(-.51, -.42, .1) ;
+# 5) to address this problem, made all the eigenvectors consistent with each other by constraining the first element of each eigenvector to be positive
+# previously the code had addressed this problem by returning the absolute value for all elements of the eigenvector, which seems baffling
+ 
 
+# Outstanding issues
+# 1) subsample = F returns an error
+# 2) unclear what weights value returns
 
-# eigenvectors are sometimes inverted; changing the code so that they are absolute values seems like the wrong way
-# to address this problem; should instead make all eigenvectors consistent with each other....
-# it seems to me that you shouldn't take the absolute value per se, but ensure that
-# all the components are going in the same direction.....
-
-# the way it does the PCA is through bootstrapping so, 
-# note that it would be nice to know how much the first component explains; adjust function to return this
-
-
-# http://www.stata.com/support/faqs/statistics/bootstrapped-samples-guidelines/
-# The above statement contains the key to choosing the right number of replications. Here is the recipe:
-
-# Choose a large but tolerable number of replications. Obtain the bootstrap estimates.
-# Change the random-number seed. Obtain the bootstrap estimates again, using the same number of replications.
-# Do the results change meaningfully? If so, the first number you chose was too small. Try a larger number. If results are similar enough, you probably have a large enough number. To be sure, you should probably perform step 2 a few more times, but I seldom do.
 
 rm(list = ls())
 
@@ -30,10 +21,15 @@ if (Sys.info()['user']=="cindycheng"){
   pathCode="~/Documents/Papers/ForeignAid/RCode";
   pathResults = '~/Dropbox/ForeignAid/Results'}
  
-# load packages
-library(dplyr)
-source(paste0(pathCode, "/Analysis/dilsTweak.R"))
+if (Sys.info()['user'] == 'cindy'){
+  pathCode="/home/cindy";
+  pathResults = "/home/cindy"
+}
 
+
+# load packages
+# library(dplyr)
+source(paste0(pathCode, "/Analysis/dilsTweak.R"))
 
 # load data
 setwd(paste0(pathResults, "/gbmeLatDist"))
@@ -46,25 +42,75 @@ unDist = data.frame(res)
 load('warMsum5Dist.rda')
 warDist = data.frame(res)
 
+# merge data
+D1 = merge(allyDist, igoDist, by = c("ccode1", "ccode2", "year"), all = T)
+D2 = merge(unDist, warDist, by = c("ccode1", "ccode2", "year"), all = T)
+D = merge(D1, D2, by = c("ccode1", "ccode2", "year"), all = T)
 
+##### Clean up data ####
 
+# Rescale war matrix
+D$warRescale =  - D$warMsum5Dist + max(D$warMsum5Dist)
+
+# Full Data frame
+DF = D[, - which(names(D) %in% c("warMsum5Dist"))]  # warMsum5Dist is removed because GenerateDilsNetwork returns all columns that are not used in the PCA
+ 
+# Without War variables at all
+DF1 = D[, - which(names(D) %in% c("warMsum5Dist", "warRescale"))]
+DF1 = DF1[-which(is.na(DF1$unDist) & DF1$year>2005 ),] # 345 = Yugoslavia; 713 = Taiwan ; 990 = Samoa ; 731 ; 731 = North Korea 341 Montenegro
+
+###### PCA ########
+# PCA on full Data
 PCA_AllYrs = NULL
 PCA_coefficients = NULL
 PCA_eigenvalues.sd = NULL
 PCA_bootstrap.sds  = NULL
 
 for (yr in c(1970:2010)){
-	PCA = getPCA(yr = yr)
-	PCA_AllYrs = rbind(PCA_AllYrs, data.frame(PCA$dils.edgelist)) 
-	PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients))
-	PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev ))
-	PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds))
-
+  PCA = getPCA(DF, yr = yr, n.sub = 5000)  
+  PCA_AllYrs = rbind(PCA_AllYrs, data.frame(PCA$dils.edgelist)) 
+  if (yr <=2005){
+    PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients))
+    PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev ))
+    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds))
+  } else if(yr >2005){
+    PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients, NA))
+    PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev , NA))
+    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds, NA))
+  }
+  
 }
 
-PCATotal = list(PCA_AllYrs, PCA_coefficients, PCA_eigenvalues.sd, PCA_bootstrap.sds)
+PCA_FullData = list(PCA_AllYrs= PCA_AllYrs, PCA_coefficients = PCA_coefficients, PCA_eigenvalues.sd= PCA_eigenvalues.sd, PCA_bootstrap.sds = PCA_bootstrap.sds  )
 
-save(PCATotal, file = "PCA.rda")
+save(PCA_FullData, file = "PCA_FullData.rda")
 
  
+###### PCA without war data
+PCA_AllYrs_NW = NULL
+PCA_coefficients_NW = NULL
+PCA_eigenvalues.sd_NW = NULL
+PCA_bootstrap.sds_NW  = NULL
+
+for (yr in c(1970:2005)){
+  PCA = getPCA(DF1, yr = yr, n.sub = 5000)  
+  PCA_AllYrs_NW = rbind(PCA_AllYrs_NW, data.frame(PCA$dils.edgelist)) 
+  if (yr <=2005){
+  PCA_coefficients_NW = rbind(PCA_coefficients_NW, c(yr, PCA$coefficients))
+  PCA_eigenvalues.sd_NW = rbind(PCA_eigenvalues.sd_NW, c(yr, PCA$sdev ))
+  PCA_bootstrap.sds_NW = rbind(PCA_bootstrap.sds_NW, c(yr, PCA$bootstrap.sds))
+  } else if (yr > 2005){
+    PCA_coefficients_NW = rbind(PCA_coefficients_NW, c(yr, PCA$coefficients, NA))
+    PCA_eigenvalues.sd_NW = rbind(PCA_eigenvalues.sd_NW, c(yr, PCA$sdev, NA ))
+    PCA_bootstrap.sds_NW = rbind(PCA_bootstrap.sds_NW, c(yr, PCA$bootstrap.sds, NA))
+  }
+}
+
+ 
+PCA_NW = list(PCA_AllYrs_NW= PCA_AllYrs_NW, PCA_coefficients_NW = PCA_coefficients_NW, PCA_eigenvalues.sd_NW= PCA_eigenvalues.sd_NW, PCA_bootstrap.sds_NW = PCA_bootstrap.sds_NW  )
+save(PCA_NW, file = "PCA_NW.rda")
+ 
+
+
+
  
