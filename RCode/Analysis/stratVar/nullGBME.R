@@ -9,7 +9,17 @@ if(Sys.info()['user']=='s7m'){
 	pathData='~/Google Drive/Research/ForeignAid/Data'	
 	pathCode='~/Research/ForeignAid/RCode';
 	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
-setwd("~/Documents/Papers/ForeignAid/RCode/Analysis")
+
+if (Sys.info()["user"]=="cindycheng") {
+  pathMain="~/Dropbox/ForeignAid";
+  pathGraphics="~/Dropbox/ForeignAid/graphics";
+  pathData="~/Dropbox/ForeignAid/data";
+  pathCode="~/Documents/Papers/ForeignAid/RCode";
+  pathFunctions="~/Documents/Methods/R Functions"
+  pathResults = '~/Dropbox/ForeignAid/Results/gbmeLatSpace/NewLatSpace'
+}
+
+
 	
 if(Sys.info()['user']=='cindy'){ 
 	pathData="/home/cindy"
@@ -40,7 +50,7 @@ nullGBME=function( matList, matName, yrs,
 		ofile=paste(matName, yrs[t], 'OUT', sep='_')
 
 		if(direct){
-			source(paste0(pathCode, '/Analysis/gbme.asym.R'))
+			source(paste0(pathCode, '/Analysis/stratVar/gbme.asym.R'))
 			ufile=paste(matName, yrs[t], 'U', sep='_')
 			vfile=paste(matName, yrs[t], 'V', sep='_')
 			setwd(pathResults)

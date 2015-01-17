@@ -258,13 +258,6 @@
   url = {http://www.jstor.org/stable/2006912}
 }
 
-@TECHREPORT{alesina:1999,
-  author = {Alesina, Alberto and Weder, Beatrice},
-  title = {Do corrupt governments receive less foreign aid?},
-  institution = {National bureau of economic research},
-  year = {1999}
-}
-
 @ARTICLE{alfaro2010does,
   author = {Alfaro, L. and Chanda, A. and Kalemli-Ozcan, S. and Sayek, S.},
   title = {Does foreign direct investment promote growth? Exploring the role
@@ -528,6 +521,13 @@
   volume = {1}
 }
 
+@ARTICLE{bermeo:2008,
+  author = {Bermeo, Sarah Blodgett},
+  title = {Aid Strategies of Bilateral Donors},
+  journal = {Unpublished Working Paper},
+  year = {2008}
+}
+
 @ARTICLE{berthelemy:2006,
   author = {Berth{\'e}lemy, Jean-Claude},
   title = {Bilateral donors’ interest vs. recipients’ development motives in
@@ -538,6 +538,18 @@
   pages = {179--194},
   number = {2},
   publisher = {Wiley Online Library}
+}
+
+@ARTICLE{berthelemy:2004,
+  author = {Berth{\'e}lemy, Jean-Claude and Tichit, Ariane},
+  title = {Bilateral donors' aid allocation decisions—a three-dimensional panel
+	analysis},
+  journal = {International Review of Economics \& Finance},
+  year = {2004},
+  volume = {13},
+  pages = {253--274},
+  number = {3},
+  publisher = {Elsevier}
 }
 
 @BOOK{bhagwati2008termites,
@@ -1085,6 +1097,17 @@
   publisher = {Taylor \& Francis}
 }
 
+@ARTICLE{collier:2002,
+  author = {Collier, Paul and Dollar, David},
+  title = {Aid allocation and poverty reduction},
+  journal = {European Economic Review},
+  year = {2002},
+  volume = {46},
+  pages = {1475--1500},
+  number = {8},
+  publisher = {Elsevier}
+}
+
 @ARTICLE{cranmer2014reciprocity,
   author = {Cranmer, Skyler J and Heinrich, Tobias and Desmarais, Bruce A},
   title = {Reciprocity and the structural determinants of the international
@@ -1143,6 +1166,17 @@
   pages = {547--563},
   number = {3},
   publisher = {Elsevier}
+}
+
+@ARTICLE{demesquita:2007,
+  author = {De Mesquita, Bruce Bueno and Smith, Alastair},
+  title = {Foreign aid and policy concessions},
+  journal = {Journal of Conflict Resolution},
+  year = {2007},
+  volume = {51},
+  pages = {251--284},
+  number = {2},
+  publisher = {Sage Publications}
 }
 
 @ARTICLE{dean2007measuring,
@@ -1206,6 +1240,18 @@
   publisher = {Nature Publishing Group}
 }
 
+@ARTICLE{dietrich:2013,
+  author = {Dietrich, Simone},
+  title = {Bypass or Engage? Explaining Donor Delivery Tactics in Foreign Aid
+	Allocation*},
+  journal = {International Studies Quarterly},
+  year = {2013},
+  volume = {57},
+  pages = {698--712},
+  number = {4},
+  publisher = {Wiley Online Library}
+}
+
 @ARTICLE{dixit1998ideology,
   author = {Dixit, A. and Londregan, J.},
   title = {Ideology, tactics, and efficiency in redistributive politics},
@@ -1265,6 +1311,15 @@
   year = {2003},
   pages = {411--430},
   publisher = {JSTOR}
+}
+
+@ARTICLE{easterly:2008,
+  author = {Easterly, William and Pfutze, Tobias},
+  title = {Where does the money go? Best and worst practices in foreign aid},
+  journal = {Journal of Economic Perspectives},
+  year = {2008},
+  volume = {22},
+  number = {2}
 }
 
 @TECHREPORT{ebenstein2009estimating,
@@ -1882,7 +1937,7 @@
   publisher = {American Statistical Association}
 }
 
-@ARTICLE{hoff2002latent,
+@ARTICLE{hoff:2002,
   author = {Hoff, P.D. and Raftery, A.E. and Handcock, M.S.},
   title = {Latent space approaches to social network analysis},
   journal = {Journal of the american Statistical association},
@@ -2455,6 +2510,17 @@
   publisher = {Wiley Online Library}
 }
 
+@ARTICLE{levi:2009,
+  author = {Levi, Margaret and Sacks, Audrey and Tyler, Tom},
+  title = {Conceptualizing legitimacy, measuring legitimating beliefs},
+  journal = {American Behavioral Scientist},
+  year = {2009},
+  volume = {53},
+  pages = {354--375},
+  number = {3},
+  publisher = {Sage Publications}
+}
+
 @ARTICLE{li2003reversal,
   author = {Li, Quan and Resnick, Adam},
   title = {Reversal of fortunes: Democratic institutions and foreign direct
@@ -2988,6 +3054,17 @@
   pages = {308--323},
   number = {3},
   publisher = {Elsevier}
+}
+
+@ARTICLE{nunnenkamp:2006,
+  author = {Nunnenkamp, Peter and Thiele, Rainer},
+  title = {Targeting aid to the needy and deserving: nothing but promises?},
+  journal = {The World Economy},
+  year = {2006},
+  volume = {29},
+  pages = {1177--1201},
+  number = {9},
+  publisher = {Wiley Online Library}
 }
 
 @ARTICLE{nyamu2008breathing,
@@ -3792,6 +3869,18 @@
   number = {2}
 }
 
+@ARTICLE{thiele:2007,
+  author = {Thiele, Rainer and Nunnenkamp, Peter and Dreher, Axel},
+  title = {Do donors target aid in line with the Millennium Development Goals?
+	A sector perspective of aid allocation},
+  journal = {Review of World Economics},
+  year = {2007},
+  volume = {143},
+  pages = {596--630},
+  number = {4},
+  publisher = {Springer}
+}
+
 @ARTICLE{thomas2009worldwide,
   author = {Thomas, Melissa A},
   title = {What Do the Worldwide Governance Indicators Measure},
@@ -4025,6 +4114,16 @@
   year = {1994},
   author = {Wasserman, S. and Faust, K.},
   volume = {8}
+}
+
+@ARTICLE{alesina:2002,
+  author = {Weder, Beatrice and Alesina, Alberto},
+  title = {Do Corrupt Governments Receive Less Foreign Aid?},
+  journal = {American Economic Association},
+  year = {2002},
+  volume = {92},
+  pages = {1126-1137},
+  number = {4}
 }
 
 @TECHREPORT{wei1997corruption,

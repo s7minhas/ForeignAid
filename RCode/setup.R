@@ -130,12 +130,13 @@ cleanWbData = function(data, variable){
 # ccode_1 & ccode_2 and the time aspect by a variable called year
 # time is a simple vector of years
 # panel is a dataset with country codes
-DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear = NA, time, pd, panel=panel, directed=FALSE){
-		if ( is.na(cntryYear) ==T){
+DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear1 = NA, cntryYear2 = NA, time, pd, panel=panel, directed=FALSE){
+		if ( is.na(cntryYear1) ==T){
 			panelMatch <- panel 
 		 }else  { 
-			panelMatch <- panel[-which(panel$cnameYear %in% setdiff(panel$cnameYear, 	
-			dyadData[,cntryYear])),] }
+			panelMatch <- panel[-which(panel$cnameYear 
+				%in% intersect(setdiff(panel$cnameYear, dyadData[,cntryYear1]),
+							setdiff(panel$cnameYear, dyadData[,cntryYear2]))       ),] }
 			
 	countryList <- lapply(pd, function(x) FUN=panelMatch[panelMatch$year==x,'ccode'])
 	names(countryList) <- pd
@@ -251,3 +252,58 @@ fulldata1 <- do.call(rbind, fulldata)
 return(fulldata1)
 }
 ################################################################
+
+################################################################
+
+## Turns data that is in country-year format into an edgelist: country-country-year format aggregated by year
+
+# The combinations of the dyadComb and makeDyad below make country-year data into country-country-year data with potential replicates in year
+
+dyadComb  = function(id, name, num){
+	if (!is.na(name) & !is.na(num)){
+   		dyads = cbind(id, t(combn(name, 2)), t(combn(num, 2)))
+	} else if (is.na(name)){
+		dyads = cbind(id, t(combn(num, 2)))	
+	} else if (is.na(num)){
+		dyads = cbind(id, t(combn(name, 2)))	
+	}
+	return(dyads)
+} 
+
+makeDyad = function(data, unit){
+uniqueUnit = unique(data[, unit])
+rawDyad = NULL
+for (ii in 1:length(uniqueUnit)){
+    slice = data[which(data[, unit] == uniqueUnit[ii]),]
+    if( dim(slice)[1] ==1 ){
+        sList2 = cbind(slice[,1], slice[,4], NA, slice[,3], NA )} 
+    else if ( dim(slice)[1] > 1 ){
+            sList2 = dyadComb(unique(slice[, unit]),slice[,4], slice[,3]) }
+    rawDyad = rbind(rawDyad, sList2)
+}
+rawDyad = data.frame(rawDyad, stringsAsFactors = F)
+names(rawDyad) = c(unit, "cname_1", "cname_2", "ccode1", "ccode2")
+rawDyad2 = rawDyad[-which(is.na(rawDyad$cname_2)),]
+rawDyad2$year = substring(rawDyad2$yrRcid, 1, 4)
+rawDyad2$dname = paste(rawDyad2$cname_1, rawDyad2$cname_2, sep = "_")
+return(rawDyad2)
+}
+
+# aggDyad aggregates output from makeDyad by year
+aggDyad = function(data, year, name){
+  yrs = sort(unique(data[,year]))
+  aggD = NULL
+  for (jj in 1:length(yrs)){
+    slice = data[which(data[, year] == yrs[jj]),]
+    sList2 = data.frame(tapply(slice$year, slice$dyadID, length), year = yrs[jj])
+    aggD = rbind(aggD, data.frame(id = row.names(sList2), sList2))
+  }
+  names(aggD) = c("dyadID", name, "year" )
+  aggD$dyadID = as.numeric(as.character(aggD$dyadID))
+  aggD$year = as.numeric(as.character(aggD$year))
+  return(aggD)
+}
+
+
+
+

@@ -9,31 +9,47 @@ if(Sys.info()['user']=='cindycheng'){
 
 
 setwd(pathCode); source('setup.R')
+
+ 
 load(paste0(pathData,'/stratInterestMatrics.rda'))
+
+
 #######################################################
 
 #######################################################
 # File Specific Functions
 
 # Run lat standardization to distance
-latToDist=function(yName, yList){
+latToDist=function(yName, yList, divMean, symm, outfilename){
 	yrs=names(yList)
 	oNames=paste(yName, yrs, 'OUT', sep='_')
-	zNames=paste(yName, yrs, 'Z', sep='_')
-	res=NULL
 
+	if ( symm == T ) {
+		zNames=paste(yName, yrs, 'Z', sep='_')}
+	else if( symm == F ){
+		uNames = paste(yName, yrs, 'U', sep = '_')
+		vNames = paste(yName, yrs, 'V', sep = '_')}
+
+	res=NULL
 	for(ii in 1:length(yrs)){
 		yData=yList[[ii]]
 		ids=rownames(yData)
-		
-		pzMu=getPosInSpace(oNames[ii], zNames[ii], ids)
-		latDist=getDyadDist(pzMu, ids)
-		latDist=stdize(latDist)
-		res=rbind(res,meltSymm(latDist, yrs[ii], yName))
+
+		if (symm == T){
+			pzMu=getPosInSpaceZ(oNames[ii], zNames[ii], ids)
+			latDist=getDyadDist(pzMu, ids)}
+		else if (symm == F){
+			puMu=getPosInSpace(oNames[ii], uNames[ii], ids)
+			pvMu=getPosInSpace(oNames[ii], vNames[ii], ids)
+			latDist=getDyadDistAsym(puMu, pvMu, ids)}}
+
+		latDist=stdize(latDist, divMean)
+		res = rbind(res, meltSymm(latDist, yrs[ii], yName), symm)
 		print(paste0('Distance calculated for ',yName,':',yrs[ii]))
-	}
+#  do this afterwards so that the min is the minimum across all years
+	if (divMean == F & sign(min(res[,4]))==-1 ){res[,4] = res[,4] - min(res[,4]) }
 	setwd(paste0(pathResults,'/gbmeLatDist'))
-	save(res, file=paste0(yName, 'Dist.rda'))
+	save(res, file= paste0(outfilename, '.rda' ))
 	print(paste0('results saved for ', yName))
 }
 
@@ -45,12 +61,15 @@ proc.rr<-function(Y,X){
 	Ahalf<-eA$vec[,1:k]%*%diag(sqrt(eA$val[1:k]),nrow=k)%*%t(eA$vec[,1:k])
 	t(t(X)%*%Y%*%solve(Ahalf)%*%t(Y)) }
 
+
+ 
 # Code from Hoff to get latent space positions
 getPosInSpace=function(oname, zname, ids){
 	
 	# Load data
-	setwd(paste0(pathResults,'/gbmeLatSpace'))
+	setwd(paste0(pathResults,'/gbmeLatSpace/NewLatSpace'))
 	OUT=read.table(oname, header=TRUE)
+	
 	Z=read.table(zname)
 
 	#convert to an array
@@ -78,6 +97,7 @@ getPosInSpace=function(oname, zname, ids){
 	pzMu=apply(PZ, c(1,2), mean); rownames(pzMu)=ids
 	pzMu
 }
+ 
 
 # Euclidean distance between two points
 getDyadDist=function(posMatrix, ids){
@@ -92,6 +112,19 @@ getDyadDist=function(posMatrix, ids){
 	distMatrix
 }
 
+getDyadDistAsym=function(posMatrixU, posMatrixV, ids){
+	n=nrow(posMatrixU)
+	distMatrix = matrix(NA, nrow=n, ncol=n, dimnames=list(ids, ids))
+	for(ii in 1:length(ids)){
+	  for(jj in 1:length(ids)){
+	    distMatrix[ii,jj] = sqrt( (posMatrixU[ids[ii],1] - posMatrixV[ids[jj],1])^2 
+	      + (posMatrixU[ids[ii],2] - posMatrixV[ids[jj],2])^2 )
+	  }
+	}
+	distMatrix
+}
+
+
 # Standardize
 stdize=function(x, divMean=TRUE){
 	mu=mean(x)
@@ -100,11 +133,18 @@ stdize=function(x, divMean=TRUE){
 }
 
 # Melt symmetric matrix
-meltSymm=function(x, yr, vnme){
+meltSymm=function(x, yr, vnme, symm){
 	library(igraph)
-	graph=graph.adjacency(x, mode='undirected',weighted=TRUE)
+
+	if(symm == T){
+		graph=graph.adjacency(x, mode='undirected',weighted=TRUE)}
+	else if (symm == F){
+		graph=graph.adjacency(x, mode='directed',weighted=TRUE)}
+
 	edgeVal=cbind(get.edgelist(graph), yr, E(graph)$weight)
 	colnames(edgeVal)=c('ccode1','ccode2','year',paste0(vnme,'Dist'))
 	apply(edgeVal, 2, num)
 }
+
+
 #######################################################
