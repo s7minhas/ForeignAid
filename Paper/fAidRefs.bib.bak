@@ -2611,6 +2611,19 @@
   number = {1}
 }
 
+@ARTICLE{Maizels1984,
+  author = {Maizels, Alfred and Nissanke, Machiko K},
+  title = {Motivations for aid to developing countries},
+  journal = {World Development},
+  year = {1984},
+  volume = {12},
+  pages = {879--900},
+  number = {9},
+  owner = {cindycheng},
+  publisher = {Elsevier},
+  timestamp = {2015.01.19}
+}
+
 @ARTICLE{maizels:1984,
   author = {Maizels, Alfred and Nissanke, Machiko K},
   title = {Motivations for aid to developing countries},
@@ -2761,6 +2774,41 @@
   pages = {1311--1319},
   number = {12},
   publisher = {Taylor \& Francis}
+}
+
+@ARTICLE{mckinlay:1978,
+  author = {McKinlay, Robert D and Little, Richard},
+  title = {A foreign-policy model of the distribution of British bilateral aid,
+	1960--70},
+  journal = {British Journal of Political Science},
+  year = {1978},
+  volume = {8},
+  pages = {313--331},
+  number = {03},
+  publisher = {Cambridge Univ Press}
+}
+
+@ARTICLE{mckinlay:1977,
+  author = {McKinlay, Robert D and Little, Richard},
+  title = {A foreign policy model of US bilateral aid allocation},
+  journal = {World Politics},
+  year = {1977},
+  volume = {30},
+  pages = {58--86},
+  number = {01},
+  publisher = {Cambridge Univ Press}
+}
+
+@ARTICLE{mckinley:1979,
+  author = {McKinley, Robert D and Little, Richard},
+  title = {THE US AID RELATIONSHIP: A TEST OF THE RECIPIENT NEED AND THE DONOR
+	INTEREST MODELS*},
+  journal = {Political Studies},
+  year = {1979},
+  volume = {27},
+  pages = {236--250},
+  number = {2},
+  publisher = {Wiley Online Library}
 }
 
 @BOOK{medvedev2006beyond,
@@ -3821,6 +3869,14 @@
   title = {When Do Donors Coordinate? Explaining Competition, Collusion and
 	Coordination in the Provision of Foreign Aid},
   year = {2014}
+}
+
+@INPROCEEDINGS{stone:2006,
+  author = {Stone, Randall W},
+  title = {Buying Influence: The Political Economy of International Aid},
+  booktitle = {annual meeting of the Interanational Studies Association, San Diego,
+	CA},
+  year = {2006}
 }
 
 @ARTICLE{suliman2009human,
