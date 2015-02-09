@@ -45,17 +45,4 @@ for(ii in 1:length(yrs)){
 # Plotting
 coefCross = coefCross[which(coefCross$ccodeS==2),]
 
-VARS=vars
-VARSname=vars
-
-tmp = ggcoefplot(coefData=coefCross, 
-	vars=VARS, varNames=VARSname,
-  Noylabel=FALSE, coordFlip=FALSE, revVar=FALSE,
-  facet=TRUE, facetColor=FALSE, colorGrey=FALSE,
-  facetName='cross', 
-  facetDim=c(3,3), 
-  facetBreaks=seq(yrs[1],2011,3),
-  facetLabs=seq(yrs[1],2011,3),
-  allBlack=FALSE
-  )
-tmp
+###############################################################################
