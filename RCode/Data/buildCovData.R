@@ -1,4 +1,4 @@
-source("/Users/janus829/Desktop/Research/ForeignAid/RCode/setup.R")
+source("~/Research/ForeignAid/RCode/setup.R")
 
 ###############################################################
 # WB data
@@ -80,11 +80,11 @@ polity2$country[polity2$country=='UAE']='United Arab Emirates'
 polity2$country[polity2$country=='Congo Brazzaville']='Congo, Republic of'
 polity2$country[polity2$country=='Congo Kinshasa']='Congo, Democratic Republic of'
 polity2$country[polity2$country=='Germany East']="Germany Democratic Republic"
-polity2$cname=countrycode(polity2$country, 'country.name', 'country.name')
+polity2$cname=cname(polity2$country)
 polity2$cname[polity2$country=='Yemen South']="S. YEMEN"
 polity2$cname[polity2$country=='Vietnam South']="S. VIETNAM"
-polity2[polity2$cname=='Yugoslavia', 'cname']='SERBIA'
-polity2[polity2$cname=='Czechoslovakia', 'cname']='CZECH REPUBLIC'
+polity2[polity2$country=='Yugoslavia', 'cname']='SERBIA'
+polity2[polity2$country=='Czechoslovakia', 'cname']='CZECH REPUBLIC'
 
 polity2$cnameYear=paste(polity2$cname, polity2$year, sep='')
 
@@ -118,7 +118,7 @@ icrg2$Country[icrg2$Country=='Congo-Brazzaville']='Congo, Republic of'
 icrg2$Country[icrg2$Country=='Congo-Kinshasa']='Congo, Democratic Republic of'
 drop=c("Hong Kong", "New Caledonia")
 icrg2=icrg2[which(!icrg2$Country %in% drop),]
-icrg2$cname=countrycode(icrg2$Country, 'country.name', 'country.name')
+icrg2$cname=cname(icrg2$Country)
 icrg2[icrg2$cname=='Czechoslovakia', 'cname']='CZECH REPUBLIC'
 
 icrg2$cnameYear=paste(icrg2$cname, icrg2$Year, sep='')
@@ -186,7 +186,7 @@ banks2=banks2[banks2$country!='Somaliland',]
 banks2=banks2[banks2$code!=1145,] # Removing extra cases for Trinidad
 banks2=banks2[banks2$code!=1247,] # Removing extra cases for Venezuela
 
-banks2$cname=countrycode(banks2$country, 'country.name', 'country.name')
+banks2$cname=cname(banks2$country)
 banks2$cname[banks2$country=='Vietnam REP']='S. VIETNAM'
 banks2$cname[banks2$country=='Yemen PDR']='S. YEMEN'
 banks2$cname[banks2$country=="Yemen PDR (So. Yemen)"]='S. YEMEN'
@@ -236,7 +236,7 @@ fh$Country[fh$Country=='Congo (Kinshasa)']='Congo, Democratic Republic of'
 fh$Country[fh$Country=='Germany, E.']="Germany Democratic Republic" 
 fh$Country[fh$Country=='Germany, W.']="Germany" 
 
-fh$cname=countrycode(fh$Country, 'country.name', 'country.name')
+fh$cname=cname(fh$Country)
 fh$cname[fh$Country=='Vietnam, S.']='S. VIETNAM'
 fh$cname[fh$Country=='Yemen, S.']='S. YEMEN'
 
@@ -292,6 +292,41 @@ names(table(food2$cyear)[table(food2$cyear)>1])
 ###############################################################
 
 ###############################################################
+# Natural disaster data
+emdat2=read.csv(paste0(pathData,'/Components/EMDAT/emdat.csv'))
+emdat=emdat2
+
+# Convert to standard country names
+emdat$country_name=trim(emdat$country_name)
+emdat$country_name[emdat$country_name=='Germany Dem Rep']="Germany Democratic Republic"
+emdat$cname=cname(emdat$country_name)
+
+# Drop some countries
+emdat$drop=0
+emdat[emdat$country_name=='Germany Fed Rep' & emdat$year==1991, 'drop']=1
+emdat = emdat[which(emdat$drop!=1),]
+
+# Cname corrections
+emdat$cname[emdat$country_name=='Czechoslovakia']='CZECH REPUBLIC'
+emdat$cname[emdat$country_name=='Yemen P Dem Rep']='S. YEMEN'
+emdat$cname[emdat$country_name=='Yugoslavia']='SERBIA'
+
+# Dupe check
+emdat$cnameYear=paste(emdat$cname, emdat$year, sep='')
+names(table(emdat$cnameYear)[table(emdat$cnameYear)>1]) # Dupe check
+
+# Add countrycode
+emdat$ccode=panel$ccode[match(emdat$cname,panel$cname)]
+emdat$cyear=paste(emdat$ccode,emdat$year,sep='')
+
+# Drop countries with no ccodes: throws away small islands
+emdat = emdat[!is.na(emdat$ccode),]
+
+# Final dupe check
+names(table(emdat$cyear)[table(emdat$cyear)>1])
+###############################################################
+
+###############################################################
 # Combining data
 frame=unique(panel[,c('ccode', 'cname')])
 dframe=NULL; frame$year=NA; years=seq(1960,2012,1)
@@ -312,6 +347,8 @@ unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 covData=merge(covData, fh[,c(3:5,ncol(fh))],by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 covData=merge(covData, food2[,c(3,ncol(food2))],by='cyear',all.x=T,all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData=merge(covData, emdat[,c(4:10,15)], by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 
 setwd(pathData)

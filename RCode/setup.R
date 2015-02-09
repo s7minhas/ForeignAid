@@ -4,6 +4,7 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 ){pathMain="~/Dropbox/Research/ForeignAid";
   pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
   pathResults='~/Dropbox/Research/ForeignAid/Results';
+  pathCode='~/Research/ForeignAid/RCode'
   pathData="~/Dropbox/Research/ForeignAid/Data"
   } else if  (Sys.info()["user"]=="cindycheng") {
   pathMain="~/Dropbox/ForeignAid";
@@ -14,8 +15,9 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathResults = '~/Dropbox/ForeignAid/Results'}
 
 # Loading libraries and functions
-toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 'gtools', 
-       'ggplot2', 'doBy', 'sbgcop', 'tikzDevice', 'igraph', 'bipartite')
+toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 
+	'gtools', 'ggplot2', 'doBy', 'sbgcop', 'tikzDevice', 
+	'igraph', 'bipartite', 'lme4')
 for(lib in toLoad){
   if(!(lib %in% installed.packages()[,1])){ 
   	install.packages(lib, repos='http://cran.rstudio.com/') }
@@ -32,6 +34,9 @@ panel$cname<-toupper(panel$cname) # not for some reason German Democratic Republ
 set.seed(6886)
 setwd(pathMain)
 
+# Source scripts
+setwd(pathCode)
+source('vizResults.R')
 ################################################################
 # Helper functions
 trim = function (x) gsub("^\\s+|\\s+$", "", x)
@@ -61,8 +66,8 @@ rescale = function(x,new_max,new_min){
 ################################################################
 # Convert to cname
 cname = function(x){
-	library(countrycode); x = as.character(x)
-	y = countrycode(x, 'country.name', 'country.name') }
+	x = as.character(x)
+	toupper(countrycode(x, 'country.name', 'country.name')) }
 ################################################################
 
 ################################################################
@@ -231,6 +236,7 @@ lagTS <- function(x,l){
 
 lagData <- function(data, country_year, country, varsTOlag, lag=1)
 {
+  data[,country_year] = num(data[,country_year])
   data <- data[order(data[,country_year]),]
   lagData <- apply(data[,varsTOlag], 2,
     function(x){
