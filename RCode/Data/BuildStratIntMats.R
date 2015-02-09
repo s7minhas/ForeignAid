@@ -525,17 +525,16 @@ source(paste0(pathCode, '/setup.R'))
 ###############################################################
 
 ###############################################################
-# # Clean joint military exercise data
+# Clean joint military exercise data
 # library(dplyr)
 # library(stringr)
 
 # setwd(paste0(pathData, '/Components/Orazio'))
-# jme<-read.csv("jme_v1.csv", stringsAsFactors=F)
+# jme<-read.csv("jme_v1.1.csv", stringsAsFactors=F)
 
 # jme2 = dplyr::select(jme, c(s.year, e.year, statea:statep))
 # jme2$ID = 1:dim(jme2)[1]
-
-
+ 
 # # make into dyadic data
 # jmeDyad = melt(jme2, id.vars = c('s.year', 'e.year', 'ID'))
 # jmeDyad =  plyr::rename(jmeDyad, replace= c("value" = "country"))
@@ -545,25 +544,25 @@ source(paste0(pathCode, '/setup.R'))
 # uniqueID = unique(jmeDyad[,'ID'])
 # rawDyad = NULL 
 # for (ii in 1:length(uniqueID)){
-# 	slice = jmeDyad[which(jmeDyad[, 'ID'] == uniqueID[ii]),]
-# 	if( dim(slice)[1] ==1 ){
-# 	sList2 = c(slice[,'ID'], slice[,4], NA)} 
-# 	else if ( dim(slice)[1] > 1 ){
-# 	sList2 = cbind(unique(slice[, 'ID']),t(combn(slice[,4], 2))) }
-# 	rawDyad = rbind(rawDyad, sList2)
+	# slice = jmeDyad[which(jmeDyad[, 'ID'] == uniqueID[ii]),]
+	# if( dim(slice)[1] ==1 ){
+	# sList2 = c(slice[,'ID'], slice[,4], NA)} 
+	# else if ( dim(slice)[1] > 1 ){
+	# sList2 = cbind(unique(slice[, 'ID']),t(combn(slice[,4], 2))) }
+	# rawDyad = rbind(rawDyad, sList2)
 # }
 
 # rawDyad2 = data.frame(rawDyad, stringsAsFactors= F)
 # names(rawDyad2) = c("ID", "stabb_1", "stabb_2")
 
+ 
 # # add years
 # jmeDyadYr = merge(rawDyad2, jme2[, c('s.year', 'e.year', 'ID')], by = "ID", all = T ) 
  
-
-# # remove data for which we don't have end years or they don't make sense
+# # remove data for which we don't have end years 
 # jmeDyadYrClean = jmeDyadYr[-which(jmeDyadYr$e.year =="-9"|jmeDyadYr$e.year =="xxxx"),]
 # jmeDyadYrClean$e.year = num(jmeDyadYrClean$e.year)
-# jmeDyadYrClean = jmeDyadYrClean[-which(jmeDyadYrClean$e.year < jmeDyadYrClean$s.year),]
+# # jmeDyadYrClean = jmeDyadYrClean[-which(jmeDyadYrClean$e.year < jmeDyadYrClean$s.year),] - fixed in v1.1 version of the dataset
 
 # # get full number of years
 # table(jmeDyadYrClean$e.year - jmeDyadYrClean$s.year)
@@ -582,6 +581,22 @@ source(paste0(pathCode, '/setup.R'))
 # jmeDyadAllYrs$cname_1 = countryKey$cname[match(jmeDyadAllYrs$stabb_1, countryKey$stabb)]
 # jmeDyadAllYrs$cname_2 = countryKey$cname[match(jmeDyadAllYrs$stabb_2, countryKey$stabb)]
 
+# jmeDyadAllYrs$cname_1[grep("SRB", jmeDyadAllYrs$stabb_1)] = "SERBIA"
+# jmeDyadAllYrs$cname_2[grep("SRB", jmeDyadAllYrs$stabb_2)] = "SERBIA"
+# jmeDyadAllYrs$ccode_1[grep("SRB", jmeDyadAllYrs$stabb_1)] = 345
+# jmeDyadAllYrs$ccode_2[grep("SRB", jmeDyadAllYrs$stabb_2)] = 345
+
+# jmeDyadAllYrs$cname_1[grep("CSK", jmeDyadAllYrs$stabb_1)] = "CZECHOSLOVAKIA"
+# jmeDyadAllYrs$cname_2[grep("CSK", jmeDyadAllYrs$stabb_2)] = "CZECHOSLOVAKIA"
+# jmeDyadAllYrs$ccode_1[grep("CSK", jmeDyadAllYrs$stabb_1)] = 315
+# jmeDyadAllYrs$ccode_2[grep("CSK", jmeDyadAllYrs$stabb_2)] = 315
+
+# jmeDyadAllYrs$cname_1[grep("DDR", jmeDyadAllYrs$stabb_1)] = "GERMAN DEMOCRATIC REPUBLIC"
+# jmeDyadAllYrs$cname_2[grep("DDR", jmeDyadAllYrs$stabb_2)] ="GERMAN DEMOCRATIC REPUBLIC"
+# jmeDyadAllYrs$ccode_1[grep("DDR", jmeDyadAllYrs$stabb_1)] = 265
+# jmeDyadAllYrs$ccode_2[grep("DDR", jmeDyadAllYrs$stabb_2)] =265
+
+
 # jmeDyadAggYrs = jmeDyadAllYrs[-which(is.na(jmeDyadAllYrs$ccode_1)|is.na(jmeDyadAllYrs$ccode_2)), ]
 # jmeDyadAggYrs$jme = 1
 
@@ -591,11 +606,12 @@ source(paste0(pathCode, '/setup.R'))
 # jmeFINAL  = data.frame(jmeFINAL )
  
 # setwd(paste0(pathData, '/Components/Orazio'))
-# save(jmeFINAL, file = 'jme.rda')
+# save(jmeFINAL, file = 'jme_v1_1.rda')
 
 # # missing states names
-# union(unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_1)),'stabb_1'] ), unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_2)), 'stabb_2'] ))
+# jmeDyadAllYrs[which(jmeDyadAllYrs$ccode_1 %in% union(unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_1)),'stabb_1'] ), unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_2)), 'stabb_2'] )) | jmeDyadAllYrs$ccode_2 %in% union(unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_1)),'stabb_1'] ), unique(jmeDyadAllYrs[which(is.na(jmeDyadAllYrs$ccode_2)), 'stabb_2'] ))),] 
 # # get the 8 NATO Members.... or throw it out
+# #DDR is East Germany, CSK is Czechoslovakia, and SRB is Serbia. 
 
 # states = c("Denmark", 'Bulgaria', 'Japan', 'Germany', 'Algeria', 'United Arab Emirates', 'Germany', 'Czechoslovakia', 'Italy')
 # exist = countrycode(states, 'country.name', 'iso3c')
@@ -684,7 +700,7 @@ setwd(paste0(pathData, '/Components/PRIO_ArmedConflict')); load('war.rda')
 setwd(paste0(pathData, '/Components/VoetenData')); load('unNew.rda')
 setwd(paste0(pathData, '/Components/MIDs')); load('mid.rda')
 setwd(paste0(pathData, "/components/SIPRI")); load('arms.rda')
-setwd(paste0(pathData, '/Components/Orazio')); save(jmeFINAL, file = 'jme.rda')
+setwd(paste0(pathData, '/Components/Orazio')); save(jmeFINAL, file = 'jme_v1_1.rda')
 # setwd(paste0(pathData, '/Components/LeedsData')); load('allydir.rda')
 
 
@@ -720,7 +736,6 @@ hostlevMats = DyadBuild(variable='hostlev', dyadData=midFINAL,
 
 
 unFINALNew$cname_2Year = paste(unFINALNew$cname_2, unFINALNew$year, sep = "")
- 
 unMats = DyadBuild(variable='agree3unNew', dyadData=unFINALNew,
     cntry1='ccode_1', cntry2 = 'ccode_2', cntryYear1 = 'cname_1Year', cntryYear2= 'cname_2Year', time='year',
     pd=1970:2010, panel=panel, directed=FALSE)

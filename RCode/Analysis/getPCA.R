@@ -33,52 +33,46 @@ source(paste0(pathCode, "/Analysis/dilsTweak.R"))
 
 # load data
 setwd(paste0(pathResults, "/gbmeLatDist"))
-load('allyDist.rda')
+load('allyWtDist.rda')
 allyDist = data.frame(res)
 load('igoDist.rda')
 igoDist = data.frame(res)
-load('unDist.rda')
+load('unNewDist.rda')
 unDist = data.frame(res)
-load('warMsum5Dist.rda')
+load('midDist.rda')
+midDist = data.frame(res)
+load('hostlevDist.rda')
+hostlevDist = data.frame(res)
+load('hostlevsumDist.rda')
+hostlevsumDist = data.frame(res)
+load('armsDist.rda')
+armsDist = data.frame(res)
+load('warMsumDistStd.rda')
 warDist = data.frame(res)
+load('armsSumDist.rda')
+armsSumDist = data.frame(res)
+load('jmeDist.rda')
+jmeDist = data.frame(res) 
 
+
+###### PCA - UN, IGO and Ally########
 # merge data
 D1 = merge(allyDist, igoDist, by = c("ccode1", "ccode2", "year"), all = T)
-D2 = merge(unDist, warDist, by = c("ccode1", "ccode2", "year"), all = T)
-D = merge(D1, D2, by = c("ccode1", "ccode2", "year"), all = T)
-
-##### Clean up data ####
-
-# Rescale war matrix
-D$warRescale =  - D$warMsum5Dist + max(D$warMsum5Dist)
-
-# Full Data frame
-DF = D[, - which(names(D) %in% c("warMsum5Dist"))]  # warMsum5Dist is removed because GenerateDilsNetwork returns all columns that are not used in the PCA
+D = merge(D1, unDist, by = c("ccode1", "ccode2", "year"), all = T)
  
-# Without War variables at all
-DF1 = D[, - which(names(D) %in% c("warMsum5Dist", "warRescale"))]
-DF1 = DF1[-which(is.na(DF1$unDist) & DF1$year>2005 ),] # 345 = Yugoslavia; 713 = Taiwan ; 990 = Samoa ; 731 ; 731 = North Korea 341 Montenegro
 
-###### PCA ########
 # PCA on full Data
 PCA_AllYrs = NULL
 PCA_coefficients = NULL
 PCA_eigenvalues.sd = NULL
 PCA_bootstrap.sds  = NULL
 
-for (yr in c(1970:2010)){
-  PCA = getPCA(DF, yr = yr, n.sub = 5000)  
+for (yr in c(1970:2005)){
+  PCA = getPCA(DF, yr = yr, n.sub = 1000)  
   PCA_AllYrs = rbind(PCA_AllYrs, data.frame(PCA$dils.edgelist)) 
-  if (yr <=2005){
     PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients))
     PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev ))
-    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds))
-  } else if(yr >2005){
-    PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients, NA))
-    PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev , NA))
-    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds, NA))
-  }
-  
+    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds))  
 }
 
 PCA_FullData = list(PCA_AllYrs= PCA_AllYrs, PCA_coefficients = PCA_coefficients, PCA_eigenvalues.sd= PCA_eigenvalues.sd, PCA_bootstrap.sds = PCA_bootstrap.sds  )
@@ -86,31 +80,69 @@ PCA_FullData = list(PCA_AllYrs= PCA_AllYrs, PCA_coefficients = PCA_coefficients,
 save(PCA_FullData, file = "PCA_FullData.rda")
 
  
-###### PCA without war data
-PCA_AllYrs_NW = NULL
-PCA_coefficients_NW = NULL
-PCA_eigenvalues.sd_NW = NULL
-PCA_bootstrap.sds_NW  = NULL
+###### PCA - JME, HostLev and ArmsTransfers, War ? ########
+# hostlev, arms
+# hostlevsum, armsSum
 
-for (yr in c(1970:2005)){
-  PCA = getPCA(DF1, yr = yr, n.sub = 5000)  
-  PCA_AllYrs_NW = rbind(PCA_AllYrs_NW, data.frame(PCA$dils.edgelist)) 
-  if (yr <=2005){
-  PCA_coefficients_NW = rbind(PCA_coefficients_NW, c(yr, PCA$coefficients))
-  PCA_eigenvalues.sd_NW = rbind(PCA_eigenvalues.sd_NW, c(yr, PCA$sdev ))
-  PCA_bootstrap.sds_NW = rbind(PCA_bootstrap.sds_NW, c(yr, PCA$bootstrap.sds))
-  } else if (yr > 2005){
-    PCA_coefficients_NW = rbind(PCA_coefficients_NW, c(yr, PCA$coefficients, NA))
-    PCA_eigenvalues.sd_NW = rbind(PCA_eigenvalues.sd_NW, c(yr, PCA$sdev, NA ))
-    PCA_bootstrap.sds_NW = rbind(PCA_bootstrap.sds_NW, c(yr, PCA$bootstrap.sds, NA))
-  }
+#hostlev, armsSum
+#hostlevsum, arms
+
+# mid, arms
+# mid armsSum
+
+
+# merge data
+D1 = merge(midDist, warDist, by = c("ccode1", "ccode2", "year"), all = T)
+D2 = armsSumDist
+D2 = merge(armsDist, jmeDist, by = c("ccode1", "ccode2", "year"), all = T)
+D = merge(D1, D2, by = c("ccode1", "ccode2", "year"), all = T)
+head(D2)
+
+#  
+D$midDistRescale = -D$midDist + max(D$midDist, na.rm = T)
+D$hostlevDistRescale = -D$hostlevDist + max(D$hostlevDist, na.rm = T)
+D$warDistRescale = -D$warMsum5Dist + max(D$warMsum5Dist, na.rm = T)
+DF = D[, -which(names(D) %in% c("midDist", "warMsum5Dist"))]
+
+
+D$hostlevsumDistRescale = -D$hostlevsumDist + max(D$hostlevsumDist, na.rm = T)
+D$warDistRescale = -D$warMsum5Dist + max(D$warMsum5Dist, na.rm = T)
+DF = D[, -which(names(D) %in% c("hostlevsumDist", "warMsum5Dist"))]
+summary(DF)
+cor(DF[, -c(1:3)])
+
+# PCA on full Data
+PCA_AllYrs = NULL
+PCA_coefficients = NULL
+PCA_eigenvalues.sd = NULL
+PCA_bootstrap.sds  = NULL
+
+for (yr in c(1990:2010)){
+  PCA = getPCA(DF, yr = yr, n.sub = 1000)  
+  PCA_AllYrs = rbind(PCA_AllYrs, data.frame(PCA$dils.edgelist)) 
+    PCA_coefficients = rbind(PCA_coefficients, c(yr, PCA$coefficients))
+    PCA_eigenvalues.sd = rbind(PCA_eigenvalues.sd, c(yr, PCA$sdev ))
+    PCA_bootstrap.sds = rbind(PCA_bootstrap.sds, c(yr, PCA$bootstrap.sds))  
 }
 
- 
-PCA_NW = list(PCA_AllYrs_NW= PCA_AllYrs_NW, PCA_coefficients_NW = PCA_coefficients_NW, PCA_eigenvalues.sd_NW= PCA_eigenvalues.sd_NW, PCA_bootstrap.sds_NW = PCA_bootstrap.sds_NW  )
-save(PCA_NW, file = "PCA_NW.rda")
- 
 
+PCA_coefficients 
+summary(PCA_AllYrs)
+PCA_eigenvalues.sd
+PCA_bootstrap.sds
+
+summary(DF[which(DF$year>2005),])
+
+
+PCA_FullData = list(PCA_AllYrs= PCA_AllYrs, PCA_coefficients = PCA_coefficients, PCA_eigenvalues.sd= PCA_eigenvalues.sd, PCA_bootstrap.sds = PCA_bootstrap.sds  )
+
+save(PCA_FullData, file = "PCA_FullData_midWarArmsSum.rda")
+
+
+
+### Evaluate eigenvalues
+
+PCA_eigenvalues.sd[, -1])^2/rowSums((PCA_eigenvalues.sd[, -1])^2)
 
 
  

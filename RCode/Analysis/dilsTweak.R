@@ -7,11 +7,6 @@ D = D[which(D$year == yr), ]
 # get number of observations per year
 n = dim(D)[1]
 
-# igoDist missing after 2005; remove from PCA analysis when after 2005 
-if(yr >2005){
-  D = D[, -which(names(D) == "igoDist")]
-}
-
 # impute unDist where missing
 if(any(is.na(D$unDist)) == T) {
     D$unDist[which(is.na(D$unDist))] = rowMeans(D[which(is.na(D$unDist)), -which(names(D) %in% c( "unDist", "ccode1", "ccode2", "year"))])
