@@ -362,18 +362,24 @@ colony4 = panelyear(colony3, colony3$IndYr, rep(2015, length(colony3$IndYr)))
 colony5 = colony4[which(colony4$year>1959),]
 colony5$colony[which(colony5$year < colony5$GWSysYr)] = 0
 
+# make variable for number of years since a colony gained independence/seceded
+colony5$colYears = unlist(lapply(split(colony5$colony, colony5$Name), cumsum))
+ 
 # reshape data and make dummy variables for each colonizer
 colony5 = colony5[-which(colony5$ColRulerName == "Austria-Hungary"), - which(names(colony5) %in% c("IndYr", "GWSysYr"))]
-colony6 = reshape(colony5, timevar = "ColRulerName", idvar = c("State", "Name", "ColRuler", "year"), direction = 'wide', sep = "_")
+colony6 = reshape(colony5, timevar = "ColRulerName", idvar = c("State", "Name", "ColRuler", "colYears", "year"), direction = 'wide', sep = "_")
 colony6[is.na(colony6)] = 0
-
+ 
 # aggregate by colony and year
-names(colony6)[c(5, 17, 27)] = c("colony_UK", "colony_US", "colony_SouthAfrica")
+names(colony6)[c(6, 18, 28)] = c("colony_UK", "colony_US", "colony_SouthAfrica")
 colony5$ColRulerName[which(colony5$ColRulerName=="United Kingdom")] = "UK"
 colony5$ColRulerName[which(colony5$ColRulerName=="South Africa")] = "SouthAfrica"
 colony5$ColRulerName[which(colony5$ColRulerName=="United States")] = "US"
 
-colony7 = summaryBy(formula(paste(paste("colony", unique(colony5$ColRulerName), sep = "_", collapse = "+"), paste("Name", "year", sep = "+"), sep = "~")), FUN = sum, data = colony6, keep.names = T, id = c("State", "ColRuler"))
+ 
+colony7 = summaryBy(formula(paste(paste("colony", unique(colony5$ColRulerName), sep = "_", collapse = "+"), paste("Name", "year", sep = "+"), sep = "~")), FUN = sum, data = colony6, keep.names = T, id = c("State", "ColRuler", "colYears"))
+colony7$colDummy = 1
+colony7$numColonizers = rowSums(colony7[, c(3:34)])
  
 # fix country names
 colony7$State[which(colony7$State == 316)] = 315
@@ -390,7 +396,7 @@ colony7$cnameYearColony=paste(paste(colony7$cname, colony7$year, sep=''), colony
 names(table(colony7$cnameYearColony)[table(colony7$cnameYearColony)>1])
 which(duplicated(colony7$cyear)==T)
  
-colonyFINAL = colony7[ , c(37:44, 2, 3:34)]
+colonyFINAL = colony7[ , c(38:45, 2, 37, 46, 47, 3:34)]
 names(colonyFINAL)
 ###############################################################
 
@@ -418,8 +424,9 @@ covData=merge(covData, food2[,c(3,ncol(food2))],by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 covData=merge(covData, emdat[,c(4:10,15)], by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, colonyFINAL[,c(7, 10:41)], by='cyear', all.x=T, all.y=F)
+covData=merge(covData, colonyFINAL[,c(11, 1, 2, 10,13:44)], by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData[, 65:99][is.na(covData[, 65:99])]= 0
 
 setwd(pathData)
 save(covData, file='covData.rda')
