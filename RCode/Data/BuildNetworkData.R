@@ -3,8 +3,8 @@
 
 ##### Load Packages and Functions #####
 source(paste0(pathCode, '/setup.R'))
-source(paste0(pathCode, '/bipartite.R'))
-source(paste0(pathCode, '/ggnet.R'))
+#source(paste0(pathCode, '/bipartite.R'))
+#source(paste0(pathCode, '/ggnet.R'))
 
 
 

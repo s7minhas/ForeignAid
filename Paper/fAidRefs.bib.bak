@@ -816,6 +816,17 @@
   url = {http://www.jstor.org/stable/2118125}
 }
 
+@ARTICLE{demesquita:1975,
+  author = {Bueno de Mesquita, Bruce},
+  title = {Measuring systemic polarity},
+  journal = {Journal of Conflict Resolution},
+  year = {1975},
+  volume = {19},
+  pages = {187--216},
+  number = {2},
+  publisher = {Sage Publications}
+}
+
 @ARTICLE{buhaug2008contagion,
   author = {Buhaug, H. and Gleditsch, K.S.},
   title = {Contagion or Confusion? Why Conflicts Cluster in Space},
@@ -1510,6 +1521,13 @@
   author = {Garg, SK}
 }
 
+@ARTICLE{gartzke:2006,
+  author = {Gartzke, Erik and Jo, Dong-Joon},
+  title = {The Affinity of Nations Index, 1946-2002},
+  journal = {New York, NY: Columbia University},
+  year = {2006}
+}
+
 @ARTICLE{gastanaga1998,
   author = {Victor M. Gastanaga and Jeffrey B. Nugent and Bistra Pashamova},
   title = {Host country reforms and FDI inflows: How much difference do they
@@ -2001,6 +2019,18 @@
 	this type of international trade should become even more prevalent
 	in the next century.},
   publisher = {Federal Reserve Bank of New York}
+}
+
+@ARTICLE{hage:2011,
+  author = {H{\"a}ge, Frank M},
+  title = {Choice or circumstance? Adjusting measures of foreign policy similarity
+	for chance agreement},
+  journal = {Political Analysis},
+  year = {2011},
+  volume = {19},
+  pages = {287--305},
+  number = {3},
+  publisher = {SPM-PMSAPSA}
 }
 
 @BOOK{islam1981tale,
@@ -2776,6 +2806,18 @@
   publisher = {Taylor \& Francis}
 }
 
+@ARTICLE{mckinley:1979,
+  author = {McKinlay, Robert D and Little, Richard},
+  title = {THE US AID RELATIONSHIP: A TEST OF THE RECIPIENT NEED AND THE DONOR
+	INTEREST MODELS*},
+  journal = {Political Studies},
+  year = {1979},
+  volume = {27},
+  pages = {236--250},
+  number = {2},
+  publisher = {Wiley Online Library}
+}
+
 @ARTICLE{mckinlay:1978,
   author = {McKinlay, Robert D and Little, Richard},
   title = {A foreign-policy model of the distribution of British bilateral aid,
@@ -2797,18 +2839,6 @@
   pages = {58--86},
   number = {01},
   publisher = {Cambridge Univ Press}
-}
-
-@ARTICLE{mckinley:1979,
-  author = {McKinley, Robert D and Little, Richard},
-  title = {THE US AID RELATIONSHIP: A TEST OF THE RECIPIENT NEED AND THE DONOR
-	INTEREST MODELS*},
-  journal = {Political Studies},
-  year = {1979},
-  volume = {27},
-  pages = {236--250},
-  number = {2},
-  publisher = {Wiley Online Library}
 }
 
 @BOOK{medvedev2006beyond,
@@ -3823,6 +3853,17 @@
   volume = {4},
   pages = {73--92},
   number = {1}
+}
+
+@ARTICLE{signorino:1999,
+  author = {Signorino, Curtis S and Ritter, Jeffrey M},
+  title = {Tau-b or Not Tau-b: Measuring the Similarity of Foreign Policy Positions},
+  journal = {International Studies Quarterly},
+  year = {1999},
+  volume = {43},
+  pages = {115--144},
+  number = {1},
+  publisher = {Wiley Online Library}
 }
 
 @ARTICLE{simmons2000international,
