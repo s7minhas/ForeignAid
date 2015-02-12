@@ -1944,7 +1944,7 @@
   publisher = {Oxford Univ Press}
 }
 
-@ARTICLE{hoff2005bilinear,
+@ARTICLE{hoff:2005,
   author = {Hoff, P.D.},
   title = {Bilinear mixed-effects models for dyadic data},
   journal = {Journal of the american Statistical association},
@@ -1966,7 +1966,7 @@
   publisher = {Taylor \& Francis}
 }
 
-@ARTICLE{hoff2004modeling,
+@ARTICLE{hoff:2004,
   author = {Hoff, P.D. and Ward, M.D.},
   title = {Modeling dependencies in international relations networks},
   journal = {Political Analysis},
@@ -2537,6 +2537,17 @@
 	cratic shocks are spread (i.e. contagion) to other countries in the
 	same region. Ultimately, the geographical location of a country may
 	determine its economic and financial integration into the world economy.},
+  publisher = {Wiley Online Library}
+}
+
+@ARTICLE{leeds:2007,
+  author = {Leeds, Brett Ashley and Savun, Burcu},
+  title = {Terminating alliances: Why do states abrogate agreements?},
+  journal = {Journal of Politics},
+  year = {2007},
+  volume = {69},
+  pages = {1118--1132},
+  number = {4},
   publisher = {Wiley Online Library}
 }
 

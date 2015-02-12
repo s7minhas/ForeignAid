@@ -2,33 +2,318 @@
 \section*{Measuring Strategic Interest}
 
 
-Essential to evaluating the relative importance countries may accord strategic motives when dispensing aid is to how one measures strategic motives.  However, as argued in the literature review, previous papers have been greatly inconsistent in how they have measured strategic interest, which in turn produces incoherence as to what exactly is being measured. It is not simply a matter of using different data to measure the same concept, for example choosing between using Polity data or Freedom House data to measure political instituions, but of using different data to measure different aspects of a concept. That is, while UN voting scores and arms transfers may be acceptable measures of strategic interest, surely nobody is arguing that they are conceptually equivalent in the same way as Polity and Freedom House are.\\
-
-A large reason for this inconsistency is that while a dyad's strategic bilateral relationship is quite multifaceted, to date, there has not been a readily available measure of strategic interest which captures its various aspects the same way that scholars have done for political institutions in the form of Polity and Freedom house. The most relevant research to date has been concerned with how to measure foreign policy similarity, starting with \citep{demesquita:1975} Kendall $\tau_b$ measure and then \citet{signorino:1999} \textit{S Scores}, with new work continually being done \citep{gartzke:2006, hage:2011, }). However, foreign policy similiarity arguably only captures the political dimension of strategic interest, equally relevant is active military cooperation between two countries.\\
-
-While military cooperation certainly has political dimensions, we would argue that it should be considered a separate aspect of strategic interest rather than an subset of political strategic interests. That is, military security is set apart by its capacity to affect a country's security in a manner that is more immediate, concrete and unilateral than other security concerns across countries more generally, for example as compared to access to natural resources, humanitarian sanctions or environmental policy. While military cooperation can certainly be mediated in the political arena, is qualitatively different - that is it is one thing to jointly condem the various atrocities of the North Korean government, it is quite another thing to take joint military action against it.
+\noindent\noindent  How one \textit{measures} strategic interest is essential to evaluating the relative importance countries may accord strategic motives when dispensing aid.  However, as argued in the literature review, previous papers have been  inconsistent in how they have measured strategic interest, which in turn produces incoherence as to what exactly is being measured. It is not simply a matter of using different data to measure the same concept but of using different data to measure different aspects of a concept. That is, while UN voting scores and arms transfers may be acceptable measures of strategic interest, surely nobody is arguing that they are conceptually equivalent in the same way as Polity and Freedom House are.\\
+\noindent\noindent  A large reason for this inconsistency is that while a dyad's strategic bilateral relationship is quite multifaceted, to date, there has not been a readily available measure of strategic interest which captures its various aspects the same way that scholars have done for other complex concepts.\footnote{For example, Polity and Freedom House have provided measures or political institutions while the World Bank's World Governance Indicators (WGI) project provides measures for six dimensions of governance} The most relevant research to date has been concerned with how to measure foreign policy similarity, starting with \citep{demesquita:1975} Kendall $\tau_b$ measure and then \citet{signorino:1999} \textit{S Scores}, with new work continually being done \citep{gartzke:2006, hage:2011, }). However, foreign policy similiarity arguably only captures the political dimension of strategic interest, equally relevant is active military cooperation between two countries.\\
+\noindent\noindent  While military cooperation certainly has political dimensions, we would argue that it should be considered a separate aspect of strategic interest rather than an subset of political strategic interests. That is, military security is set apart by its capacity to affect a country's security in a manner that is more immediate, concrete and unilateral than other security concerns across countries more generally, for example as compared to access to natural resources, humanitarian sanctions or environmental policy. While military cooperation can certainly be mediated in the political arena, is qualitatively different - that is it is one thing to jointly condem the various atrocities of the North Korean government, it is quite another thing to take joint military action against it.
 
 \subsection{A new measure of strategic interest}
 
-Our measure of strategic interest attempts to introduce greater coherency to the literature by providing a more rigorous measure of these two aspects of strategic interest, political and military. We do so by first measuring the latent space of different dyadic variables that measure various aspects of the strategic relationshp between countries and then conducting a principal components analysis (PCA) to combine the resulting measures. As such, our political strategic interest is the first principal component that results from the PCA of the latent space for dyadic alliances, UN voting and membership in an intergovernmental organizations (IGOs). Meanwhile our military strategic interest measure is the first principal component of the PCA that results from the latent space for dyadic arms transfers, militarized interstate disputes (MIDs), and wars. Note that MIDs and wars are of course, the opposite of military cooperation; for these latent measures we reverse the scale to account for this.  We explain how we constructed these measures of strategic interest in greater detail below while we detail the data sources we relied on in the following section.
-
-The main advantage of using calculating the latent space of different dyadic variables as opposed to using alternative specifications such as the \textit{S Score} algorithm is that we are consequently able to account for third order dependencies within the data. To review, first order dependency refers the propensity for some actors to send or recieve more ties than others, second-order dependency refers to reciprocity of exchange between actors while a third-order dependency refers to interaction among three or more actors. Dyadic data are rife with these types of dependencies, and aside from first-order dependency, they pose serious challenges the basic assumption of independence between observations. 
-
+Our measure of strategic interest attempts to introduce greater coherency to the literature by providing a more rigorous measure of these two aspects of strategic interest, political and military. We do so by first measuring the latent space of different dyadic variables that measure various aspects of the strategic relationshp between countries. We then calculate the latent distance between each dyad for each component. Finally, we combine the latent distances for each component through a principal components analysis (PCA). As such, our political strategic interest is the first principal component that results from the PCA of the latent distance between dyadic alliances, UN voting and membership in an intergovernmental organizations (IGOs). Meanwhile our military strategic interest measure is the first principal component of the PCA that results from the latent distance between dyadic arms transfers, militarized interstate disputes (MIDs), and wars. Note that MIDs and wars are of course, the opposite of military cooperation; for these latent measures we reverse the scale to account for this.  We explain how we constructed these measures of strategic interest in greater detail below while we detail the data sources we relied on in the following section.\\
+\noindent\noindent  The main advantage of using calculating the latent space of different dyadic variables as opposed to using alternative specifications such as the \textit{S Score} algorithm\footnote{\citet{leeds:2007} for example creates a measure of a states ``threat environment'' as the set of all states for which ones is contiguous with or which is a major power and with an S score below the population median. } is that we are consequently able to account for third order dependencies within the data. To review, first order dependency refers the propensity for some actors to send or recieve more ties than others, second-order dependency refers to reciprocity of exchange between actors while a third-order dependency refers to interaction among three or more actors. Dyadic data are rife with these types of dependencies, and aside from first-order dependency, they pose serious challenges the basic assumption of independence between observations. \\
 In particular, third order dependency includes the concepts of (i) transitivity, (ii) balance and (iii) clusterability. Formally, a triad $ijk$ is said to be transitive if for whenver $y_{ij} = 1$ and $y_{jk} = 1$, we also observe that $y_{ik}$. This follows the logic of `` a friend of a friend is a friend''. Meanwhile,  a triad $ijk$ is said to be balanced if $y_{ij} \times y_{jk} \times y_{ki} >0$. Conceptually, if the relatoionship between $i$ and $j$ is `positive', then both will relate to another unit $k$ identically, either both positive or both negative. Finally a triad $ijk$ is said to be cluserable if it is balanced or all the relations are all negative. It is a relaxation of the concept of balance and seeks to capture groups where the measurements are positive within groups and negative between groups. For a more detailed explanation of these concepts, see \citet{hoff:2002,hoff:2004,hoff:2005}. \\
-
-In other words, third order dependencies suggest that ``knowing something about the relationship between $i$ and $j$ as well as between $i$ and $k$ may reveal something about the relationship between $i$ and $k$, even when we do not directly observe it'' \citep{hoff:2004}. Such a dependency is especially important to capture with regards to strategic relationships as dyadic relationships between two particular countries cannot help but be understood in the context of their relationship with other countries. \\
-
-Following \citep{hoff:2005}, we run a null generalized bilinear mixed effects model (gbme) \footnote{Code for running the gbme can be found from Hoff's website at \url{http://www.stat.washington.edu/hoff/Code/hoff_2005_jasa/} } to estimate the latent space for each component of our strategic interest variables. Below we show a visualization for each component for the year 2000.
-
-
-After estimating the latent spaces for these components, we then combine them in a principal components analysis to reduce the dimensionality of our measure while retaining as much variance as possible. That is, for example, alliances, UN voting and joint membership in IGOs all capture certain aspects of political strategic interest, and instead of choosing only one of them as our measure of strategic interest as other papers have done, we combine them in order to increase our explanatory power.\\
-
-It is possible of course, to do a PCA on all different aspects of strategic interest --- alliances, UN voting, joint IGO membership, arms transfers, mids and wars --- together, and then run analyses on the largest components of the PCA. As discussed before, while we argue that political and military strategic interest are qualititatively different, we do acknowledge that both can inform each other. While we considered employing this approach, we decided to make the tradeoff for better interpretability of our measure over increased precision of our strategic interest measure. The interpretation of different components of a PCA measure is generally not straightforward. For example, we could end up with a first principal component that is explained by alliances \%50 of the time, IGOs \%40 of the time, arms transfers \% 5 of the time and the rest of the components a combined \%5 of the time and a second component that is explained by  MIDS \%60 of the time, alliances 30\% of the time, and the rest of the components a combined \%10 of the time. While we may be able to say that strategic interest matters, it would be more difficult to say in what way. In separating out the variables before hand for theoretical reasons, we increase the interpretability of any of our subsequent results while sacrificing a bit of explanatory power. At the same time, whatever results we do find should represent a harder test for the importance of political or military strategic interest because of this sacrifice.\\
-
-We also conduct a series of post-estimatation validation tests for our resulting strategic variables  
+\noindent\noindent  In other words, third order dependencies suggest that ``knowing something about the relationship between $i$ and $j$ as well as between $i$ and $k$ may reveal something about the relationship between $i$ and $k$, even when we do not directly observe it'' \citep{hoff:2004}. Such a dependency is especially important to capture with regards to strategic relationships as dyadic relationships between two particular countries cannot help but be understood in the context of their relationship with other countries. \\
+\noindent\noindent  Following \citep{hoff:2005}, we run a null generalized bilinear mixed effects model (gbme) \footnote{Code for running the gbme can be found from Hoff's website at \url{http://www.stat.washington.edu/hoff/Code/hoff_2005_jasa/} } to estimate the latent space for each component of our strategic interest variables. Below we show a visualization for each component for the year 2005.
 
 
 
+\begin{figure}[h!] 
+\caption{Latent Spaces for components of Political Strategic Interest Measure for the year 2005}
+\centering
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:ally}
+\includegraphics[width = 2.3in]{\detokenize{ally_2005.pdf}}
+\caption*{(a) Alliiances}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:un}
+\includegraphics[width = 2.3in]{\detokenize{un_2005.pdf}}
+\caption*{(b) UN voting}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:igo}
+\includegraphics[width = 2.3in]{\detokenize{igo_2005.pdf}}
+\caption*{(c) IGO membership}
+\end{minipage}
+\end{figure}
+ 
+\begin{figure}[h!] 
+\caption{Latent Spaces for components of Military Strategic Interest Measure for the year 2005}
+\centering
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:armsSum}
+\includegraphics[width = 2.3in]{\detokenize{armsSum_2005.pdf}}
+\caption*{(a) Arms transfers}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:mid}
+\includegraphics[width = 2.3in]{\detokenize{mid_2005.pdf}}
+\caption*{(b) MIDs}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:war}
+\includegraphics[width = 2.3in]{\detokenize{warMsum5_2005.pdf}}
+\caption*{(c) War}
+\end{minipage}
+\end{figure}
+ 
+
+
+
+
+After estimating the latent spaces for these components, we calculate the latent distances between each dyad for each component. We then combine them in a principal components analysis to reduce the dimensionality of our measure while retaining as much variance as possible. That is, for example, alliances, UN voting and joint membership in IGOs all capture certain aspects of political strategic interest, and instead of choosing only one of them as our measure of strategic interest as other papers have done, we combine them in order to increase our explanatory power. A visualization of the resultant dyadic PCA is shown below for the political strategic measure and the military strategic measure for the year 2005. These suggest that there is much more variation in political strategic interests than there are military strategic interests, perhaps because the number of issues spaces in the political arena are much greater. These vizualizations also suggest that on average, countries have a greater political strategic interest than military strategic interest. Since the military strategic interest data is composed largely of actual military events, this makes sense as on average, conflict between any two countries is much rarer than diplomatic negotiations. \\
+
+
+\begin{figure}[h!]
+\centering
+\caption{Dyadic PCA for Political Strategic Interests for year 2005}
+\includegraphics[width = 5in]{\detokenize{dyadViz_allyIGOUN.pdf}}
+\caption*{\small{Along the x and y axes are the countries included in our analyes for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\caption{Dyadic PCA for Military Strategic Interests for year 2005}
+\includegraphics[width = 5in]{\detokenize{dyadViz_midWarArmsSum.pdf}}
+\caption*{\small{Along the x and y axes are the countries included in our analyes for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
+\end{figure}
+
+We also conduct a series of post-estimatation validation tests for our resulting strategic variables. In particular, we (1) evaluate the relationship between our political strategic interest variable and our military strategic interest variable against S scores and Kendall's $\tau_b$ for alliances and (2) investigate how our measures describe well-known dyadic relationships. With perform a simple bivariate OLS with and with year fixed effects to evaluate how our measures compare to S scores and Kendall's $\tau_b$. Note in order to make our strategic measures somewhat interpretable, for the validation we scale our strategic measures to be between 0 and 1 just as S scores and Kendall $\tau_b$ is scaled. The results are shown in Table \ref{table:polval} for political strategic interest and Table \ref{table:milval} for miltiary strategic interest. 
+
+\begin{table}[h!]
+\small
+\caption{Validation of Political Strategic Interest Variable against S scores and Kendall's $\tau_b$}
+\begin{center}
+\begin{tabular}{l c c c c c c }
+\hline
+                    & Unweighted   & Unweighted & Weighted  & Weighted  & Tau-B & Tau-B \\
+                   &   S Scores &   S Scores &  S Scores &  S Scores &  &   \\
+\hline
+(Intercept)         & $0.97^{***}$  & $1.03^{***}$  & $1.01^{***}$  & $1.02^{***}$  & $0.29^{***}$  & $0.25^{***}$  \\
+                    & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      \\
+Political Strategic Interest             & $-0.80^{***}$ & $-0.84^{***}$ & $-1.22^{***}$ & $-1.26^{***}$ & $-0.89^{***}$ & $-0.87^{***}$ \\
+                    & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      & $(0.00)$      \\
+Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
+%as.factor(year)1971 &               & $-0.01^{***}$ &               & $0.01^{**}$   & $-0.00^{*}$   &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1972 &               & $-0.03^{***}$ &               & $-0.01^{***}$ & $-0.02^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1973 &               & $-0.02^{***}$ &               & $-0.01^{**}$  & $-0.02^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1974 &               & $-0.02^{***}$ &               & $0.00$        & $-0.02^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1975 &               & $-0.01^{***}$ &               & $0.02^{***}$  & $-0.02^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1976 &               & $-0.03^{***}$ &               & $-0.01^{***}$ & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1977 &               & $-0.03^{***}$ &               & $0.01^{**}$   & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1978 &               & $-0.05^{***}$ &               & $-0.01^{***}$ & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1979 &               & $-0.07^{***}$ &               & $-0.03^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1980 &               & $-0.06^{***}$ &               & $-0.00$       & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1981 &               & $-0.08^{***}$ &               & $-0.02^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1982 &               & $-0.09^{***}$ &               & $-0.02^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1983 &               & $-0.09^{***}$ &               & $-0.02^{***}$ & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1984 &               & $-0.10^{***}$ &               & $-0.03^{***}$ & $-0.06^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1985 &               & $-0.09^{***}$ &               & $-0.03^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1986 &               & $-0.10^{***}$ &               & $-0.03^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1987 &               & $-0.10^{***}$ &               & $-0.04^{***}$ & $-0.06^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1988 &               & $-0.10^{***}$ &               & $-0.04^{***}$ & $-0.06^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1989 &               & $-0.12^{***}$ &               & $-0.06^{***}$ & $-0.06^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1990 &               & $-0.11^{***}$ &               & $-0.08^{***}$ & $-0.05^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1991 &               & $-0.07^{***}$ &               & $-0.03^{***}$ & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1992 &               & $-0.04^{***}$ &               & $0.04^{***}$  & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1993 &               & $-0.05^{***}$ &               & $0.01^{***}$  & $-0.06^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1994 &               & $-0.02^{***}$ &               & $0.06^{***}$  & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1995 &               & $-0.02^{***}$ &               & $0.05^{***}$  & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1996 &               & $-0.03^{***}$ &               & $0.05^{***}$  & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1997 &               & $-0.04^{***}$ &               & $0.03^{***}$  & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1998 &               & $-0.04^{***}$ &               & $0.02^{***}$  & $-0.03^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)1999 &               & $-0.04^{***}$ &               & $0.02^{***}$  & $-0.04^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+%as.factor(year)2000 &               & $-0.01^{***}$ &               & $0.06^{***}$  & $-0.01^{***}$ &               \\
+%                    &               & $(0.00)$      &               & $(0.00)$      & $(0.00)$      &               \\
+\hline
+R$^2$               & 0.28          & 0.32          & 0.32          & 0.34          & 0.17          & 0.17          \\
+Adj. R$^2$          & 0.28          & 0.32          & 0.32          & 0.34          & 0.17          & 0.17          \\
+Num. obs.           & 824426        & 824426        & 824426        & 824426        & 824148        & 824148        \\
+\hline
+\multicolumn{7}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}
+\end{tabular}
+\label{table:polval}
+\end{center}
+\end{table}
+
+
+
+\begin{table}
+\small
+\caption{Validation of Military Strategic Interest Variable against S scores and Kendall's $\tau_b$}
+\begin{center}
+\begin{tabular}{l c c c c c c }
+\hline
+                    & Unweighted   & Unweighted & Weighted  & Weighted  & Tau-B & Tau-B \\
+                   &   S Scores &   S Scores &  S Scores &  S Scores &  &   \\
+\hline
+(Intercept)         & $0.75^{***}$ & $0.79^{***}$  & $0.68^{***}$ & $0.66^{***}$  & $0.02^{***}$  & $0.02^{***}$ \\
+                    & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.00)$      & $(0.00)$      & $(0.00)$     \\
+Military Strategic Interest              & $0.01^{***}$ & $-0.05^{***}$ & $0.03^{***}$ & $-0.10^{***}$ & $0.02^{***}$  & $-0.00$      \\
+                    & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.01)$      & $(0.00)$      & $(0.00)$     \\
+Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
+%as.factor(year)1971 &              & $0.03^{***}$  &              & $0.09^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1972 &              & $0.03^{***}$  &              & $0.09^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1973 &              & $0.03^{***}$  &              & $0.10^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1974 &              & $-0.01^{**}$  &              & $0.03^{***}$  & $0.00$        &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1975 &              & $0.04^{***}$  &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1976 &              & $0.03^{***}$  &              & $0.10^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1977 &              & $0.04^{***}$  &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1978 &              & $-0.01^{***}$ &              & $0.05^{***}$  & $-0.00$       &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1979 &              & $0.01^{***}$  &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1980 &              & $0.02^{***}$  &              & $0.14^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1981 &              & $-0.00$       &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1982 &              & $-0.01^{*}$   &              & $0.13^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1983 &              & $-0.03^{***}$ &              & $0.08^{***}$  & $-0.00$       &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1984 &              & $-0.05^{***}$ &              & $0.05^{***}$  & $0.00$        &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1985 &              & $-0.04^{***}$ &              & $0.05^{***}$  & $0.00$        &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1986 &              & $-0.01^{**}$  &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1987 &              & $-0.01^{**}$  &              & $0.12^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1988 &              & $-0.01^{*}$   &              & $0.13^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1989 &              & $-0.02^{***}$ &              & $0.11^{***}$  & $-0.01^{*}$   &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1990 &              & $-0.03^{***}$ &              & $0.06^{***}$  & $-0.00$       &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1991 &              & $0.01^{**}$   &              & $0.11^{***}$  & $-0.01^{*}$   &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1992 &              & $0.03^{***}$  &              & $0.17^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1993 &              & $0.04^{***}$  &              & $0.17^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1994 &              & $0.04^{***}$  &              & $0.18^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1995 &              & $0.04^{***}$  &              & $0.17^{***}$  & $-0.01^{***}$ &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1996 &              & $0.04^{***}$  &              & $0.16^{***}$  & $-0.01^{***}$ &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1997 &              & $0.03^{***}$  &              & $0.15^{***}$  & $-0.01^{***}$ &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1998 &              & $0.03^{***}$  &              & $0.15^{***}$  & $-0.01^{***}$ &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)1999 &              & $0.03^{***}$  &              & $0.15^{***}$  & $-0.01^{***}$ &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+%as.factor(year)2000 &              & $0.03^{***}$  &              & $0.15^{***}$  & $-0.01^{**}$  &              \\
+%                    &              & $(0.00)$      &              & $(0.00)$      & $(0.00)$      &              \\
+\hline
+R$^2$               & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & 0.00         \\
+Adj. R$^2$          & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & -0.00        \\
+Num. obs.           & 824426       & 824426        & 824426       & 824426        & 824148        & 824148       \\
+\hline
+\multicolumn{7}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}
+\end{tabular}
+\label{table:milval}
+\end{center}
+\end{table}
+
+\noindent\noindent  In brief, we find that our political strategic measure performs well against S scores and Kendal's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similiarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic interest between a dyad. \\
+\noindent\noindent  Our military strategic measure performs will mixed results with respect to S scoresand Kendal's $\tau_b$ for alliances . It has a negative and statistically significant relationship between S scores with year fixed effects. It in fact has a postiive and statistically significant relationship between S scores and Kendal's $\tau_b$ without year fixed effects These mixed results suggest that the military strategic measure is perhaps measuring something qualitatively different than S scores.\\
+\noindent\noindent Finally we also investigate how our measure performs relative to well known dyadic relationships. In the figures below, we plot the dyadic relationships between countries that are well-known to have friendly or antagonistic relationships. In Figure \ref{USIsraelIran_p} shows for example the dyadic relationship between Iran and Israel, the US and Israel, and the US and Iran. The plot suggests that the US and Israel have consistently had a stronger political strategic relationship throughought time except for the early 1970s when Iran and Israel is shown to have had a stronger political strategic relationship. This is in fact consistent with historical evidence which suggests that Iran and Israel enjoyed close ties before the Iranian revolution. Meanwhile the plot of the dyadic relationships between China and Japan and, North Korea and China and North Korea and Japan suggest more or less indifferent relations among the three before 1990 after which the political strategic relationship between China and North Korea becomes markedly stronger. This is also consistent with the disappearance of Soviet support for North Korea following the end of the Cold War and the emergence of China as North Korea's new protector. Finally, the plot of the dyadic relationship between India and Pakistan, India and the US and Pakistan and the US suggest in fact that India and Pakistan have a much stronger political strategic relationship than either do with the US. Given the history of antagonism between India and Pakistan, this is a rather suprising result; it also suggests however that a dyad's political relationshp and military relationship may be quite different and indeed as two large bordering countries, cooperation between India and Pakistan is important to the security of both. 
+
+
+\begin{figure}[h!] 
+\caption{Dyadic relationships over time as measured by the political strategic interest variable}
+\centering
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:USIsraelIran_p}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_USIsraelIran_allyIGOUN.pdf}}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:ChinaJapNK_p}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_ChinaJapNK_allyIGOUN.pdf}}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:USIndPak_p}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_USIndPak_allyIGOUN.pdf}}
+\end{minipage}
+\end{figure}
+
+We plot the same dyadic relationships using our military strategic interest variable. Here, variation between different dyadic relationships is much more difficult to tease out, perhaps a function of the fact that military events are much more rare. There are two points of interest about these plots (i) they have large degrees of variation over time, suggesting that while military events may be rare, they also have a large influence on a dyad's military strategic relationship (ii) they dyadic relationships plotted here seem to be very similar over time potentially suggesting that third order dependencies are very strong with wegards to military strategic relationships.
+
+\begin{figure}[h!] 
+\caption{Dyadic relationships over time as measured by the military strategic interest variable}
+\centering
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:ally}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_USIsraelIran_midWarArmsSum.pdf}}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:un}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_ChinaJapNK_midWarArmsSum.pdf}}
+\end{minipage}
+\hspace{-.2in}
+\begin{minipage}{.33\linewidth}
+\centering
+\label{fig:igo}
+\includegraphics[width = 2.3in]{\detokenize{dyadic_USIndPak_midWarArmsSum.pdf}}
+\end{minipage}
+\end{figure}
+
+Before moving on to the next section, we note that it is possible to do a PCA on all different of these components of strategic interest --- alliances, UN voting, joint IGO membership, arms transfers, mids and wars --- together. If we were to take this approach,  we could run our models using the largest components of the resulting PCA. As discussed above, while we argue that political and military strategic interest are qualititatively different, we do acknowledge that both can inform each other and so taking such a course of action would be theoretically logical. \\
+\noindent\noindent While we considered employing this approach, we decided to make the tradeoff for better interpretability of our measure over increased precision of our strategic interest measure as the interpretation of different components of a PCA measure is generally not straightforward as it is. For example, we could end up with a first principal component that is explained by alliances \%50 of the time, IGOs \%40 of the time, arms transfers \% 5 of the time and the rest of the components a combined \%5 of the time and a second component that is explained by  MIDS \%60 of the time, alliances 30\% of the time, and the rest of the components a combined \%10 of the time. While we may be able to say that strategic interest matters, it would be more difficult to say in what way. In separating out the variables before hand for theoretical reasons, we increase the interpretability of any of our subsequent results while sacrificing some explanatory power. At the same time, whatever results we do find should represent a harder test for the importance of political or military strategic interest because of this tradeoff.\\
 
 
 

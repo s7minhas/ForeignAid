@@ -68,6 +68,8 @@ digitsep=fullstop
 \usepackage[space]{grffile} % allows us to specify directories that have spaces
 \usepackage[section]{placeins} % prevents floats from moving past a \FloatBarrier or section
 \usepackage{tikz}
+\usepackage{caption}
+
 % \usepackage{pgfplots}
 
 % define clickable links and their colors
@@ -143,7 +145,8 @@ digitsep=fullstop
 % -------------------- customizations -------------------- %
 
 % define the includegraphics search path
-% \graphicspath{{Graphics/}}
+\graphicspath{{Graphics/}}
+% \graphicspath{{~/Users/cindycheng/Dropbox/ForeignAid/graphics/}}
 
 % easy commands for number propers
 \newcommand{\first}{$1^{\text{st}}$}
@@ -156,7 +159,7 @@ digitsep=fullstop
 
 % define bibliography style
 
-\graphicspath{{/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/Graphics/}}
+%\graphicspath{{/Users/janus829/Desktop/Research/ButheProjects/ForeignAid/Graphics/}}
 
 % -------------------------------------------------------- %
 
@@ -193,6 +196,11 @@ In recent years, numerous studies have sought to explain the strategic and polit
 
 %%%%% Theory %%%%%
 \input{fAidTheory}
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% Theory %%%%%
+\input{fAidData}
 %%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Empirics %%%%%
