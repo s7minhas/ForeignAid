@@ -24,6 +24,9 @@ for(lib in toLoad){
   library(lib, character.only=TRUE)
 }
 
+### PACKAGE VERIONS
+## Must have countrycode version 0.16 installed
+
 # Helper dataset
 setwd(pathData)
 load('panel.rda')

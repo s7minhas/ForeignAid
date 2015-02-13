@@ -22,22 +22,29 @@ vars=c(
 ## Run model on full sample
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
-	' + (', paste(vars, collapse=' + '), '|ccodeS)' ))
+	# ' + (', paste(vars, collapse=' + '), 
+		' + (1|ccodeS)' ))
 
-yrs=1975:2009
-coefCross=NULL
+yrs=1975:1976
+ranCross=NULL
+fixCross=NULL
 for(ii in 1:length(yrs)){
 	# Subset data by year
 	slice=regData[which(char(regData$year) %in% char(yrs[ii])),]
 
 	# Run model and pull out results
 	modResults=lmer(modForm, data=slice)
+
+	# Fixed effects
+	fixCoefs=fixef(modResults)
+	fixCoefs=data.frame(year=yrs[ii], fixCoefs)
+	fixCross=rbind(fixCross, fixCoefs)
+
+	# Random effects
 	ranCoefs=coef(modResults)$ccodeS
 	ranCoefs=data.frame(year=yrs[ii], ccodeS=rownames(ranCoefs), ranCoefs)
 	ranCoefs=melt(ranCoefs, id=c('year', 'ccodeS'))
-
-	# Organize results
-	coefCross=rbind(coefCross, ranCoefs)
+	ranCross=rbind(ranCoefs, ranCoefs)
 }
 ###############################################################################
 
