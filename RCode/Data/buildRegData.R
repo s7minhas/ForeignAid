@@ -7,7 +7,6 @@ setwd(pathData)
 load('aidData.rda'); rm(list=c('aidData', 'aidMats', 'IaidMats'))
 
 ## Log aid flows
-summary(IaidData$commitUSD09)
 IaidData$logAid=log(IaidData$commitUSD09 + 1)
 ################################################################
 
