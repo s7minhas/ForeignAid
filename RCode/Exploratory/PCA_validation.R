@@ -14,10 +14,14 @@ if (Sys.info()['user'] == 'cindy'){
 source(paste0(pathCode, "/setup.R"))
 
 # load data
-#load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
 load(paste0(pathResults, '/PCA/PCA_FullData_midWarArmsSum.rda'))
+load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
 load(paste0(pathData, '/components/EUgene.rda'))
+library(texreg)
 
+a = PCA_FullData[[3]][, 2:4]
+
+colMeans(a^2/3)
 
 ######################################################
 
@@ -52,7 +56,7 @@ PCA_All$PCAStd = PCA_All$PCA/max(PCA_All$PCA, na.rm = T)
 ############################################################
 
 ############################################################
-
+ 
 
 # subset Eugene Data data 
 
@@ -76,34 +80,40 @@ validate$PCAStd = validate$PCA - min(validate$PCA, na.rm = T)
 validate$PCAStd  = validate$PCAStd /max(validate$PCAStd , na.rm = T)
  
 
-
 ############################################################
 
 ############################################################
 
-
+ 
 # Evaluate PCA vis a vis S-scores and Tau - B
 
 # s-scores
-summary(lm(s_wt_glo ~ PCAStd  , data = validate))
-summary(lm(s_wt_glo ~ PCAStd + as.factor(year) , data = validate))
+sWt_p = lm(s_wt_glo ~ PCAStd  , data = validate)
+sWt_y_p = lm(s_wt_glo ~ PCAStd + as.factor(year) , data = validate)
  
-summary(lm(s_un_glo ~ PCAStd  , data = validate))
-summary(lm(s_un_glo ~ PCAStd + as.factor(year) , data = validate))
+s_p = lm(s_un_glo ~ PCAStd  , data = validate)
+s_y_p = lm(s_un_glo ~ PCAStd + as.factor(year) , data = validate)
 
 # tau - B
-summary(lm(tau_glob ~ PCAStd + as.factor(year), data = validate))
-summary(lm(tau_glob ~ PCAStd, data = validate))
+t_p = lm(tau_glob ~ PCAStd + as.factor(year), data = validate)
+t_y_p =lm(tau_glob ~ PCAStd, data = validate)
  
  
 # Compare against relationship between S-Scores and Tau-B
 summary(lm(s_wt_glo~ tau_glob + as.factor(year), data = validate))
+summary(lm(s_wt_glo~ tau_glob + as.factor(year) + as.factor(ccode1), data = validate))
 summary(lm(s_wt_glo~ tau_glob, data = validate))
 
 summary(lm(s_un_glo~ tau_glob + as.factor(year), data = validate))
 summary(lm(s_un_glo~ tau_glob, data = validate))
+summary(lm(s_un_glo~ tau_glob, data = sscores))
+summary(lm(tau_glob~ s_un_glo, data = sscores))
  
-
+texreg(list(s_p, s_y_p, sWt_p,sWt_y_p, t_p, t_y_p),      
+       dcolumn=FALSE,
+       custom.model.names=c("Unweighted S Scores","Unweighted S Scores","Weighted S Scores", "Weighted S Scores", "Tau-B", "Tau-B"),
+      )
+ 
 
 ############################################################
 
@@ -111,17 +121,46 @@ summary(lm(s_un_glo~ tau_glob, data = validate))
 
 
 # Evaluate the PCA for different triads of countries
-PCA_All$PCAStd = validate$
+# Political Strategic Interest
 
-plotSub(c(2, 630, 666), validate)
-plotSub(c(732, 710, 740), PCA_All  )
-plotSub(c(2, 101, 40),  PCA_All)
+setwd(pathGraphics)
+pdf("dyadic_USIsraelIran_allyIGOUN.pdf")
+plotSub(c(2, 630, 666), PCA_All , ylab = "Political Strategic Interest")
+dev.off()
 
-plotSub(c(750, 770, 2), PCA_All)
-plotSub(c(750, 710, 770), PCA_All)
-names(PCA_FullData)
 
- 
+setwd(pathGraphics)
+pdf("dyadic_ChinaJapNK_allyIGOUN.pdf")
+plotSub(c(732, 710, 740), PCA_All  , ylab = "Political Strategic Interest")
+dev.off()
+
+setwd(pathGraphics)
+pdf("dyadic_USIndPak_allyIGOUN.pdf")
+plotSub(c(750, 770, 2), PCA_All, ylab = "Political Strategic Interest")
+dev.off()
+
+
+
+# Military Strategic Interest 
+setwd(pathGraphics)
+pdf("dyadic_USIsraelIran_midWarArmsSum.pdf")
+plotSub(c(2, 630, 666), PCA_All , ylab = "Military Strategic Interest")
+dev.off()
+
+
+setwd(pathGraphics)
+pdf("dyadic_ChinaJapNK_midWarArmsSum.pdf")
+plotSub(c(732, 710, 740), PCA_All  , ylab = "Military Strategic Interest")
+dev.off()
+
+
+setwd(pathGraphics)
+pdf("dyadic_USIndPak_midWarArmsSum.pdf")
+plotSub(c(750, 770, 2), PCA_All, ylab = "Military Strategic Interest")
+dev.off()
  
   
+plotSub(c(750, 710, 770), PCA_All)
+plotSub(c(2, 101, 40),  PCA_All)
+
  

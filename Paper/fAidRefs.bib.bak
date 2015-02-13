@@ -434,6 +434,14 @@
   publisher = {Elsevier}
 }
 
+@MISC{wb:2013,
+  author = {World Bank},
+  title = {World Development Indicators Online (WDI) database},
+  year = {2013},
+  owner = {cindycheng},
+  timestamp = {2014.03.18}
+}
+
 @ARTICLE{banks2008cross,
   author = {Banks, A.S.},
   title = {Cross-National Time-Series Data Archive (CNTS) 1815-2007},
@@ -1132,6 +1140,13 @@
   timestamp = {2014.04.18}
 }
 
+@INPROCEEDINGS{dorazio:2012,
+  author = {D'Orazio, Vito},
+  title = {Advancing Measurement of Foreign Policy Similarity},
+  booktitle = {APSA 2012 Annual Meeting Paper},
+  year = {2012}
+}
+
 @ARTICLE{daude2007,
   author = {Daude, Christian and Stein, Ernesto},
   title = {THE QUALITY OF INSTITUTIONS AND FOREIGN DIRECT INVESTMENT},
@@ -1569,6 +1584,13 @@
   url = {http://www.sciencedirect.com/science/article/pii/S0305750X98000497}
 }
 
+@BOOK{gibler:2009,
+  title = {International military alliances, 1648-2008},
+  publisher = {CQ Press},
+  year = {2009},
+  author = {Gibler, Douglas M}
+}
+
 @ARTICLE{ginsburg2005international,
   author = {Ginsburg, Tom},
   title = {International substitutes for domestic institutions: Bilateral investment
@@ -1745,6 +1767,25 @@
   issn = {1467-9701},
   publisher = {Blackwell Publishing Ltd},
   url = {http://dx.doi.org/10.1111/j.1467-9701.2006.00777.x}
+}
+
+@ARTICLE{,
+  author = {Guha-Sapir, D. and Below, R. and Hoyois, Ph.},
+  title = {EM-DAT: International Disaster Database},
+  journal = {Université Catholique de Louvain, Brussels, Belgium},
+  year = {2009},
+  owner = {cindycheng},
+  timestamp = {2015.02.13},
+  url = {www.emdat.be}
+}
+
+@MISC{gurr:2010,
+  author = {Gurr, Ted and Marshall, Monty and Jaggers, Keith},
+  title = {Polity IV Project: Political Regime Characteristics and Transitions,
+	1800-2009},
+  year = {2010},
+  owner = {cindycheng},
+  timestamp = {2015.02.13}
 }
 
 @ARTICLE{guzman1998ldcs,
@@ -1944,6 +1985,13 @@
   publisher = {Oxford Univ Press}
 }
 
+@ARTICLE{hensel:2009,
+  author = {Hensel, Paul R},
+  title = {ICOW colonial history data set, version 1.0},
+  journal = {University of North Texas. http://www. paulhensel. org/icowcol. html},
+  year = {2009}
+}
+
 @ARTICLE{hoff:2005,
   author = {Hoff, P.D.},
   title = {Bilinear mixed-effects models for dyadic data},
@@ -1982,6 +2030,14 @@
   publisher = {Springer},
   year = {2009},
   author = {Hoff, Peter D}
+}
+
+@BOOK{holtom:2013,
+  title = {Trends in international arms transfers, 2012},
+  publisher = {SIPRI},
+  year = {2013},
+  author = {Holtom, Paul and Bromley, Mark and Wezeman, Pieter D and Wezeman,
+	Siemon T}
 }
 
 @ARTICLE{hummels2001nature,
@@ -3275,6 +3331,15 @@
   url = {http://www.jstor.org/stable/3078618}
 }
 
+@ARTICLE{palmer:2015,
+  author = {Palmer, Glenn and D’Orazio, Vito and Kenwick, Michael and Lane, Matthew},
+  title = {The MID4 dataset, 2002--2010: Procedures, coding rules and description},
+  journal = {Conflict Management and Peace Science},
+  year = {2015},
+  pages = {0738894214559680},
+  publisher = {SAGE Publications}
+}
+
 @ARTICLE{parcon2008disaggregating,
   author = {Parcon, H.C.},
   title = {Disaggregating PTAs and the Role of International Division of Labor
@@ -3365,6 +3430,16 @@
   doi = {10.1093/pan/mpq020},
   eprint = {http://pan.oxfordjournals.org/content/early/2010/08/26/pan.mpq020.full.pdf+html},
   url = {http://pan.oxfordjournals.org/content/early/2010/08/26/pan.mpq020.abstract}
+}
+
+@ARTICLE{pevehouse:2004,
+  author = {Pevehouse, Jon and Nordstrom, Timothy and Warnke, Kevin},
+  title = {The Correlates of War 2 International Governmental Organizations
+	Data Version 2.3},
+  year = {2010},
+  number = {2},
+  publisher = {Taylor \& Francis},
+  url = {\url{http://www.correlatesofwar.org/COW2%20Data/IGOs/IGOv2.3.htm}}
 }
 
 @TECHREPORT{pierce2012surprisingly,
@@ -3773,6 +3848,14 @@
   timestamp = {2012.01.24}
 }
 
+@BOOK{sarkees:2010,
+  title = {Resort to war: a data guide to inter-state, extra-state, intra-state,
+	and non-state wars, 1816-2007},
+  publisher = {Cq Pr},
+  year = {2010},
+  author = {Sarkees, Meredith Reid and Wayman, Frank Whelon}
+}
+
 @BOOK{sauvant2009effect,
   title = {The effect of treaties on foreign direct investment},
   publisher = {Oxford University Press},
@@ -3929,6 +4012,13 @@
   booktitle = {annual meeting of the Interanational Studies Association, San Diego,
 	CA},
   year = {2006}
+}
+
+@ARTICLE{strezhnev:2012,
+  author = {Strezhnev, Anton and Voeten, Erik},
+  title = {United Nations general assembly voting data},
+  journal = {URL: http://hdl. handle. net/1902.1/12379},
+  year = {2012}
 }
 
 @ARTICLE{suliman2009human,

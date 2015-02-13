@@ -314,7 +314,7 @@ aggDyad = function(data, year, name){
 
 
  
-plotSub=function(csk, data){
+plotSub=function(csk, data, ylab){
   countrynames = countrycode(csk, 'cown', 'country.name')
   dyadComb = t(combS(countrynames, 2))
   dyad = data.frame(paste(dyadComb[,1], dyadComb[,2], sep = "-"),
@@ -324,7 +324,8 @@ plotSub=function(csk, data){
   
   triad=data[which(data$ccode1 %in% csk & data$ccode2 %in% csk), c('dyadID', 'cname_1', 'cname_2', 'year', 'PCAStd')]
   triad = merge(triad, dyad, by = c("cname_1", "cname_2"))
-  ggplot(triad, aes(x=year, y=PCAStd, color=dyadName))+geom_line()
+  ggplot(triad, aes(x=year, y=PCAStd, color=dyadName))+geom_line()+
+    theme(legend.position="bottom")+ ylab(ylab)
 }
   
   

@@ -1,2 +1,43 @@
 \section*{Data}
 \label{data}
+
+\subsection*{Aid flows}
+
+Our data from foreign aid flows
+
+
+
+While we go into great detail on how we construct our measure of strategic relationships in the previous section, here we document the data sources we used to create our measure. 
+
+\subsection*{Political Strategic Relationships}
+
+To review, for our measure of political strategic relationships, we conducted a PCA on the latent distances for alliances, UN voting and joint IGO membership. Data for alliances was retrieved from the Correlates of War (COW) Formal Alliance dataset \citep{gibler:2009}. Following \citep{demesquita:1975} and \citep{signorino:1999}, we distinguish between different types of alliances with the following weighting scheme: 0 = no alliance, 1 = entente, 2 = neutrality or nonaggression pact, 3 = mutual defense pact. \\
+\indent\indent UN voting data was obtained from the United Nations General Assembly Data set \citep{strezhnev:2012}. Here we calculate the proportion of times two states agree out of the total number of votes they both voted on. Agreement means either both vote yes, both vote no, or both abstain. This measure is similar to the `voting similarity index' readily available from the dataset except the voting similarity index does not account for mutual abstentions. \\
+\indent\indent  Meanwhile IGO voting data was obtained from the Correlates of War International Governmental Organizations Data Set. \citep{pevehouse:2004}. Dyads were coded as 1 if they belonged to the same IGO as a full member or an associate member and coded as 0 if one or both of them was an observer, had no membership, was not yet a state or was missing data.\footnote{Note we had attempted to make distinctions between different types of membership much like for alliances but found that very few states were noted to be Associate Members or Observers of an IGO for the time period that we are conducting our analysis. Thus we chose to use the simpler coding scheme} 
+
+\subsection*{Military Strategic Relationships}
+
+Meanwhile, for our measure of military strategic relationships, we conducted a PCA on the latent distances for arms transfers, MIDs and instances of war.  Data for the total sum of arms transfers per year were retrieved from the Stockholm International Peace Research Institute (SIPRI) Arms Transfers Database \citep{holtom:2013}. Data for MIDs was retrieved from the Militarized Interstate Dispute (MID) data collection compiled by COW \citep{palmer:2015}. Finally, war data was extracted from the COW Inter-State War Data set \citep{sarkees:2010}. 
+
+\subsection*{Humanitarian Need}
+
+For our measure of humanitarian need, we use (1)  life expectancy at birth extracted from the \citep{wb:2013}. This measure ``indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.'' \\
+
+We also use (2) a count of the number of natural disasters a country has experienced a year from the Emergency Disasters Database (EM-DAT) database \citep{emdat:2009}. For a disaster to be included into the database, at least one of the following crieteria must be fulfilled: (a) Ten or more people reported killed (b) A hundred or more people reported affected (c) Declaration of a state of emergency (d) Call for international assistance. \\
+
+These two measures of humanitarian need were chosen to reflect as much as possible the humanitarian need of a particular country. We eschewed using GDP per capita as our measure of humanitarian need in favor of life expectancy, which offers a more holistic measure of the level of health, education and income of a country. Life expectancy in turn was used instead of the UN Human Development Index as it was found that life expectancy is highly correlated with the UN HDI with better coverage.\citep{cahill:2005}. Meanwhile natural disasters were included as the incidence of natural disasters are seen as exogenous to a country's current development (though of course the \textit{impact} of a natural disaster is not). 
+
+\subsection*{Covariates}
+
+We also include a number of covariates in our model, including measures for political institutions. For our measure of political institutions, we use Polity IV data available from the Center for Systemic Peace \citep{gurr:2010}. Polity IV caputres differences in regime characteristics on a 21 point scale ranging from -10 (hereditary monarchy) to +10 (consolidated democracy).  Note we rescale Polity IV to range from 1 to 21 for greater ease of interpretation.
+
+We control for macroeconomic indicators by controlling for GDP per capita, available from the World Bank  \citep{wb:2013}. 
+
+We also control for the incidence of civil war as incidence of civil war in a recipient country certainly informs the ability for a donor country to dispense aid. We do so with data retrieved from the Uppsala Conflict Data Program (UCDP)/International Peace Research Institute (PRIO) Armed Conflict Database. \citep{gleditsch:2002}. We code as civil war any armed conflict which either (a) ``Internal armed conflict occurs between the government of a state and one or more internal opposition group(s) without intervention from other states'' or (b) ``Internationalized internal armed conflict occurs between the government of a state and one or more internal opposition group(s) with intervention from other states (secondary parties) on one or both sides.''
+
+Finally for our data on former colonies, we used the Colonial History Data Set from the Issue Correlates of War (ICOW) Project \citep{hensel:2009}.
+
+
+ 
+
+
