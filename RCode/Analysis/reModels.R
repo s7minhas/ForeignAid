@@ -5,7 +5,24 @@ if(Sys.info()["user"]=="janus829"){
 # Load reg data
 setwd(pathData)
 load('regData.rda')
-regData = regData[regData$year>1974 & regData$year<=2010,]
+regData = regData[regData$year>1974 & regData$year<=2006,]
+
+# Only include senders with at least 20 recevier data point
+## in every year
+regData$tmp=1
+agg=summaryBy(tmp ~ ccodeS + year, data=regData, FUN=sum, na.rm=TRUE, keep.names=T)
+toKeep=paste0(agg[which(agg$tmp>=20),1], agg[which(agg$tmp>=20),2])
+regData = regData[which(regData$cyearS %in% toKeep),]
+
+# Remove senders that only have datapoints for a ten year period
+agg=summaryBy(tmp ~ ccodeS,
+	data=unique(regData[,c('ccodeS', 'year', 'tmp')]), FUN=sum, na.rm=TRUE, keep.names=T)
+toKeep=agg[which(agg$tmp>=10),1]
+regData = regData[which(regData$ccodeS %in% toKeep),]
+
+# Grouping factors
+regData$year = factor(regData$year, levels=sort(unique(regData$year)))
+regData$ccodeS = factor(regData$ccodeS)
 ################################################################
 
 ################################################################
@@ -13,33 +30,26 @@ regData = regData[regData$year>1974 & regData$year<=2010,]
 ## mod formula
 vars=c(
 	'LstratMu', # state interest measure
-	'colony', # Colonial variable
+	# 'colony', # Colonial variable
 	'Lpolity2', # Institutions
 	'LlnGdpCap', # Macroecon controls
 	'LlifeExpect', 'Lno_disasters', # Humanitarian
 	'Lcivwar'
-	# ,'SLpolity2', 'SLlnGdpCap' 
 	)
-
-sVars=c('SLpolity2', 'SLlnGdpCap')
 
 ## Run model on full sample
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
-	# ' + (1|ccodeS) + (1|year)' ))
-	' + (1|year/ccodeS)' ))
-	# ' + (', paste(sVars, collapse=' + '), '|ccodeS)' ))
-
-# mod=lm(modForm, data=regData)
-# library(lmtest)
-# coeftest(mod)[1:15,]
+	# ' + (LstratMu|year/ccodeS)' ))
+	' + (LstratMu + colony|year) + (LstratMu + SLlnGdpCap + SLpolity2|ccodeS)' ))
 
 mod=lmer(modForm, data=regData)
 summary(mod)
+ranef(mod)
+sqrt(mean( (resid(mod)^2) ))
 ###############################################################################
 
 ###############################################################################
 # Plotting
-coefCross = coefCross[which(coefCross$ccodeS==2),]
 
 ###############################################################################
