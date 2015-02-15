@@ -1,5 +1,5 @@
 \section*{Introduction}
- 
+\label{intro} 
 
 \indent\indent  Foreign aid describes the transfer of resources from one government to another. Although the term itself suggests a humanitarian motive, scholars and experts have long debated whether it would be more accurate to ascribe foreign aid a strategic motive instead. With some exceptions \citep{bermeo:2008}, most scholars have found that donors prioritize strategic considerations when dispensing aid \citep{alesina:2000, berthelemy:2006}. \\
 
@@ -11,7 +11,7 @@
 %\begin{quote} `Perhaps the most puzzling conclusion of the existing literature is that a focus on trade partners, former colonies, and allies is somehow evidence against a development focus of aid. Instead, one could interpret this as evidence that donors give aid to the countries in which they most wish to pursue development. In this sense, donor interests and recipient needs are not mutually exclusive categories.'
 %\end{quote} Meanwhile some have argued that donors who give to poor countries may not do it out of a %humanitarian impulse but because it is cheaper to buy interest in poorer countries \citep{demesquita:2007,stone:2006}. Conversely, a donor country may give to a poorly governed, undemocratic country for humanitarian reasons as well, North Korea being a prominent example.
 
-\indent\indent  The existing lack of coherence in evaluating strategic interest extends to model specification. Papers which have empirically evaluated the dominance of strategic over humanitarian motives with some exceptions \citep{berthelemy:2006}, have done so by specifying models which pool all donors together or by running models for each donor country separately. 
+\indent\indent  The existing lack of coherence in evaluating strategic interest extends to model specification. Papers which have empirically evaluated the dominance of strategic over humanitarian motives with some exceptions \citep{berthelemy:2006}, have done so by specifying models which pool all donors together or by running models for each donor country separately. In our model specification, we use a hierarchical random effects model with countries receiving aid nested in senders and senders nested in time. Applying this method enables us to explicitly model the drivers of aid in an aggregate sense and to also explore how those drivers vary between senders.  
 
 %%%%%%%%%%%%%%%%%%%%%%
 % SM note: So we don't resolve these issues with our current model specification either. We could have tried to get at these issues using a network modeling approach, but as we discussed the bipartite nature of our data took away that option. In the next iteration of this paper, we can take a look into adding spatially lagged covariates to get at this issue. Hmmm, it might also be interesting to weight aid flows by our strategic interest variable. This would help us to test whether or not states follow their strategic partners in giving aid flows. 
@@ -19,10 +19,6 @@
 
 % We find this empirical choice puzzling - if foreign aid is indeed given for strategic reasons then surely a donor country should account for the foreign aid given by other countries when making their own allocations. The same should be equally true if foreign aid is given for humanitarian reasons - if a very needy country is already receiving an abundant amount of foreign aid from other countries, a particular donor country may decide to dispense aid to a less needy but overlooked recipient country. Pooled models do not address this issue as they do not distinguish between donor countries while donor by donor regressions cannot address this issue because by construction they do not account for the allocations of other donor countries. \\
 
-% \indent\indent  In our model specification, we use a hierarchical random effects model with panel data to account for the possibility that foreign aid given by one donor is not given without consideration of allocations by other donors. In doing so, we are able to model both the variation that is common among donor countries as well as that which is specific to a particular donor country, combining the best of what a pooled regression or donor by donor regressions can offer.  
+\indent\indent With these model and variable specifications, we find that our strategic interest variable does play a positive role in predicting aid flows between countries. Interestingly, we also find meaningful variation between countries in the relevance of that strategic interest variable in directing aid flows, and the effect of that variable has a noticeable upward trend over time. Indicating that in recent years more and more countries are directing aid to those countries that are most relevant to their strategic interests. 
 
-\indent With these model and variable specifications, we find that.... [INCLUDE FINDINGS HERE] Moreover, onor by donor regressions have found that there is wide variations of motivations in allocating foreign aid among donors, we find that when we consider the donor countries together that.... [INCLUDE FINDINGS HERE]. 
-In what follows, we first give a brief overview of the literature before introducing our new measure of strategic interest. We then run our analyses of the motivations for foreign aid with our new measure using a hierarchical random effects model. We discuss the implications of our results before concluding. 
-
-
-\label{intro}
+\indent\indent In what follows, we first give a brief overview of the literature before introducing our new measure of strategic interest. We then run our analyses of the motivations for foreign aid with our new measure using a hierarchical random effects model. We discuss the implications of our results before concluding. 
