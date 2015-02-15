@@ -24,6 +24,8 @@ regData = regData[which(regData$ccodeS %in% toKeep),]
 regData$year = factor(regData$year, levels=sort(unique(regData$year)))
 regData$ccodeS = factor(regData$ccodeS)
 regData$ccodeS = interaction(regData$year, regData$ccodeS, drop = TRUE) 
+regData$ccodeR = factor(regData$ccodeR)
+regData$ccodeR = interaction(regData$year, regData$ccodeS, regData$ccodeR, drop = TRUE) 
 ################################################################
 
 ################################################################
@@ -35,16 +37,15 @@ vars=c(
 	,'Lpolity2' # Institutions
 	,'LlnGdpCap' # Macroecon controls
 	,'LlifeExpect', 'Lno_disasters' # Humanitarian
-	# ,'Lcivwar'
 	)
 
 ## Run model on full sample
 modForm=formula(paste0(
-	'logAid ~ ', paste(vars, collapse=' + '), '+ (LstratMu|year/ccodeS)'))
+	'logAid ~ ', paste(vars, collapse=' + '), 
+	'+ (LstratMu|year/ccodeS)'))
 
 mod=lmer(modForm, data=regData)
 summary(mod)
-ranef(mod)
 sqrt(mean( (resid(mod)^2) ))
 ###############################################################################
 
@@ -59,11 +60,13 @@ par(mfrow=c(3,3))
 for(cntry in unique(ranCYrStrat$ccodeS)){
 	slice=ranCYrStrat[which(ranCYrStrat$ccodeS %in% cntry),]
 	plot(slice$year, slice$LstratMu, type='l')
-	title(paste0(cntry, ': ', countrycode(cntry, 'cown', 'country.name')))
+	abline(h=0, col='red', lty=2)
+	title(paste0(cntry, ': ', unique(panel$cname[panel$ccode==cntry])))
 }
 par(mfrow=c(1,1))
 
 ranYrStrat=ranef(mod)$'year'
 ranYrStrat$year = rownames(ranYrStrat)
 plot(ranYrStrat$year, ranYrStrat$LstratMu, type='l')
+abline(h=0, col='red', lty=2)
 ###############################################################################
