@@ -7,6 +7,9 @@ setwd(pathData)
 load('regData.rda')
 regData = regData[regData$year>1974 & regData$year<=2006,]
 
+# Adjust covariates
+regData$LmilMu = regData$LmilMu + abs(regData$LmilMu)
+
 # Only include senders with at least 20 recevier data point
 ## in every year
 regData$tmp=1
@@ -33,20 +36,34 @@ regData$ccodeR = interaction(regData$year, regData$ccodeS, regData$ccodeR, drop 
 ## mod formula
 vars=c(
 	'LstratMu', # state interest measure
+	'LmilMu', # military interest measure
 	'colony' # Colonial variable
 	,'Lpolity2' # Institutions
 	,'LlnGdpCap' # Macroecon controls
 	,'LlifeExpect', 'Lno_disasters' # Humanitarian
+	,'Lcivwar' # Civil war
 	)
 
 ## Run model on full sample
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
-	'+ (LstratMu|year/ccodeS)'))
+	# '+ factor(year) + factor(ccodeS)'))		
+	'+ (1|year/ccodeS)'))	
+	# '+ (LstratMu|year/ccodeS)'))
+	# '+ (LstratMu + LmilMu|year/ccodeS)'))
+	# '+ (', paste(vars, collapse=' + '), '|year/ccodeS)'))
 
-mod=lmer(modForm, data=regData)
+# mod=lm(modForm, data=regData)
+# mod=lmer(modForm, data=regData)
 summary(mod)
 sqrt(mean( (resid(mod)^2) ))
+# Save model results
+setwd(pathResults)
+# save(mod, file='mod_fixef.rda')
+# save(mod, file='mod_None.rda')
+# save(mod, file='mod_ranStrat.rda')
+# save(mod, file='mod_ranStratMil.rda')
+# save(mod, file='mod_ranAll.rda')
 ###############################################################################
 
 ###############################################################################
@@ -60,6 +77,7 @@ par(mfrow=c(3,3))
 for(cntry in unique(ranCYrStrat$ccodeS)){
 	slice=ranCYrStrat[which(ranCYrStrat$ccodeS %in% cntry),]
 	plot(slice$year, slice$LstratMu, type='l')
+	# lines(slice$year, slice$LmilMu, lty=2)
 	abline(h=0, col='red', lty=2)
 	title(paste0(cntry, ': ', unique(panel$cname[panel$ccode==cntry])))
 }
@@ -68,5 +86,6 @@ par(mfrow=c(1,1))
 ranYrStrat=ranef(mod)$'year'
 ranYrStrat$year = rownames(ranYrStrat)
 plot(ranYrStrat$year, ranYrStrat$LstratMu, type='l')
+# lines(ranYrStrat$year, ranYrStrat$LmilMu, lty=2)
 abline(h=0, col='red', lty=2)
 ###############################################################################

@@ -17,6 +17,9 @@ load('PCA/PCA_FullData_allyIGOUN.rda')
 
 ## Pull out PCA results
 stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
+
+load('PCA/PCA_FullData_midWarArmsSum.rda')
+milData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
 ################################################################
 
 ################################################################
@@ -70,15 +73,15 @@ impVars=c(
 	)
 impData=covData[,impVars]
 
-# impute with gaussian copula [will incorporate imputation w/ other covars later]
-covData_sbgcop=sbgcop.mcmc(impData, nsamp=1000, verb=TRUE, seed=1342)
+# # impute with gaussian copula [will incorporate imputation w/ other covars later]
+# covData_sbgcop=sbgcop.mcmc(impData, nsamp=1000, verb=TRUE, seed=1342)
 
-# Setting up imputed dataframe
-IcovData=cbind(
-	covData[,c('ccode','cname','year')], 
-	covData_sbgcop$Y.pmean[,vars] )
-setwd(pathData)
-save(IcovData, file='IcovData.rda')
+# # Setting up imputed dataframe
+# IcovData=cbind(
+# 	covData[,c('ccode','cname','year')], 
+# 	covData_sbgcop$Y.pmean[,vars] )
+# setwd(pathData)
+# save(IcovData, file='IcovData.rda')
 ################################################################
 
 ################################################################
@@ -107,16 +110,24 @@ IaidData$cyearS=num(paste0(IaidData$ccodeS, IaidData$year))
 stratData$id=paste0(stratData$ccode1, 9999, stratData$ccode2)
 stratData$idYr=paste0(stratData$ccode1, 9999, stratData$ccode2, stratData$year)
 
+milData$id=paste0(milData$ccode1, 9999, milData$ccode2)
+milData$idYr=paste0(milData$ccode1, 9999, milData$ccode2, milData$year)
+
 IcovData$cyear=paste0(IcovData$ccode, IcovData$year)
 
 # Lag covariate data
 names(stratData)[4:6]=paste0('strat',c('Mu','Up','Lo'))
 stratData=lagData(stratData, 'idYr', 'id', names(stratData)[4:6])
+
+names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
+milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
+
 IcovData=lagData(IcovData, 'cyear', 'ccode', vars)
 
 # Subset datasets by time
 IaidData = IaidData[IaidData$year>1970 & IaidData$year<=2010,]
 stratData = stratData[stratData$year>1970 & stratData$year<=2010,]
+milData = milData[milData$year>1970 & milData$year<=2010,]
 IcovData = IcovData[IcovData$year>1970 & IcovData$year<=2010,]
 
 # Merge datasets
@@ -124,6 +135,9 @@ regData=IaidData
 dim(regData)
 # Add strategic variable to regData
 regData=merge(regData, stratData[,c(8:11)], by='idYr', all.x=TRUE, all.y=FALSE)
+unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
+# Add military variable to regData
+regData=merge(regData, milData[,c(8:11)], by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add receiver level covariates
 regData=merge(regData, IcovData[,c(9:14)], by.x='cyearR', by.y='cyear', all.x=TRUE, all.y=FALSE)
