@@ -1,11 +1,10 @@
-if(Sys.info()["user"]=="janus829"){
-	source("~/Research/ForeignAid/RCode/setup.R") }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
 
 ################################################################
 # Load reg data
 setwd(pathData)
 load('regData.rda')
-regData = regData[regData$year>1974 & regData$year<=2006,]
+regData = ameliaRegData$imp$imp1
 
 # Adjust covariates
 regData$LmilMu = regData$LmilMu + abs(regData$LmilMu)
@@ -47,14 +46,14 @@ vars=c(
 ## Run model on full sample
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
-	# '+ factor(year) + factor(ccodeS)'))		
-	'+ (1|year/ccodeS)'))	
+	'+ factor(year) + factor(ccodeS)'))		
+	# '+ (1|year/ccodeS)'))	
 	# '+ (LstratMu|year/ccodeS)'))
 	# '+ (LstratMu + LmilMu|year/ccodeS)'))
 	# '+ (', paste(vars, collapse=' + '), '|year/ccodeS)'))
 
 # mod=lm(modForm, data=regData)
-# mod=lmer(modForm, data=regData)
+mod=lmer(modForm, data=regData)
 summary(mod)
 sqrt(mean( (resid(mod)^2) ))
 # Save model results

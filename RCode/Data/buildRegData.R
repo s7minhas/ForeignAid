@@ -1,4 +1,4 @@
-if(Sys.info()['user']=='janus829' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
 
 ################################################################
 # Load DV
@@ -76,33 +76,33 @@ names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
 covData$cyear=paste0(covData$ccode, covData$year)
 ################################################################
 
-################################################################
-# Spatially weighted strategic variable
-stratMat=DyadBuild( variable='stratMu', dyadData=stratData,
-    cntry1='ccode1', cntry2 = 'ccode2',  time='year',
-    pd=1970:2005, panel=panel, directed=TRUE )
+# ################################################################
+# # Spatially weighted strategic variable
+# stratMat=DyadBuild( variable='stratMu', dyadData=stratData,
+#     cntry1='ccode1', cntry2 = 'ccode2',  time='year',
+#     pd=1970:2005, panel=panel, directed=TRUE )
 
-# the idea
-# say that we have countries i, j, and k. 
-# i and j are close to each other in strategic space, and j has in the past given aid to k
-# does i as a result more likely to give aid to k as well.
+# # the idea
+# # say that we have countries i, j, and k. 
+# # i and j are close to each other in strategic space, and j has in the past given aid to k
+# # does i as a result more likely to give aid to k as well.
 
-milData=DyadBuild( variable='milMu', dyadData=milData,
-    cntry1='ccode1', cntry2 = 'ccode2',  time='year',
-    pd=1970:2005, panel=panel, directed=TRUE )
-################################################################
+# milData=DyadBuild( variable='milMu', dyadData=milData,
+#     cntry1='ccode1', cntry2 = 'ccode2',  time='year',
+#     pd=1970:2005, panel=panel, directed=TRUE )
+# ################################################################
 
 ################################################################
-# Create lagged variables, subset by time (>1970 & <2005), and merge
+# Create lagged variables, subset by time (>1974 & <2005), and merge
 stratData=lagData(stratData, 'idYr', 'id', names(stratData)[4:6])
 milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
 covData=lagData(covData, 'cyear', 'ccode', vars)
 
 # Subset datasets by time
-aidData = aidData[aidData$year>1970 & aidData$year<=2005,]
-stratData = stratData[stratData$year>1970 & stratData$year<=2005,]
-milData = milData[milData$year>1970 & milData$year<=2005,]
-covData = covData[covData$year>1970 & covData$year<=2005,]
+aidData = aidData[aidData$year>1974 & aidData$year<=2005,]
+stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
+milData = milData[milData$year>1974 & milData$year<=2005,]
+covData = covData[covData$year>1974 & covData$year<=2005,]
 
 # Merge datasets
 regData=aidData[,which(!names(aidData) %in% 'commitUSD09')]
@@ -130,11 +130,12 @@ regData$colony[which(regData$id %in% colony$id)]=1
 idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 	'cnameS', 'ccodeS', 'cnameR', 'ccodeR')
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
+lagVars=regVars[-which(regVars %in% c('colony'))]
 
 # vars and data  to use in imputation
 set.seed(6886)
 ameliaRegData=amelia(x=regData, m=5, cs='id', ts='year', 
-	lags=regVars, idvars=idVars, polytime=1)
+	lags=lagVars, idvars=idVars, polytime=1)
 
 summary(ameliaRegData$imp$imp1)
 ################################################################
