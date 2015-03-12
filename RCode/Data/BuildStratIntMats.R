@@ -1,5 +1,4 @@
-if(Sys.info()['user']=='janus829'){ pathCode='~/Desktop/Research/ForeignAid/RCode' }
-if(Sys.info()['user']=='s7m'){ pathCode='~/Research/ForeignAid/RCode' }
+if(Sys.info()['user']=='janus829' | Sys.info()['user']=='janus829'){ pathCode='~/Research/ForeignAid/RCode' }
 if(Sys.info()['user']=='cindycheng'){ pathCode = '~/Documents/Papers/ForeignAid/RCode'}
 source(paste0(pathCode, '/setup.R'))
 
@@ -243,15 +242,15 @@ source(paste0(pathCode, '/setup.R'))
 # save(warFINAL, file='war.rda')
 ###############################################################
 
-###############################################################
-# Clean UN data
+# ###############################################################
+# # Clean UN data
 
-# vote – Vote choice 
-# 1 – Yes 
-# 2 – Abstain 
-# 3 – No 
-# 8 – Absent 
-# 9 – Not a member 
+# # vote – Vote choice 
+# # 1 – Yes 
+# # 2 – Abstain 
+# # 3 – No 
+# # 8 – Absent 
+# # 9 – Not a member 
 
 # #### Make new measures from the raw data
  

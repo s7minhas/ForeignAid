@@ -1,5 +1,4 @@
-if(Sys.info()["user"]=="janus829"){
-	source("~/Research/ForeignAid/RCode/setup.R") }
+if(Sys.info()['user']=='janus829' | Sys.info()['user']=='janus829'){ pathCode='~/Research/ForeignAid/RCode' }
 if(Sys.info()["user"]=="cindycheng"){
 	source("~/Documents/Papers/ForeignAid/RCode/setup.R") }
 
