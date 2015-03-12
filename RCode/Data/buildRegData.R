@@ -12,10 +12,7 @@ aidData$logAid=log(aidData$commitUSD09 + 1)
 # PCA variable
 setwd(pathResults)
 load('PCA/PCA_FullData_allyIGOUN.rda')
-
-## Pull out PCA results
 stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
-
 load('PCA/PCA_FullData_midWarArmsSum.rda')
 milData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
 ################################################################
@@ -47,8 +44,8 @@ covData=covData[,c('ccode','cname', 'year', vars)]
 ################################################################
 
 ################################################################
-# Merge datasets for regression
-# timeframe: 1971-2010
+# Add ids to various frames
+# timeframe: 1971-2005
 
 # Add colony variable
 colony = read.csv(paste0(pathData,'/Components/ICOW Colonial History 1.0/coldata100.csv'))
@@ -70,26 +67,42 @@ aidData$cyearS=num(paste0(aidData$ccodeS, aidData$year))
 
 stratData$id=paste0(stratData$ccode1, 9999, stratData$ccode2)
 stratData$idYr=paste0(stratData$ccode1, 9999, stratData$ccode2, stratData$year)
+names(stratData)[4:6]=paste0('strat',c('Mu','Up','Lo'))
 
 milData$id=paste0(milData$ccode1, 9999, milData$ccode2)
 milData$idYr=paste0(milData$ccode1, 9999, milData$ccode2, milData$year)
+names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
 
 covData$cyear=paste0(covData$ccode, covData$year)
+################################################################
 
-# Lag covariate data
-names(stratData)[4:6]=paste0('strat',c('Mu','Up','Lo'))
+################################################################
+# Spatially weighted strategic variable
+stratMat=DyadBuild( variable='stratMu', dyadData=stratData,
+    cntry1='ccode1', cntry2 = 'ccode2',  time='year',
+    pd=1970:2005, panel=panel, directed=TRUE )
+
+# the idea
+# say that we have countries i, j, and k. 
+# i and j are close to each other in strategic space, and j has in the past given aid to k
+# does i as a result more likely to give aid to k as well.
+
+milData=DyadBuild( variable='milMu', dyadData=milData,
+    cntry1='ccode1', cntry2 = 'ccode2',  time='year',
+    pd=1970:2005, panel=panel, directed=TRUE )
+################################################################
+
+################################################################
+# Create lagged variables, subset by time (>1970 & <2005), and merge
 stratData=lagData(stratData, 'idYr', 'id', names(stratData)[4:6])
-
-names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
 milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
-
 covData=lagData(covData, 'cyear', 'ccode', vars)
 
 # Subset datasets by time
-aidData = aidData[aidData$year>1970 & aidData$year<=2010,]
-stratData = stratData[stratData$year>1970 & stratData$year<=2010,]
-milData = milData[milData$year>1970 & milData$year<=2010,]
-covData = covData[covData$year>1970 & covData$year<=2010,]
+aidData = aidData[aidData$year>1970 & aidData$year<=2005,]
+stratData = stratData[stratData$year>1970 & stratData$year<=2005,]
+milData = milData[milData$year>1970 & milData$year<=2005,]
+covData = covData[covData$year>1970 & covData$year<=2005,]
 
 # Merge datasets
 regData=aidData[,which(!names(aidData) %in% 'commitUSD09')]

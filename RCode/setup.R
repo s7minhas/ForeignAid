@@ -180,8 +180,6 @@ DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear1 = NA, cntry
 	names(Mats) <- pd
 	Mats
 }
-
-
 ################################################################
 
 ################################################################
@@ -240,6 +238,7 @@ lagTS <- function(x,l){
 lagData <- function(data, country_year, country, varsTOlag, lag=1)
 {
   data[,country_year] = num(data[,country_year])
+  data[,country] = num(data[,country])  
   data <- data[order(data[,country_year]),]
   lagData <- apply(data[,varsTOlag], 2,
     function(x){
