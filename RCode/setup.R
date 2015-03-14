@@ -24,6 +24,9 @@ for(lib in toLoad){
   library(lib, character.only=TRUE)
 }
 
+## gg theme
+theme_set(theme_bw())
+
 ### PACKAGE VERIONS
 ## Must have countrycode version 0.16 installed
 
