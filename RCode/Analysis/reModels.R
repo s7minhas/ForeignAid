@@ -22,7 +22,7 @@ agg=summaryBy(tmp ~ ccodeS,
 toKeep=agg[which(agg$tmp>=7),1]
 regData = regData[which(regData$ccodeS %in% toKeep),]
 
-# Grouping factors for hierarchical framework
+# # Grouping factors for hierarchical framework
 # regData$year = factor(regData$year, levels=sort(unique(regData$year)))
 # regData$ccodeS = factor(regData$ccodeS)
 # regData$ccodeS = interaction(regData$year, regData$ccodeS, drop = TRUE) 
@@ -32,6 +32,7 @@ regData = regData[which(regData$ccodeS %in% toKeep),]
 
 ################################################################
 # RE model
+
 ## mod formula
 vars=c(
 	'LstratMu', # state interest measure
@@ -47,9 +48,11 @@ vars=c(
 ### Results consistent across various specifications
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
-	# '+ factor(year) + factor(ccodeS)')) # Sender + year fixed effects
-	# '+ factor(id) + factor(ccodeS) - 1')) # Dyadic + year fixed effecs
+	# '+ factor(year) + factor(ccodeS) -1')) # Sender + year fixed effects
+	# '+ factor(id) - 1')) # Dyad fixed effects
+	# '+ factor(id) + factor(year) - 1')) # Dyad + year fixed effects
 	# '+ (1|ccodeS) + (1|year)'))	# Sender + year random effects
+	# '+ (1|id)')) # Dyadic fixed effects
 	'+ (1|id) + (1|year)')) # Dyad + year random effects
 	# '+ (1|year/ccodeS)'))	# Senders nested within years
 
@@ -58,7 +61,6 @@ mod=lmer(modForm, data=regData) # random effects estimation
 
 # Model results
 summary(mod)$coefficients[1:(length(vars)+1),]
-# Quick performance glimpse
 sqrt(mean( (resid(mod)^2) ))
 #########################################################
 
@@ -81,7 +83,7 @@ stratEffect
 lifeEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=vars, actual=FALSE, brk=0.1, 
   vi='LlifeExpect', ostat=median, sigma=FALSE, intercept=TRUE,
-  ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
+  ylabel="Log(Aid)$_{t}$", xlabel="Life Expectancy$_{t-1}$",
   plotType='ribbon'
   )
 lifeEffect=lifeEffect + theme(axis.title.y=element_text(vjust=1))
@@ -93,7 +95,7 @@ lifeEffect
 disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=vars, actual=FALSE, brk=1, 
   vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
-  ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
+  ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
   plotType='errorBar'
   )
 disastEffect=disastEffect + theme(axis.title.y=element_text(vjust=1))
@@ -124,4 +126,63 @@ ccf( modData$LlifeExpect[which(modData$ccodeS == sender[i])], modData$logAid[whi
  
 
  
+#########################################################
+
+#########################################################
+# Revise model formula to incorporate interaction
+modForm=formula(paste0(
+	'logAid ~ ', paste(vars, collapse=' + '), 
+	'+ LstratMu * Lno_disasters',
+	'+ (1|id) + (1|year)')) # Dyad + year random effects
+
+# Rerun model	
+mod=lmer(modForm, data=regData) # random effects estimation
+
+# Peek @ Model results
+summary(mod)$coefficients[1:(length(vars)+2),]
+sqrt(mean( (resid(mod)^2) ))
+
+# Create scenario matrix
+stratRange=with(data=regData, seq(min(LstratMu), max(LstratMu), .01) )
+disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 1) )
+scen = with(data=regData, 
+	expand.grid(1, stratRange, median(LmilMu), median(colony),
+		median(Lpolity2), median(LlnGdpCap), median(LlifeExpect),
+		disRange, median(Lcivwar) ) )
+
+# Add interaction term
+scen = cbind( scen, scen[,2]*scen[,8] )
+colnames(scen) = colnames( coef(mod)$id )
+scen = data.matrix(scen)
+pred = scen %*% mod@beta
+draws = mvrnorm(10000, mod@beta, vcov(mod))
+sysUncert = scen %*% t(draws)
+sysInts = t(apply(sysUncert, 1, function(x){ quantile(x, c(0.025, 0.975)) }))
+
+# Combine for plotting
+ggData=data.frame(
+		cbind(pred, sysInts, scen[,'LstratMu'], scen[,'Lno_disasters'])
+	)
+names(ggData)=c('fit', 'sysLo', 'sysHi', 'LstratMu', 'Lno_disasters')
+
+# Make a surface plot
+tmp=ggplot(ggData, aes(x=LstratMu, y=Lno_disasters, fill=fit)) 
+tmp=tmp + xlab('Strategic Interest') + ylab('No. Disasters')
+tmp=tmp + geom_tile(colour='darkgrey')
+tmp=tmp + scale_fill_gradient2(midpoint=median(regData$logAid), 
+	space='rgb', low="#d73027", mid="white", high="#4575b4", name='Log(Aid)\n')
+tmp=tmp + scale_x_continuous(expand=c(0,0)) + scale_y_continuous(expand=c(0,0))
+tmp=tmp + theme(axis.ticks=element_blank(), 
+  legend.position='top', legend.key.width=unit(2,'cm'),
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank() )
+tmp
+
+# Plot rel at various cuts of disasters
+disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 5) )
+ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
+tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit))
+tmp=tmp + geom_line()
+tmp=tmp + geom_ribbon(aes(ymin=sysLo, ymax=sysHi), alpha=.9)
+tmp=tmp + facet_grid(~Lno_disasters)
+tmp
 #########################################################

@@ -111,7 +111,7 @@ ggcoefplot = function(coefData, vars, varNames, estimates, serrors,
 # gg simulation plot
 ggsimplot = function(
   modelResults, sims=10000, simData, vars, vi, ostat=median, 
-  actual=TRUE, brk=0.1,
+  actual=TRUE, brk=0.1, 
   sigma=FALSE, intercept=TRUE, ylabel, xlabel,
   specX=FALSE, ggxlims=NULL, ggxbreaks=NULL,
   specY=FALSE, ggylims=NULL, ggybreaks=NULL, plotType='errorBar'){
@@ -123,7 +123,7 @@ ggsimplot = function(
   vcov=vcov(modelResults)
   betas=modelResults@beta; names(betas)=rownames(vcov)
   RSS=sum(resid(modelResults)^2)
-  dfResid=nrow(simData)-length(modelResults@beta) - length(modelResults@u) + 1
+  dfResid=nrow(simData)-length(betas) - length(modelResults@u) + 1
   if(sigma){sigma = sqrt(RSS/dfResid)} else {sigma = 0}
 
   # Set up scenario
