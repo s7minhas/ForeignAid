@@ -133,6 +133,7 @@ ccf( modData$LlifeExpect[which(modData$ccodeS == sender[i])], modData$logAid[whi
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
 	'+ LstratMu * Lno_disasters',
+	# '+ LstratMu * LlnGdpCap',
 	'+ (1|id) + (1|year)')) # Dyad + year random effects
 
 # Rerun model	
@@ -145,13 +146,19 @@ sqrt(mean( (resid(mod)^2) ))
 # Create scenario matrix
 stratRange=with(data=regData, seq(min(LstratMu), max(LstratMu), .01) )
 disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 1) )
+# gdpRange=with(data=regData, seq(min(LlnGdpCap), max(LlnGdpCap), .5) )
 scen = with(data=regData, 
 	expand.grid(1, stratRange, median(LmilMu), median(colony),
 		median(Lpolity2), median(LlnGdpCap), median(LlifeExpect),
 		disRange, median(Lcivwar) ) )
+# scen = with(data=regData, 
+# 	expand.grid(1, stratRange, median(LmilMu), median(colony),
+# 		median(Lpolity2), gdpRange, median(LlifeExpect),
+# 		median(Lno_disasters), median(Lcivwar) ) )
 
 # Add interaction term
 scen = cbind( scen, scen[,2]*scen[,8] )
+# scen = cbind( scen, scen[,2]*scen[,6] )
 colnames(scen) = colnames( coef(mod)$id )
 scen = data.matrix(scen)
 pred = scen %*% mod@beta
@@ -162,12 +169,16 @@ sysInts = t(apply(sysUncert, 1, function(x){ quantile(x, c(0.025, 0.975)) }))
 # Combine for plotting
 ggData=data.frame(
 		cbind(pred, sysInts, scen[,'LstratMu'], scen[,'Lno_disasters'])
+		# cbind(pred, sysInts, scen[,'LstratMu'], scen[,'LlnGdpCap'])
 	)
 names(ggData)=c('fit', 'sysLo', 'sysHi', 'LstratMu', 'Lno_disasters')
+# names(ggData)=c('fit', 'sysLo', 'sysHi', 'LstratMu', 'LlnGdpCap')
 
 # Make a surface plot
 tmp=ggplot(ggData, aes(x=LstratMu, y=Lno_disasters, fill=fit)) 
 tmp=tmp + xlab('Strategic Interest') + ylab('No. Disasters')
+# tmp=ggplot(ggData, aes(x=LstratMu, y=LlnGdpCap, fill=fit)) 
+# tmp=tmp + xlab('Strategic Interest') + ylab('Log(GDP capita)')
 tmp=tmp + geom_tile(colour='darkgrey')
 tmp=tmp + scale_fill_gradient2(midpoint=median(regData$logAid), 
 	space='rgb', low="#d73027", mid="white", high="#4575b4", name='Log(Aid)\n')
@@ -179,10 +190,13 @@ tmp
 
 # Plot rel at various cuts of disasters
 disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 5) )
+# gdpRange=with(data=regData, seq(min(LlnGdpCap), max(LlnGdpCap), 2) )
 ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
+# ggDataSmall = ggData[which(ggData$LlnGdpCap %in% gdpRange),]
 tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit))
 tmp=tmp + geom_line()
 tmp=tmp + geom_ribbon(aes(ymin=sysLo, ymax=sysHi), alpha=.9)
 tmp=tmp + facet_grid(~Lno_disasters)
+# tmp=tmp + facet_grid(~LlnGdpCap)
 tmp
 #########################################################
