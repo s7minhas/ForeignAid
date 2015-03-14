@@ -16,8 +16,8 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 
 # Loading libraries and functions
 toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 
-	'gtools', 'ggplot2', 'doBy', 'sbgcop', 'tikzDevice', 
-	'igraph', 'bipartite', 'lme4')
+	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
+	'igraph', 'bipartite', 'lme4', 'MASS')
 for(lib in toLoad){
   if(!(lib %in% installed.packages()[,1])){ 
   	install.packages(lib, repos='http://cran.rstudio.com/') }
@@ -180,8 +180,6 @@ DyadBuild <- function(variable, dyadData, cntry1, cntry2, cntryYear1 = NA, cntry
 	names(Mats) <- pd
 	Mats
 }
-
-
 ################################################################
 
 ################################################################
@@ -240,6 +238,7 @@ lagTS <- function(x,l){
 lagData <- function(data, country_year, country, varsTOlag, lag=1)
 {
   data[,country_year] = num(data[,country_year])
+  data[,country] = num(data[,country])  
   data <- data[order(data[,country_year]),]
   lagData <- apply(data[,varsTOlag], 2,
     function(x){
