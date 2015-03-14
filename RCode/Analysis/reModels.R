@@ -1,4 +1,5 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ################################################################
 # Load reg data
@@ -28,6 +29,8 @@ regData = regData[which(regData$ccodeS %in% toKeep),]
 # regData$ccodeS = interaction(regData$year, regData$ccodeS, drop = TRUE) 
 # regData$ccodeR = factor(regData$ccodeR)
 # regData$ccodeR = interaction(regData$year, regData$ccodeS, regData$ccodeR, drop = TRUE) 
+
+
 ################################################################
 
 ################################################################
@@ -68,6 +71,8 @@ setwd(pathResults)
 
 #########################################################
 # Substantive effects
+# strategic interest
+set.seed(2)
 strat=seq(min(regData$LstratMu), max(regData$LstratMu), .1)
 # strat = sort(regData$LstratMu)
 scen = with(data=regData, expand.grid(1, strat, mean(LmilMu), 
@@ -98,6 +103,109 @@ tmp = tmp + geom_line() + geom_ribbon(alpha=0.3)
 tmp = tmp + geom_ribbon(aes(ymin=Lo90, ymax=Hi90), alpha=0.5)
 # tmp = tmp + geom_rug(sides='b', position='jitter')
 tmp
+
+# summary(exp(ggData$Fit))
+# c( 672600 - 5248000  )/5248000 : -87%
+
+########################################################
+# life expectancy
+set.seed(2)
+life=seq(min(regData$LlifeExpect), max(regData$LlifeExpect), .1)
+# strat = sort(regData$LstratMu)
+scen = with(data=regData, expand.grid(1, mean(LstratMu), mean(LmilMu), 
+	median(colony), mean(Lpolity2), mean(LlnGdpCap), 
+	life,  median(Lno_disasters) , median(Lcivwar) ) )
+colnames(scen)=c('(Intercept)', vars)
+
+# Simulations
+sims=1000
+betas=summary(mod)$coefficients[,1]
+varCov=vcov(mod)
+betaDraws = mvrnorm(sims, betas, varCov)
+preds = betaDraws %*% t(scen)
+
+# Data for plotting
+ggData = t(apply(preds, 2, 
+   function(x){ mean = mean(x) ;
+     qlo95 = quantile(x, 0.025) ; qhi95 = quantile(x, 0.975) ;
+     qlo90 = quantile(x, 0.05) ; qhi90 = quantile(x, 0.95) ;
+     rbind(mean, qlo95, qhi95, qlo90, qhi90) } ))
+ggData = data.frame(ggData)
+colnames(ggData) = c('Fit', 'Lo95', 'Hi95', 'Lo90', 'Hi90')
+ggData$x=life
+
+# Plot
+tmp = ggplot(ggData, aes(x=x, y=Fit, ymin=Lo95, ymax=Hi95))
+tmp = tmp + geom_line() + geom_ribbon(alpha=0.3)
+tmp = tmp + geom_ribbon(aes(ymin=Lo90, ymax=Hi90), alpha=0.5)
+# tmp = tmp + geom_rug(sides='b', position='jitter')
+ 
+tmp
+# summary(exp(ggData$Fit))
+# c( 2822000 -1397000 )/1397000 : 102%
+ 
+########################################################
+# natural disaster
+set.seed(2) 
+disast=seq(min(regData$Lno_disasters), max(regData$Lno_disasters), .1)
+# strat = sort(regData$LstratMu)
+scen = with(data=regData, expand.grid(1, mean(LstratMu), mean(LmilMu), 
+	median(colony), mean(Lpolity2), mean(LlnGdpCap), 
+	mean(LlifeExpect),  disast , median(Lcivwar) ) )
+colnames(scen)=c('(Intercept)', vars)
+
+# Simulations
+sims=1000
+betas=summary(mod)$coefficients[,1]
+varCov=vcov(mod)
+betaDraws = mvrnorm(sims, betas, varCov)
+preds = betaDraws %*% t(scen)
+
+# Data for plotting
+ggData = t(apply(preds, 2, 
+   function(x){ mean = mean(x) ;
+     qlo95 = quantile(x, 0.025) ; qhi95 = quantile(x, 0.975) ;
+     qlo90 = quantile(x, 0.05) ; qhi90 = quantile(x, 0.95) ;
+     rbind(mean, qlo95, qhi95, qlo90, qhi90) } ))
+ggData = data.frame(ggData)
+colnames(ggData) = c('Fit', 'Lo95', 'Hi95', 'Lo90', 'Hi90')
+ggData$x=disast
+
+# Plot
+tmp = ggplot(ggData, aes(x=x, y=Fit, ymin=Lo95, ymax=Hi95))
+tmp = tmp + geom_line() + geom_ribbon(alpha=0.3)
+tmp = tmp + geom_ribbon(aes(ymin=Lo90, ymax=Hi90), alpha=0.5)
+# tmp = tmp + geom_rug(sides='b', position='jitter')
+tmp
+
+#summary(exp(ggData$Fit))
+#c(125700000 - 1671000    )/ 1671000 : 742%
+
+
+#########################################################
+
+#########################################################
+
+# cross correlation functions
+
+modData = model.frame(mod)
+sender = unique(modData$ccodeS)
+
+par(mfrow = c(2, 3)) # wanted to put all the plots on same page but just too small to interpret
+for ( i in 13:18){
+ccf( modData$Lno_disasters[which(modData$ccodeS == sender[i])], modData$logAid[which(modData$ccodeS== sender[i])])
+}
+
+for ( i in 1:6){
+ccf(modData$LstratMu[which(modData$ccodeS == sender[i])], modData$logAid[which(modData$ccodeS== sender[i])])
+}
+
+for ( i in 1:6){
+ccf( modData$LlifeExpect[which(modData$ccodeS == sender[i])], modData$logAid[which(modData$ccodeS== sender[i])])
+}
+ 
+
+ 
 #########################################################
 
 #########################################################
