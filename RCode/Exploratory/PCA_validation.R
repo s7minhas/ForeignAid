@@ -17,11 +17,7 @@ source(paste0(pathCode, "/setup.R"))
 load(paste0(pathResults, '/PCA/PCA_FullData_midWarArmsSum.rda'))
 load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
 load(paste0(pathData, '/components/EUgene.rda'))
-library(texreg)
 
-a = PCA_FullData[[3]][, 2:4]
-
-colMeans(a^2/3)
 
 ######################################################
 
