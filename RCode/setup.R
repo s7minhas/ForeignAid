@@ -1,8 +1,10 @@
 # Setting working directory
+rm(list=ls())
 if(
 Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 ){pathMain="~/Dropbox/Research/ForeignAid";
-  pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
+  # pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
+  pathGraphics='~/Research/ForeignAid/Presentations/Graphics';  
   pathResults='~/Dropbox/Research/ForeignAid/Results';
   pathCode='~/Research/ForeignAid/RCode'
   pathData="~/Dropbox/Research/ForeignAid/Data"

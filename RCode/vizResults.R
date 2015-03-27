@@ -37,12 +37,12 @@ ggcoefplot = function(coefData, vars, varNames, estimates, serrors,
 	    names(ggcoefData) = c("Variable", "Mean", "SEs", "upper95", "lower95",
 	                           "upper90","lower90")    	
     }
-  ggcoefData$Mean = numSM(ggcoefData$Mean)
-  ggcoefData$lower90 = numSM(ggcoefData$lower90)
-  ggcoefData$upper90 = numSM(ggcoefData$upper90)
-  ggcoefData$lower95 = numSM(ggcoefData$lower95)
-  ggcoefData$upper95 = numSM(ggcoefData$upper95)
-  if(facet){ggcoefData$Facet = numSM(ggcoefData$Facet)}
+  ggcoefData$Mean = num(ggcoefData$Mean)
+  ggcoefData$lower90 = num(ggcoefData$lower90)
+  ggcoefData$upper90 = num(ggcoefData$upper90)
+  ggcoefData$lower95 = num(ggcoefData$lower95)
+  ggcoefData$upper95 = num(ggcoefData$upper95)
+  if(facet){ggcoefData$Facet = num(ggcoefData$Facet)}
   if(revVar){ggcoefData$Variable = factor(ggcoefData$Variable, levels=rev(unique(varNames)))
   	} else {ggcoefData$Variable = factor(ggcoefData$Variable, levels=unique(varNames))}
   
@@ -111,7 +111,7 @@ ggcoefplot = function(coefData, vars, varNames, estimates, serrors,
 # gg simulation plot
 ggsimplot = function(
   modelResults, sims=10000, simData, vars, vi, ostat=median, 
-  actual=TRUE, brk=0.1, 
+  actual=TRUE, brk=0.1, vRange=NULL,
   sigma=FALSE, intercept=TRUE, ylabel, xlabel,
   specX=FALSE, ggxlims=NULL, ggxbreaks=NULL,
   specY=FALSE, ggylims=NULL, ggybreaks=NULL, plotType='errorBar'){
@@ -127,8 +127,9 @@ ggsimplot = function(
   if(sigma){sigma = sqrt(RSS/dfResid)} else {sigma = 0}
 
   # Set up scenario
-  if(!actual){vRange=seq(min(simData[,vi]), max(simData[,vi]), brk)
-    } else { vRange=sort(unique(simData[,vi])) }
+  if(is.null(vRange)){
+    if(!actual){vRange=seq(min(simData[,vi]), max(simData[,vi]), brk)
+      } else { vRange=sort(unique(simData[,vi])) } } 
   scenCol = length(vars); scenRow = length(vRange)
   scenario = matrix(NA, nrow=scenRow, ncol=scenCol)
   colnames(scenario) = c(vars)
