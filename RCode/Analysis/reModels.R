@@ -96,6 +96,22 @@ tikz(file=paste0(pathGraphics, 'stratEffect.tex'), width=8, height=5, standAlone
 stratEffect
 dev.off()
 
+## Natural disaster 
+disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=vars, actual=FALSE, brk=1, vRange=1:7,
+  vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
+  plotType='errorBar'
+  )
+disastEffect=disastEffect + theme(axis.title.y=element_text(vjust=1))
+tikz(file=paste0(pathGraphics, 'disastEffect.tex'), width=8, height=5, standAlone=F)
+disastEffect
+dev.off()
+
+tikz(file=paste0(pathGraphics, 'effects.tex'), width=8, height=4, standAlone=F)
+multiplot(list(stratEffect, disastEffect), cols=2)
+dev.off()
+
 ## Life expectancy
 lifeEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=vars, actual=FALSE, brk=0.1, 
@@ -131,19 +147,6 @@ polEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData,
   )
 gdpEffect=gdpEffect + theme(axis.title.y=element_text(vjust=1))
 gdpEffect
-
-## Natural disaster 
-disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-  vars=vars, actual=FALSE, brk=1, vRange=1:7,
-  vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
-  ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
-  plotType='errorBar'
-  )
-disastEffect=disastEffect + theme(axis.title.y=element_text(vjust=1))
-disastEffect
-
-#summary(exp(ggData$Fit))
-#c(125700000 - 1671000    )/ 1671000 : 742%
 #########################################################
 
 #########################################################
@@ -177,7 +180,6 @@ coefP=ggcoefplot(coefData, vars2[-2], varNames)
 tikz(file=paste0(pathGraphics, 'modCoef2.tex'), width=8, height=5, standAlone=F)
 coefP
 dev.off()
-
 
 # Create scenario matrix
 stratQts = quantile(regData$LstratMu, probs=c(.1,.9))

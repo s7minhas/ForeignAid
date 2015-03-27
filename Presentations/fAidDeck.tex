@@ -31,7 +31,7 @@
 {
   \frametitle{Extant Approaches to Modeling Strategic Interest}
   \begin{itemize}
-  \item  Consensus is that strategic interest takes precedence over humanitarian ones in foreign aid allocation
+  \item  Consensus is that strategic interest takes precedence over humanitarian ones in country level foreign aid allocation
   \pause
   \item Within this literature strategic interest takes on a variety of operationalizations, most commonly: 
   \begin{itemize}
@@ -147,9 +147,19 @@ We estimate the model via Gibbs sampling using the full conditionals of the para
   \frametitle{Measuring Humanitarian Need}
   \begin{itemize}
   \item Life expectancy at birth (Banks 2013)
-  \item Number of Natural Disasters (EM-DAT 2009)
+  \pause
+  \item Number of Natural Disasters (EM-DAT 2009):
+  \pause
+  \begin{itemize}
+    \item Ten or more people reported killed
+    \item A hundred or more people reported affected
+    \item Declaration of a state of emergency
+    \item Call for international assistance
+  \end{itemize}
   \end{itemize}    
 } 
+
+% For a disaster to be included into the database, at least one of the following criteria must be fulfilled: (a) Ten or more people reported killed (b) A hundred or more people reported affected (c) Declaration of a state of emergency (d) Call for international assistance.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -178,15 +188,32 @@ We estimate the model via Gibbs sampling using the full conditionals of the para
 \frame
 {
   \frametitle{Substantive Effects}
-    \centering
-  \resizebox{1\textwidth}{!}{\input{Graphics/stratEffect.tex}}
+  \resizebox{1\textwidth}{!}{\input{Graphics/effects.tex}}
 } 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame
 {
-  \frametitle{What was the Point?}
+  \frametitle{Temporal Contingencies?}
+    \centering
+  \resizebox{1\textwidth}{!}{\input{Graphics/timeCross.tex}}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Donor Country Contingencies?}
+    \centering
+  \resizebox{1\textwidth}{!}{\input{Graphics/cntryCross.tex}}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{benefits of latent space approach}
     \centering
   \resizebox{1\textwidth}{!}{\input{Graphics/rmseApproach.tex}}
 } 

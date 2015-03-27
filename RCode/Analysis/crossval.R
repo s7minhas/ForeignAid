@@ -36,7 +36,6 @@ regData = regData[which(regData$ccodeS %in% toKeep),]
 ## mod formula
 vars=c(
 	'LstratMu', # state interest measure
-	# 'LmilMu', # military interest measure
 	'colony' # Colonial variable
 	,'Lpolity2' # Institutions
 	,'LlnGdpCap' # Macroecon controls
@@ -48,8 +47,10 @@ vars=c(
 ### Results consistent across various specifications
 modForm=formula(paste0(
 	'logAid ~ ', paste(vars, collapse=' + '), 
+	# '+ LstratMu * Lno_disasters',
 	'+ (1|ccodeS)'))	# Sender + year random effects
 
+# Cross val by country
 yrs = sort(unique(regData$year))
 coefData=NULL
 for(ii in seq_along(yrs)){
@@ -64,20 +65,54 @@ for(ii in seq_along(yrs)){
 # Coefficient plot
 varNames = c(
 	'Pol. Strat. Distance$_{sr,t-1}$',
-	# 'Mil. Strat. Distance$_{sr,t-1}$',
 	'Former Colony$_{sr,t-1}$',
 	'Polity$_{r,t-1}$',
 	'Log(GDP per capita)$_{r,t-1}$',
 	'Life Expectancy$_{r,t-1}$',
 	'No. Disasters$_{r,t-1}$',
 	'Civil War$_{r,t-1}$'
+	# ,'Pol. Strat. Distance$_{sr,t-1}$ $\\times$ \n No. Disasters$_{r,t-1}$'
 	)
 
-ggcoefplot(coefData=coefData[coefData[,'Year']>1976,], 
-	vars=vars, varNames=varNames,
+timeCross=ggcoefplot(coefData=coefData[coefData[,'Year']>1976,], 
+	vars=c('LstratMu','Lno_disasters'), 
+	# vars=c('LstratMu','Lno_disasters','LstratMu:Lno_disasters'), 
+	varNames=varNames[c(1,6)],	
+	# varNames=varNames[c(1,6,8)],
 	Noylabel=FALSE, coordFlip=FALSE, revVar=FALSE,
 	facet=TRUE, facetColor=FALSE, colorGrey=FALSE,
 	facetName='Year', 
 	facetBreaks=seq(yrs[1],yrs[length(yrs)],5),
 	facetLabs=seq(yrs[1],yrs[length(yrs)],5)
   )
+tikz(file=paste0(pathGraphics, 'timeCross.tex'), width=8, height=4, standAlone=F)
+timeCross
+dev.off()
+
+# Cross val by sender cntry
+cntries = unique(regData$ccodeS)
+coefData=NULL
+for(ii in seq_along(cntries)){
+	slice = regData[regData$ccodeS != cntries[ii],]
+	mod=lmer(modForm, data=slice) # random effects estimation	
+	coefs = summary(mod)$coefficients[1:(length(vars)+1),]
+	coefs = cbind(LeftOut=cntries[ii], coefs)
+	coefData = rbind(coefData, coefs)
+	print(cntries[ii])
+}	
+
+# Coefficient plot
+cntryCross=ggcoefplot(coefData=coefData, 
+	vars=c('LstratMu','Lno_disasters'), 
+	# vars=c('LstratMu','Lno_disasters','LstratMu:Lno_disasters'), 
+	varNames=varNames[c(1,6)],	
+	# varNames=varNames[c(1,6,8)],
+	Noylabel=FALSE, coordFlip=FALSE, revVar=FALSE,
+	facet=TRUE, facetColor=FALSE, colorGrey=FALSE,
+	facetName='LeftOut'
+	# facetBreaks=seq(yrs[1],yrs[length(yrs)],5),
+	# facetLabs=seq(yrs[1],yrs[length(yrs)],5)
+  )
+tikz(file=paste0(pathGraphics, 'cntryCross.tex'), width=8, height=4, standAlone=F)
+cntryCross
+dev.off()
