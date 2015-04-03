@@ -53,31 +53,31 @@ Our measure of strategic relationships attempts to introduce greater coherency t
 \end{minipage}
 \end{figure}
  
-\begin{figure}[h!] 
-\caption{Latent Spaces for components of Military Strategic Interest Measure during 2005}
-\label{fig:milLat}
-\centering
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:armsSum}
-\includegraphics[width = 2.3in]{\detokenize{armsSum_2005.pdf}}
-\caption*{(a) Arms transfers}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:mid}
-\includegraphics[width = 2.3in]{\detokenize{mid_2005.pdf}}
-\caption*{(b) MIDs}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:war}
-\includegraphics[width = 2.3in]{\detokenize{warMsum5_2005.pdf}}
-\caption*{(c) War}
-\end{minipage}
-\end{figure}
+% \begin{figure}[h!] 
+% \caption{Latent Spaces for components of Military Strategic Interest Measure during 2005}
+% \label{fig:milLat}
+% \centering
+% \begin{minipage}{.33\linewidth}
+% \centering
+% \label{fig:armsSum}
+% \includegraphics[width = 2.3in]{\detokenize{armsSum_2005.pdf}}
+% \caption*{(a) Arms transfers}
+% \end{minipage}
+% \hspace{-.2in}
+% \begin{minipage}{.33\linewidth}
+% \centering
+% \label{fig:mid}
+% \includegraphics[width = 2.3in]{\detokenize{mid_2005.pdf}}
+% \caption*{(b) MIDs}
+% \end{minipage}
+% \hspace{-.2in}
+% \begin{minipage}{.33\linewidth}
+% \centering
+% \label{fig:war}
+% \includegraphics[width = 2.3in]{\detokenize{warMsum5_2005.pdf}}
+% \caption*{(c) War}
+% \end{minipage}
+% \end{figure}
  
 
 \indent\indent Countries that cluster together in this two-dimensional latent space are more likely to interact with each other. The plots for the components for the political strategic relationship variable suggest that there is distinct clustering among countries. This is also true for latent space of arms transfers, a component of the military strategic relationship variable. However, there is much less clustering for the other two components of the military strategic relationship variable, suggesting that many conflicts involve more than one or two dyads and further that military conflicts can have broad ramifications beyond the dyads involved.\\
@@ -97,13 +97,13 @@ Our measure of strategic relationships attempts to introduce greater coherency t
 \caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
 \end{figure}
 
-\begin{figure}[h!]
-\label{fig:midPCA}
-\centering
-\caption{Dyadic PCA for Military Strategic Interests for year 2005}
-\includegraphics[width = 5in]{\detokenize{dyadViz_midWarArmsSum.pdf}}
-\caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
-\end{figure}
+% \begin{figure}[h!]
+% \label{fig:midPCA}
+% \centering
+% \caption{Dyadic PCA for Military Strategic Interests for year 2005}
+% \includegraphics[width = 5in]{\detokenize{dyadViz_midWarArmsSum.pdf}}
+% \caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
+% \end{figure}
 
 \indent\indent We also conduct a series of post-estimation validation tests for our resulting strategic variables. In particular, we (1) evaluate the relationship between our political strategic interest variable and our military strategic interest variable against S scores and Kendall's $\tau_b$ for alliances and (2) investigate how our measures describe well-known dyadic relationships. We perform a simple bivariate OLS with and with year fixed effects to evaluate how our measures compare to S scores and Kendall's $\tau_b$.\footnote{Note for comparison that the bivariate relationship of S scores on Kendall's $\tau_b$ is statistically significant with a coefficient of 0.62 while the bivariate relationship of Kendall's $\tau_b$ on S Scores is statistically significant with a coefficient of 0.31.} Note in order to make our strategic measures somewhat interpretable, for the validation we scale our strategic measures to be between 0 and 1 just as S scores and Kendall $\tau_b$ is scaled. The results are shown in Table \ref{table:polval} for political strategic interest and Table \ref{table:milval} for military strategic interest. \\
 
@@ -134,34 +134,34 @@ Num. obs.           & 824426        & 824426        & 824426        & 824426    
 
 
 
-\begin{table}
-\small
-\caption{Validation of Military Strategic Interest Variable against S scores and Kendall's $\tau_b$}
-\begin{center}
-\begin{tabular}{l c c c c c c }
-\hline
-                    & Unweighted   & Unweighted & Weighted  & Weighted  & Tau-B & Tau-B \\
-                   &   S Scores &   S Scores &  S Scores &  S Scores &  &   \\
-\hline
-(Intercept)         & $0.75^{***}$ & $0.79^{***}$  & $0.68^{***}$ & $0.66^{***}$  & $0.02^{***}$  & $0.02^{***}$ \\
-                    & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.00)$      & $(0.00)$      & $(0.00)$     \\
-Military Strategic Interest              & $0.01^{***}$ & $-0.05^{***}$ & $0.03^{***}$ & $-0.10^{***}$ & $0.02^{***}$  & $-0.00$      \\
-                    & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.01)$      & $(0.00)$      & $(0.00)$     \\
-Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
-\hline
-R$^2$               & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & 0.00         \\
-Adj. R$^2$          & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & -0.00        \\
-Num. obs.           & 824426       & 824426        & 824426       & 824426        & 824148        & 824148       \\
-\hline
-\multicolumn{7}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}
-\end{tabular}
-\label{table:milval}
-\end{center}
-\end{table}
+% \begin{table}
+% \small
+% \caption{Validation of Military Strategic Interest Variable against S scores and Kendall's $\tau_b$}
+% \begin{center}
+% \begin{tabular}{l c c c c c c }
+% \hline
+%                     & Unweighted   & Unweighted & Weighted  & Weighted  & Tau-B & Tau-B \\
+%                    &   S Scores &   S Scores &  S Scores &  S Scores &  &   \\
+% \hline
+% (Intercept)         & $0.75^{***}$ & $0.79^{***}$  & $0.68^{***}$ & $0.66^{***}$  & $0.02^{***}$  & $0.02^{***}$ \\
+%                     & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.00)$      & $(0.00)$      & $(0.00)$     \\
+% Military Strategic Interest              & $0.01^{***}$ & $-0.05^{***}$ & $0.03^{***}$ & $-0.10^{***}$ & $0.02^{***}$  & $-0.00$      \\
+%                     & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.01)$      & $(0.00)$      & $(0.00)$     \\
+% Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
+% \hline
+% R$^2$               & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & 0.00         \\
+% Adj. R$^2$          & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & -0.00        \\
+% Num. obs.           & 824426       & 824426        & 824426       & 824426        & 824148        & 824148       \\
+% \hline
+% \multicolumn{7}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}
+% \end{tabular}
+% \label{table:milval}
+% \end{center}
+% \end{table}
 
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad. \\
 
-\indent\indent   Our military strategic measure performs will mixed results with respect to S scores and Kendall's $\tau_b$ for alliances . It has a negative and statistically significant relationship between S scores with year fixed effects. It in fact has a positive and statistically significant relationship between S scores and Kendall's $\tau_b$ without year fixed effects These mixed results suggest that the military strategic measure is perhaps measuring something qualitatively different than S scores.\\
+% \indent\indent   Our military strategic measure performs will mixed results with respect to S scores and Kendall's $\tau_b$ for alliances . It has a negative and statistically significant relationship between S scores with year fixed effects. It in fact has a positive and statistically significant relationship between S scores and Kendall's $\tau_b$ without year fixed effects These mixed results suggest that the military strategic measure is perhaps measuring something qualitatively different than S scores.\\
 
 \indent\indent Finally we also investigate how our measure performs relative to well known dyadic relationships. In the figures below, we plot the dyadic relationships between countries that are well-known to have friendly or antagonistic relationships. Figure \ref{fig:USIsraelIran_p} shows for example the dyadic relationship between Iran and Israel, the US and Israel, and the US and Iran. The plot suggests that the US and Israel have consistently had a stronger political strategic relationship throughout time except for the early 1970's when Iran and Israel is shown to have had a stronger political strategic relationship. This is in fact consistent with historical evidence which suggests that Iran and Israel enjoyed close ties before the Iranian revolution. Meanwhile the plot of the dyadic relationships between China and Japan and, North Korea and China and North Korea and Japan suggest more or less indifferent relations among the three before 1990 after which the political strategic relationship between China and North Korea becomes markedly stronger. This is also consistent with the disappearance of Soviet support for North Korea following the end of the Cold War and the emergence of China as North Korea's new protector. Finally, the plot of the dyadic relationship between India and Pakistan, India and the US and Pakistan and the US suggest in fact that India and Pakistan have a much stronger political strategic relationship than either do with the US. Given the history of antagonism between India and Pakistan, this is a rather surprising result; it also suggests however that a dyad's political relationship and military relationship may be quite different and indeed as two large bordering countries, cooperation between India and Pakistan is important to the security of both. 
 
