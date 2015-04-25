@@ -1,0 +1,69 @@
+\section*{Analysis}
+\label{empirics}
+
+\begin{align*}
+  Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1}) \\
+  & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
+  & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \; Expect_{r,t-1}) \\  
+  & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) 
+\end{align*}
+
+\subsection*{Estimation Method}
+
+To model aid flows using our directed-dyadic panel dataset, we utilize a hierarchical model. To implement this we nest receivers within senders and senders within years. We include random intercepts in our model for every sender and year. The results of this analyis are shown below in table \ref{tab:mainResults}.
+
+\begin{figure}[ht]
+\centering
+\resizebox{.7\textwidth}{!}{\input{modCoef.tex}}
+\caption{Regression results using conflict distance from capital city on the left, and the chart on the right shows regression results using minimum conflict distance from any major city. Darker colors indicates that the coefficient estimate is significantly different from zero at a 95\% CI, while lighter the same for a 90\% CI. Grey indicates that the estimate is not significantly different from zero at either of those intervals.}
+\label{fig:coef1}
+\end{figure}
+
+Our strategic interest variables are shown in the first two rows. The results for the political strategic relationship variable align with the extant literature, we can see that countries are likely to send greater levels of aid to those with whom they have strong political relationships. The same does not hold for strong military relationships, the relationship with this variable and aid is actually slightly negative. We also see that countries are more likely to send aid to former colonies, a finding which also has received support in previous literature. 
+
+Next we turn to particular characteristics of receiver countries that are associated with higher levels of aid flows. Our analysis finds that countries which are poorer, more democratic, or that have recently faced a natural disaster receive higher levels of aid on average. Lower levels of life expectancy, however, are not associated with greater levels of aid. 
+
+\begin{figure}[ht]
+\centering
+\resizebox{.8\textwidth}{!}{\input{effects.tex}}
+\caption{Expected values for GDP growth based on scenarios where all variables are held to their constants but Ln(Min. Conflict Dist.) varies from its minimum to maximum. The 90\% interval of each distribution is shaded in dark grey and the 95\% in a lighter color.}
+\label{fig:sim1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\resizebox{.8\textwidth}{!}{\input{timeCross.tex}}
+\caption{Each line here in the left panel shows the coefficient estimate of $Ln(Min. \; Capital \; Dist.)_{i,t-1}$ from rerunning the model on six random subsamples within the dataset. The panel on the right shows the same for $Ln(Min. \; City \; Dist.)_{i,t-1}$. All the covariates used in the initial model shown in figure \ref{fig:coefplot} were included as well.}
+\label{fig:timeCross}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\resizebox{.8\textwidth}{!}{\input{cntryCross.tex}}
+\caption{Each line here in the left panel shows the coefficient estimate of $Ln(Min. \; Capital \; Dist.)_{i,t-1}$ from rerunning the model on six random subsamples within the dataset. The panel on the right shows the same for $Ln(Min. \; City \; Dist.)_{i,t-1}$. All the covariates used in the initial model shown in figure \ref{fig:coefplot} were included as well.}
+\label{fig:cntryCross}
+\end{figure}
+
+\subsection*{Interactive Specification}
+
+\begin{align*}
+  Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1})  \\
+  & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
+  & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \;Expect_{r,t-1}) \\  
+  & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) \\
+  & \;+\; \beta_{8}(Pol. \; Strat.  \; Interest_{sr,t-1} \times No. \; Disasters_{r,t-1})
+\end{align*}
+
+\begin{figure}[ht]
+\centering
+\resizebox{.7\textwidth}{!}{\input{modCoef2.tex}}
+\caption{Regression results using conflict distance from capital city on the left, and the chart on the right shows regression results using minimum conflict distance from any major city. Darker colors indicates that the coefficient estimate is significantly different from zero at a 95\% CI, while lighter the same for a 90\% CI. Grey indicates that the estimate is not significantly different from zero at either of those intervals.}
+\label{fig:coef2}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\resizebox{.8\textwidth}{!}{\input{intEffect.tex}}
+\caption{Expected values for GDP growth based on scenarios where all variables are held to their constants but Ln(Min. Conflict Dist.) varies from its minimum to maximum. The 90\% interval of each distribution is shaded in dark grey and the 95\% in a lighter color.}
+\label{fig:sim2}
+\end{figure}

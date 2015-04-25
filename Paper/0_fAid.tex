@@ -146,7 +146,11 @@ digitsep=fullstop
 
 %\graphicspath{{~/Users/cindycheng/Dropbox/ForeignAid/graphics/}}
 % \graphicspath{{Graphics/}}
-\graphicspath{{/Users/janus829/Dropbox/ForeignAid/graphics/}}
+
+\makeatletter
+\def\input@path{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
+\makeatother
+\graphicspath{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
 
 % easy commands for number propers
 \newcommand{\first}{$1^{\text{st}}$}
@@ -184,32 +188,28 @@ In recent years, numerous studies have sought to explain the strategic and polit
 \newpage
 
 %%%%%%%% INTRO %%%%%%%%
-\input{fAidIntro}
+\input{1_fAidIntro}
 %%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Lit Review %%%%%
-\input{fAidLit}
+\input{2_fAidLit}
 %%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Theory %%%%%
-\input{fAidTheory}
+\input{3_fAidTheory}
 %%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%% Theory %%%%%
-\input{fAidData}
+\input{4_fAidData}
 %%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Empirics %%%%%
-\input{fAidEmp}
-%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%% Empirics %%%%%
-%\input{fAidFindings}
+\input{5_fAidEmp}
 %%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Conclusion %%%%%
-\input{fAidConcl}
+\input{6_fAidConcl}
 %%%%%%%%%%%%%%%%%%%%%%
 
 \newpage
