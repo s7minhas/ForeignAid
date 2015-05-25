@@ -9,6 +9,8 @@
 
 \subsection*{A new measure of strategic relationships}
 
+% The sociomatrices described in the last section summarize the relations among all actors in any given country-year. As mentioned above, one way to think about them is that they provide information on the interactions between the N(N − 1) dyads of domestic actors. A simpler way to think about them is that they describe a single network. Analyzing the sociomatrices using network techniques allows me to reduce the information provided by the event data into a low-dimensional space.
+
 Our measure of strategic relationships attempts to introduce greater coherency to the literature by providing a more rigorous measure of these two aspects of a strategic relationship, political and military. We do so by first measuring the latent space of different dyadic variables that measure various aspects of the strategic relationship between countries. We then calculate the latent distance between each dyad for each component using a bilinear mixed effects model \citep{hoff:2005}. Finally, we combine the latent distances for each variable through a principal components analysis (PCA). As such, our political strategic relationship measure is the first principal component that results from the PCA of the latent distance between dyadic alliances, UN voting and joint membership in an intergovernmental organizations (IGOs). Meanwhile our military strategic relationship measure is the first principal component of the PCA that results from the latent distance between dyadic arms transfers, militarized interstate disputes (MIDs), and wars. Note that MIDs and wars are of course, the opposite of military cooperation; for these latent measures we reverse the scale to account for this.  We explain how we construct these measures of strategic interest in greater detail below while we detail the data sources we relied on in the data section.\\
 
 \indent\indent   The main advantage of calculating the latent space of different dyadic variables as opposed to using alternative specifications such as the S Score algorithm \footnote{\citet{leeds:2007}, for example, measure a states ``threat environment'' as the set of all states for which ones is contiguous with or which is a major power and with an S score below the population median.} is that we are consequently able to account for third order dependencies within the data. To review, first order dependency refers to the propensity for some actors to send or receive more ties than others, second-order dependency refers to reciprocity of exchange between actors, and a third-order dependency refers to interactions among three or more actors. Dyadic data are rife with these types of dependencies, and aside from first-order dependencies, they pose serious challenges to the basic assumption of independence between observations \citep{poast2010, hoff:2004}. \\
@@ -52,33 +54,6 @@ Our measure of strategic relationships attempts to introduce greater coherency t
 \caption*{(c) IGO membership}
 \end{minipage}
 \end{figure}
- 
-% \begin{figure}[h!] 
-% \caption{Latent Spaces for components of Military Strategic Interest Measure during 2005}
-% \label{fig:milLat}
-% \centering
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:armsSum}
-% \includegraphics[width = 2.3in]{\detokenize{armsSum_2005.pdf}}
-% \caption*{(a) Arms transfers}
-% \end{minipage}
-% \hspace{-.2in}
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:mid}
-% \includegraphics[width = 2.3in]{\detokenize{mid_2005.pdf}}
-% \caption*{(b) MIDs}
-% \end{minipage}
-% \hspace{-.2in}
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:war}
-% \includegraphics[width = 2.3in]{\detokenize{warMsum5_2005.pdf}}
-% \caption*{(c) War}
-% \end{minipage}
-% \end{figure}
- 
 
 \indent\indent Countries that cluster together in this two-dimensional latent space are more likely to interact with each other. The plots for the components for the political strategic relationship variable suggest that there is distinct clustering among countries. This is also true for latent space of arms transfers, a component of the military strategic relationship variable. However, there is much less clustering for the other two components of the military strategic relationship variable, suggesting that many conflicts involve more than one or two dyads and further that military conflicts can have broad ramifications beyond the dyads involved.\\
 
@@ -96,14 +71,6 @@ Our measure of strategic relationships attempts to introduce greater coherency t
 \includegraphics[width = 5in]{\detokenize{dyadViz_allyIGOUN.pdf}}
 \caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
 \end{figure}
-
-% \begin{figure}[h!]
-% \label{fig:midPCA}
-% \centering
-% \caption{Dyadic PCA for Military Strategic Interests for year 2005}
-% \includegraphics[width = 5in]{\detokenize{dyadViz_midWarArmsSum.pdf}}
-% \caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
-% \end{figure}
 
 \indent\indent We also conduct a series of post-estimation validation tests for our resulting strategic variables. In particular, we (1) evaluate the relationship between our political strategic interest variable and our military strategic interest variable against S scores and Kendall's $\tau_b$ for alliances and (2) investigate how our measures describe well-known dyadic relationships. We perform a simple bivariate OLS with and with year fixed effects to evaluate how our measures compare to S scores and Kendall's $\tau_b$.\footnote{Note for comparison that the bivariate relationship of S scores on Kendall's $\tau_b$ is statistically significant with a coefficient of 0.62 while the bivariate relationship of Kendall's $\tau_b$ on S Scores is statistically significant with a coefficient of 0.31.} Note in order to make our strategic measures somewhat interpretable, for the validation we scale our strategic measures to be between 0 and 1 just as S scores and Kendall $\tau_b$ is scaled. The results are shown in Table \ref{table:polval} for political strategic interest and Table \ref{table:milval} for military strategic interest. \\
 
@@ -131,33 +98,6 @@ Num. obs.           & 824426        & 824426        & 824426        & 824426    
 \label{table:polval}
 \end{center}
 \end{table}
-
-
-
-% \begin{table}
-% \small
-% \caption{Validation of Military Strategic Interest Variable against S scores and Kendall's $\tau_b$}
-% \begin{center}
-% \begin{tabular}{l c c c c c c }
-% \hline
-%                     & Unweighted   & Unweighted & Weighted  & Weighted  & Tau-B & Tau-B \\
-%                    &   S Scores &   S Scores &  S Scores &  S Scores &  &   \\
-% \hline
-% (Intercept)         & $0.75^{***}$ & $0.79^{***}$  & $0.68^{***}$ & $0.66^{***}$  & $0.02^{***}$  & $0.02^{***}$ \\
-%                     & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.00)$      & $(0.00)$      & $(0.00)$     \\
-% Military Strategic Interest              & $0.01^{***}$ & $-0.05^{***}$ & $0.03^{***}$ & $-0.10^{***}$ & $0.02^{***}$  & $-0.00$      \\
-%                     & $(0.00)$     & $(0.00)$      & $(0.00)$     & $(0.01)$      & $(0.00)$      & $(0.00)$     \\
-% Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
-% \hline
-% R$^2$               & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & 0.00         \\
-% Adj. R$^2$          & 0.00         & 0.01          & 0.00         & 0.01          & 0.00          & -0.00        \\
-% Num. obs.           & 824426       & 824426        & 824426       & 824426        & 824148        & 824148       \\
-% \hline
-% \multicolumn{7}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}
-% \end{tabular}
-% \label{table:milval}
-% \end{center}
-% \end{table}
 
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad. \\
 
