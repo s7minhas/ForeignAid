@@ -10,22 +10,6 @@ if(Sys.info()['user']=='s7m'){
 	pathCode='~/Research/ForeignAid/RCode';
 	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
 
-if (Sys.info()["user"]=="cindycheng") {
-  pathMain="~/Dropbox/ForeignAid";
-  pathGraphics="~/Dropbox/ForeignAid/graphics";
-  pathData="~/Dropbox/ForeignAid/data";
-  pathCode="~/Documents/Papers/ForeignAid/RCode";
-  pathFunctions="~/Documents/Methods/R Functions"
-  pathResults = '~/Dropbox/ForeignAid/Results/gbmeLatSpace/NewLatSpace'
-}
-
-
-	
-if(Sys.info()['user']=='cindy'){ 
-	pathData="/home/cindy"
-	pathCode="/home/cindy"
-	pathResults ="/home/cindy"}
-
 setwd(pathData)
 load('stratInterestMatrics.rda')
 #######################################################
