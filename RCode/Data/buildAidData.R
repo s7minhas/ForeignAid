@@ -31,6 +31,7 @@ aidData=merge(aidData,receivers,by.x='Receiver',by.y='cntry',all.x=T)
 aidData=aidData[which(!is.na(aidData$cnameS)),] # gets rid of IGO sending cases
 aidData=aidData[which(!is.na(aidData$cnameR)),] # gets rid of region/group recipients
 aidData=aidData[which(!is.na(aidData$ccodeR)),] # gets rid of small countries
+aidData=aidData[which(!is.na(aidData$ccodeS)),] # gets rid of small countries
 aidData=aidData[which(!is.na(aidData$year)),] # weird cases with taiwan as donor but no year and no commit figure
 ################################################################
 
@@ -49,7 +50,14 @@ aidMats=DyadBuild(variable='commitUSD09', dyadData=aidData,
 	pd=1970:2010, panel=panel, directed=TRUE)
 ################################################################
 
-################################################################
+###############################################################
+# include only original oecd donor countries
+oecd = c('AUSTRIA', 'BELGIUM', 'CANADA', 'DENMARK', 'FRANCE', 'GERMANY',
+	'GREECE', 'ICELAND', 'IRELAND', 'ITALY', 'LUXEMBOURG', 'NETHERLANDS',
+	'NORWAY', 'PORTUGAL', 'SPAIN', 'SWEDEN', 'UNITED KINGDOM', 'UNITED STATES' )
+aidData = aidData[which(aidData$cnameS %in% oecd),]
+aidData = aidData[which(!aidData$cnameR %in% oecd),]
+
 # Limit to set number of donors and receivers
 dCntries = unique(aidData$cnameS)
 rCntries = unique(aidData$cnameR)
