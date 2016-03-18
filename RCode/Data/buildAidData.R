@@ -2,7 +2,9 @@ if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Resear
 
 ################################################################
 setwd(paste0(pathData, '/AidData'))
-aidData=read.csv('aidDataAgg.csv')
+aidData = read.csv('aiddata2_1_donor_recipient_year.csv')
+aidData = aidData[,c('donor','recipient','year','commitment_usd_constant_sum')]
+# aidData=read.csv('aidDataAgg.csv')
 colnames(aidData)=c('Sender','Receiver','year','commitUSD09')
 ################################################################
 
@@ -16,6 +18,7 @@ senders[is.na(senders[,3]),1] # check to make sure all NAs are IGOs
 
 receivers=char(unique(aidData$Receiver))
 receivers=data.frame(cbind(cntry=receivers,cnameR=cname(receivers)))
+receivers$cnameR[receivers$cntry=='CZECHOSLOVAKIA'] = 'CZECH REPUBLIC'
 receivers[is.na(receivers[,2]),1] # check to make sure all NAs are IGOs/regions
 receivers$ccodeR=num(panel$ccode[match(receivers$cnameR,panel$cname)])
 receivers[is.na(receivers[,3]),1] # check to make sure all NAs are IGOs/regions
@@ -44,6 +47,13 @@ aidData$ccodeS=num(aidData$ccodeS)
 aidMats=DyadBuild(variable='commitUSD09', dyadData=aidData,
 	cntry1='ccodeS', cntry2='ccodeR', time='year',
 	pd=1970:2010, panel=panel, directed=TRUE)
+################################################################
+
+################################################################
+# Limit to set number of donors and receivers
+dCntries = unique(aidData$cnameS)
+rCntries = unique(aidData$cnameR)
+
 ################################################################
 
 ################################################################
