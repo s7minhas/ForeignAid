@@ -1,11 +1,13 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/ForeignAid1/RCode/setup.R') }
 
 ################################################################
 # Load DV
 setwd(pathData)
-load('aidData.rda'); rm(list=c('aidMats'))
+load('aidDataQwids.rda'); rm(list=c('aidMats'))
 ## Log aid flows
-aidData$logAid=log(aidData$commitUSD09 + 1)
+aidData$logAid=log(aidData$commitUSD13 - c(min(aidData$commitUSD13)-1))
+
 ################################################################
 
 ################################################################
@@ -48,15 +50,24 @@ covData=covData[,c('ccode','cname', 'year', vars)]
 # timeframe: 1971-2005
 
 # Add colony variable
-colony = read.csv(paste0(pathData,'/Components/ICOW Colonial History 1.0/coldata100.csv'))
+colony = read.csv(paste0(pathData,'/Components/ICOW Colonial History 1.0/coldata100.csv'), stringsAsFactors = F)
 colony = colony[,c(2:3)]
 colony$ColRulerName=countrycode(colony$ColRuler, 'cown', 'country.name')
 colony = colony[!is.na(colony$ColRulerName),]
 colony$cname = cname(colony$Name)
 colony$cname[colony$cname=='YUGOSLAVIA']='SERBIA'
-colony = unique(colony[,c(3:4) ])
+colony$cname[which(colony$cname == 'CABO VERDE')] = 'CAPE VERDE'
+colony$cname[which(colony$cname == 'CONGO')] = "CONGO, REPUBLIC OF"
+colony$cname[which(colony$cname == 'CONGO, THE DEMOCRATIC REPUBLIC OF THE')] = "CONGO, THE DEMOCRATIC REPUBLIC OF"
+colony$cname[which(colony$cname == 'LIBYA')] = "LIBYAN ARAB JAMAHIRIYA"
+colony$cname[which(colony$cname == 'YEMEN ARAB REPUBLIC')] = 'YEMEN'
+colony$cname[which(colony$cname == "YEMEN PEOPLE'S REPUBLIC")] = 'S. YEMEN'
+colony$cname[which(colony$cname == "VIET NAM")] = 'VIETNAM'
+colony$cname[which(colony$Name == "Republic of Vietnam (South)")] = 'S. VIETNAM'
+ 
 colony$ccodeCol=panel$ccode[match(colony$cname,panel$cname)]
-colony$ccodeRuler=panel$ccode[match(colony$ColRulerName,panel$cname)]
+colony$ccodeRuler=panel$ccode[match(cname(colony$ColRulerName),panel$cname)]
+colony = colony[-which(is.na(colony$ccodeRuler)),] # gets rid of Austria-Hungary
 colony$id = num(paste0( colony$ccodeRuler, 9999, colony$ccodeCol ))
 
 # Create id vectors
@@ -105,7 +116,7 @@ milData = milData[milData$year>1974 & milData$year<=2005,]
 covData = covData[covData$year>1974 & covData$year<=2005,]
 
 # Merge datasets
-regData=aidData[,which(!names(aidData) %in% 'commitUSD09')]
+regData=aidData[,which(!names(aidData) %in% 'commitUSD13')]
 dim(regData)
 # Add strategic variable to regData
 regData=merge(regData, stratData[,c(8,9)], by='idYr', all.x=TRUE, all.y=FALSE)

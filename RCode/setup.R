@@ -9,12 +9,12 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathCode='~/Research/ForeignAid/RCode'
   pathData="~/Dropbox/Research/ForeignAid/Data"
   } else if  (Sys.info()["user"]=="cindycheng") {
-  pathMain="~/Dropbox/ForeignAid";
-  pathGraphics="~/Dropbox/ForeignAid/graphics";
-  pathData="~/Dropbox/ForeignAid/data";
-  pathCode="~/Documents/Papers/ForeignAid/RCode";
-  pathFunctions="~/Documents/Methods/R Functions"
-  pathResults = '~/Dropbox/ForeignAid/Results'}
+  pathMain="~/Dropbox/Documents/Papers/ForeignAid";
+  pathGraphics="~/Dropbox/Documents/Papers/ForeignAid/graphics";
+  pathData="~/Dropbox/Documents/Papers/ForeignAid/data";
+  pathCode="~/Dropbox/Documents/Papers/ForeignAid1/RCode";
+  pathFunctions="~/Dropbox/Documents/Methods/R Functions"
+  pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'}
 
 # Loading libraries and functions
 toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 
