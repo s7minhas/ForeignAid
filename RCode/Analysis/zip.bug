@@ -1,7 +1,5 @@
 
-
-# zeros trick in JAGS:  https://hypergeometric.wordpress.com/2014/02/17/the-zero-crossings-trick-for-jags-finding-roots-stochastically/
-data{ for ( i in 1:N){
+data{ for (i in 1:N){
 	z[i] <- 0
 }
 }
@@ -25,7 +23,6 @@ model {for (i in 1:N) {
 
 
 dev <- -2*sum(ll[])
-
 
 # priors
 	for (j in 1:8) {beta[j] ~ dnorm(0.0, 0.01)}

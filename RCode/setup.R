@@ -17,7 +17,7 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'}
 
 # Loading libraries and functions
-toLoad=c('foreign', 'cshapes', 'countrycode', 'reshape', 
+toLoad=c('runjags', 'snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
 	'igraph', 'bipartite', 'lme4', 'MASS', 'grid')
 for(lib in toLoad){
@@ -403,4 +403,36 @@ combS <- function (x, m, FUN = NULL, simplify = TRUE, ...)
     else out
   }
 
+
+#######################
+
+#######################
+# fns for extracting data from mcmc chains
+
+extractFromCoda <- function(coda,vname){
+  dnames <- dimnames(coda[[1]])[[2]]
+  theString <- paste("^",vname,sep="")
+  cat(paste("searching for",theString,"in MCMC output\n"))
+  theOnes <- grep(theString,
+                  dnames)
+  cat(paste("found",length(theOnes),"matching columns\n"))
+  as.matrix(coda[[1]][,theOnes])
+}
+
+extractFromCodaNChains<-function(coda,vname){
+  dnames <- dimnames(coda[[1]])[[2]]
+  theString <- paste("^",vname,sep="")
+  cat(paste("searching for",theString,"in MCMC output\n"))
+  theOnes <- grep(theString,
+                  dnames)
+  cat(paste("found",length(theOnes),"matching columns\n"))
+  do.call(cbind, lapply(coda, function(x){
+  	return(x[, theOnes])
+  	}))
+
+
+}
+
+extractCI <- function(x)c(mean(x),
+                       quantile(x,c(.025,.975)))
 
