@@ -5,9 +5,13 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 # Load DV
 setwd(pathData)
 load('aidDataQwids.rda'); rm(list=c('aidMats'))
-## Log aid flows
-aidData$logAid=log(aidData$commitUSD13 - c(min(aidData$commitUSD13)-1))
 
+aidData[which(aidData$commitUSD13<0),] = 0 
+
+## Log aid flows
+aidData$logAid=log(aidData$commitUSD13 +1)
+ 
+ 
 ################################################################
 
 ################################################################
@@ -142,6 +146,8 @@ idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 	'cnameS', 'ccodeS', 'cnameR', 'ccodeR')
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
 lagVars=regVars[-which(regVars %in% c('colony'))]
+
+
 
 # vars and data  to use in imputation
 set.seed(6886)
