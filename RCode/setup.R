@@ -17,9 +17,9 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
   pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'}
 
 # Loading libraries and functions
-toLoad=c('runjags', 'snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
+toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
-	'igraph', 'bipartite', 'lme4', 'MASS', 'grid')
+	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid','runjags')
 for(lib in toLoad){
   if(!(lib %in% installed.packages()[,1])){ 
   	install.packages(lib, repos='http://cran.rstudio.com/') }

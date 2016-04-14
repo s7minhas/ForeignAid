@@ -52,12 +52,17 @@ modForm=formula(paste0(
 	# '+ factor(id) - 1')) # Dyad fixed effects
 	# '+ factor(id) + factor(year) - 1')) # Dyad + year fixed effects
 	# '+ (1|ccodeS) + (1|year)'))	# Sender + year random effects
+	'+ (1|ccodeS) + (1|ccodeR)'))	# Sender + receiver random effects	
 	# '+ (1|id)')) # Dyadic fixed effects
-	'+ (1|id) + (1|year)')) # Dyad + year random effects
+	# '+ (1|id) + (1|year)')) # Dyad + year random effects
 	# '+ (1|year/ccodeS)'))	# Senders nested within years
 
 # mod=lm(modForm, data=regData) # fixed effects estimation
-mod=lmer(modForm, data=regData) # random effects estimation
+# mod=lmer(modForm, data=regData) # random effects estimation
+
+modNB = glmer.nb(modForm, data=regData) # neg binom
+modPois = glmmadmb(modForm, data=regData, zeroInflation=FALSE, family='poisson') # poisson
+modZIP = glmmadmb(modForm, data=regData, zeroInflation=TRUE, family='poisson') # zero infl poisson
 
 # Model results
 summary(mod)$coefficients[1:(length(vars)+1),]
