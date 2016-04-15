@@ -4,16 +4,18 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 ################################################################
 setwd(paste0(pathData, '/AidData'))
 aidData = read.csv('qwidsOECD.csv', skip = 2, stringsAsFactors = F)
+ 
+
 aidData = reshape(	aidData[, -which(names(aidData) %in% c('X.2', 'Time.Period'))],
-					varying = paste('X', 1966:2014, sep = ''),
+					varying = paste('X', 1960:2014, sep = ''),
 					v.names = 'commitUSD13',
 					timevar = 'year',
-					times = 1966:2014,
+					times = 1960:2014,
 					direction = 'long')
 aidData$commitUSD13 = as.numeric(gsub('\\.\\.', 0, aidData$commitUSD13))
 names(aidData)[1:2] = c('Sender', 'Receiver')
 
-aidData =  aidData[-grep('Donor|DAC Countries, Total', aidData$Sender),
+aidData =  aidData[-grep('Donor', aidData$Sender),
 						-which(names(aidData) == 'id')]
 aidData =  aidData[-grep('<', aidData$Sender, fixed = T),]
 aidData =  aidData[-grep('{', aidData$Sender, fixed = T),]
@@ -49,8 +51,10 @@ aidData=merge(aidData,receivers,by.x='Receiver',by.y='cntry',all.x=T)
 # Dealing with NAs
 aidData=aidData[which(!is.na(aidData$cnameR)),] # gets rid of region/group recipients
 aidData=aidData[which(!is.na(aidData$ccodeR)),] # gets rid of small countries
+aidData=aidData[which(!is.na(aidData$cnameS)),] # gets rid of IGO sending cases
+aidData=aidData[which(!is.na(aidData$cnameR)),] # gets rid of region/group recipients
 
-
+  
 ################################################################
 
 ################################################################
@@ -72,6 +76,7 @@ aidData = aidData[which(!aidData$cnameR %in% oecd),]
 # Limit to set number of donors and receivers
 dCntries = unique(aidData$cnameS)
 rCntries = unique(aidData$cnameR)
+ 
 
 ################################################################
 

@@ -22,6 +22,10 @@ agg=summaryBy(tmp ~ ccodeS,
 toKeep=agg[which(agg$tmp>=7),1]
 regData = regData[which(regData$ccodeS %in% toKeep),]
 
+names(regData)
+hist(exp(regData$logAid))
+
+ls()
 
 ################################################################
 

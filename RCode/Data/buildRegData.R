@@ -6,11 +6,10 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 setwd(pathData)
 load('aidDataQwids.rda'); rm(list=c('aidMats'))
 
-aidData[which(aidData$commitUSD13<0),] = 0 
+aidData$commitUSD13[which(aidData$commitUSD13<0)] = 0 
 
 ## Log aid flows
-aidData$logAid=log(aidData$commitUSD13 +1)
- 
+# aidData$logAid=log(aidData$commitUSD13 +1)
  
 ################################################################
 
@@ -27,6 +26,7 @@ milData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
 ## Get monadic covariates from BuildCovarData.R
 setwd(pathData)
 load('covData.rda')
+
 
 ### Insert zeros for NA in civwar variable
 covData$civwar[is.na(covData$civwar)]=0
@@ -46,7 +46,10 @@ vars=c(
 	'lnGdpCap', # Macroecon controls
 	'lifeExpect', 'no_disasters', # Humanitarian
 	'civwar' )
-covData=covData[,c('ccode','cname', 'year', vars)]
+	names(covData)
+covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
+ 
+ 
 ################################################################
 
 ################################################################
@@ -88,7 +91,7 @@ milData$id=paste0(milData$ccode1, 9999, milData$ccode2)
 milData$idYr=paste0(milData$ccode1, 9999, milData$ccode2, milData$year)
 names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
 
-covData$cyear=paste0(covData$ccode, covData$year)
+
 ################################################################
 
 # ################################################################
@@ -112,16 +115,19 @@ covData$cyear=paste0(covData$ccode, covData$year)
 stratData=lagData(stratData, 'idYr', 'id', names(stratData)[4:6])
 milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
 covData=lagData(covData, 'cyear', 'ccode', vars)
-
+ 
 # Subset datasets by time
 aidData = aidData[aidData$year>1974 & aidData$year<=2005,]
 stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
 milData = milData[milData$year>1974 & milData$year<=2005,]
 covData = covData[covData$year>1974 & covData$year<=2005,]
 
+
+names(covData)
 # Merge datasets
-regData=aidData[,which(!names(aidData) %in% 'commitUSD13')]
+regData=aidData 
 dim(regData)
+ 
 # Add strategic variable to regData
 regData=merge(regData, stratData[,c(8,9)], by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
@@ -129,15 +135,18 @@ unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 regData=merge(regData, milData[,c(8,9)], by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add receiver level covariates
-regData=merge(regData, covData[,c(9:14)], by.x='cyearR', by.y='cyear', all.x=TRUE, all.y=FALSE)
+regData=merge(regData, covData[,c(1, 10:14)], by.x='cyearR', by.y='cyear', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add sender level covariates
 names(covData)=paste0('S',names(covData))
-regData=merge(regData, covData[,c(9:14)], by.x='cyearS', by.y='Scyear', all.x=TRUE, all.y=FALSE)
+regData=merge(regData, covData[,c(1, 10:14)], by.x='cyearS', by.y='Scyear', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add colony variable
 regData$colony=0
 regData$colony[which(regData$id %in% colony$id)]=1
+
+
+summary(regData)
 ################################################################
 
 ################################################################
@@ -147,14 +156,32 @@ idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
 lagVars=regVars[-which(regVars %in% c('colony'))]
 
-
-
+lagVars=regVars[grep('SL|L', regVars)]
+ 
 # vars and data  to use in imputation
 set.seed(6886)
 ameliaRegData=amelia(x=regData, m=5, cs='id', ts='year', 
 	lags=lagVars, idvars=idVars, polytime=1)
 
-summary(ameliaRegData$imp$imp1)
+# copula 
+names(regData)
+ 
+impData=regData[,-which(names(regData)%in% c('idYr', 'cnameS', 'cnameR', 'Receiver', 'Sender', 'id'))]
+names(impData)
+
+library(sbgcop) 
+
+# copula imputation
+imp = sbgcop.mcmc(impData, nsamp=1000, verb=TRUE, seed=1000)
+
+IData=imp$Y.pmean
+
+summary(IData)
+setwd(pathData)
+pathData
+save(IData, file = "IData.rda")
+
+
 ################################################################
 
 ################################################################
