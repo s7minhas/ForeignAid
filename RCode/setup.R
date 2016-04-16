@@ -19,6 +19,7 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 # Loading libraries and functions
 toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
+  'foreach', 'doParallel',
 	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid','runjags')
 if( Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m" ){ toLoad = toLoad[-which(toLoad=='runjags')] }
 for(lib in toLoad){
@@ -56,6 +57,8 @@ substrRight = function(x, n){
 num = function(x){ as.numeric(as.character(x)) }
 
 char = function(x){as.character(x)}
+
+pasteVec = function(x,y){ as.vector(outer(x,y,paste0)) }
 ################################################################
 
 ################################################################

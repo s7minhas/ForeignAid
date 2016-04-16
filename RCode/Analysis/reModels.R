@@ -4,8 +4,9 @@ pathGraphics = '~/Research/ForeignAid/Presentations/Graphics/'
 ################################################################
 # Load reg data
 setwd(pathData)
-load('regData.rda')
-regData = ameliaRegData$imp$imp3
+load('IData.rda')
+# regData = ameliaRegData$imp$imp3
+regData = data.frame(IData)
 
 # Adjust covariates
 regData$LmilMu = regData$LmilMu + abs(regData$LmilMu)
@@ -46,8 +47,9 @@ vars=c(
 
 ## Run model on full sample
 ### Results consistent across various specifications
+regData$ccodeS = factor(regData$ccodeS) ; regData$ccodeR = factor(regData$ccodeR)
 modForm=formula(paste0(
-	'logAid ~ ', paste(vars, collapse=' + '), 
+	'commitUSD13 ~ ', paste(vars, collapse=' + '), 
 	# '+ factor(year) + factor(ccodeS) -1')) # Sender + year fixed effects
 	# '+ factor(id) - 1')) # Dyad fixed effects
 	# '+ factor(id) + factor(year) - 1')) # Dyad + year fixed effects
@@ -60,26 +62,16 @@ modForm=formula(paste0(
 # mod=lm(modForm, data=regData) # fixed effects estimation
 # mod=lmer(modForm, data=regData) # random effects estimation
 
-# Various models
-## Gaussian
-regData$ccodeS = factor(regData$ccodeS) ; regData$ccodeR = factor(regData$ccodeR)
-modNorm = glmmadmb(modForm, data=regData, zeroInflation=FALSE, family='gaussian') # normal
-modNormZ = glmmadmb(modForm, data=regData, zeroInflation=TRUE, family='gaussian') # zero infl normal
-
-## Gamma
-modGamma = glmmadmb(modForm, data=regData, zeroInflation=FALSE, family='gamma') # gamma
-modGammaZ = glmmadmb(modForm, data=regData, zeroInflation=TRUE, family='gamma') # zero infl gamma
-
-## neg-binom
-modNegBinom = glmmadmb(modForm, data=regData, zeroInflation=FALSE, family='nbinom') # neg-binom
-modNegBinomZ = glmmadmb(modForm, data=regData, zeroInflation=TRUE, family='nbinom') # zero infl neg-binom
-
-## Poisson
-modPois = glmmadmb(modForm, data=regData, zeroInflation=FALSE, family='poisson') # poisson
-modPoisZ = glmmadmb(modForm, data=regData, zeroInflation=TRUE, family='poisson') # zero infl poisson
-
-save(modNorm, modNormZ, modGamma, modGammaZ, modNegBinom, modNegBinomZ,
-	file=paste0(pathResults, '/modExploration.rda'))
+# Various models in parallel
+ziLog = rep(c('FALSE','TRUE'),4)
+fam = rep(c('gaussian','gamma','nbinom','poisson'), each=2)
+cl=makeCluster(8)
+registerDoParallel(cl)
+mods = foreach(ii=1:length(fam), .packages=c('glmmADMB')) %dopar% {
+	m=glmmadmb(modForm, data=regData, zeroInflation=ziLog[ii], family=fam[ii], extra.args="-ndi 100000")
+	return(m) }
+names(mods) = sapply(c('gaussian','gamma','nbinom','poisson'), function(x){ paste0(x,c('','_zi')) }) %>% as.vector()
+save(mods, file=paste0(pathResults, '/modExploration.rda'))
 
 # # Model results
 # summary(mod)$coefficients[1:(length(vars)+1),]
