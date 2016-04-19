@@ -29,7 +29,7 @@ if (Sys.info()['user'] == 'cindy'){
 
 # load packages
 # library(dplyr)
-source(paste0(pathCode, "/Analysis/dilsTweak.R"))
+source(paste0(pathCode, "/dilsTweak.R"))
 
 # load data
 setwd(paste0(pathResults, "/gbmeLatDist"))
