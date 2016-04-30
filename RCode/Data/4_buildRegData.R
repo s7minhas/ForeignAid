@@ -7,10 +7,6 @@ setwd(pathData)
 load('aidDataQwids.rda'); rm(list=c('aidMats'))
 
 aidData$commitUSD13[which(aidData$commitUSD13<0)] = 0 
-
-## Log aid flows
-# aidData$logAid=log(aidData$commitUSD13 +1)
- 
 ################################################################
 
 ################################################################
@@ -26,7 +22,6 @@ milData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
 ## Get monadic covariates from BuildCovarData.R
 setwd(pathData)
 load('covData.rda')
-
 
 ### Insert zeros for NA in civwar variable
 covData$civwar[is.na(covData$civwar)]=0
@@ -48,8 +43,6 @@ vars=c(
 	'civwar' )
 	names(covData)
 covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
- 
- 
 ################################################################
 
 ################################################################
@@ -74,7 +67,6 @@ colony$cname[which(colony$Name == "Republic of Vietnam (South)")] = 'S. VIETNAM'
  
 colony$ccodeCol=panel$ccode[match(colony$cname,panel$cname)]
 colony$ccodeRuler=panel$ccode[match(cname(colony$ColRulerName),panel$cname)]
-colony = colony[-which(is.na(colony$ccodeRuler)),] # gets rid of Austria-Hungary
 colony$id = num(paste0( colony$ccodeRuler, 9999, colony$ccodeCol ))
 
 # Create id vectors
@@ -90,25 +82,7 @@ names(stratData)[4:6]=paste0('strat',c('Mu','Up','Lo'))
 milData$id=paste0(milData$ccode1, 9999, milData$ccode2)
 milData$idYr=paste0(milData$ccode1, 9999, milData$ccode2, milData$year)
 names(milData)[4:6]=paste0('mil',c('Mu','Up','Lo'))
-
-
 ################################################################
-
-# ################################################################
-# # Spatially weighted strategic variable
-# stratMat=DyadBuild( variable='stratMu', dyadData=stratData,
-#     cntry1='ccode1', cntry2 = 'ccode2',  time='year',
-#     pd=1970:2005, panel=panel, directed=TRUE )
-
-# # the idea
-# # say that we have countries i, j, and k. 
-# # i and j are close to each other in strategic space, and j has in the past given aid to k
-# # does i as a result more likely to give aid to k as well.
-
-# milData=DyadBuild( variable='milMu', dyadData=milData,
-#     cntry1='ccode1', cntry2 = 'ccode2',  time='year',
-#     pd=1970:2005, panel=panel, directed=TRUE )
-# ################################################################
 
 ################################################################
 # Create lagged variables, subset by time (>1974 & <2005), and merge
@@ -122,12 +96,9 @@ stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
 milData = milData[milData$year>1974 & milData$year<=2005,]
 covData = covData[covData$year>1974 & covData$year<=2005,]
 
-
-names(covData)
 # Merge datasets
 regData=aidData 
 dim(regData)
- 
 # Add strategic variable to regData
 regData=merge(regData, stratData[,c(8,9)], by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
@@ -145,8 +116,34 @@ unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 regData$colony=0
 regData$colony[which(regData$id %in% colony$id)]=1
 
+# Add alliance binary
+setwd(pathData)
+load('stratInterestMatrics.rda')
+allyData = melt(allyWtMats) ; names(allyData) = c('ccode1', 'ccode2', 'LallyWt', 'year')
+allyData$year = num(allyData$year) + 1 # equiv to lag
+allyData$id = paste0(allyData$ccode1, 9999, allyData$ccode2)
+allyData$idYr = num( paste0(allyData$ccode1, 9999, allyData$ccode2, allyData$year) )
+allyData = allyData[allyData$year>=1975 & allyData$year<=2005,]
+regData$LallyWt = allyData$LallyWt[match(regData$idYr, allyData$idYr)]
+regData$LallyWt[is.na(regData$LallyWt)] = 0
 
-summary(regData)
+# Add igo count
+igoData = melt(igoMats) ; names(igoData) = c('ccode1', 'ccode2', 'Ligo', 'year')
+igoData$year = num(igoData$year) + 1 # equiv to lag
+igoData$id = paste0(igoData$ccode1, 9999, igoData$ccode2)
+igoData$idYr = num( paste0(igoData$ccode1, 9999, igoData$ccode2, igoData$year) )
+igoData = igoData[igoData$year>=1975 & igoData$year<=2005,]
+regData$Ligo = igoData$Ligo[match(regData$idYr, igoData$idYr)]
+regData$Ligo[is.na(regData$Ligo)] = 0
+
+# Add un ideal point score
+unData = melt(unMats) ; names(unData) = c('ccode1', 'ccode2', 'LunIdPt', 'year')
+unData$year = num(unData$year) + 1
+unData$id = paste0(unData$ccode1, 9999, unData$ccode2)
+unData$idYr = num( paste0(unData$ccode1, 9999, unData$ccode2, unData$year) )
+unData = unData[unData$year>=1975 & unData$year<=2005,]
+regData$LunIdPt = unData$LunIdPt[match(regData$idYr, unData$idYr)]
+regData$LunIdPt[is.na(regData$LunIdPt)] = 0
 ################################################################
 
 ################################################################
@@ -155,37 +152,67 @@ idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 	'cnameS', 'ccodeS', 'cnameR', 'ccodeR')
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
 lagVars=regVars[-which(regVars %in% c('colony'))]
-
 lagVars=regVars[grep('SL|L', regVars)]
  
-# vars and data  to use in imputation
-set.seed(6886)
-ameliaRegData=amelia(x=regData, m=5, cs='id', ts='year', 
-	lags=lagVars, idvars=idVars, polytime=1)
-
 # copula 
-names(regData)
- 
 impData=regData[,-which(names(regData)%in% c('idYr', 'cnameS', 'cnameR', 'Receiver', 'Sender', 'id'))]
-names(impData)
+
+# Divide up data into monadic and dyadic
+ids = names(impData)[c(1:3,5:6)]
+nodeVars = c( 'Lpolity2', 'LlnGdpCap', 'LlifeExpect', 'Lno_disasters', 'Lcivwar', 
+	'SLpolity2', 'SLlnGdpCap', 'SLlifeExpect', 'SLno_disasters', 'SLcivwar' )
+dyadVars = c( 'commitUSD13', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
+nodeData = unique(impData[,c(ids,nodeVars)])
+senVars = c(ids[c(1,3:4)], nodeVars[6:10])
+recVars = c(ids[c(2,3,5)], nodeVars[1:5])
+library(abind)
+tmp = abind(
+	nodeData[,senVars],
+	nodeData[,recVars],
+	along=1
+	)
+nodeData = unique(tmp)
+dyadData = impData[,c(ids,dyadVars)]
 
 library(sbgcop) 
+source(paste0(pathCode, '/Data/sbgcop_l2.R'))
+imp = sbgcop.mcmc_l2(Y=nodeData[,-1], Y_l2=dyadData[,-c(1:2)], nsamp=5000, seed=6886)
 
-# copula imputation
-imp = sbgcop.mcmc(impData, nsamp=1000, verb=TRUE, seed=1000)
+# Eval convergence of nodal imputation model
+sbgCor = melt(imp$'C.psamp')
+sbgCor = sbgCor[sbgCor$X1 != sbgCor$X2,]
+sbgCor$v12 = paste0(sbgCor$X1, sbgCor$X2)
+tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) + geom_line() + facet_wrap(~X1, scales='free_y') + xlab('') + ylab('')
+tmp=tmp + theme(axis.ticks=element_blank(), panel.border=element_blank(), legend.title=element_blank(), legend.position='bottom')
+ggsave(tmp, file=paste0(pathGraphics, '/nodalImputationConvergenceSBGCOP.pdf'))
 
-IData=imp$Y.pmean
+sbgCor = melt(imp$'C.psamp_l2')
+sbgCor = sbgCor[sbgCor$X1 != sbgCor$X2,]
+sbgCor$v12 = paste0(sbgCor$X1, sbgCor$X2)
+tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) + geom_line() + facet_wrap(~X1, scales='free_y') + xlab('') + ylab('')
+tmp=tmp + theme(axis.ticks=element_blank(), panel.border=element_blank(), legend.title=element_blank(), legend.position='bottom')
+ggsave(tmp, file=paste0(pathGraphics, '/fullImputationConvergenceSBGCOP.pdf'))
 
-summary(IData)
+# Sample 5 from posterior
+impPost = imp$'Y.impute_l2'[,,sample(800:1000, 5)]
+
+# Cleanup
+iData = lapply(1:dim(impPost)[3], function(ii){
+	# Pull out slice and convert to df	
+	x = impPost[,,ii]
+	x = data.frame( x )
+
+	# Adjust covariates
+	x$LmilMu = x$LmilMu + abs(x$LmilMu)
+
+	# Grouping factors for hierarchical framework
+	x$year = factor(x$year, levels=sort(unique(x$year)))
+	x$ccodeS = factor(x$ccodeS)
+	x$ccodeR = factor(x$ccodeR)
+	return(x)
+	})
+
 setwd(pathData)
-pathData
-save(IData, file = "IData.rda")
-
-
-################################################################
-
-################################################################
-# Save
-setwd(pathData)
-save(regData, ameliaRegData, file='regData.rda')
+save(iData, file = "iData.rda")
+save(imp, file='sbgOutput_nodalDyadicImputation.rda')
 ################################################################
