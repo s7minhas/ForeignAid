@@ -20,8 +20,7 @@ Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
 toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
   'foreach', 'doParallel',
-	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid','runjags')
-if( Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m" ){ toLoad = toLoad[-which(toLoad=='runjags')] }
+	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid')
 for(lib in toLoad){
   if(!(lib %in% installed.packages()[,1])){ 
   	install.packages(lib, repos='http://cran.rstudio.com/') }
