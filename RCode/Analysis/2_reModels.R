@@ -24,7 +24,7 @@ genModelForm = function(var){
 	formula(
 		paste0( 
 			'commitUSD13 ~ ',  # DV
-			var, # add key var
+			var, ' + ', # add key var
 			paste(cntrlVars, collapse=' + '), # add control vars
 			'+ (1|ccodeS) + (1|ccodeR)') # random sender and receiver effects
 		)
