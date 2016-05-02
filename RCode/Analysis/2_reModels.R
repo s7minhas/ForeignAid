@@ -43,12 +43,12 @@ runModelParallel = function(cores=5, dataList, trainLogic, trainEnd=2002, modTyp
 	modForm=genModelForm(keyRegVar)
 	modName = genFileName(trainLogic, modType, zeroInfLogic, keyRegVar)
 	print(paste0('Running model: ', Reduce(paste, deparse(modForm))))
-	print(paste0('Sainvg to: ', modName))
+	print(paste0('Saving to: ', modName))
 	cl=makeCluster(cores) ; registerDoParallel(cl)
 	mods = foreach(ii=1:length(dataList), .packages=c('glmmADMB')) %dopar% {
 		regData = dataList[[ii]] # Subset to relevant data
 		if(trainLogic){regData$year=num(regData$year); regData=regData[regData$year<trainEnd,] ; regData$year=factor(regData$year, levels=sort(unique(regData$year))) }	
-		m=glmmadmb(modForm, data=regData, zeroInflation=zeroInfLogic, family=modType, extra.args="-ndi 100000") # Run
+		m=glmmadmb(modForm, data=regData, zeroInflation=zeroInfLogic, family=modType, extra.args="-ndi 90000") # Run
 	} ; stopCluster(cl)
 	save(mods, file=paste0(pathResults, '/', modName)) # Save output	
 }
