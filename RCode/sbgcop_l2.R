@@ -122,15 +122,15 @@ sbgcop.mcmc_l2 <- function (
                 plugin.marginal_l2 = (apply(Y_l2, 2, function(x) { length(unique(x)) }) > plugin.threshold)                    
                 ok_S0_l2 <- all(eigen(S0_l2)$val > 0) & dim(S0_l2)[1] == dim(Y_l2)[2] & dim(S0_l2)[2] == dim(Y_l2)[2]
                 ok_n0_l2 <- (n0_l2 >= 0)
-                if (!ok_S0_l2) { cat("Error: S0 must be a positive definite p x p matrix in Level 2 \n") }
-                if (!ok_n0_l2) { cat("Error: n0 must be positive in Level 2 \n") }
+                if (!ok_S0_l2) { cat("Error: S0_l2 must be a positive definite p x p matrix in Level 2 \n") }
+                if (!ok_n0_l2) { cat("Error: n0_l2 must be positive in Level 2 \n") }
                 vnames_l2 <- colnames(Y_l2)
                 colnames(Y_l2) <- vnames_l2
                 n_l2 <- dim(Y_l2)[1]
                 p_l2 <- dim(Y_l2)[2]
                 set.seed(seed)
                 R_l2 <- NULL 
-                for (j in 1:p) { R_l2 <- cbind(R_l2, match(Y_l2[, j], sort(unique(Y_l2[, j])))) }
+                for (j in 1:p_l2) { R_l2 <- cbind(R_l2, match(Y_l2[, j], sort(unique(Y_l2[, j])))) }
                 Rlevels_l2 <- apply(R_l2, 2, max, na.rm = TRUE)
                 Ranks_l2 <- apply(Y_l2, 2, rank, ties.method = "max", na.last = "keep")
                 N_l2 <- apply(!is.na(Ranks_l2), 2, sum)
@@ -148,7 +148,7 @@ sbgcop.mcmc_l2 <- function (
         # Begin imputation process for level 2 data + imputed level 1 data
 
         # Run through variables
-        for (j in sample(1:p)) {
+        for (j in sample(1:p_l2)) {
             Sjc_l2 <- S_l2[j, -j] %*% solve(S_l2[-j, -j])
             sdj_l2 <- sqrt(S_l2[j, j] - S_l2[j, -j] %*% solve(S_l2[-j, -j]) %*% S_l2[-j, j])
             muj_l2 <- Z_l2[, -j] %*% t(Sjc_l2)

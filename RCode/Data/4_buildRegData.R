@@ -175,7 +175,7 @@ nodeData = unique(tmp)
 dyadData = impData[,c(ids,dyadVars)]
 
 library(sbgcop) 
-source(paste0(pathCode, '/Data/sbgcop_l2.R'))
+source(paste0(pathCode, '/sbgcop_l2.R'))
 imp = sbgcop.mcmc_l2(Y=nodeData[,-1], Y_l2=dyadData[,-c(1:2)], nsamp=5000, seed=6886)
 
 # Eval convergence of nodal imputation model
