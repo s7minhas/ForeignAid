@@ -144,6 +144,9 @@ unData$idYr = num( paste0(unData$ccode1, 9999, unData$ccode2, unData$year) )
 unData = unData[unData$year>=1975 & unData$year<=2005,]
 regData$LunIdPt = unData$LunIdPt[match(regData$idYr, unData$idYr)]
 regData$LunIdPt[is.na(regData$LunIdPt)] = 0
+
+# Save pre imputation
+save(regData, file=paste0(pathData, '/noImputationData.rda'))
 ################################################################
 
 ################################################################
