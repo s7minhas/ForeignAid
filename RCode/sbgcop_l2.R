@@ -96,7 +96,16 @@ sbgcop.mcmc_l2 <- function (
         
         # Drop Y_l2 i/j vars from ns-1 imputation so they can
         ## be replaced by i/j vars from ns imputation
-        if(ns>1){ Y_l2 = Y_l2[,-which(colnames(Y_l2) %in% c(paste0('S',vars), vars))] }
+
+        if(ns==1){print(colnames(Y_l2))
+            print(head(Y_l2))}
+        if(ns>1){
+            print (paste(c('****************', 'nsamp is', ns), collasep = ' '))
+            head(Y_l2)
+           # print(paste(c("old column names"), paste(colnames(Y_l2), collapse = ' '), sep = ' '))
+                  Y_l2 = Y_l2[,-which(colnames(Y_l2) %in% c(paste0('S',vars), vars))] 
+            print(head(Y_l2))}
+            #print(paste("new column names", paste(colnames(Y_l2), collapse = ' '), sep = ' '))}
         
         # Resume merge
         fData = data.frame( Y_l2 , row.names=NULL )
