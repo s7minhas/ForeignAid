@@ -1,15 +1,26 @@
 ################################################################
 
 ################################################################
-# validate models
-# http://stackoverflow.com/questions/20428742/select-first-element-of-nested-list-in-r
-
+# validate k-fold models
 
 # Load model results
 toLoad=list.files(pathResults)[grepl('10-Fold', list.files(pathResults))]
 for(out in toLoad){ load(paste0(pathResults, '/', out)) ; assign(gsub('.rda','',out), mods) ; rm(list='mods') }
 
- 
+# Load imputed data
+setwd(pathData)
+load('iData.rda')
+# Add dyad random effect
+iData = lapply(iData, function(x){
+  # add dyadic id
+  x$id = paste(x$ccodeS, x$ccodeR, sep='_')
+  x$id = factor(x$id)
+  # log aid flow
+  x$commitUSD13 = log(x$commitUSD13 + 1)
+  return(x)
+})
+
+# load unimputed data
 load(paste0(pathData, '/noImputationData.rda'))
 regData$commitUSD13 = log(regData$commitUSD13 + 1)
 xOut = regData[,c('commitUSD13', 
@@ -18,101 +29,35 @@ xOut = regData[,c('commitUSD13',
   'ccodeS', 'cnameS', 'ccodeR', 'cnameR','year'
   )] 
 xOut$id = paste(xOut$ccodeS, xOut$ccodeR, sep='_')
-xOut$id = factor(xOut$id)
-xOut$ccodeS = factor(xOut$ccodeS)
-xOut$year = factor(xOut$year)
-# check to make sure unimputed and imputed data are in the same order
+xOut$id = factor(xOut$id); xOut$ccodeS = factor(xOut$ccodeS); xOut$year = factor(xOut$year); xOut$ccodeR = factor(xOut$ccodeR)
+
+ # check to make sure unimputed and imputed data are in the same order
 # which(xOut$id != iData[[1]]$id)
  
 
+############################################################
 
-################################################################
-## lm models 
+############################################################
 
-# Meld parameter estimates from each and calc out of sample perf
-rubinCoefList = function(mod, k){ # k for k-fold
+# create tests set for imputed datasets or non-imputed datasets
+PartitionList = function(dataList, k, modPartitionLevel){
 
-modCoefList = lapply(1:k, function(x){
- lapply(lapply(mod, '[[', x), function(x){
-    beta = fixef(x)
-    se = sqrt(diag(vcov(x)))
-    return( cbind(beta, se) )
-  })%>% do.call('rbind',.) 
-  }) 
-
-  modSummList = lapply(modCoefList, function(x){
-    modSumm = mi.meld(q=matrix(x[,1],ncol=length(unique(rownames(x))), byrow=TRUE), 
-    se=matrix(x[,2],ncol=length(unique(rownames(x))), byrow=TRUE), 
-    byrow=TRUE) %>% lapply(., t) %>% do.call('cbind',.) %>% data.frame(.)
-    names(modSumm) = c('beta', 'se')
-    modSumm$t = modSumm$beta/modSumm$se
-    modSumm$var = unique(rownames(x))
-    return(modSumm)
-})
-
- return(modSummList)
-}
-
+  if (class(dataList) == 'list'){
+     m = length(dataList)}
  
-xPartitionList = function(data, k, modPartitionLevel){
-  data$Partition = as.numeric(as.character(data[, modPartitionLevel]))
-  partitions = sort(levels(data[, modPartitionLevel]))
-        
-  # randomly shuffle partition levels
-  set.seed(2) # make sure this is the same seed as in runModelParallel()
-  partitions = partitions[sample(length(partitions))]
+  else if (class(dataList) == 'data.frame'){
+     m = 1}
 
- folds = cut(seq(1, length(partitions)), breaks = 10, labels = F)
-           
- # partition data by k-folds
-  xSliceList = foreach(K = 1:k) %do%{
-    partitionIndex = which(folds == K)
-    xSlice = data[data$Partition %in% partitions[partitionIndex],] %>% na.omit
-    return(xSlice)
-  }
+  pList = lapply(1:m, function(x){
 
-  return(xSliceList)
+    if (class(dataList) == 'list'){
+    data = dataList[[x]]}
 
-}
+    else if (class(dataList) == 'data.frame'){
+      data = dataList}
 
-getRMSE = function( coef, data){
-  pred = t(coef$beta %*% t(cbind(1, data[,coef$var[-1]])))
-  c(pred - data$commitUSD13)^2 %>% mean(.) %>% sqrt(.) 
-}
-
-getRMSE_KFold = function(rcoefList, xList){
- mapply(getRMSE, coef = rcoefList, data = xList)
-}
-
-
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LstratMu`, k = 10), xList =xPartitionList(xOut, 10, 'ccodeS' ) ))
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LstratMu`, k = 10), xList =xPartitionList(xOut, 10, 'year' ) ))
-
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LallyWt`, k = 10), xList =xPartitionList(xOut, 10, 'ccodeS' ) ))
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LallyWt`, k = 10), xList =xPartitionList(xOut, 10, 'year' ) ))
-
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_Ligo`, k = 10), xList =xPartitionList(xOut, 10, 'ccodeS' ) ))
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_Ligo`, k = 10), xList =xPartitionList(xOut, 10, 'year' ) ))
-
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LunIdPt`, k = 10), xList =xPartitionList(xOut, 10, 'ccodeS' ) ))
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LunIdPt`, k = 10), xList =xPartitionList(xOut, 10, 'year' ) ))
-
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, k = 10), xList =xPartitionList(xOut, 10, 'ccodeS' ) ))
-mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, k = 10), xList =xPartitionList(xOut, 10, 'year' ) ))
-  
-
-################################################################
-## random effects models
-
-
-# create tests set for each imputed dataset
-iPartitionList = function(idataList, k, modPartitionLevel){
-  m = length(idataList)
-
-  iPartition = lapply(1:m, function(x){
-    idata = idataList[[x]]
-    idata$Partition =as.numeric(as.character(idata[, modPartitionLevel]))
-    partitions = sort(levels(idata[, modPartitionLevel]))
+    data$Partition =as.numeric(as.character(data[, modPartitionLevel]))
+    partitions = sort(levels(data[, modPartitionLevel]))
 
     # randomly shuffle partition levels
     set.seed(2) # make sure this is the same seed as in runModelParallel()
@@ -120,19 +65,23 @@ iPartitionList = function(idataList, k, modPartitionLevel){
 
     folds = cut(seq(1, length(partitions)), breaks = 10, labels = F)
       
-
      # partition data by k-folds
     iSliceList = foreach(K = 1:k) %do%{
     partitionIndex = which(folds == K)
-    iSlice = idata[idata$Partition %in% partitions[partitionIndex],] %>% na.omit
+    iSlice = data[data$Partition %in% partitions[partitionIndex],] %>% na.omit
     return(iSlice)
   }
 
   return(iSliceList)})
 
-return(iPartition)
-
+  if (class(dataList) == 'list'){
+    return(pList)}
+  
+  else if (class(dataList) == 'data.frame'){
+    return(unlist(pList, recursive=FALSE))
+  }
 }
+
 
 # get predicted values
 predictREList = function(k, modList, dataList){
@@ -149,10 +98,11 @@ predictREList = function(k, modList, dataList){
         return(p)})
       return(pFold) })
   return(pImpFold)}
+}
 
-} 
 
-# then calculate the RMSE for each imputation-fold
+
+# calculate the RMSE for each imputation-fold
 getRMSE_wRE_KFold = function(k, predREList, dataList) {
 
 # helper function
@@ -185,77 +135,229 @@ RmsePerImpPerFold = lapply(1:k, function(x){
 })
 
 return(RmsePerImpPerFold)
- 
 }
 
-######
-# partition imputed data into test sets by ccode
-iDataPartitionC = iPartitionList(iData, 10, 'ccodeS')
-iDataPartitionCR = iPartitionList(iData, 10, 'ccodeR')
-iDataPartitionY = iPartitionList(iData, 10, 'year')
-
-# strat
-(rmseStratCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LstratMu`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-mean(unlist(rmseStratCCode)); var(unlist(rmseStratCCode))
-
-(rmseStratCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LstratMu`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-mean(unlist(rmseStratCCodeR)); var(unlist(rmseStratCCodeR))
-
-(rmseStratYear = predictREList(10, `10-Fold_year_gaussian_re_LstratMu`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
-mean(unlist(rmseStratYear)); var(unlist(rmseStratYear))
-
-
-
-# ally
-(rmseAllyCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-mean(unlist(rmseAllyCCode)); var(unlist(rmseAllyCCode))
-
-(rmseAllyCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-mean(unlist(rmseAllyCCodeR)); var(unlist(rmseAllyCCodeR))
-
-
-(rmseAllyYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
-mean(unlist(rmseAllyYear)); var(unlist(rmseAllyYear))
-
-# igo
-(rmseIGOCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_Ligo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-mean(unlist(rmseIGOCCode)); var(unlist(rmseIGOCCode))
-
-(rmseIGOCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_Ligo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-mean(unlist(rmseIGOCCodeR)); var(unlist(rmseIGOCCodeR))
-
-(rmseIGOYear = predictREList(10, `10-Fold_year_gaussian_re_Ligo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
-mean(unlist(rmseIGOYear)); var(unlist(rmseIGOYear))
-
-# un
-(rmseUNCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LunIdPt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-mean(unlist(rmseUNCCode)); var(unlist(rmseUNCCode))
-
-(rmseUNCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LunIdPt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-mean(unlist(rmseUNCCodeR)); var(unlist(rmseUNCCodeR))
-
-(rmseUNYear = predictREList(10, `10-Fold_year_gaussian_re_LunIdPt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
-mean(unlist(rmseUNYear)); var(unlist(rmseUNYear))
-
-# all
-(rmseALLCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-mean(unlist(rmseALLCCode)); var(unlist(rmseALLCCode))
-
-(rmseALLCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-mean(unlist(rmseALLCCodeR)); var(unlist(rmseALLCCodeR))
-
-(rmseALLYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
-mean(unlist(rmseALLYear)); var(unlist(rmseALLYear))
-
-
-lapply(lapply(list(rmseStratCCode, rmseAllyCCode,   rmseIGOCCode,  rmseUNCCode ,rmseALLCCode), function(x){unlist(x)}), function(x){ m = mean(x); v =var(x); return(c(m, v))})
-lapply(lapply(list(rmseStratCCodeR, rmseAllyCCodeR, rmseIGOCCodeR,  rmseUNCCodeR,  rmseALLCCodeR), function(x){unlist(x)}), function(x){ m = mean(x); v =var(x); return(c(m, v))})
-lapply(lapply(list(rmseStratYear, rmseAllyYear, rmseIGOYear,   rmseUNYear, rmseALLYear), function(x){unlist(x)}), function(x){ m = mean(x); v =var(x); return(c(m, v))})
- 
- 
-
-
- 
 
 ################################################################
 
+#################################################################
+## evaluate performance using imputed data
+
+# partition imputed data into test sets by ccode
+iDataPartitionC = PartitionList(iData, 10, 'ccodeS')
+iDataPartitionCR = PartitionList(iData, 10, 'ccodeR')
+iDataPartitionY = PartitionList(iData, 10, 'year')
+
+
+# strat
+(rmseStratCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LstratMu`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
+(rmseStratCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LstratMu`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
+(rmseStratYear = predictREList(10, `10-Fold_year_gaussian_re_LstratMu`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+
+# ally
+(rmseAllyCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
+(rmseAllyCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
+(rmseAllyYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+ 
+# igo
+(rmseIGOCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_Ligo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
+(rmseIGOCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_Ligo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
+(rmseIGOYear = predictREList(10, `10-Fold_year_gaussian_re_Ligo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+ 
+# un
+(rmseUNCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LunIdPt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
+(rmseUNCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LunIdPt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
+(rmseUNYear = predictREList(10, `10-Fold_year_gaussian_re_LunIdPt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+ 
+# all
+(rmseALLCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
+(rmseALLCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
+(rmseALLYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+ 
+
+#### plot rmse by different ivs for ccodeS folds
+rmseCcode =  data.frame(rmse = unlist(lapply(list(Strat = rmseStratCCode, Ally = rmseAllyCCode,   IGO= rmseIGOCCode,  UN= rmseUNCCode ,'Ally + IGO + UN' = rmseALLCCode), function(x){unlist(x)})))
+rmseCcode$variable = gsub('\\d', '', rownames(rmseCcode))
+ 
+rmseCcodeSummary = summarySE(rmseCcode, measurevar = 'rmse', groupvars = c('variable'))
+rmseCcodeSummary$id = factor(rmseCcodeSummary$variable, levels = levels(factor(rmseCcodeSummary$variable))[c(4, 1,3,5, 2)])
+rmseCcodeSummary$variable = factor(rmseCcodeSummary$variable, levels = levels(factor(rmseCcodeSummary$variable))[c(4, 1,3,5, 2)])
+ 
+pdf(paste0(setwd(pathGraphics), '/rmsePlotCcodeS.pdf'))
+rC = ggplot(rmseCcodeSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rC + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+#### plot rmse by different ivs for ccodeR folds
+rmseCCodeR =  data.frame(rmse = unlist(lapply(list(Strat= rmseStratCCodeR, Ally = rmseAllyCCodeR,   IGO = rmseIGOCCodeR,  UN = rmseUNCCodeR ,'Ally + IGO + UN' = rmseALLCCodeR), function(x){unlist(x)})))
+rmseCCodeR$variable = gsub('\\d', '', rownames(rmseCCodeR))
+ 
+rmseCCodeRSummary = summarySE(rmseCCodeR, measurevar = 'rmse', groupvars = c('variable'))
+rmseCCodeRSummary$id = factor(rmseCCodeRSummary$variable, levels = levels(factor(rmseCCodeRSummary$variable))[c(4, 1,3,5, 2)])
+rmseCCodeRSummary$variable = factor(rmseCCodeRSummary$variable, levels = levels(factor(rmseCCodeRSummary$variable))[c(4, 1,3,5, 2)])
+ 
+pdf(paste0(setwd(pathGraphics), '/rmsePlotCcodeR.pdf'))
+rCR = ggplot(rmseCCodeRSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rCR + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+#### plot rmse by different ivs for year folds
+rmseYear =  data.frame(rmse = unlist(lapply(list(Strat = rmseStratYear, Ally = rmseAllyYear,   IGO = rmseIGOYear,  UN = rmseUNYear ,'Ally + IGO + UN' = rmseALLYear), function(x){unlist(x)})))
+rmseYear$variable = gsub('\\d|rmse|Year', '', rownames(rmseYear))
+
+rmseYearSummary = summarySE(rmseYear, measurevar = 'rmse', groupvars = c('variable'))
+rmseYearSummary$id = factor(rmseYearSummary$variable, levels = levels(factor(rmseYearSummary$variable))[c(4, 1,3,5, 2)])
+rmseYearSummary$variable = factor(rmseYearSummary$variable, levels = levels(factor(rmseYearSummary$variable))[c(4, 1,3,5, 2)])
+
+pdf(paste0(setwd(pathGraphics), '/rmsePlotYear.pdf'))
+rY= ggplot(rmseYearSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rY + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+################################################################
+
+#################################################################
+
+## evaluate performance using non-imputed data
+xPartitionC= rep(list(PartitionList(xOut, 10, 'ccodeS' )), 5)
+xPartitionCR= rep(list(PartitionList(xOut, 10, 'ccodeR')), 5)
+xPartitionY= rep(list(PartitionList(xOut, 10, 'year' )), 5)
+
+
+# strat
+(rmseStratCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LstratMu`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
+(rmseStratCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LstratMu`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
+(rmseStratYearX = predictREList(10, `10-Fold_year_gaussian_re_LstratMu`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+
+# ally
+(rmseAllyCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWt`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
+(rmseAllyCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWt`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
+(rmseAllyYearX = predictREList(10, `10-Fold_year_gaussian_re_LallyWt`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+
+# igo
+(rmseIGOCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_Ligo`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
+(rmseIGOCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_Ligo`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
+(rmseIGOYearX = predictREList(10, `10-Fold_year_gaussian_re_Ligo`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+ 
+# un
+(rmseUNCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LunIdPt`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
+(rmseUNCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LunIdPt`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
+(rmseUNYearX = predictREList(10, `10-Fold_year_gaussian_re_LunIdPt`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+ 
+# all
+(rmseALLCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
+(rmseALLCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
+(rmseALLYearX = predictREList(10, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+ 
+
+#### plot rmse by different ivs for ccodeS folds
+rmseCcodeX =  data.frame(rmse = unlist(lapply(list(Strat = rmseStratCCodeX, 
+                              Ally = rmseAllyCCodeX,   
+                              IGO = rmseIGOCCodeX,  
+                              UN= rmseUNCCodeX ,
+                             'Ally + IGO + UN' = rmseALLCCodeX), function(x){unlist(x)})))
+ 
+rmseCcodeX$variable = gsub('\\d', '', rownames(rmseCcodeX))
+rmseCcodeXSummary = summarySE(rmseCcodeX, measurevar = 'rmse', groupvars = c('variable'))
+rmseCcodeXSummary$id = factor(rmseCcodeXSummary$variable, levels = levels(factor(rmseCcodeXSummary$variable))[c(4, 1,3,5, 2)])
+rmseCcodeXSummary$variable = factor(rmseCcodeXSummary$variable, levels = levels(factor(rmseCcodeXSummary$variable))[c(4, 1,3,5, 2)])
+ 
+pdf(paste0(setwd(pathGraphics), '/rmsePlotCcodeSnoImpute.pdf'))
+rCx = ggplot(rmseCcodeXSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rCx + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+#### plot rmse by different ivs for ccodeR folds
+rmseCCodeRX =  data.frame(rmse = unlist(lapply(list(Strat = rmseStratCCodeX, 
+                              Ally = rmseAllyCCodeRX,   
+                              IGO = rmseIGOCCodeRX,  
+                              UN= rmseUNCCodeRX ,
+                             'Ally + IGO + UN' = rmseALLCCodeRX), function(x){unlist(x)})))
+rmseCCodeRX$variable = gsub('\\d', '', rownames(rmseCCodeRX))
+ 
+rmseCCodeRXSummary = summarySE(rmseCCodeRX, measurevar = 'rmse', groupvars = c('variable'))
+rmseCCodeRXSummary$id = factor(rmseCCodeRXSummary$variable, levels = levels(factor(rmseCCodeRXSummary$variable))[c(4, 1,3,5, 2)])
+rmseCCodeRXSummary$variable = factor(rmseCCodeRXSummary$variable, levels = levels(factor(rmseCCodeRXSummary$variable))[c(4, 1,3,5, 2)])
+ 
+ 
+pdf(paste0(setwd(pathGraphics), '/rmsePlotCcodeRnoImpute.pdf'))
+rCRx = ggplot(rmseCCodeRXSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rCRx + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+#### plot rmse by different ivs for year folds
+rmseYearX =  data.frame(rmse = unlist(lapply(list(Strat = rmseStratYearX, 
+                                                Ally = rmseAllyYearX,   
+                                                IGO= rmseIGOYearX,  
+                                                UN= rmseUNYearX ,
+                                                'Ally + IGO + UN' = rmseALLYearX), function(x){unlist(x)})))
+rmseYearX$variable = gsub('\\d', '', rownames(rmseYearX))
+ 
+rmseYearXSummary = summarySE(rmseYearX, measurevar = 'rmse', groupvars = c('variable'))
+rmseYearXSummary$id = factor(rmseYearXSummary$variable, levels = levels(factor(rmseYearXSummary$variable))[c(4, 1,3,5, 2)])
+rmseYearXSummary$variable = factor(rmseYearXSummary$variable, levels = levels(factor(rmseYearXSummary$variable))[c(4, 1,3,5, 2)])
+
+pdf(paste0(setwd(pathGraphics), '/rmsePlotYearNoImpute.pdf'))
+rYx= ggplot(rmseYearXSummary, aes (x = id, y = rmse, ci ,colour = variable))
+rYx + geom_errorbar(aes(ymin = rmse - ci, ymax = rmse + ci), width = 0.2)+ geom_point()
+dev.off()
+
+
+# ################################################################
+# ## lm models 
+
+# # Meld parameter estimates from each and calc out of sample perf
+# rubinCoefList = function(mod, k){ # k for k-fold
+
+# modCoefList = lapply(1:k, function(x){
+#  lapply(lapply(mod, '[[', x), function(x){
+#     beta = fixef(x)
+#     se = sqrt(diag(vcov(x)))
+#     return( cbind(beta, se) )
+#   })%>% do.call('rbind',.) 
+#   }) 
+
+#   modSummList = lapply(modCoefList, function(x){
+#     modSumm = mi.meld(q=matrix(x[,1],ncol=length(unique(rownames(x))), byrow=TRUE), 
+#     se=matrix(x[,2],ncol=length(unique(rownames(x))), byrow=TRUE), 
+#     byrow=TRUE) %>% lapply(., t) %>% do.call('cbind',.) %>% data.frame(.)
+#     names(modSumm) = c('beta', 'se')
+#     modSumm$t = modSumm$beta/modSumm$se
+#     modSumm$var = unique(rownames(x))
+#     return(modSumm)
+# })
+
+#  return(modSummList)
+# }
+ 
+# getRMSE = function( coef, data){
+#   pred = t(coef$beta %*% t(cbind(1, data[,coef$var[-1]])))
+#   c(pred - data$commitUSD13)^2 %>% mean(.) %>% sqrt(.) 
+# }
+
+# getRMSE_KFold = function(rcoefList, xList){
+#  mapply(getRMSE, coef = rcoefList, data = xList)
+# }
+
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LstratMu`, k = 10), xList =PartitionList(xOut, 10, 'ccodeS' ) ))
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LstratMu`, k = 10), xList =PartitionList(xOut, 10, 'year' ) ))
+
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LallyWt`, k = 10), xList =PartitionList(xOut, 10, 'ccodeS' ) ))
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LallyWt`, k = 10), xList =PartitionList(xOut, 10, 'year' ) ))
+
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_Ligo`, k = 10), xList =PartitionList(xOut, 10, 'ccodeS' ) ))
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_Ligo`, k = 10), xList =PartitionList(xOut, 10, 'year' ) ))
+
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LunIdPt`, k = 10), xList =PartitionList(xOut, 10, 'ccodeS' ) ))
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LunIdPt`, k = 10), xList =PartitionList(xOut, 10, 'year' ) ))
+
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, k = 10), xList =PartitionList(xOut, 10, 'ccodeS' ) ))
+# mean(getRMSE_KFold(rcoefList = rubinCoefList(mod = `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, k = 10), xList =PartitionList(xOut, 10, 'year' ) ))
+  
+
+# ################################################################
