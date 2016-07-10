@@ -1,5 +1,5 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/ForeignAid1/RCode/setup.R') }
 
 ################################################################
 # Load reg data
@@ -29,36 +29,48 @@ cntrlVars=c(
 	)
 
 # model spec gen
-genModelForm = function(var, type, struc){
+genModelForm = function(var, type, struc, interaction = FALSE){
 	if(type=='re'){ strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
 	if(type=='fe'){ strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
 	if(type=='none'){ strucChar=NULL }
-	form = formula(
-		paste0(  'commitUSD13 ~ ',  # DV
+
+	if ( interaction == FALSE){
+			form = formula(
+			paste0(  'commitUSD13 ~ ',  # DV
 			paste(var, collapse=' + '), ' + ', # add key var
 			paste(cntrlVars, collapse=' + '), # add control vars
+			strucChar )  )}
+	else if (interaction == TRUE){
+			form = formula(
+			paste0(  'commitUSD13 ~ ',  # DV
+			paste(c(var, paste(c(var, 'Lno_disasters'), collapse = '*')), collapse=' + '), ' + ', # add key var
+			paste(cntrlVars, collapse=' + '), # add control vars
 			strucChar )  )
+	}
+
 	return(form)
 }
 
+ 
 # filename gen
-genFileName = function(train, mod, type, zeroInf, keyVar, trainEnd=2002){
+genFileName = function(train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
 	b = mod ; c = type ; d = if(zeroInf){ 'zi' } ; e = paste(keyVar, collapse='')
-	f = paste0(paste(a,b,c,d,e, sep='_'), '.rda')
-	return( gsub('__','_',f) )
+	f = ifelse(interaction, 'interaction', '' )
+	g = paste0(paste(a,b,c,d,e,f, sep='_'), '.rda')
+	return( gsub('__','_',g) )
 }
 
 # Run models in parallel across imputed datasets
 runModelParallel = function(
-	cores=6, 
+	cores=detectCores(),
 	dataList=iData, trainLogic=FALSE, trainEnd=2002, 
 	modType='re', modFamily='gaussian', zeroInfLogic=FALSE, 
-	keyRegVar='LstratMu', modStruc=c('id','year')
+	keyRegVar='LstratMu', modStruc=c('id','year'), int = FALSE
 	){
 
-	modForm = genModelForm(var=keyRegVar, type=modType, struc=modStruc)
-	modName = genFileName(train=trainLogic, mod=modFamily, type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar)
+	modForm = genModelForm(var=keyRegVar, type=modType, struc=modStruc, interaction = int)
+	modName = genFileName(train=trainLogic, mod=modFamily, type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar, interaction = int)
 
 	print(paste0('Running model: ', Reduce(paste, deparse(modForm))))
 	print(paste0('Saving to: ', modName))
@@ -106,6 +118,36 @@ runModelParallel = function(
 # ################################################################
 
 ################################################################
+# # Run interaction models
+# Full sample model, random effect, LstratMu, runs in a couple of minutes
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LstratMu', int = T)
+
+ 
+# Full sample model, random effect, LallyWt, runs in a couple of minutes
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LallyWt', int = T)
+
+# Full sample model, random effect, LunIDpt, runs in a couple of minutes
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', int = T)
+
+ 
+
+# Full sample model, random effect, LunIDpt, runs in a couple of minutes
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='Ligo', int = T)
+
+ 
+# Full sample model, random effect, LallyWt + LunIdPt + Ligo, runs in a couple of minutes
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'), int = T)
+
+ 
+
+# robustness check, fixed effects, takes about 30 mins to run
+runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu', int = TRUE)
+# ################################################################
+
+################################################################
+
+
+
 # Compare to existing measures using two fold temporally cut cv
 # Training, random effect, Lstratmu
 runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='LstratMu')
