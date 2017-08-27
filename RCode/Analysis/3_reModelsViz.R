@@ -5,194 +5,173 @@ pathGraphics = '~/Research/ForeignAid/Presentations/Graphics/'
 
 ################################################################
 # load data
+load(paste0(pathData, '/noImputationData.rda'))
 load(paste0(pathData, '/iData_v2.rda'))
 
 # load model
 fullSampPath = paste0(pathResults, '/fullSamp_gaussian_re_')
 load(paste0(fullSampPath, 'LallyDist_interaction.rda')) ; allyMods = mods
+load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoMods = mods
+load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unMods = mods ; rm(mods)
 
-lapply(mods, function(x){summary(x)$coefficients})
-
-
-
-rubinCoef(mods)
-
-fullSamp_gaussian_re_LigoDist_interaction.rda
-fullSamp_gaussian_re_LunDist_interaction.rda
+# lapply(mods, function(x){summary(x)$coefficients})
+rubinCoef(allyMods)
+rubinCoef(igoMods)
+rubinCoef(unMods)
 ################################################################
 
-# # Model results
-# summary(mod)$coefficients[1:(length(vars)+1),]
-# sqrt(mean( (resid(mod)^2) ))
-# summary(regData[,'logAid'])
+################################################################
+# Model results
+mod = unMods[[1]]
 
-# # Coefficient plot
-# coefData=summary(mod)$coefficients[1:(length(vars)+1),]
-# varNames = c(
-# 	'Pol. Strat. Distance$_{sr,t-1}$',
-# 	# 'Mil. Strat. Distance$_{sr,t-1}$',
-# 	# 'Former Colony$_{sr,t-1}$',
-# 	'Polity$_{r,t-1}$',
-# 	'Log(GDP per capita)$_{r,t-1}$',
-# 	'Life Expectancy$_{r,t-1}$',
-# 	'No. Disasters$_{r,t-1}$',
-# 	'Civil War$_{r,t-1}$'
-# 	)
-# coefP=ggcoefplot(coefData, vars[-2], varNames)
-# tikz(file=paste0(pathGraphics, 'modCoef.tex'), width=8, height=5, standAlone=F)
-# coefP
-# dev.off()
-# #########################################################
+summary(mod)$coefficients[1:(length(vars)+1),]
+sqrt(mean( (resid(mod)^2) ))
+summary(regData[,'logAid'])
 
-# #########################################################
-# # Substantive effects
-# ## Strategic interest
-# stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=vars, actual=FALSE, brk=0.01, 
-#   vi='LstratMu', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
-#   plotType='ribbon'
-#   )
-# stratEffect=stratEffect + theme(axis.title.y=element_text(vjust=1))
-# tikz(file=paste0(pathGraphics, 'stratEffect.tex'), width=8, height=5, standAlone=F)
-# stratEffect
-# dev.off()
+# Coefficient plot
+coefData=summary(mod)$coefficients[1:(length(vars)+1),]
+varNames = c(
+	'Pol. Strat. Distance$_{sr,t-1}$',
+	# 'Mil. Strat. Distance$_{sr,t-1}$',
+	# 'Former Colony$_{sr,t-1}$',
+	'Polity$_{r,t-1}$',
+	'Log(GDP per capita)$_{r,t-1}$',
+	'Life Expectancy$_{r,t-1}$',
+	'No. Disasters$_{r,t-1}$',
+	'Civil War$_{r,t-1}$'
+	)
+coefP=ggcoefplot(coefData, vars[-2], varNames)
+tikz(file=paste0(pathGraphics, 'modCoef.tex'), width=8, height=5, standAlone=F)
+coefP
+dev.off()
+#########################################################
 
-# ## Natural disaster 
-# disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=vars, actual=FALSE, brk=1, vRange=1:7,
-#   vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
-#   plotType='errorBar'
-#   )
-# disastEffect=disastEffect + theme(axis.title.y=element_text(vjust=1))
-# tikz(file=paste0(pathGraphics, 'disastEffect.tex'), width=8, height=5, standAlone=F)
-# disastEffect
-# dev.off()
+#########################################################
+# Substantive effects
+## Strategic interest
+stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=, actual=FALSE, brk=0.01, 
+  vi='LallyDist', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
+  plotType='ribbon'
+  )
+stratEffect=stratEffect + theme(axis.title.y=element_text(vjust=1))
+tikz(file=paste0(pathGraphics, 'stratEffect.tex'), width=8, height=5, standAlone=F)
+stratEffect
+dev.off()
 
-# tikz(file=paste0(pathGraphics, 'effects.tex'), width=8, height=4, standAlone=F)
-# multiplot(list(stratEffect, disastEffect), cols=2)
-# dev.off()
+## Natural disaster 
+disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=vars, actual=FALSE, brk=1, vRange=1:7,
+  vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
+  plotType='errorBar'
+  )
+disastEffect=disastEffect + theme(axis.title.y=element_text(vjust=1))
+tikz(file=paste0(pathGraphics, 'disastEffect.tex'), width=8, height=5, standAlone=F)
+disastEffect
+dev.off()
 
-# ## Life expectancy
-# lifeEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=vars, actual=FALSE, brk=0.1, 
-#   vi='LlifeExpect', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="Life Expectancy$_{t-1}$",
-#   plotType='ribbon'
-#   )
-# lifeEffect=lifeEffect + theme(axis.title.y=element_text(vjust=1))
-# lifeEffect
-# # summary(exp(ggData$Fit))
-# # c( 2822000 -1397000 )/1397000 : 102%
+tikz(file=paste0(pathGraphics, 'effects.tex'), width=8, height=4, standAlone=F)
+multiplot(list(stratEffect, disastEffect), cols=2)
+dev.off()
 
-# ## GDP per capita
+## Life expectancy
+lifeEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=vars, actual=FALSE, brk=0.1, 
+  vi='LlifeExpect', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="Life Expectancy$_{t-1}$",
+  plotType='ribbon'
+  )
+lifeEffect=lifeEffect + theme(axis.title.y=element_text(vjust=1))
+lifeEffect
+# summary(exp(ggData$Fit))
+# c( 2822000 -1397000 )/1397000 : 102%
+
+## GDP per capita
+gdpQts = quantile(regData$LlnGdpCap, probs=c(0.25, 0.75))
+gdpRange = seq(gdpQts[1], gdpQts[2], .1)
+gdpEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=vars, actual=FALSE, brk=0.1, vRange=gdpRange,
+  vi='LlnGdpCap', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="Log(GDP per capita)$_{t-1}$",
+  plotType='ribbon'
+  )
+gdpEffect=gdpEffect + theme(axis.title.y=element_text(vjust=1))
+gdpEffect
+
+## Polity
 # gdpQts = quantile(regData$LlnGdpCap, probs=c(0.25, 0.75))
 # gdpRange = seq(gdpQts[1], gdpQts[2], .1)
-# gdpEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=vars, actual=FALSE, brk=0.1, vRange=gdpRange,
-#   vi='LlnGdpCap', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="Log(GDP per capita)$_{t-1}$",
-#   plotType='ribbon'
-#   )
-# gdpEffect=gdpEffect + theme(axis.title.y=element_text(vjust=1))
-# gdpEffect
+polEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+  vars=vars, actual=FALSE, brk=0.1, 
+  vi='Lpolity2', ostat=median, sigma=FALSE, intercept=TRUE,
+  ylabel="Log(Aid)$_{t}$", xlabel="Polity$_{t-1}$",
+  plotType='ribbon'
+  )
+gdpEffect=gdpEffect + theme(axis.title.y=element_text(vjust=1))
+gdpEffect
+#########################################################
 
-# ## Polity
-# # gdpQts = quantile(regData$LlnGdpCap, probs=c(0.25, 0.75))
-# # gdpRange = seq(gdpQts[1], gdpQts[2], .1)
-# polEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=vars, actual=FALSE, brk=0.1, 
-#   vi='Lpolity2', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="Polity$_{t-1}$",
-#   plotType='ribbon'
-#   )
-# gdpEffect=gdpEffect + theme(axis.title.y=element_text(vjust=1))
-# gdpEffect
-# #########################################################
+# regData = iData[[1]]
+mod = allyMods[[1]]
+var = 'LallyDist'
 
-# #########################################################
-# # Revise model formula to incorporate interaction
-# modForm=formula(paste0(
-# 	'logAid ~ ', paste(vars, collapse=' + '), 
-# 	'+ LstratMu * Lno_disasters',
-# 	'+ (1|id) + (1|year)')) # Dyad + year random effects
+#########################################################
+# Create scenario matrix
+stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
+# stratRange=with(data=regData, seq(min(LstratMu), max(LstratMu), .01) )
+stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
+disRange=with(data=regData, seq(min(Lno_disasters), 5, 1) )
+scen = with(data=regData, 
+	expand.grid(
+		1, stratRange, disRange, 
+		median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
+		median(LlnGdpCap,na.rm=TRUE), 
+		median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
+		) )
 
-# # Rerun model	
-# mod=lmer(modForm, data=regData) # random effects estimation
+# Add interaction term
+scen = cbind( scen, scen[,2]*scen[,3] )
+colnames(scen) = colnames( coef(mod)$id )
+scen = data.matrix(scen)
+pred = scen %*% mod@beta
+draws = mvrnorm(10000, mod@beta, vcov(mod))
+sysUncert = scen %*% t(draws)
+sysInts = t(apply(sysUncert, 1, function(x){ quantile(x, c(0.05, 0.95), na.rm=TRUE) }))
 
-# # Peek @ Model results
-# summary(mod)$coefficients[1:(length(vars)+2),]
-# sqrt(mean( (resid(mod)^2) ))
+# Combine for plotting
+ggData=data.frame(
+		cbind(pred, sysInts, scen[,var], scen[,'Lno_disasters'])
+	)
+names(ggData)=c('fit', 'sysLo', 'sysHi', var, 'Lno_disasters')
 
-# # Coefficient plot
-# coefData=summary(mod)$coefficients[1:(length(vars)+2),]
-# varNames = c(
-# 	'Pol. Strat. Distance$_{sr,t-1}$',
-# 	# 'Former Colony$_{sr,t-1}$',
-# 	'Polity$_{r,t-1}$',
-# 	'Log(GDP per capita)$_{r,t-1}$',
-# 	'Life Expectancy$_{r,t-1}$',
-# 	'No. Disasters$_{r,t-1}$',
-# 	'Civil War$_{r,t-1}$',
-# 	'Pol. Strat. Distance$_{sr,t-1}$ $\\times$ \n No. Disasters$_{r,t-1}$'
-# 	)
-# vars2=c(vars, 'LstratMu:Lno_disasters')
-# coefP=ggcoefplot(coefData, vars2[-2], varNames)
-# tikz(file=paste0(pathGraphics, 'modCoef2.tex'), width=8, height=5, standAlone=F)
-# coefP
-# dev.off()
+# Make a surface plot
+tmp=ggplot(ggData, aes(x=LallyDist, y=Lno_disasters, fill=fit)) 
+tmp=tmp + xlab('Strategic Interest') + ylab('No. Disasters')
+tmp=tmp + geom_tile(colour='darkgrey')
+tmp=tmp + scale_fill_gradient2(midpoint=median(regData$logAid), 
+	space='rgb', low="#d73027", mid="white", high="#4575b4", name='Log(Aid)\n')
+tmp=tmp + scale_x_continuous(expand=c(0,0)) + scale_y_continuous(expand=c(0,0))
+tmp=tmp + theme(axis.ticks=element_blank(), 
+  legend.position='top', legend.key.width=unit(2,'cm'),
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank() )
+tmp
 
-# # Create scenario matrix
-# stratQts = quantile(regData$LstratMu, probs=c(.1,.9))
-# # stratRange=with(data=regData, seq(min(LstratMu), max(LstratMu), .01) )
-# stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
-# disRange=with(data=regData, seq(min(Lno_disasters), 5, 1) )
-# scen = with(data=regData, 
-# 	expand.grid(1, stratRange, median(colony),
-# 		median(Lpolity2), median(LlnGdpCap), median(LlifeExpect),
-# 		disRange, median(Lcivwar) ) )
-
-# # Add interaction term
-# scen = cbind( scen, scen[,2]*scen[,7] )
-# colnames(scen) = colnames( coef(mod)$id )
-# scen = data.matrix(scen)
-# pred = scen %*% mod@beta
-# draws = mvrnorm(10000, mod@beta, vcov(mod))
-# sysUncert = scen %*% t(draws)
-# sysInts = t(apply(sysUncert, 1, function(x){ quantile(x, c(0.025, 0.975)) }))
-
-# # Combine for plotting
-# ggData=data.frame(
-# 		cbind(pred, sysInts, scen[,'LstratMu'], scen[,'Lno_disasters'])
-# 	)
-# names(ggData)=c('fit', 'sysLo', 'sysHi', 'LstratMu', 'Lno_disasters')
-
-# # Make a surface plot
-# tmp=ggplot(ggData, aes(x=LstratMu, y=Lno_disasters, fill=fit)) 
-# tmp=tmp + xlab('Strategic Interest') + ylab('No. Disasters')
-# tmp=tmp + geom_tile(colour='darkgrey')
-# tmp=tmp + scale_fill_gradient2(midpoint=median(regData$logAid), 
-# 	space='rgb', low="#d73027", mid="white", high="#4575b4", name='Log(Aid)\n')
-# tmp=tmp + scale_x_continuous(expand=c(0,0)) + scale_y_continuous(expand=c(0,0))
-# tmp=tmp + theme(axis.ticks=element_blank(), 
-#   legend.position='top', legend.key.width=unit(2,'cm'),
-#   panel.grid.major = element_blank(), panel.grid.minor = element_blank() )
-# tmp
-
-# # Plot rel at various cuts of disasters
-# disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 1) )
-# disRange=c(1,3,5)
-# ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
-# tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit))
-# tmp=tmp + geom_line()
-# tmp=tmp + scale_x_continuous(breaks=2:5, limits=c(2,5))
-# tmp=tmp + geom_ribbon(aes(ymin=sysLo, ymax=sysHi), alpha=.7)
-# tmp=tmp + facet_grid(~Lno_disasters)
-# tmp=tmp + xlab('Pol. Strat. Distance$_{sr,t-1}$') + ylab("Log(Aid)$_{t}$")
-# tmp=tmp + theme(axis.ticks=element_blank(), 
-#   panel.grid.major = element_blank(), panel.grid.minor = element_blank() )
-# tikz(file=paste0(pathGraphics, 'intEffect.tex'), width=8, height=5, standAlone=F)
-# tmp
-# dev.off()
-# #########################################################
+# Plot rel at various cuts of disasters
+disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 1) )
+disRange=c(1,3,5)
+ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
+tmp=ggplot(ggDataSmall, aes(x=LallyDist, y=fit))
+tmp=tmp + geom_line()
+tmp=tmp + scale_x_continuous(breaks=2:5, limits=c(2,5))
+tmp=tmp + geom_ribbon(aes(ymin=sysLo, ymax=sysHi), alpha=.7)
+tmp=tmp + facet_grid(~Lno_disasters)
+tmp=tmp + xlab('Pol. Strat. Distance$_{sr,t-1}$') + ylab("Log(Aid)$_{t}$")
+tmp=tmp + theme(axis.ticks=element_blank(), 
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank() )
+tmp
+tikz(file=paste0(pathGraphics, 'intEffect.tex'), width=8, height=5, standAlone=F)
+tmp
+dev.off()
+#########################################################
