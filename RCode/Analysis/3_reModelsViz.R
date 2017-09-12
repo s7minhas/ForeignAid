@@ -10,40 +10,52 @@ load(paste0(pathData, '/iData_v2.rda'))
 
 # load model
 fullSampPath = paste0(pathResults, '/fullSamp_gaussian_re_')
-load(paste0(fullSampPath, 'LallyDist_interaction.rda')) ; allyMods = mods
-load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoMods = mods
-load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unMods = mods ; rm(mods)
+load(paste0(fullSampPath, 'LallyDist.rda')) ; allyMods = mods
+load(paste0(fullSampPath, 'LigoDist.rda')) ; igoMods = mods
+load(paste0(fullSampPath, 'LunDist.rda')) ; unMods = mods
 
-# lapply(mods, function(x){summary(x)$coefficients})
-rubinCoef(allyMods)
-rubinCoef(igoMods)
-rubinCoef(unMods)
+load(paste0(fullSampPath, 'LallyDist_interaction.rda')) ; allyIntMods = mods
+load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoIntMods = mods
+load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods ; rm(mods)
+
+# 
+allMods = list(
+  ally=allyMods,igo=igoMods,un=unMods,
+  allyInt=allyIntMods,igoInt=igoIntMods,unInt=unIntMods )
+modSumm = lapply(allMods, rubinCoef)
+
+# vars
+cntrlVars=c(
+  'Lno_disasters', 'colony', 'Lpolity2',
+  'LlnGdpCap', 'LlifeExpect', 'Lcivwar' )
 ################################################################
 
 ################################################################
 # Model results
 mod = unMods[[1]]
+vars = c('(Intercept)','LunDist', cntrlVars)
+# summary(mod)$coefficients[1:(length(vars)+1),]
+# sqrt(mean( (resid(mod)^2) ))
+# summary(regData[,'logAid'])
 
-summary(mod)$coefficients[1:(length(vars)+1),]
-sqrt(mean( (resid(mod)^2) ))
-summary(regData[,'logAid'])
+# genCoefPlot = function(mod, vars){
 
-# Coefficient plot
-coefData=summary(mod)$coefficients[1:(length(vars)+1),]
-varNames = c(
-	'Pol. Strat. Distance$_{sr,t-1}$',
-	# 'Mil. Strat. Distance$_{sr,t-1}$',
-	# 'Former Colony$_{sr,t-1}$',
-	'Polity$_{r,t-1}$',
-	'Log(GDP per capita)$_{r,t-1}$',
-	'Life Expectancy$_{r,t-1}$',
-	'No. Disasters$_{r,t-1}$',
-	'Civil War$_{r,t-1}$'
-	)
-coefP=ggcoefplot(coefData, vars[-2], varNames)
-tikz(file=paste0(pathGraphics, 'modCoef.tex'), width=8, height=5, standAlone=F)
-coefP
-dev.off()
+  # Coefficient plot
+  coefData=summary(mod)$coefficients[1:(length(vars)+1),]
+  varNames = c(
+    'Pol. Strat. Distance$_{sr,t-1}$',
+    'Former Colony$_{sr,t-1}$',
+    'Polity$_{r,t-1}$',
+    'Log(GDP per capita)$_{r,t-1}$',
+    'Life Expectancy$_{r,t-1}$',
+    'No. Disasters$_{r,t-1}$',
+    'Civil War$_{r,t-1}$'
+    )
+  coefP=ggcoefplot(coefData, vars[-2], varNames)
+  # tikz(file=paste0(pathGraphics, 'modCoef.tex'), width=8, height=5, standAlone=F)
+  coefP
+  # dev.off()
+}
 #########################################################
 
 #########################################################
