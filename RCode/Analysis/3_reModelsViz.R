@@ -1,6 +1,5 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
-pathGraphics = '~/Research/ForeignAid/Presentations/Graphics/'
 ################################################################
 
 ################################################################
@@ -18,12 +17,13 @@ load(paste0(fullSampPath, 'LstratMu.rda')) ; stratMuMods = mods
 load(paste0(fullSampPath, 'LallyDist_interaction.rda')) ; allyIntMods = mods
 load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoIntMods = mods
 load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods
-load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods ; rm(mods)
+load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods
+load(paste0(fullSampPath, 'LstratMu_interaction.rda')) ; stratMuIntMods = mods ; rm(mods)
 
 # 
 allMods = list(
-  ally=allyMods,igo=igoMods,un=unMods,
-  allyInt=allyIntMods,igoInt=igoIntMods,unInt=unIntMods )
+  ally=allyMods,igo=igoMods,un=unMods, stratMu=stratMuMods,
+  allyInt=allyIntMods,igoInt=igoIntMods,unInt=unIntMods, stratMuInt=stratMuIntMods )
 modSumm = lapply(allMods, rubinCoef)
 
 # vars

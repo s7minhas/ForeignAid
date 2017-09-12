@@ -1,24 +1,40 @@
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 ################################################################
 
 ################################################################
 # validate k-fold models
 
 # Load model results
-toLoad=list.files(pathResults)[grepl('10-Fold', list.files(pathResults))]
-for(out in toLoad){ load(paste0(pathResults, '/', out)) ; assign(gsub('.rda','',out), mods) ; rm(list='mods') }
+toLoad=list.files(pathResults)[grepl('5-Fold', list.files(pathResults))]
+
+# load model
+foldPath = paste0(pathResults, '/5-Fold_ccodeR_gaussian_re_')
+load(paste0(foldPath, 'LallyDist.rda')) ; allyModsR = mods
+load(paste0(foldPath, 'LigoDist.rda')) ; igoModsR = mods
+load(paste0(foldPath, 'LunDist.rda')) ; unModsR = mods
+load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsR = mods
+
+foldPath = paste0(pathResults, '/5-Fold_ccodeS_gaussian_re_')
+load(paste0(foldPath, 'LallyDist.rda')) ; allyModsS = mods
+load(paste0(foldPath, 'LigoDist.rda')) ; igoModsS = mods
+load(paste0(foldPath, 'LunDist.rda')) ; unModsS = mods
+load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsS = mods
+
+foldPath = paste0(pathResults, '/5-Fold_year_gaussian_re_')
+load(paste0(foldPath, 'LallyDist.rda')) ; allyModsY = mods
+load(paste0(foldPath, 'LigoDist.rda')) ; igoModsY = mods
+load(paste0(foldPath, 'LunDist.rda')) ; unModsY = mods
+load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsY = mods
 
 # Load imputed data
-setwd(pathData)
-load('iData.rda')
+load(paste0(pathData, '/iData.rda'))
 # Add dyad random effect
 iData = lapply(iData, function(x){
   # add dyadic id
-  x$id = paste(x$ccodeS, x$ccodeR, sep='_')
-  x$id = factor(x$id)
+  x$id = paste(x$ccodeS, x$ccodeR, sep='_') ; x$id = factor(x$id)
   # log aid flow
-  x$commitUSD13 = log(x$commitUSD13 + 1)
-  return(x)
-})
+  x$commitUSD13 = log(x$commitUSD13 + 1) ; return(x) })
 
 # load unimputed data
 load(paste0(pathData, '/noImputationData.rda'))
@@ -26,15 +42,13 @@ regData$commitUSD13 = log(regData$commitUSD13 + 1)
 xOut = regData[,c('commitUSD13', 
   'colony' ,'Lpolity2','LlnGdpCap','LlifeExpect', 'Lno_disasters','Lcivwar',
   'LstratMu', 'LallyWt', 'LunIdPt', 'Ligo',
-  'ccodeS', 'cnameS', 'ccodeR', 'cnameR','year'
-  )] 
+  'ccodeS', 'cnameS', 'ccodeR', 'cnameR','year' )]
 xOut$id = paste(xOut$ccodeS, xOut$ccodeR, sep='_')
-xOut$id = factor(xOut$id); xOut$ccodeS = factor(xOut$ccodeS); xOut$year = factor(xOut$year); xOut$ccodeR = factor(xOut$ccodeR)
+xOut$id = factor(xOut$id); xOut$ccodeS = factor(xOut$ccodeS)
+xOut$year = factor(xOut$year); xOut$ccodeR = factor(xOut$ccodeR)
 
- # check to make sure unimputed and imputed data are in the same order
+## check to make sure unimputed and imputed data are in the same order
 # which(xOut$id != iData[[1]]$id)
- 
-
 ############################################################
 
 ############################################################
@@ -144,35 +158,34 @@ return(RmsePerImpPerFold)
 ## evaluate performance using imputed data
 
 # partition imputed data into test sets by ccode
-iDataPartitionC = PartitionList(iData, 10, 'ccodeS')
-iDataPartitionCR = PartitionList(iData, 10, 'ccodeR')
-iDataPartitionY = PartitionList(iData, 10, 'year')
-
+iDataPartitionC = PartitionList(iData, 5, 'ccodeS')
+iDataPartitionCR = PartitionList(iData, 5, 'ccodeR')
+iDataPartitionY = PartitionList(iData, 5, 'year')
 
 # strat
-(rmseStratCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LstratMu`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-(rmseStratCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LstratMu`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-(rmseStratYear = predictREList(10, `10-Fold_year_gaussian_re_LstratMu`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+rmseStratCCodeS = predictREList(5, stratMuModsS, iDataPartitionC) %>% getRMSE_wRE_KFold(5, ., iDataPartitionC)  %>%  lapply(., mean)
+rmseStratCCodeR = predictREList(5, stratMuModsR, iDataPartitionCR) %>% getRMSE_wRE_KFold(5, ., iDataPartitionCR)  %>%  lapply(., mean)
+rmseStratYear = predictREList(5, stratMuModsY, iDataPartitionY) %>% getRMSE_wRE_KFold(5, ., iDataPartitionY)  %>%  lapply(., mean)
 
 # ally
-(rmseAllyCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-(rmseAllyCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-(rmseAllyYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+rmseAllyCCodeS = predictREList(5, allyModsS, iDataPartitionC) %>% getRMSE_wRE_KFold(5, ., iDataPartitionC)  %>%  lapply(., mean)
+rmseAllyCCodeR = predictREList(5, allyModsR, iDataPartitionCR) %>% getRMSE_wRE_KFold(5, ., iDataPartitionCR)  %>%  lapply(., mean)
+rmseAllyYear = predictREList(5, allyModsY, iDataPartitionY) %>% getRMSE_wRE_KFold(5, ., iDataPartitionY)  %>%  lapply(., mean)
  
 # igo
-(rmseIGOCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_Ligo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-(rmseIGOCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_Ligo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-(rmseIGOYear = predictREList(10, `10-Fold_year_gaussian_re_Ligo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+rmseIGOCCodeS = predictREList(5, igoModsS, iDataPartitionC) %>% getRMSE_wRE_KFold(5, ., iDataPartitionC)  %>%  lapply(., mean)
+rmseIGOCCodeR = predictREList(5, igoModsR, iDataPartitionCR) %>% getRMSE_wRE_KFold(5, ., iDataPartitionCR)  %>%  lapply(., mean)
+rmseIGOYear = predictREList(5, igoModsY, iDataPartitionY) %>% getRMSE_wRE_KFold(5, ., iDataPartitionY)  %>%  lapply(., mean)
  
 # un
-(rmseUNCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LunIdPt`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-(rmseUNCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LunIdPt`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-(rmseUNYear = predictREList(10, `10-Fold_year_gaussian_re_LunIdPt`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+rmseUNCCode = predictREList(5, unModsS, iDataPartitionC) %>% getRMSE_wRE_KFold(5, ., iDataPartitionC)  %>%  lapply(., mean)
+rmseUNCCodeR = predictREList(5, unModsR, iDataPartitionCR) %>% getRMSE_wRE_KFold(5, ., iDataPartitionCR)  %>%  lapply(., mean)
+rmseUNYear = predictREList(5, unModsY, iDataPartitionY) %>% getRMSE_wRE_KFold(5, ., iDataPartitionY)  %>%  lapply(., mean)
  
-# all
-(rmseALLCCode = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionC) %>% getRMSE_wRE_KFold(10, ., iDataPartitionC)  %>%  lapply(., mean))
-(rmseALLCCodeR = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(10, ., iDataPartitionCR)  %>%  lapply(., mean))
-(rmseALLYear = predictREList(10, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionY) %>% getRMSE_wRE_KFold(10, ., iDataPartitionY)  %>%  lapply(., mean))
+# # all
+# rmseALLCCode = predictREList(5, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionC) %>% getRMSE_wRE_KFold(5, ., iDataPartitionC)  %>%  lapply(., mean)
+# rmseALLCCodeR = predictREList(5, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionCR) %>% getRMSE_wRE_KFold(5, ., iDataPartitionCR)  %>%  lapply(., mean)
+# rmseALLYear = predictREList(5, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, iDataPartitionY) %>% getRMSE_wRE_KFold(5, ., iDataPartitionY)  %>%  lapply(., mean)
  
 
 #### plot rmse by different ivs for ccodeS folds
@@ -228,29 +241,29 @@ xPartitionY= rep(list(PartitionList(xOut, 10, 'year' )), 5)
 
 
 # strat
-(rmseStratCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LstratMu`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
-(rmseStratCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LstratMu`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
-(rmseStratYearX = predictREList(10, `10-Fold_year_gaussian_re_LstratMu`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+rmseStratCCodeX = predictREList(5, `10-Fold_ccodeS_gaussian_re_LstratMu`, xPartitionC) %>% getRMSE_wRE_KFold(5, ., xPartitionC)  %>%  lapply(., mean)
+rmseStratCCodeRX = predictREList(5, `10-Fold_ccodeR_gaussian_re_LstratMu`, xPartitionCR) %>% getRMSE_wRE_KFold(5, ., xPartitionCR)  %>%  lapply(., mean)
+rmseStratYearX = predictREList(5, `10-Fold_year_gaussian_re_LstratMu`, xPartitionY) %>% getRMSE_wRE_KFold(5, ., xPartitionY)  %>%  lapply(., mean)
 
 # ally
-(rmseAllyCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWt`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
-(rmseAllyCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWt`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
-(rmseAllyYearX = predictREList(10, `10-Fold_year_gaussian_re_LallyWt`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+rmseAllyCCodeX = predictREList(5, `10-Fold_ccodeS_gaussian_re_LallyWt`, xPartitionC) %>% getRMSE_wRE_KFold(5, ., xPartitionC)  %>%  lapply(., mean)
+rmseAllyCCodeRX = predictREList(5, `10-Fold_ccodeR_gaussian_re_LallyWt`, xPartitionCR) %>% getRMSE_wRE_KFold(5, ., xPartitionCR)  %>%  lapply(., mean)
+rmseAllyYearX = predictREList(5, `10-Fold_year_gaussian_re_LallyWt`, xPartitionY) %>% getRMSE_wRE_KFold(5, ., xPartitionY)  %>%  lapply(., mean)
 
 # igo
-(rmseIGOCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_Ligo`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
-(rmseIGOCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_Ligo`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
-(rmseIGOYearX = predictREList(10, `10-Fold_year_gaussian_re_Ligo`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+rmseIGOCCodeX = predictREList(5, `10-Fold_ccodeS_gaussian_re_Ligo`, xPartitionC) %>% getRMSE_wRE_KFold(5, ., xPartitionC)  %>%  lapply(., mean)
+rmseIGOCCodeRX = predictREList(5, `10-Fold_ccodeR_gaussian_re_Ligo`, xPartitionCR) %>% getRMSE_wRE_KFold(5, ., xPartitionCR)  %>%  lapply(., mean)
+rmseIGOYearX = predictREList(5, `10-Fold_year_gaussian_re_Ligo`, xPartitionY) %>% getRMSE_wRE_KFold(5, ., xPartitionY)  %>%  lapply(., mean)
  
 # un
-(rmseUNCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LunIdPt`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
-(rmseUNCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LunIdPt`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
-(rmseUNYearX = predictREList(10, `10-Fold_year_gaussian_re_LunIdPt`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+rmseUNCCodeX = predictREList(5, `10-Fold_ccodeS_gaussian_re_LunIdPt`, xPartitionC) %>% getRMSE_wRE_KFold(5, ., xPartitionC)  %>%  lapply(., mean)
+rmseUNCCodeRX = predictREList(5, `10-Fold_ccodeR_gaussian_re_LunIdPt`, xPartitionCR) %>% getRMSE_wRE_KFold(5, ., xPartitionCR)  %>%  lapply(., mean)
+rmseUNYearX = predictREList(5, `10-Fold_year_gaussian_re_LunIdPt`, xPartitionY) %>% getRMSE_wRE_KFold(5, ., xPartitionY)  %>%  lapply(., mean)
  
 # all
-(rmseALLCCodeX = predictREList(10, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, xPartitionC) %>% getRMSE_wRE_KFold(10, ., xPartitionC)  %>%  lapply(., mean))
-(rmseALLCCodeRX = predictREList(10, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, xPartitionCR) %>% getRMSE_wRE_KFold(10, ., xPartitionCR)  %>%  lapply(., mean))
-(rmseALLYearX = predictREList(10, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, xPartitionY) %>% getRMSE_wRE_KFold(10, ., xPartitionY)  %>%  lapply(., mean))
+rmseALLCCodeX = predictREList(5, `10-Fold_ccodeS_gaussian_re_LallyWtLunIdPtLigo`, xPartitionC) %>% getRMSE_wRE_KFold(5, ., xPartitionC)  %>%  lapply(., mean)
+rmseALLCCodeRX = predictREList(5, `10-Fold_ccodeR_gaussian_re_LallyWtLunIdPtLigo`, xPartitionCR) %>% getRMSE_wRE_KFold(5, ., xPartitionCR)  %>%  lapply(., mean)
+rmseALLYearX = predictREList(5, `10-Fold_year_gaussian_re_LallyWtLunIdPtLigo`, xPartitionY) %>% getRMSE_wRE_KFold(5, ., xPartitionY)  %>%  lapply(., mean)
  
 
 #### plot rmse by different ivs for ccodeS folds
