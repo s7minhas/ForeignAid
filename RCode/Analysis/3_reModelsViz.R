@@ -13,9 +13,11 @@ fullSampPath = paste0(pathResults, '/fullSamp_gaussian_re_')
 load(paste0(fullSampPath, 'LallyDist.rda')) ; allyMods = mods
 load(paste0(fullSampPath, 'LigoDist.rda')) ; igoMods = mods
 load(paste0(fullSampPath, 'LunDist.rda')) ; unMods = mods
+load(paste0(fullSampPath, 'LstratMu.rda')) ; stratMuMods = mods
 
 load(paste0(fullSampPath, 'LallyDist_interaction.rda')) ; allyIntMods = mods
 load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoIntMods = mods
+load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods
 load(paste0(fullSampPath, 'LunDist_interaction.rda')) ; unIntMods = mods ; rm(mods)
 
 # 
@@ -28,34 +30,58 @@ modSumm = lapply(allMods, rubinCoef)
 cntrlVars=c(
   'Lno_disasters', 'colony', 'Lpolity2',
   'LlnGdpCap', 'LlifeExpect', 'Lcivwar' )
+cntrlVarNames = c(
+  'No. Disasters$_{r,t-1}$',    
+  'Former Colony$_{sr,t-1}$',
+  'Polity$_{r,t-1}$',
+  'Log(GDP per capita)$_{r,t-1}$',
+  'Life Expectancy$_{r,t-1}$',
+  'Civil War$_{r,t-1}$'
+  )
 ################################################################
 
 ################################################################
 # Model results
-mod = unMods[[1]]
-vars = c('(Intercept)','LunDist', cntrlVars)
-# summary(mod)$coefficients[1:(length(vars)+1),]
-# sqrt(mean( (resid(mod)^2) ))
-# summary(regData[,'logAid'])
-
-# genCoefPlot = function(mod, vars){
+genCoefPlot = function(mod, meltImpute=TRUE,
+  vars, varNames, dropIndex=1, printPlot=FALSE, fName){
 
   # Coefficient plot
-  coefData=summary(mod)$coefficients[1:(length(vars)+1),]
-  varNames = c(
-    'Pol. Strat. Distance$_{sr,t-1}$',
-    'Former Colony$_{sr,t-1}$',
-    'Polity$_{r,t-1}$',
-    'Log(GDP per capita)$_{r,t-1}$',
-    'Life Expectancy$_{r,t-1}$',
-    'No. Disasters$_{r,t-1}$',
-    'Civil War$_{r,t-1}$'
-    )
-  coefP=ggcoefplot(coefData, vars[-2], varNames)
-  # tikz(file=paste0(pathGraphics, 'modCoef.tex'), width=8, height=5, standAlone=F)
-  coefP
-  # dev.off()
-}
+  if(!meltImpute){coefData=summary(mod)$coefficients}
+  if(meltImpute){coefData=rubinCoef(mod, matrixFormat=TRUE)}
+  coefP=ggcoefplot(coefData, vars[-dropIndex], varNames[-dropIndex])
+  if(printPlot){
+    tikz(file=fName, width=8, height=5, standAlone=F)
+    coefP
+    dev.off() }
+  if(!printPlot){ return(coefP) } }
+
+
+# no interaction models
+varNamesNoInt = c('(Intercept)','Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
+
+genCoefPlot(unMods,
+  vars=c('(Intercept)','LunDist', cntrlVars),
+  varNames=varNamesNoInt,
+  fName = paste0(pathGraphics, 'unModCoef.tex') )
+
+# interaction models
+varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
+  'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
+
+genCoefPlot(allyIntMods,
+  vars=c('(Intercept)','LallyDist', cntrlVars, 'LallyDist:Lno_disasters'),
+  varNames=varNamesInt,
+  fName = paste0(pathGraphics, 'allyModIntCoef.tex') )
+
+genCoefPlot(igoIntMods,
+  vars=c('(Intercept)','LigoDist', cntrlVars, 'LigoDist:Lno_disasters'),
+  varNames=varNamesInt,
+  fName = paste0(pathGraphics, 'igoModIntCoef.tex') )
+
+genCoefPlot(unIntMods,
+  vars=c('(Intercept)','LunDist', cntrlVars, 'LunDist:Lno_disasters'),
+  varNames=varNamesInt,
+  fName = paste0(pathGraphics, 'unModIntCoef.tex') )
 #########################################################
 
 #########################################################

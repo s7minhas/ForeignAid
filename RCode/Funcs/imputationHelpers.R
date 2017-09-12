@@ -1,5 +1,5 @@
 library(Amelia)
-rubinCoef = function(mod){
+rubinCoef = function(mod, matrixFormat=FALSE){
   modCoef = lapply(mod, function(x){
     beta = fixef(x)
     se = sqrt(diag(vcov(x)))
@@ -14,5 +14,11 @@ rubinCoef = function(mod){
   names(modSumm) = c('beta', 'se')
   modSumm$t = modSumm$beta/modSumm$se
   modSumm$var = unique(rownames(modCoef))
+
+  if(matrixFormat){
+    names(modSumm) = c('Estimate', 'Std. Error', 't value', 'var')
+    rownames(modSumm) = modSumm$var
+    modSumm = data.matrix(modSumm[,-ncol(modSumm)]) }
+
   return(modSumm)
 }
