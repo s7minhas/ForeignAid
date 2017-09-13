@@ -7,21 +7,21 @@ if(Sys.info()['user']=='cindycheng'){
 ################################################################
 # load models
 foldPath = paste0(pathResults, '/5-Fold_ccodeR_gaussian_re_')
-load(paste0(foldPath, 'LallyDist.rda')) ; allyModsR = mods
-load(paste0(foldPath, 'LigoDist.rda')) ; igoModsR = mods
-load(paste0(foldPath, 'LunDist.rda')) ; unModsR = mods
+load(paste0(foldPath, 'LallyWt.rda')) ; allyModsR = mods
+load(paste0(foldPath, 'Ligo.rda')) ; igoModsR = mods
+load(paste0(foldPath, 'LunIdPt.rda')) ; unModsR = mods
 load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsR = mods
 
 foldPath = paste0(pathResults, '/5-Fold_ccodeS_gaussian_re_')
-load(paste0(foldPath, 'LallyDist.rda')) ; allyModsS = mods
-load(paste0(foldPath, 'LigoDist.rda')) ; igoModsS = mods
-load(paste0(foldPath, 'LunDist.rda')) ; unModsS = mods
+load(paste0(foldPath, 'LallyWt.rda')) ; allyModsS = mods
+load(paste0(foldPath, 'Ligo.rda')) ; igoModsS = mods
+load(paste0(foldPath, 'LunIdPt.rda')) ; unModsS = mods
 load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsS = mods
 
 foldPath = paste0(pathResults, '/5-Fold_year_gaussian_re_')
-load(paste0(foldPath, 'LallyDist.rda')) ; allyModsY = mods
-load(paste0(foldPath, 'LigoDist.rda')) ; igoModsY = mods
-load(paste0(foldPath, 'LunDist.rda')) ; unModsY = mods
+load(paste0(foldPath, 'LallyWt.rda')) ; allyModsY = mods
+load(paste0(foldPath, 'Ligo.rda')) ; igoModsY = mods
+load(paste0(foldPath, 'LunIdPt.rda')) ; unModsY = mods
 load(paste0(foldPath, 'LstratMu.rda')) ; stratMuModsY = mods ; rm(list=c('mods','foldPath'))
 
 # load data

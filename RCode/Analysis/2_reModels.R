@@ -4,7 +4,7 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 ################################################################
 # Load reg data
 setwd(pathData)
-load('iData.rda')
+load('iData_v2.rda')
 # Add dyad random effect
 iData = lapply(iData, function(x){
 	# add dyadic id

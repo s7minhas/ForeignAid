@@ -60,7 +60,12 @@ genCoefPlot(igoMods,
   varNames=varNamesNoInt, printPlot=TRUE,
   fName = paste0(pathGraphics, '/igoModCoef.tex') )
 
-# interaction models
+genCoefPlot(stratMuMods,
+  vars=c('(Intercept)','LstratMu', cntrlVars),
+  varNames=varNamesNoInt, printPlot=TRUE,
+  fName = paste0(pathGraphics, '/stratMuModCoef.tex') )
+
+# # interaction models
 varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
   'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
 
@@ -68,13 +73,18 @@ genCoefPlot(igoIntMods,
   vars=c('(Intercept)','LigoDist', cntrlVars, 'LigoDist:Lno_disasters'),
   varNames=varNamesInt, printPlot=TRUE,
   fName = paste0(pathGraphics, '/igoModIntCoef.tex') )
+
+genCoefPlot(stratMuIntMods,
+  vars=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters'),
+  varNames=varNamesInt, printPlot=TRUE,
+  fName = paste0(pathGraphics, '/stratMuIntCoef.tex') )
 #########################################################
 
 #########################################################
 # Substantive effects
 ## Strategic interest
-mod = igoIntMods[[1]] # results consistent for other model iters
-simVars = c('LigoDist', cntrlVars)
+mod = stratMuMods[[1]] # results consistent for other model iters
+simVars = c('LstratMu', cntrlVars)
 
 stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=simVars, actual=FALSE, brk=0.01, 
@@ -97,6 +107,7 @@ tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlo
 disastEffect
 dev.off()
 
+##
 tikz(file=paste0(pathGraphics, '/effects.tex'), width=8, height=4, standAlone=F)
 multiplot(list(stratEffect, disastEffect), cols=2)
 dev.off()
@@ -104,8 +115,8 @@ dev.off()
 
 #########################################################
 # switch to interaction mod
-mod = igoIntMods[[1]]
-var = 'LigoDist'
+mod = stratMuIntMods[[1]]
+var = 'LstratMu'
 
 # Create scenario matrix
 stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
@@ -139,7 +150,7 @@ names(ggData)=c('fit', 'sysLo95', 'sysHi95', 'sysLo90', 'sysHi90', var, 'Lno_dis
 disRange=with(data=regData, seq(min(Lno_disasters), max(Lno_disasters), 2) )
 ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
 
-tmp=ggplot(ggDataSmall, aes(x=LigoDist, y=fit)) +
+tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit)) +
   geom_line() +
   geom_ribbon(aes(ymin=sysLo90, ymax=sysHi90), alpha=.6) +
   geom_ribbon(aes(ymin=sysLo95, ymax=sysHi95), alpha=.4) +
