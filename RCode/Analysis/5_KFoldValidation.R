@@ -85,12 +85,20 @@ xKout_year = xKout(modPartitionLevel='year')
 folds_ccodeR = list( ally=allyModsR, igo=igoModsR,
   un=unModsR, stratMu=stratMuModsR )
 folds_ccodeS = list( ally=allyModsS, igo=igoModsS,
-  un=unModsS, stratMu=stSatMuModsS )
+  un=unModsS, stratMu=stratMuModsS )
 folds_year = list( ally=allyModsY, igo=igoModsY,
-  un=unModsY, stratMu=stSatMuModsY )
+  un=unModsY, stratMu=stratMuModsY )
 
 #
-rmse_ccodeR = lapply(folds_ccodeR, getRMSE_wRE)
-rmse_ccodeS = lapply(folds_ccodeS, getRMSE_wRE)
-rmse_year = lapply(folds_year, getRMSE_wRE)
+rmse_ccodeR = lapply(folds_ccodeR, function(mod){
+  getRMSE_wRE(5,5,mod,xKout_ccodeR) })
+rmse_ccodeS = lapply(folds_ccodeS, function(mod){
+  getRMSE_wRE(5,5,mod,xKout_ccodeS) })
+rmse_year = lapply(folds_year, function(mod){
+  getRMSE_wRE(5,5,mod,xKout_year) })
+
+loadPkg('dplyr')
+rmse_ccodeR %>% melt() %>% group_by(L1) %>% summarise(mu=mean(value))
+rmse_ccodeS %>% melt() %>% group_by(L1) %>% summarise(mu=mean(value))
+rmse_year %>% melt() %>% group_by(L1) %>% summarise(mu=mean(value))
 ################################################################

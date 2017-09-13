@@ -98,10 +98,11 @@ ggcoefplot = function(coefData, vars, varNames, estimates, serrors,
 	  if(Noylabel){coefp = coefp + theme(axis.text.y = element_blank())}
 	  if(coordFlip){coefp = coefp + coord_flip()} else {
 	  	coefp = coefp + theme(axis.text.x=element_text(angle=xAngle, hjust=1)) }
-	  coefp = coefp + theme(legend.position='none', legend.title=element_blank(),
-	    axis.ticks=element_blank(), panel.grid.major=element_blank(),
-	    panel.grid.minor=element_blank(), panel.border = element_blank(),
-	    axis.line = element_line(color = 'black'))
+	  coefp = coefp + theme(
+      legend.position='none', legend.title=element_blank(),
+	    axis.ticks=element_blank(), panel.border = element_blank()
+	    # ,axis.line = element_line(color = 'black')
+      )
 	  coefp 
   	}
 }
@@ -201,11 +202,12 @@ ggsimplot = function(
   
   if(specY){temp = temp + scale_y_continuous(limits=ggylims, breaks=ggybreaks)}
   temp = temp + xlab(xlabel) + ylab(ylabel)
-  temp = temp + theme(panel.border = element_blank(), 
-  axis.line = element_line(), axis.ticks = element_blank(),
-  panel.grid.major=element_blank(), panel.grid.minor=element_blank(), 
-  axis.title.x = element_text(vjust=-0.2),
-  axis.title.y = element_text(vjust=0.2))
+  temp = temp + theme(
+    panel.border = element_blank(), 
+    # axis.line = element_line(), 
+    axis.ticks = element_blank(),
+    axis.title.x = element_text(vjust=-0.2),
+    axis.title.y = element_text(vjust=0.2))
   temp
 }
 #######################################################################
