@@ -9,16 +9,11 @@ load(paste0(pathData, '/iData_v2.rda'))
 
 # load model
 fullSampPath = paste0(pathResults, '/fullSamp_gaussian_re_')
-load(paste0(fullSampPath, 'LigoDist.rda')) ; igoMods = mods
 load(paste0(fullSampPath, 'LstratMu.rda')) ; stratMuMods = mods
-
-load(paste0(fullSampPath, 'LigoDist_interaction.rda')) ; igoIntMods = mods
 load(paste0(fullSampPath, 'LstratMu_interaction.rda')) ; stratMuIntMods = mods ; rm(mods)
 
 # 
-allMods = list(
-  ally=allyMods,igo=igoMods,un=unMods, stratMu=stratMuMods,
-  allyInt=allyIntMods,igoInt=igoIntMods,unInt=unIntMods, stratMuInt=stratMuIntMods )
+allMods = list( stratMu=stratMuMods, stratMuInt=stratMuIntMods )
 modSumm = lapply(allMods, rubinCoef)
 
 # vars
@@ -38,46 +33,34 @@ cntrlVarNames = c(
 ################################################################
 # Model results
 genCoefPlot = function(mod, meltImpute=TRUE,
-  vars, varNames, dropIndex=1, printPlot=FALSE, fName){
+  vars, varNames, dropIndex=1, fName){
 
   # Coefficient plot
   if(!meltImpute){coefData=summary(mod)$coefficients}
   if(meltImpute){coefData=rubinCoef(mod, matrixFormat=TRUE)}
   coefP=ggcoefplot(coefData, vars[-dropIndex], varNames[-dropIndex])
-  if(printPlot){
-    tikz(file=fName, width=8, height=5, standAlone=F)
-    coefP
-    dev.off() }
-  if(!printPlot){ return(coefP) } }
+  return(coefP) }
 
 
 # no interaction models
 varNamesNoInt = c('(Intercept)','Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
 
 # sig
-genCoefPlot(igoMods,
-  vars=c('(Intercept)','LigoDist', cntrlVars),
-  varNames=varNamesNoInt, printPlot=TRUE,
-  fName = paste0(pathGraphics, '/igoModCoef.tex') )
-
-genCoefPlot(stratMuMods,
-  vars=c('(Intercept)','LstratMu', cntrlVars),
-  varNames=varNamesNoInt, printPlot=TRUE,
-  fName = paste0(pathGraphics, '/stratMuModCoef.tex') )
+# tikz(file=paste0(pathGraphics, '/stratMuModCoef.tex'), width=8, height=5, standAlone=F)
+# genCoefPlot(stratMuMods,
+#   vars=c('(Intercept)','LstratMu', cntrlVars),
+#   varNames=varNamesNoInt)
+# dev.off()
 
 # # interaction models
 varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
   'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
 
-genCoefPlot(igoIntMods,
-  vars=c('(Intercept)','LigoDist', cntrlVars, 'LigoDist:Lno_disasters'),
-  varNames=varNamesInt, printPlot=TRUE,
-  fName = paste0(pathGraphics, '/igoModIntCoef.tex') )
-
-genCoefPlot(stratMuIntMods,
-  vars=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters'),
-  varNames=varNamesInt, printPlot=TRUE,
-  fName = paste0(pathGraphics, '/stratMuIntCoef.tex') )
+# tikz(file=paste0(pathGraphics, '/stratMuIntCoef.tex'), width=8, height=5, standAlone=F)
+# genCoefPlot(stratMuIntMods,
+#   vars=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters'),
+#   varNames=varNamesInt )
+# dev.off()
 #########################################################
 
 #########################################################
@@ -88,10 +71,14 @@ simVars = c('LstratMu', cntrlVars)
 
 stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=simVars, actual=FALSE, brk=0.01, 
-  vi='LigoDist', ostat=median, sigma=FALSE, intercept=TRUE,
+  # vRange=regData$LstratMu[!is.na(regData$LstratMu)],
+  vRange=seq(min(regData$LstratMu,na.rm=TRUE), max(regData$LstratMu, na.rm=TRUE), 0.01),
+  vi='LstratMu', ostat=median, sigma=FALSE, intercept=TRUE,
   ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
   plotType='ribbon'
   ) + theme(axis.title.y=element_text(vjust=1))
+# regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
+# stratEffect = stratEffect + geom_rug(data=regData, aes(x=LstratMu), sides='b') + ylim(0.3,.9)
 tikz(file=paste0(pathGraphics, '/stratEffect.tex'), width=8, height=5, standAlone=F)
 stratEffect
 dev.off()
@@ -99,10 +86,19 @@ dev.off()
 ## Natural disaster 
 disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
   vars=simVars, actual=FALSE, brk=1, vRange=1:10,
+  # vRange=regData$Lno_disasters[!is.na(regData$Lno_disasters)],
+  # vRange=seq(min(regData$Lno_disasters,na.rm=TRUE), max(regData$Lno_disasters, na.rm=TRUE), 0.01),
   vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
   ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
   plotType='errorBar'
   ) + theme(axis.title.y=element_text(vjust=1))
+# regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
+# stuff=data.frame(table(regData$Lno_disasters))
+# stuff$freqScale = rescale(stuff$Freq, max(disastEffect$data$Fit), min(disastEffect$data$Fit))
+
+# disastEffect + geom_bar(data=stuff, aes(x=Var1, y=freqScale), stat='identity', alpha=.4) 
+
+disastEffect = disastEffect + geom_rug(data=regData[regData$Lno_disasters<=10,], aes(x=Lno_disasters), sides='b') + scale_x_continuous(limits=c(1,10))
 tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlone=F)
 disastEffect
 dev.off()

@@ -28,18 +28,18 @@ modForm=formula(paste0(
 
 # Cross val by country
 yrs = sort(unique(regData$year))
-# coefData=NULL
-# for(ii in seq_along(yrs)){
-# 	slice = regData[regData$year!=yrs[ii],]
-# 	slice$year = factor(slice$year)
-# 	slice$id = factor(slice$id)		
-# 	slice$commitUSD13 = log(slice$commitUSD13 + 1)
-# 	mod = lmer(modForm, data=slice) # random effects estimation	
-# 	coefs = summary(mod)$coefficients[1:(length(vars)+1),]
-# 	coefs = cbind(Year=yrs[ii], coefs)
-# 	coefData = rbind(coefData, coefs)
-# 	print(char(yrs[ii]))
-# }
+coefData=NULL
+for(ii in seq_along(yrs)){
+	slice = regData[regData$year!=yrs[ii],]
+	slice$year = factor(slice$year)
+	slice$id = factor(slice$id)		
+	slice$commitUSD13 = log(slice$commitUSD13 + 1)
+	mod = lmer(modForm, data=slice) # random effects estimation	
+	coefs = summary(mod)$coefficients[1:(length(vars)+1),]
+	coefs = cbind(Year=yrs[ii], coefs)
+	coefData = rbind(coefData, coefs)
+	print(char(yrs[ii]))
+}
 
 # Coefficient plot
 varNames = c(
@@ -52,25 +52,25 @@ varNames = c(
 	'Civil War$_{r,t-1}$'
 	)
 
-# timeCross=ggcoefplot(
-# 	coefData=coefData, 
-# 	vars=c('LstratMu','Lno_disasters'), 
-# 	varNames=varNames[c(1,2)],	
-# 	Noylabel=FALSE, coordFlip=FALSE, revVar=FALSE,
-# 	facet=TRUE, facetColor=FALSE, colorGrey=FALSE,
-# 	facetName='Year', 
-# 	facetBreaks=seq(yrs[1],yrs[length(yrs)],5),
-# 	facetLabs=seq(yrs[1],yrs[length(yrs)],5)
-#   ) + theme_bw() + theme(
-#   axis.ticks=element_blank(),
-#   panel.border=element_blank(),
-#   legend.position='none',
-#   strip.text.x = element_text(size = 9, color='white' ),
-#   strip.background = element_rect(fill = "#525252", color='#525252') 
-#   )
-# tikz(file=paste0(pathGraphics, '/timeCross.tex'), width=8, height=4, standAlone=F)
-# timeCross
-# dev.off()
+timeCross=ggcoefplot(
+	coefData=coefData, 
+	vars=c('LstratMu','Lno_disasters'), 
+	varNames=varNames[c(1,2)],	
+	Noylabel=FALSE, coordFlip=FALSE, revVar=FALSE,
+	facet=TRUE, facetColor=FALSE, colorGrey=FALSE,
+	facetName='Year', 
+	facetBreaks=seq(yrs[1],yrs[length(yrs)],5),
+	facetLabs=seq(yrs[1],yrs[length(yrs)],5)
+  ) + theme_bw() + theme(
+  axis.ticks=element_blank(),
+  panel.border=element_blank(),
+  legend.position='none',
+  strip.text.x = element_text(size = 9, color='white' ),
+  strip.background = element_rect(fill = "#525252", color='#525252') 
+  )
+tikz(file=paste0(pathGraphics, '/timeCross.tex'), width=8, height=4, standAlone=F)
+timeCross
+dev.off()
 
 # Cross val by sender cntry
 cntries = unique(regData$ccodeS)
