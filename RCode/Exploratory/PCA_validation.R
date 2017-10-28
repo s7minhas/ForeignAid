@@ -10,6 +10,12 @@ if (Sys.info()['user'] == 'cindy'){
   pathResults = "/home/cindy"
 }
 
+if (Sys.info()['user'] == 's7m'){
+  pathCode="~/Research/ForeignAid/RCode";
+  pathResults = "~//Dropbox/Research/ForeignAid/Results"
+  pathData = "~//Dropbox/Research/ForeignAid/data"
+}
+
 # load packages
 source(paste0(pathCode, "/setup.R"))
 
@@ -127,7 +133,7 @@ dev.off()
 
 setwd(pathGraphics)
 pdf("dyadic_ChinaJapNK_allyIGOUN.pdf")
-plotSub(c(732, 710, 740), PCA_All  , ylab = "Political Strategic Interest")
+plotSub(c(731, 710, 740), PCA_All  , ylab = "Political Strategic Interest")
 dev.off()
 
 setwd(pathGraphics)

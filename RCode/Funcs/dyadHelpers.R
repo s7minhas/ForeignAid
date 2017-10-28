@@ -55,16 +55,26 @@ aggDyad = function(data, year, name){
  
 plotSub=function(csk, data, ylab){
   countrynames = countrycode(csk, 'cown', 'country.name')
+  countrynames[which(csk==731)] = 'NORTH KOREA'
   dyadComb = t(combS(countrynames, 2))
-  dyad = data.frame(paste(dyadComb[,1], dyadComb[,2], sep = "-"),
-                    dyadComb)
+  dyad = data.frame(paste(dyadComb[,1], dyadComb[,2], sep = "-"), dyadComb)
   names(dyad) = c("dyadName", "cname_1", "cname_2")
-  
   
   triad=data[which(data$ccode1 %in% csk & data$ccode2 %in% csk), c('dyadID', 'cname_1', 'cname_2', 'year', 'PCAStd')]
   triad = merge(triad, dyad, by = c("cname_1", "cname_2"))
-  ggplot(triad, aes(x=year, y=PCAStd, color=dyadName))+geom_line()+
-    theme(legend.position="bottom")+ ylab(ylab)
+
+  yrLabels = seq(min(triad$year), max(triad$year), 7)  
+  ggplot(triad, aes(x=year, y=PCAStd, color=dyadName)) +
+    geom_line() +
+    geom_point() + 
+    scale_y_continuous(ylab) +
+    scale_x_continuous('', breaks=yrLabels, labels=yrLabels) +
+    theme(
+      axis.ticks=element_blank(),
+      legend.position="bottom",
+      legend.title=element_blank(),
+      panel.border=element_blank()
+      )
 }
   
   
