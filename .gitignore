@@ -16,7 +16,6 @@
 *.csv
 *.xlsx
 *.xls
-*.pdf
 *.zip
 *.Rhistory
 .DS_Store*

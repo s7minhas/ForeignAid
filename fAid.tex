@@ -1,0 +1,240 @@
+\documentclass[12pt]{article} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% -------------------- defaults -------------------- %
+% load lots o' packages
+
+% approx iid
+\newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
+\usepackage{natbib}
+\usepackage{titlecaps}
+\Addlcwords{a about above after again against all am an and any are aren't as at be because been before being below between both but by can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further had hadn't has hasn't have haven't having he he'd he'll he's her here here's hers herself him himself his how how's i i'd i'll i'm i've if in into is isn't it it's its itself let's me more most mustn't my myself no nor not of off on once only or other ought our ours ourselves out over own same shan't she she'd she'll she's should shouldn't so some such than that that's the their theirs them themselves then there there's these they they'd they'll they're they've this those through to too under until up very was wasn't we we'd we'll we're we've were weren't what what's when when's where where's which while who who's whom why why's with won't would wouldn't you you'd you'll you're you've your yours yourself yourselves}
+
+% Fonts
+% at some point figure out bolding ...
+\usepackage[default,osfigures,scale=0.95]{opensans}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[varqu,varl]{zi4}% inconsolata typewriter
+\usepackage{amsmath,amsthm}
+\usepackage[cmintegrals]{newtxsf}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+
+% layout control
+\usepackage[paper=a4paper,left=25mm,right=25mm,top=20mm,bottom=25mm]{geometry}
+\usepackage[onehalfspacing]{setspace}
+\setlength{\parskip}{.5em}
+\usepackage{rotating}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{parallel}
+\usepackage{parcolumns}
+\usepackage{pdflscape}
+% math typesetting
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+% tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+
+\usepackage[%
+decimalsymbol=.,
+digitsep=fullstop
+]{siunitx}
+
+% to adapt caption style
+\usepackage[font={small},labelfont=bf]{caption}
+
+% footnotes at bottom
+\usepackage[bottom]{footmisc}
+
+% to change enumeration symbols begin{enumerate}[(a)]
+\usepackage{enumerate}
+
+% to make enumerations and itemizations within paragraphs or
+% lines. f.i. begin{inparaenum} for (a) is (b) and (c)
+\usepackage{paralist}
+
+% to colorize links in document. See color specification below
+\usepackage[x11names]{xcolor}
+
+% for multiple references and insertion of the word "figure" or "table"
+% \usepackage{cleveref}
+
+% load the hyper-references package and set document info
+\usepackage[pdftex]{hyperref}
+
+% graphics stuff
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[space]{grffile} % allows us to specify directories that have spaces
+\usepackage[section]{placeins} % prevents floats from moving past a \FloatBarrier or section
+\usepackage{tikz}
+\usepackage{caption}
+
+% \usepackage{pgfplots}
+
+% define clickable links and their colors
+\hypersetup{
+	unicode=false,          % non-Latin characters in Acrobat's bookmarks
+	pdftoolbar=true,        % show Acrobat's toolbar?
+	pdfmenubar=true,        % show Acrobat's menu?
+	pdffitwindow=false,     % window fit to page when opened
+	pdfstartview={FitH},    % fits the width of the page to the window
+	pdfnewwindow=true,%
+	pdfauthor={Cindy Cheng and Shahryar Minhas},%
+	pdftitle={Aid something},%
+	colorlinks,%
+	citecolor=black,%
+	filecolor=black,%
+	linkcolor=black,%
+	urlcolor=RoyalBlue4%
+	}
+
+% Including External Code
+\usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+	language=R,
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\color{gray},
+	numbers=left,
+	numberstyle=\ttfamily\color{gray}\footnotesize,
+	stepnumber=1,
+	numbersep=5pt,
+	backgroundcolor=\color{white},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	frame=single,
+	tabsize=2,
+	captionpos=b,
+	breaklines=true,
+	breakatwhitespace=false,
+	title=\lstname,
+	escapeinside={},
+	keywordstyle={},
+	morekeywords={}
+	}
+
+% -------------------------------------------------- %
+
+
+% -------------------- title -------------------- %
+
+\title{Keeping Friends Close, But Enemies Closer: Foreign Aid Responses to Natural Disasters}
+\author{	Cindy Cheng \\
+	\texttt{cindy.cheng@hfp.tum.de}
+	\and
+	Shahryar Minhas \\
+	\texttt{shahryar.minhas@duke.edu}}
+\date{\today}
+
+% \setlength{\headheight}{15pt}
+% \setlength{\headsep}{20pt}
+% \pagestyle{fancyplain}
+ 
+% \fancyhf{}
+ 
+% \lhead{\fancyplain{}{}}
+% \chead{\fancyplain{}{}}
+% \rhead{\fancyplain{}{}}
+% \rfoot{\fancyplain{}{}}
+
+% ----------------------------------------------- %
+
+
+% -------------------- customizations -------------------- %
+
+%\graphicspath{{~/Users/cindycheng/Dropbox/ForeignAid/graphics/}}
+\graphicspath{{graphics/}}
+\makeatletter
+\def\input@path{{graphics/}}
+ \makeatother
+
+% \makeatletter
+%\def\input@path{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
+% \makeatother
+%\graphicspath{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
+
+% easy commands for number propers
+\newcommand{\first}{$1^{\text{st}}$}
+\newcommand{\second}{$2^{\text{nd}}$}
+\newcommand{\third}{$3^{\text{rd}}$}
+\newcommand{\nth}[1]{${#1}^{\text{th}}$}
+
+% easy command for boldface math symbols
+\newcommand{\mbs}[1]{\boldsymbol{#1}}
+
+% define bibliography style
+
+
+
+
+% -------------------------------------------------------- %
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\doublespacing 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\singlespacing{
+	
+% In recent years, numerous studies have sought to explain the strategic and political motivations that direct foreign aid flows (e.g., \citealp{alesina:2000}; \citealp{berthelemy:2006}; \citealp{werker:2012}). To that end, scholars have tested many monadic and dyadic level hypotheses have done so using widely inconsistent measures of `strategic interest'. Moreover all the extant literature analyzes aid flows in a dyadic context where the assumption is that the flow of aid between any particular dyad is independent of any other. However, scholars are well aware of potential dependence in foreign aid allocations. Some scholars hypothesize for example that donors exhibit “herding” \citep{frot:2011}  or "lead donorship” behavior \citep{steinwand:2014}— wherein donor countries are dissuaded from giving aid to a country that already has a major donor. This is also empirically problematic as failing to account for interdependencies leads to biased coefficients and standard errors. To explicitly incorporate these interdependencies, we used a mixed hierarchical model with random effects. In doing so we are able to shed new light onto the political and strategic considerations underlying the distribution of foreign aid in the international system.
+
+Natural disasters represent rare opportunities for strategic opponents to actively inflict harm, or at the very least, passively enjoy tactical advantages over afflicted countries. However, contrary to the robust existing literature that has found that aid donors are largely motivated by strategic considerations when dispensing aid, anecdotal evidence suggests that countries often receive substantial humanitarian aid following natural disasters, even from strategic opponents. In this paper, we square this seeming incongruity by arguing that natural disasters can serve to, at least temporarily, emphasize the humanitarian, as opposed to the political or economic, aspects of a bilateral relationship. Using a new measure of strategic interest, we find that donors are more likely to dispense aid if the recipient country experiences more natural disasters irrespective of their strategic relationship with that country. Our findings suggest that social context matters in foreign aid allocation. They also have important implications for the future of foreign aid allocation, as the number of natural disasters is likely to rise, not fall, with changing climate conditions. }
+
+\end{abstract}
+
+\newpage
+
+%%%%%%%% INTRO %%%%%%%%
+\input{Paper/1_fAidIntro}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Lit Review %%%%%
+\input{Paper/2_fAidLit}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Theory %%%%%
+\input{Paper/3_fAidTheory}
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% Theory %%%%%
+\input{Paper/4_fAidData}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Empirics %%%%%
+\input{Paper/5_fAidEmp}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Conclusion %%%%%
+\input{Paper/6_fAidConcl}
+%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\bibliographystyle{Paper/sm}
+\bibliography{Paper/fAidRefs.bib}
+
+\end{document} 
