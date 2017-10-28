@@ -1,4 +1,3 @@
-
 \section*{How Natural Disasters Change the Social Context of Foreign Aid Allocations}
  
 We seek to show that social context may matter more than previously thought in foreign aid allocations.  We argue that natural disasters can encourage countries to increase aid to their strategic opponents because such disasters can drastically shift the social context of the relationship.  In so doing, we draw on a rich literature from behavioral economics which shows that at least on the individual level, social context can have a substantial influence on behavior \citep{kahneman:2003,do:2011}. 
@@ -50,14 +49,11 @@ To calculate the latent distance between each dyad for each variable, we use a b
 
 The main advantage of calculating the latent space of different dyadic variables as opposed to using alternative specifications such as the S Score algorithm\footnote{\citet{leeds:2007}, for example, measure a states ``threat environment'' as the set of all states for which ones is contiguous with or which is a major power and with an S score below the population median.} is that it allows us to account for third order dependencies within the data. To review, first order dependency refers to the propensity for some actors to send or receive more ties than others, second-order dependency refers to reciprocity of exchange between actors, and a third-order dependency refers to interactions among three or more actors. Dyadic data are rife with these types of dependencies, and aside from first-order dependencies, they pose serious challenges to the basic assumption of independence between observations \citep{poast2010, hoff:2004}. 
 
-
-
-
 More precisely, third order dependency includes the concepts of (a) transitivity, (b) balance and (c) clusterability. Formally, a triad $ijk$ is said to be transitive if for whenever $y_{ij} = 1$ and $y_{jk} = 1$, we also observe that $y_{ik}$. This follows the logic of `` a friend of a friend is a friend''. Meanwhile,  a triad $ijk$ is said to be balanced if $y_{ij} \times y_{jk} \times y_{ki} >0$. Conceptually, if the relationship between $i$ and $j$ is `positive', then both will relate to another unit $k$ identically, either both positive or both negative. Finally a triad $ijk$ is said to be clusterable if it is balanced or all the relations are all negative. It is a relaxation of the concept of balance and seeks to capture groups where the measurements are positive within groups and negative between groups.
 
 In other words, third order dependencies suggest that ``knowing something about the relationship between $i$ and $j$ as well as between $i$ and $k$ may reveal something about the relationship between $i$ and $k$, even when we do not directly observe it'' \citep{hoff:2004}. Such a dependency is especially important to capture with regards to strategic relationships as dyadic relationships between two particular countries cannot help but be understood in the context of their relationship with other countries. The importance for accounting for these dynamics have long been acknowledged in the foreign aid literature. \citet{trumbull:1994} for example, note that, ``donors do make their decisions with knowledge of what each other are doing, and may actually act cooperatively. Any study that ignores the interrelationship of donor behavior risks problems with simultaneity bias.'' However, we find that until now, this critique has largely gone by unaddressed by the existing literature. 
 
- To do so, we run a null generalized bilinear mixed effects model (gbme)\footnote{Code for running the gbme can be found from Hoff's website at \url{http://www.stat.washington.edu/hoff/Code/hoff_2005_jasa/}.} to estimate the latent space for each component of our strategic interest variables. Formally, it is represented as follows:
+ To do so, we run a null generalized bilinear mixed effects model (GBME) to estimate the latent space for each component of our strategic interest variables. Formally, it is represented as follows:
 
 \begin{align*}
 \theta_{i,j} = a_i + b_j + \gamma_{i,j} + z_i'z_j
@@ -69,45 +65,31 @@ In other words, third order dependencies suggest that ``knowing something about 
 \caption{Latent Spaces for components of Political Strategic Interest Measure during 2005}
 \label{fig:polLat}
 \centering
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:ally}
-\includegraphics[width = 2.3in]{\detokenize{ally_2005.pdf}}
-\caption*{(a) Alliances}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:un}
-\includegraphics[width = 2.3in]{\detokenize{un_2005.pdf}}
-\caption*{(b) UN voting}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\centering
-\label{fig:igo}
-\includegraphics[width = 2.3in]{\detokenize{igo_2005.pdf}}
-\caption*{(c) IGO membership}
-\end{minipage}
+	\begin{minipage}{.33\linewidth}
+		\centering
+		\label{fig:ally}
+		\includegraphics[width = 2.3in]{\detokenize{ally_2005.pdf}}
+		\caption*{(a) Alliances}
+		\end{minipage}
+		\hspace{-.2in}
+		\begin{minipage}{.33\linewidth}
+		\centering
+		\label{fig:un}
+		\includegraphics[width = 2.3in]{\detokenize{un_2005.pdf}}
+		\caption*{(b) UN voting}
+		\end{minipage}
+		\hspace{-.2in}
+		\begin{minipage}{.33\linewidth}
+		\centering
+		\label{fig:igo}
+		\includegraphics[width = 2.3in]{\detokenize{igo_2005.pdf}}
+		\caption*{(c) IGO membership}
+	\end{minipage}
 \end{figure}
 
-\indent\indent Countries that cluster together in this two-dimensional latent space are more likely to interact with each other. The plots for alliances, UN voting and IGO membership suggest that there is distinct clustering among countries. Moreover, these clusters are different across the different measures, suggesting that each variable is indeed capturing different aspects of strategic interest. % This is also true for latent space of arms transfers, a component of the military strategic relationship variable. However, there is much less clustering for the other two components of the military strategic relationship variable, suggesting that many conflicts involve more than one or two dyads and further that military conflicts can have broad ramifications beyond the dyads involved.\\
+\indent\indent Countries that cluster together in this two-dimensional latent space are more likely to interact with each other. The plots for alliances, UN voting and IGO membership suggest that there is distinct clustering among countries. Moreover, these clusters are different across the different measures, suggesting that each variable is indeed capturing different aspects of strategic interest.
 
-\indent\indent After estimating the latent spaces for these components, we calculate the euclidean distance between each dyad for each component. We then combine them in a principal components analysis (PCA) to reduce the dimensionality of our measure while retaining as much variance as possible. That is, alliances, UN voting and joint membership in IGOs all capture certain aspects of political strategic interest. Instead of choosing only one of them as our measure of strategic interest as other papers have done, we combine them in order to increase our explanatory power. We estimate the PCA of these variables for each year separately\footnote{For each year, we conduct a bootstrap PCA of 1000 subsamples each} and use the first principal component for each year as our measure of strategic interest. On average over all the years, we find that the first component of our PCA of alliances, UN voting and joint membership in IGOs, which we use as our measure of strategic interest, explains about 51\% of its variance. % Meanwhile we find that the our military strategic interest variable, that is the first component of our PCA of the combination of arms transfers, MIDs and war incidence, explains about 66\% of its variance.\\
-
-
-%for our strateci and in Figure \ref{fig:milPCA} for the military strategic measure for the year 2005. 
-% \indent\indent  A visualization of the resultant dyadic PCA is shown below in Figures \ref{fig:polPCA}. Along the x and y axes are the countries included in our analysis; any point within the plot represents the dyadic relationship between a country on the x and y axis with darker shading representing a stronger relationship and lighter shading representing a weaker relationship. 
-
-%\indent\indent  These plots suggest that there is much more variation in political strategic relationships than there are military strategic relationships, perhaps because the number of issues spaces in the political arena are much greater. They also suggest that on average, countries have a greater political strategic relationships than military strategic relationships. Since the military strategic relationships data is composed largely of actual military events, this makes sense as on average, conflict between any two countries is much rarer than diplomatic negotiations. \\
-
-% \begin{figure}[h!]
-% \centering
-% \caption{Dyadic PCA for Political Strategic Interests for year 2005}
-% \label{fig:polPCA}
-% \includegraphics[width = 5in]{\detokenize{dyadViz_allyIGOUN.pdf}}
-% \caption*{\small{Along the x and y axes are the countries included in our analyses for the year 2005. The color gradient reflects the strength of the strategic relationship between any two dyads, with dark colors reflecting a stronger relationship and light colors reflecting a weaker relationship. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space and thus stronger strategic relationships will have smaller values.}}
-% \end{figure}
+\indent\indent After estimating the latent spaces for these components, we calculate the euclidean distance between each dyad for each component. We then combine them in a principal components analysis (PCA) to reduce the dimensionality of our measure while retaining as much variance as possible. That is, alliances, UN voting and joint membership in IGOs all capture certain aspects of political strategic interest. Instead of choosing only one of them as our measure of strategic interest as other papers have done, we combine them in order to increase our explanatory power. We estimate the PCA of these variables for each year separately\footnote{For each year, we conduct a bootstrap PCA of 1000 subsamples each} and use the first principal component for each year as our measure of strategic interest. On average over all the years, we find that the first component of our PCA of alliances, UN voting and joint membership in IGOs, which we use as our measure of strategic interest, explains about 51\% of its variance. 
 
 
 \subsection*{Validating our measure of strategic interest}
@@ -143,66 +125,4 @@ Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
 
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad. \\
 
-% \indent\indent   Our military strategic measure performs will mixed results with respect to S scores and Kendall's $\tau_b$ for alliances . It has a negative and statistically significant relationship between S scores with year fixed effects. It in fact has a positive and statistically significant relationship between S scores and Kendall's $\tau_b$ without year fixed effects These mixed results suggest that the military strategic measure is perhaps measuring something qualitatively different than S scores.\\
-
-Second, we also investigate how our measure performs relative to well known dyadic relationships. In the figures below, we plot the dyadic relationships between countries that are well-known to have friendly or antagonistic relationships. For example, Figure \ref{fig:USIsraelIran_p} shows the dyadic relationship between Iran and Israel, the US and Israel, and the US and Iran. The plot suggests that the US and Israel have consistently had a stronger political strategic relationship throughout time except for the early 1970's when Iran and Israel is shown to have had a stronger political strategic relationship. This is in fact consistent with historical evidence which suggests that Iran and Israel enjoyed close ties before the Iranian revolution. 
-
-Meanwhile the plot of the dyadic relationships between China and Japan and, North Korea and China and North Korea and Japan suggest more or less indifferent relations among the three before 1990 after which the political strategic relationship between China and North Korea becomes markedly stronger. This is also consistent with the disappearance of Soviet support for North Korea following the end of the Cold War and the emergence of China as North Korea's new protector. 
-
-Finally, the plot of the dyadic relationship between India and Pakistan, India and the US and Pakistan and the US suggest in fact that India and Pakistan have a much stronger political strategic relationship than either do with the US. Given the history of antagonism between India and Pakistan, this is a rather surprising result; it also suggests however that a dyad's political relationship and military relationship may be quite different and indeed as two large bordering countries, cooperation between India and Pakistan is important to the security of both. 
-
-\begin{figure}[h!] 
-\caption{Dyadic relationships over time as measured by the political strategic interest variable}
-\centering
-\begin{minipage}{.33\linewidth}
-\centering
-\caption*{}
-\label{fig:USIsraelIran_p}
-\includegraphics[width = 2.3in]{\detokenize{dyadic_USIsraelIran_allyIGOUN.pdf}}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\centering
-\caption*{}
-\label{fig:ChinaJapNK_p}
-\includegraphics[width = 2.3in]{\detokenize{dyadic_ChinaJapNK_allyIGOUN.pdf}}
-\end{minipage}
-\hspace{-.2in}
-\begin{minipage}{.33\linewidth}
-\caption*{}
-\centering
-\label{fig:USIndPak_p}
-\includegraphics[width = 2.3in]{\detokenize{dyadic_USIndPak_allyIGOUN.pdf}}
-\end{minipage}
-\end{figure}
-
-% \indent\indent   We plot the same dyadic relationships using our military strategic interest variable. Here, variation between different dyadic relationships is much more difficult to tease out, perhaps a function of the fact that military events are much more rare. There are two points of interest about these plots (i) they have large degrees of variation over time, suggesting that while military events may be rare, they also have a large influence on a dyad's military strategic relationship (ii) they dyadic relationships plotted here seem to be very similar over time potentially suggesting that third order dependencies are very strong with regards to military strategic relationships.
-
-% \begin{figure}[h!] 
-% \caption{Dyadic relationships over time as measured by the military strategic interest variable}
-% \centering
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:ally}
-% \includegraphics[width = 2.3in]{\detokenize{dyadic_USIsraelIran_midWarArmsSum.pdf}}
-% \end{minipage}
-% \hspace{-.2in}
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:un}
-% \includegraphics[width = 2.3in]{\detokenize{dyadic_ChinaJapNK_midWarArmsSum.pdf}}
-% \end{minipage}
-% \hspace{-.2in}
-% \begin{minipage}{.33\linewidth}
-% \centering
-% \label{fig:igo}
-% \includegraphics[width = 2.3in]{\detokenize{dyadic_USIndPak_midWarArmsSum.pdf}}
-% \end{minipage}
-% \end{figure}
-
-%\indent\indent  Before moving on to the next section, we note that it is possible to do a PCA on all different of the components of strategic interest --- alliances, UN voting, joint IGO membership, arms transfers, mids and wars --- combined. If we were to take this approach,  we could run our models using the largest components of the resulting PCA. As discussed above, while we argue that political and military strategic interest are qualitatively different, we do acknowledge that both can inform each other and so taking such a course of action would be theoretically logical. \\
-
-%\noindent\noindent While we considered employing this approach, we decided to make the trade-off for better interpretability of our measure over increased precision of our strategic interest measure as the interpretation of different components of a PCA measure is generally not straightforward as it is. For example, we could end up with a first principal component that is explained by alliances \%50 of the time, IGOs \%40 of the time, arms transfers \% 5 of the time and the rest of the components a combined \%5 of the time and a second component that is explained by  MIDS \%60 of the time, alliances 30\% of the time, and the rest of the components a combined \%10 of the time. While we may be able to say that strategic interest matters, it would be more difficult to say in what way. In separating out the variables before hand for theoretical reasons, we increase the interpretability of any of our subsequent results while sacrificing some explanatory power. At the same time, whatever results we do find should represent a harder test for the importance of political or military strategic interest because of this trade-off.
-
-% multilateral aid
-% news reports
+% \indent\indent   Our military strategic measure performs will mixed results with respect to S scores and Kendall's $\tau_b$ for alliances . It has a negative a`'nd statistically significant relationship between S scores with year fixed effects. It in fact has a positive and statistically significant relationship between S scores and Kendall's $\tau_b$ without year fixed effects These mixed results suggest that the military strategic measure is perhaps measuring something qualitatively different than S scores.\\

@@ -141,8 +141,6 @@ pdf("dyadic_USIndPak_allyIGOUN.pdf")
 plotSub(c(750, 770, 2), PCA_All, ylab = "Political Strategic Interest")
 dev.off()
 
-
-
 # Military Strategic Interest 
 setwd(pathGraphics)
 pdf("dyadic_USIsraelIran_midWarArmsSum.pdf")
