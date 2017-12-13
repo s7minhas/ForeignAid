@@ -1,14 +1,10 @@
 #######################################################
 rm(list=ls())
 
-if(Sys.info()['user']=='janus829'){ 
-	pathData='~/Google Drive/Research/ForeignAid/Data'
-	pathCode='~/Desktop/Research/ForeignAid/RCode';
-	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
-if(Sys.info()['user']=='s7m'){ 
-	pathData='~/Google Drive/Research/ForeignAid/Data'	
+if(Sys.info()['user']=='janus829' | Sys.info()['user']=='s7m'){ 
+	pathData='~/Dropbox/Research/ForeignAid/data'
 	pathCode='~/Research/ForeignAid/RCode';
-	pathResults='~/Google Drive/Research/ForeignAid/Results/GBME'}
+	pathResults='~/Dropbox/Research/ForeignAid/Results/GBME'}
 
 setwd(pathData)
 load('stratInterestMatrics.rda')
