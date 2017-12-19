@@ -1,23 +1,24 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ pathCode = '~/Documents/Papers/ForeignAid/RCode'}
-source(paste0(pathCode, '/setup.R'))
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+    source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+    pathCode = '~/Documents/Papers/ForeignAid/RCode' ; source(paste0(pathCode, '/setup.R'))}
 
 ###############################################################
 # Clean alliance data [extends from 1816 to 2012]
-
-
 setwd(paste0(pathData, '/Components/COW_Alliances/version4.1_stata'))
 alliance = read.dta('alliance_v4.1_by_directed_yearly.dta')
 alliance$ccode1=num(alliance$ccode1)
 alliance$ccode2=num(alliance$ccode2)
 
-
 # clean country names
 ctyNameA=toupper(countrycode(alliance$ccode1, "cown", "country.name"))
 ctyNameB=toupper(countrycode(alliance$ccode2, "cown", "country.name"))
 
-sancIDs = data.frame( cowcode = intersect(alliance$ccode1, alliance$ccode2), 
-                       country = toupper(countrycode(intersect(alliance$ccode1, alliance$ccode2), "cown", "country.name")), stringsAsFactors = F)
+sancIDs = data.frame( cowcode = intersect(alliance$ccode1, alliance$ccode2),
+    country = toupper(
+        countrycode(intersect(alliance$ccode1, alliance$ccode2), "cown", "country.name")
+        ), 
+    stringsAsFactors = F)
 
 #fix time
 sancIDs[sancIDs$cowcode==245,'country'] = 'BAVARIA'
@@ -33,14 +34,13 @@ sancIDs[sancIDs$cowcode==345,'country'] = 'SERBIA'
 sancIDs[sancIDs$cowcode==315,'country'] = 'CZECH REPUBLIC'
 
 # Add in the data from the panel
-sancIDs$ccode = panel$ccode[match(sancIDs2$country, panel$cname)]
-sancIDs$cname = panel$cname[match(sancIDs2$country, panel$cname)]
+sancIDs$ccode = panel$ccode[match(sancIDs$country, panel$cname)]
+sancIDs$cname = panel$cname[match(sancIDs$country, panel$cname)]
 
 sancIDs[is.na(sancIDs$ccode),]    # Checks for NAs
 sancIDs[is.na(sancIDs$cname),] 
 
 # weight alliances
- 
 alliance[, 'defense'] = alliance[, 'defense']*3
 alliance[, 'neutrality'] = alliance[, 'neutrality']*2
 alliance[, 'nonaggression'] = alliance[, 'nonaggression']*2
@@ -51,25 +51,21 @@ alliance$allyWtMax = apply(alliance[, c('defense', 'nonaggression', 'neutrality'
 alliance2 = alliance[,c('ccode1', 'ccode2', 'state_name1', 'state_name2','year', 'allyWtMax', 'allyWtSum')]
 colnames(alliance2)[1:2] = c('cowcode1', 'cowcode2')
  
-alliance2$ccode_1 = sancIDs$ccode[match(alliance2$cowcode1, sancIDs2$cowcode)]
-alliance2$ccode_2 = sancIDs$ccode[match(alliance2$cowcode2, sancIDs2$cowcode)]
+alliance2$ccode_1 = sancIDs$ccode[match(alliance2$cowcode1, sancIDs$cowcode)]
+alliance2$ccode_2 = sancIDs$ccode[match(alliance2$cowcode2, sancIDs$cowcode)]
 
-alliance2$cname_1 = sancIDs$cname[match(alliance2$cowcode1, sancIDs2$cowcode)]
-alliance2$cname_2 = sancIDs$cname[match(alliance2$cowcode2, sancIDs2$cowcode)]
+alliance2$cname_1 = sancIDs$cname[match(alliance2$cowcode1, sancIDs$cowcode)]
+alliance2$cname_2 = sancIDs$cname[match(alliance2$cowcode2, sancIDs$cowcode)]
 
 allianceFINAL = na.omit(alliance2)
 allianceFINAL$ally = 1
-
  
 save(allianceFINAL, file='ally.rda')
 ###############################################################
 
 ###############################################################
 # Clean IGO data [extends from 1820 to 2005]
-setwd(paste0(pathData, '/Components/COW_IGO'))
-# igo = read.dta('IGO_dyadunit_stata_v2.3.dta')
-# save(igo, file='igoData.rda')
-load('igoData.rda')
+igo = read.dta(paste0(pathData, '/Components/COW_IGO/IGO_dyadunit_stata_v2.3.dta'))
  
 igo$ccode1=num(igo$ccode1)
 igo$ccode2=num(igo$ccode2)
@@ -118,7 +114,6 @@ sancIDs2$cname = panel$cname[match(sancIDs2$country, panel$cname)]
 sancIDs2[is.na(sancIDs2$ccode),]    # Checks for NAs
 sancIDs2[is.na(sancIDs2$cname),] 
 
-
 # Add back into igo
 names(igo)[1] = 'cowcode1'
 names(igo)[3] = 'cowcode2'
@@ -134,7 +129,6 @@ igoFINAL = igo[! (is.na(igo$ccode_1) | is.na(igo$ccode_2)),]
 igoFINAL = igoFINAL[igoFINAL$year>=1960,c(534:535,5,6:533)]
 igoFINAL = data.matrix(igoFINAL)
 
-
 # Set all igo codes of 3, -9, and -1 for IGO membership
 ## to 0 and for igo codes of 1 and 2 set to 1
 drop = c(3, -9, -1, 0)
@@ -144,7 +138,6 @@ for(ii in 1:length(years)){
     slice = igoFINAL[which(igoFINAL[,'year']==years[ii]),]
     sList = lapply(4:ncol(slice), function(x) FUN=slice[,c(1:3,x)])
     sList2 = lapply(sList, function(x) FUN=x[which(!x[,4] %in% drop),])
-    }
     sList3 = sList2[which(num(summary(sList2)[,1])>0)]
 
     sList4 = lapply(sList3, function(x){
@@ -154,7 +147,6 @@ for(ii in 1:length(years)){
     igoData = rbind(igoData, yearIGOs)
     print(years[ii])
 }
-
 
 # Cleaning
 igoDataFINAL = data.frame(cbind(rownames(igoData), igoData), row.names=NULL)
@@ -171,8 +163,8 @@ save(igoDataFINAL, file='igo.rda')
 
 ###############################################################
 # Clean PRIO War Data [first rec'd war in 1946 last in 2012]
-setwd(paste0(pathData, '/Components/PRIO_ArmedConflict'))
-war = read.csv('ucdp.prio.armed.conflict.v4.2013.csv')
+war = read.csv(
+    paste0(pathData, '/Components/PRIO_ArmedConflict/ucdp.prio.armed.conflict.v4.2013.csv'))
 
 war2 = war[war$Type==2,]
 war2 = unique(war2[,c('ID','SideA', 'SideA2nd', 'SideB',  'SideB2nd', 'YEAR')])
@@ -255,8 +247,8 @@ save(warFINAL, file='war.rda')
 #### Make new measures from the raw data
  
 # load data
-setwd(paste0(pathData, '/Components/VoetenData/Raw Data'))
-load('unData.rda')
+unData = read.table(paste0(pathData, '/Components/VoetenData/Raw Data/undata-213.tab'), 
+    sep='\t', stringsAsFactors=FALSE, header=TRUE)
 unData$uniquename = as.character(unData$uniquename)
 
 # Create year - roll call variable
@@ -335,79 +327,6 @@ unFINALNew = AllDyadYr
 
 setwd(paste0(pathData, '/Components/VoetenData'))
 save(unFINALNew, file='unNew.rda')
-
-
-
-# Note that making the whole dataset into a dyadic edgelist takes a lot of computing power - ugly hack below to make it run faster
-# n = length(unique(unJoint$yrRcid))
-# unJoint1 = unJoint[which(unJoint$yrRcid %in% unique(unJoint$yrRcid)[1:c(n/2-.5)]),]
-# unJoint1.5 = unJoint[which(unJoint$yrRcid %in% unique(unJoint$yrRcid)[c(n/2+.5):c(3/4*n - .25)]),]
-# unJoint2 = unJoint[which(unJoint$yrRcid %in% unique(unJoint$yrRcid)[c(3/4*n + .75):n]),]
-# 
-# JointDyad1 = mcparallel(makeDyad(unJoint1, 'yrRcid'))
-# JointDyad1.5 = mcparallel(makeDyad(unJoint1.5, 'yrRcid'))
-# JointDyad2 = mcparallel(makeDyad(unJoint2, 'yrRcid'))
- 
-# res =  mccollect(JointDyad1, wait = F)
-# res1.5 =  mccollect(JointDyad1.5, wait = F)
-# res2 = mccollect(JointDyad2, wait = F)
-  
-# JD = res[[1]]
-# JD1.5 = res1.5[[1]]
-# JD2 = res2[[1]]
-  
-# JD2.0 = JD2[1:c(dim(JD2)[1]/2),]
-# JD2.1 = JD2[c(dim(JD2)[1]/2 + 1): dim(JD2)[1],]
- 
-# JD$dyadID = dyadAll$dyadID[match(JD$dname, dyadAll$dname)]
-# JD1.5$dyadID = dyadAll$dyadID[match(JD1.5$dname, dyadAll$dname)]
-# JD2.0$dyadID = dyadAll$dyadID[match(JD2.0$dname, dyadAll$dname)]
-# JD2.1$dyadID = dyadAll$dyadID[match(JD2.1$dname, dyadAll$dname)]
- 
-# JointDyadYear1 = aggDyad(JD, 'year', 'all')
-# JointDyadYear1.5 = aggDyad(JD1.5, 'year', 'all')
-# JointDyadYear2.0 = aggDyad(JD2.0, 'year', 'all')
-# JointDyadYear2.1 = aggDyad(JD2.1, 'year', 'all')
- 
-# JointDyad = rbind(JointDyadYear1, JointDyadYear1.5, JointDyadYear2.0, JointDyadYear2.1)
-# JointDyadYear = aggregate(all ~ dyadID + year, data = JointDyad, sum) 
- 
-# JointDyadYear$cname_1 = dyadAll$Var1[match(JointDyadYear$dyadID, dyadAll$dyadID)]
-# JointDyadYear$cname_2 = dyadAll$Var2[match(JointDyadYear$dyadID, dyadAll$dyadID)]
- 
-
-
-
-
-# #### Using measures from the original dataset
-# setwd(paste0(pathData, '/Components/VoetenData/Affinity scores, cow country codes'))
-# unData = read.table("session_affinity_scores_un_67_02132013-cow.tab", header=T, stringsAsFactors=F)
-  
-# # Create variable : i and j agree (no abstensions) / total instances where i and j vote (including abstensions)
-# unData$agree2unA<-unData$agree2un*unData$jointvotes2/unData$jointvotes3
- 
-# # Clean up countrynames
-# unData$cname_1 = toupper(countrycode(unData$statea, "cown", "country.name"))
-# unData$cname_2 = toupper(countrycode(unData$stateb, "cown", "country.name")) 
- 
-# unData$state_name1 = countrycode(unData$statea, "cown", "country.name")
-# unData$state_name2 = countrycode(unData$stateb, "cown", "country.name")
-# names(unData)[ which(names(unData) %in% c('statea', 'stateb'))]  <- c("ccode_1", "ccode_2")
- 
-# unDataFINAL = unData[, c('state_name1', 'state_name2', 'cname_1', 'cname_2', 'ccode_1', 'ccode_2', 'year', 'agree2un', 'agree2unA', 'agree3un')]
-# unDataFINAL$agree2unA[which(is.na(unDataFINAL$agree2unA))]<-0
-# unDataFINAL$agree2un[is.na(unDataFINAL$agree2un)] = 0
-# unDataFINAL$cname_1Year <- paste(unDataFINAL$cname_1, unDataFINAL$year, sep="")
-# unDataFINAL$cname_2Year <- paste(unDataFINAL$cname_2, unDataFINAL$year, sep="")
- 
-# unDataFINAL<-unDataFINAL[-c( 
-# which(unDataFINAL$cname_1Year %in% setdiff(unDataFINAL$cname_1Year, panel$cnameYear)),
-# which(unDataFINAL$cname_2Year %in% setdiff(unDataFINAL$cname_2Year, panel$cnameYear))),  ]
-  
-# setwd(paste0(pathData, '/Components/VoetenData'))
-# save(unDataFINAL, file='un.rda')
-
- 
 ##############################################################
 
 ##############################################################
@@ -461,9 +380,6 @@ midDyadYr$dyadID = dyadAll$dyadID[match(midDyadYr$dname, dyadAll$dname)]
 ## Expand the dataset to account for conflicts over all years
 midDyadAllYr  = panelyear(midDyadYr, midDyadYr$styear, midDyadYr$endyear)
 midDyadAllYr$mid = 1
-
-
- 
 
 # Aggregate mids per dyad-year
 midDyadAggYr = select(midDyadAllYr, -(c(styear, endyear))) %>% group_by (dyadID, year) %>% summarize(hostlev = mean(hostlev), mid = sum(mid))
@@ -618,8 +534,6 @@ exist = countrycode(states, 'country.name', 'iso3c')
 
 ###############################################################
 # Arms Transfers
-
-
 folder = paste0(pathData, "/components/SIPRI/sipri")
 filenames <- list.files(folder, pattern="*.csv", full.names=TRUE)
 ldf <- lapply(filenames, read.csv, skip = 10, header = T)
@@ -685,7 +599,6 @@ armsFINAL$armsWt = armsFINAL$arms / armsFINAL$armsTot
 # save 
 setwd(paste0(pathData, "/components/SIPRI"))
 save(armsFINAL, file ='arms.rda')
-
 ###############################################################
 
 ###############################################################
@@ -699,12 +612,10 @@ setwd(paste0(pathData, "/components/SIPRI")); load('arms.rda')
 setwd(paste0(pathData, '/Components/Orazio')); save(jmeFINAL, file = 'jme_v1_1.rda')
 # setwd(paste0(pathData, '/Components/LeedsData')); load('allydir.rda')
 
-
-
 # Create matrices 
-# allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
-#     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
-#     pd=1970:2010, panel=panel, directed=FALSE)
+allyMats = DyadBuild(variable='ally', dyadData=allianceFINAL,
+    cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
+    pd=1970:2010, panel=panel, directed=FALSE)
 
 allyWtMats = DyadBuild(variable='allyWtMax', dyadData=allianceFINAL,
     cntry1='ccode_1', cntry2 = 'ccode_2', time='year',
@@ -752,16 +663,11 @@ jmeMats = DyadBuild(variable='jme', dyadData=jmeFINAL,
 # Roll mats with gap years over five year window
 warMatsMsum5=mvaStatMat(1970:2010, 5, warMats, avg=FALSE)
 
-
- 
 setwd(paste0(pathData))
-save(allyWtMats, igoMats, warMatsMsum5, midMats, hostlevMats, unMats,armsMats, armsWtMats, jmeMats,
+save(
+    allyMats, allyWtMats, 
+    igoMats, warMatsMsum5, 
+    midMats, hostlevMats, unMats, 
+    armsMats, armsWtMats, jmeMats,
     file='stratInterestMatrics.rda')
-
-
- 
-
 ###############################################################
-
-
-
