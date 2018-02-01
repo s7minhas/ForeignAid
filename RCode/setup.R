@@ -1,23 +1,27 @@
 # Setting working directory
 rm(list=ls())
-if(
-Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"
-){pathMain="~/Dropbox/Research/ForeignAid";
+
+if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m" ){
+  pathMain="~/Dropbox/Research/ForeignAid";
   pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
-  # pathGraphics='~/Research/ForeignAid/Presentations/Graphics';  
   pathResults='~/Dropbox/Research/ForeignAid/Results';
   pathCode='~/Research/ForeignAid/RCode/Funcs'
   pathData="~/Dropbox/Research/ForeignAid/Data"
-  } else if  (Sys.info()["user"]=="cindycheng") {
+  pathTnsr="~/Dropbox/Research/ForeignAid/Data/tnsrData/"
+}
+
+if(Sys.info()["user"]=="cindycheng") {
   pathMain="~/Dropbox/Documents/Papers/ForeignAid";
   pathGraphics="~/Dropbox/Documents/Papers/ForeignAid/graphics";
   pathData="~/Dropbox/Documents/Papers/ForeignAid/data";
   pathCode="~/Dropbox/Documents/Papers/ForeignAid1/RCode";
   pathFunctions="~/Dropbox/Documents/Methods/R Functions"
-  pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'}
+  pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'
+  pathTnsr="~/Dropbox/Documents/Papers/ForeignAid/Data/tnsrData/"
+}
 
 # Loading libraries and functions
-toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape', 
+toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape2', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
   'foreach', 'doParallel',
 	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid')
@@ -67,3 +71,4 @@ source('imputationHelpers.R')
 source('mcmcHelpers.R')
 source('bipartite.R')
 source('dilsTweak.R')
+source('relDataHelpers.R')
