@@ -1,5 +1,7 @@
 if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 	source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()["user"]=="cindycheng"){
+    source('~/Dropbox/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ###############################################################
 # Download file from ICOW site
@@ -31,8 +33,32 @@ cntries$cname[cntries$cntry=="Yemen People's Republic"] = 'S. YEMEN'
 cntries$cname[cntries$cntry=="Yugoslavia"] = 'SERBIA'
 cntries$cname[cntries$cntry=="Czechoslovakia"] = 'CZECH REPUBLIC'
 
+cntries$cname[cntries$cntry=="United States of America"] = 'UNITED STATES' 
+cntries$cname[cntries$cntry=="Bolivia"] = "BOLIVIA, PLURINATIONAL STATE OF"  
+cntries$cname[cntries$cntry=="United Kingdom"] = 'UNITED KINGDOM'
+cntries$cname[cntries$cntry=="German Federal Republic"] = 'GERMANY'
+cntries$cname[cntries$cntry=="Moldova"] = "MOLDOVA, REPUBLIC OF"
+cntries$cname[cntries$cntry=="Cape Verde"] = "CAPE VERDE"
+cntries$cname[cntries$cntry=="Guinea-Bissau"] = "GUINEA-BISSAU"
+cntries$cname[cntries$cntry=="Gambia"] = "GAMBIA"
+cntries$cname[cntries$cntry=="Ivory Coast"] = "COTE D'IVOIRE"
+cntries$cname[cntries$cntry=="Congo"] = "CONGO, REPUBLIC OF"
+cntries$cname[cntries$cntry=="Democratic Republic of the Congo"] = "CONGO, THE DEMOCRATIC REPUBLIC OF"
+cntries$cname[cntries$cntry=="Tanzania"] = "TANZANIA, UNITED REPUBLIC OF"
+cntries$cname[cntries$cntry=="Libya"] = "LIBYAN ARAB JAMAHIRIYA"
+cntries$cname[cntries$cntry=="Iran"] = "IRAN, ISLAMIC REPUBLIC OF"
+cntries$cname[cntries$cntry=="South Korea"] = "KOREA, REPUBLIC OF"
+cntries$cname[cntries$cntry=="North Korea"] = "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+cntries$cname[cntries$cntry=="Yemen Arab Republic"] = 'YEMEN'
+cntries$cname[cntries$cntry=="Vietnam"] = 'VIETNAM'
+cntries$cname[cntries$cntry=="Republic of Vietnam"] = 'S. VIETNAM'
+
 # Add ccode
 cntries$ccode = panel$ccode[match(cntries$cname,panel$cname)]
+
+ 
+# check
+cntries[which(is.na(cntries$ccode)),]
 
 # Merge updated cname and ccode to un
 ally$cname1 = cntries$cname[match(ally$state_name1, cntries$cntry)]
@@ -45,13 +71,17 @@ ally$totCnt = apply(ally[,c('defense', 'neutrality', 'nonaggression', 'entente')
 ally$any = apply(ally[,c('defense', 'neutrality', 'nonaggression', 'entente')], 1, sum) %>% ifelse(., 1, 0)
 ally$defEnt = apply(ally[,c('defense', 'entente')], 1, sum) %>% ifelse(., 1, 0)
 ally$defEntSum = apply(ally[,c('defense', 'entente')], 1, sum)
+ally$wtAlly = b = rowSums(cbind(ally[, 'entente'], 2*apply(ally[, c('neutrality', 'nonaggression')], 1, sum), 3* ally[,'defense']))
+
+ 
+
 ally$did = paste(ally$ccode1,ally$ccode2,ally$year, sep='_')
 
 # Aggregate to count variable for any alliance, need to split DF for this
 loadPkg('doBy')
 totAlly = ally[ally$totCnt>=1,c('ccode1','ccode2','cname1','cname2','year','totCnt')]
 totAlly = summaryBy(totCnt ~ ccode1 + ccode2 + year, data=totAlly, keep.names=TRUE, FUN=sum)
-
+ 
 anyAlly = ally[ally$any==1,c('ccode1','ccode2','cname1','cname2','year','any')]
 anyAlly = summaryBy(any ~ ccode1 + ccode2 + year, data=anyAlly, keep.names=TRUE, FUN=sum)
 
@@ -63,6 +93,10 @@ defEntSumAlly = summaryBy(defEntSum ~ ccode1 + ccode2 + year, data=defEntSumAlly
 
 defAlly = ally[ally$defense==1,c('ccode1','ccode2','cname1','cname2','year','defense')]
 defAlly = summaryBy(defense ~ ccode1 + ccode2 + year, data=defAlly, keep.names=TRUE, FUN=sum)
+
+wtAlly = ally[ally$wtAlly>=1,c('ccode1','ccode2','cname1','cname2','year','wtAlly')]
+wtAlly = summaryBy(wtAlly ~ ccode1 + ccode2 + year, data=wtAlly, keep.names=TRUE, FUN=sum)
+
 ###############################################################
 
 ###############################################################
@@ -73,6 +107,8 @@ anyAllyL = convToList(anyAlly, yrs, 'year', c('ccode1','ccode2'), 'any', standar
 defEntAllyL = convToList(defEntAlly, yrs, 'year', c('ccode1','ccode2'), 'defEnt', standardize=FALSE, addDyadLabel=TRUE)
 defEntSumAllyL = convToList(defEntSumAlly, yrs, 'year', c('ccode1','ccode2'), 'defEntSum', standardize=FALSE, addDyadLabel=TRUE)
 defAllyL = convToList(defAlly, yrs, 'year', c('ccode1','ccode2'), 'defense', standardize=FALSE, addDyadLabel=TRUE)
+wtAllyL = convToList(wtAlly, yrs, 'year', c('ccode1','ccode2'), 'wtAlly', standardize=FALSE, addDyadLabel=TRUE)
+
 ###############################################################
 
 ###############################################################
@@ -82,6 +118,6 @@ save(
 	anyAlly, anyAllyL, 
 	defEntAlly, defEntAllyL, 
 	defEntSumAlly, defEntSumAllyL, 	
-	defAlly, defAllyL, 	
+	defAlly, defAllyL, 	wtAllyL,
 	file=paste0(pathTnsr, 'ally.rda'))
 ###############################################################

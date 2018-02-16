@@ -5,7 +5,10 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 # Load un and alliance data
 load( paste0(pathTnsr, 'ally.rda') )
 load( paste0(pathTnsr, 'un.rda') )
+load( paste0(pathTnsr, 'unIdealPt.rda') )
 load( paste0(pathTnsr, 'igo.rda') )
+
+head(idealPtDistfull[[1]])
 ############################
 
 ############################
@@ -21,6 +24,7 @@ amData = lapply(yrs, function(yr){
 	# Pull yearly slice from un data
 	aun3Sl = aun3Lfull[[char(yr)]]
 	aun2Sl = aun2Lfull[[char(yr)]]
+	idealPtl = idealPtDistfull[[char(yr)]]
 
 	# Pull yearly slice from alliance dataset
 	anyAllySl = anyAllyL[[char(yr)]]		
@@ -28,9 +32,11 @@ amData = lapply(yrs, function(yr){
 	defEntSl = defEntAllyL[[char(yr)]]
 	defEntSumAllySl = defEntSumAllyL[[char(yr)]]
 	defAllySl = defAllyL[[char(yr)]]
+	wtAllySl = wtAllyL[[char(yr)]]
 
 	# Pull yearly slice from igo
 	igoSl = igoL[[char(yr)]]
+	igoSWl = igoWL[[char(yr)]]
 
 	# Merge covariate data into frame slice
 	stdz = function(x, na=TRUE){ (x - mean(x, na.rm=na))/sd(x, na.rm=na) }
@@ -48,12 +54,15 @@ amData = lapply(yrs, function(yr){
 	fSl = unFrame[[char(yr)]]	
 	fSl$agree3un = addVar(aun3Sl$agree3un, aun3Sl$ij, naZero=FALSE)
 	fSl$agree2un = addVar(aun2Sl$agree2un, aun2Sl$ij, naZero=FALSE)
+	fSl$idealPtun = addVar(idealPtl$idealpointdistance, idealPtl$ij)
 	fSl$anyAlly = addVar(anyAllySl$any, anyAllySl$ij)
 	fSl$totAllyCnt = addVar(totAllySl$totCnt, totAllySl$ij)
 	fSl$defEnt = addVar(defEntSl$defEnt, defEntSl$ij)
 	fSl$defEntSum = addVar(defEntSumAllySl$defEntSum, defEntSumAllySl$ij)
 	fSl$defense = addVar(defAllySl$defense, defAllySl$ij)
+	fSl$allyWt = addVar(wtAllySl$wtAlly, wtAllySl $ij)
 	fSl$igo = addVar(igoSl$igo, igoSl$ij)
+	fSl$igoWt = addVar(igoSWl$igoWeighted, igoSWl$ij)
 
 	# Create empty array
 	cntries = c( fSl$i, fSl$j ) %>% unique() %>% char() %>% sort() 
@@ -70,6 +79,9 @@ amData = lapply(yrs, function(yr){
 	return(eArr)
 	})
 names(amData) = yrs
+
+ 
+
 ############################s
 
 ############################
