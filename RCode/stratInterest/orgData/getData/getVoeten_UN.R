@@ -1,5 +1,7 @@
 if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 	source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()["user"]=="cindycheng"){
+    source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ###############################################################
 # Downloaded data manually from: https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/12379
@@ -19,9 +21,35 @@ cntries$cname[cntries$cntry=="Yugoslavia"] = 'SERBIA'
 cntries$cname[cntries$cntry=="Czechoslovakia"] = 'CZECH REPUBLIC'
 cntries$cname[cntries$cntry=="Germany, East"] = 'German Democratic Republic'
 
+
+cntries$cname[cntries$cntry=="United States of America"] = 'UNITED STATES' 
+cntries$cname[cntries$cntry=="Bolivia"] = "BOLIVIA, PLURINATIONAL STATE OF"  
+cntries$cname[cntries$cntry=="United Kingdom"] = 'UNITED KINGDOM'
+cntries$cname[cntries$cntry=="Germany, West"] = 'GERMANY'
+cntries$cname[cntries$cntry=="Macedonia"] = "MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF"
+cntries$cname[cntries$cntry=="Moldova"] = "MOLDOVA, REPUBLIC OF"
+cntries$cname[cntries$cntry=="Cape Verde"] = "CAPE VERDE"
+cntries$cname[cntries$cntry=="Guinea-Bissau"] = "GUINEA-BISSAU"
+cntries$cname[cntries$cntry=="Gambia"] = "GAMBIA"
+cntries$cname[cntries$cntry=="Cote d'Ivoire"] = "COTE D'IVOIRE"
+cntries$cname[cntries$cntry=="Congo"] = "CONGO, REPUBLIC OF"
+cntries$cname[cntries$cntry=="Democratic Republic of the Congo"] = "CONGO, THE DEMOCRATIC REPUBLIC OF"
+cntries$cname[cntries$cntry=="Tanzania"] = "TANZANIA, UNITED REPUBLIC OF"
+cntries$cname[cntries$cntry=="Libya"] = "LIBYAN ARAB JAMAHIRIYA"
+cntries$cname[cntries$cntry=="Iran"] = "IRAN, ISLAMIC REPUBLIC OF"
+cntries$cname[cntries$cntry=="South Korea"] = "KOREA, REPUBLIC OF"
+cntries$cname[cntries$cntry=="North Korea"] = "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+cntries$cname[cntries$cntry=="Yemen Arab Republic"] = 'YEMEN'
+cntries$cname[cntries$cntry=="Viet Nam"] = 'VIETNAM'
+cntries$cname[cntries$cntry=="Micronesia, Federated States of"] = 'MICRONESIA, FEDERATED STATES OF'
+cntries$cname[cntries$cntry=="U.S.S.R."] = 'RUSSIAN FEDERATION'
+cntries$cname[cntries$cntry=="Germany, East"] = 'GERMAN DEMOCRATIC REPUBLIC'
+
 # Add ccode
 cntries$ccode = panel$ccode[match(cntries$cname,panel$cname)]
 
+cntries[which(is.na(cntries$ccode)), c('cntry', 'cname')]
+ 
 # Merge updated cname and ccode to un
 un$cname1 = cntries$cname[match(un$stateaname, cntries$cntry)]
 un$cname2 = cntries$cname[match(un$statebname, cntries$cntry)]

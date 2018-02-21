@@ -1,5 +1,7 @@
 if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 	source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()["user"]=="cindycheng"){
+    source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ############################
 # Load un and alliance data
@@ -8,7 +10,7 @@ load( paste0(pathTnsr, 'un.rda') )
 load( paste0(pathTnsr, 'unIdealPt.rda') )
 load( paste0(pathTnsr, 'igo.rda') )
 
-head(idealPtDistfull[[1]])
+
 ############################
 
 ############################
@@ -42,7 +44,7 @@ amData = lapply(yrs, function(yr){
 	stdz = function(x, na=TRUE){ (x - mean(x, na.rm=na))/sd(x, na.rm=na) }
 	addVar = function(
 		fromVar, fromID, toID=fSl$ij, 
-		naZero=TRUE, rescale=FALSE, stdzVar=TRUE){
+		naZero=TRUE, rescale=FALSE, stdzVar=FALSE){
 		tmp = fromVar[match(toID, fromID)]
 		tmp = num(tmp)
 		if(naZero){ tmp[is.na(tmp)] = 0  }
@@ -86,7 +88,7 @@ names(amData) = yrs
 
 ############################
 # Save
-# save(amData, file=paste0(pathTnsr,'amenData_all.rda'))
+save(amData, file=paste0(pathTnsr,'amenData_all.rda'))
 # save(amData, file=paste0(pathTnsr,'amenData_all_rescaled.rda'))
-save(amData, file=paste0(pathTnsr,'amenData_all_stdz.rda'))
+# save(amData, file=paste0(pathTnsr,'amenData_all_stdz.rda'))
 ############################

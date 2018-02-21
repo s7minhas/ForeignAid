@@ -14,12 +14,12 @@ if(Sys.info()["user"]=="cindycheng") {
   pathMain="~/Dropbox/Documents/Papers/ForeignAid";
   pathGraphics="~/Dropbox/Documents/Papers/ForeignAid/graphics";
   pathData="~/Dropbox/Documents/Papers/ForeignAid/data";
-  pathCode="~/Dropbox/Documents/Papers/ForeignAid1/RCode";
+  pathCode="~/Documents/Papers/ForeignAid/RCode/Funcs";
   pathFunctions="~/Dropbox/Documents/Methods/R Functions"
   pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'
   pathTnsr="~/Dropbox/Documents/Papers/ForeignAid/Data/tnsrData/"
 }
-
+ 
 # Loading libraries and functions
 toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape2', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
@@ -68,7 +68,7 @@ source('dyadHelpers.R')
 source('tsHelpers.R')
 source('sbgcop_l2.R')
 source('imputationHelpers.R')
-source('mcmcHelpers.R')
+#source('mcmcHelpers.R')
 source('bipartite.R')
 source('dilsTweak.R')
 source('relDataHelpers.R')
