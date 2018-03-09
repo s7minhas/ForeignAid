@@ -2,7 +2,7 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 	source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()["user"]=="cindycheng"){
     source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
-
+head(ally)
 ###############################################################
 # Downloaded data manually from: https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/12379
 ## on July 7, 2015: 5pm

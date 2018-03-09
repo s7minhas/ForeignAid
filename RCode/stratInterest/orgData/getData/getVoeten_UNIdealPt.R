@@ -64,15 +64,16 @@ un$cname2 = cntries$cname[match(un$countryname2, cntries$cntry)]
 un$ccode1 = cntries$ccode[match(un$countryname1, cntries$cntry)]
 un$ccode2 = cntries$ccode[match(un$countryname2, cntries$cntry)]
 
-length(which(table(un$dyadidyr)>1))
+
 # Check for duplicates
 un$dyadidyr = paste(un$ccode1, un$ccode2, un$year, sep='_')
- 
+length(which(table(un$dyadidyr)>1))
 stopifnot( length( table(un$dyadidyr)[table(un$dyadidyr)>1] ) == 0 )
 
-
-un[which(un$ccode1 == 2 & un$year == 1946),][1:10,]
-  ###############################################################
+# reverse scale of idealpoint such that higher numbers indicate more closeness
+un$idealpointdistance = c(un$idealpointdistance - max(un$idealpointdistance))*-1
+ 
+###############################################################
 
 ###############################################################
 # use UN data to set nodes for dyadic dataset
@@ -89,7 +90,7 @@ unFrame = lapply(yrs, function(yr){
 	})
 names(unFrame) = yrs
 
-
+ 
 ###############################################################
 
 ###############################################################
@@ -114,6 +115,7 @@ idealPtDistfull = lapply(idealPtDistL, function(unSl){
 
 ###############################################################
 # Save
-save(idealPtDistfull, file=paste0(pathTnsr, 'unIdealPt.rda'))
+unIdeal = un
+save(unIdeal, idealPtDistfull, file=paste0(pathTnsr, 'unIdealPt.rda'))
  
 ###############################################################

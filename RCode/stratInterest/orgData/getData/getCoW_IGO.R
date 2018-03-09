@@ -2,7 +2,7 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
     source('~/Research/ForeignAid/RCode/setup.R') }
 
 if(Sys.info()["user"]=="cindycheng"){
-    source('~/Dropbox/Documents/Papers/ForeignAid/RCode/setup.R') }
+    source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 
 #install.packages("~/Downloads/countrycode_0.16.tar", repos = NULL, type="source")
@@ -126,8 +126,11 @@ igoFINAL = data.matrix(igoFINAL)
 
 
 
-
+###############################################
+# load igoOrgs data
+library(dplyr)
 igoOrgs = read.csv(paste0(pathTnsr, '/igounit_v2.3.csv'))
+
 
 # create measure of total number of IGO *members* over time
 igoOrgs$members = apply(igoOrgs[, -c(1,2,3, which(names(igoOrgs) ==c('dead')):which(names(igoOrgs) ==c('Sources2')))],
@@ -144,7 +147,6 @@ return(members)
  
  
 # create measure of total number of IGOs over time
-library(dplyr)
 igoOrgs$count  = apply(igoOrgs[, -c(1,2,3, which(names(igoOrgs) ==c('dead')):which(names(igoOrgs) ==c('Sources2')))],
                  1, function(x){
     count = ifelse(all(x == -9), NA, 1)
@@ -153,11 +155,12 @@ igoOrgs$count  = apply(igoOrgs[, -c(1,2,3, which(names(igoOrgs) ==c('dead')):whi
     })
 
 igoCount = data.frame(igoOrgs %>% group_by(year) %>% summarise(numIGOs = sum(count, na.rm = TRUE)) )
-
 igoOrgsFINAL = merge(igoOrgs, igoCount, by = 'year', all = TRUE)
 igoOrgsFINAL =igoOrgsFINAL[-which(igoOrgsFINAL$ioname == "CAEC" ),]
-igoOrgsFINAL$ioname = factor(igoOrgsFINAL$ioname)
+igoOrgsFINAL$ioname =  factor(igoOrgsFINAL$ioname, colnames(igoFINAL)[-c(1:3)])
  
+
+
 #igoOrgsRaw$avgNumMembers = igoOrgsRaw$members/igoOrgsRaw$numIGOs
 # Set all igo codes of 3, -9, and -1 for IGO membership
 ## to 0 and for igo codes of 1 and 2 set to 1
@@ -165,6 +168,7 @@ drop = c(3, -9, -1, 0)
 years = c(1960,1965:2005)
  
 
+ 
 
 igoData= lapply(1:length(years), function(ii){
     slice = igoFINAL[which(igoFINAL[,'year']==years[ii]),]
@@ -173,16 +177,24 @@ igoData= lapply(1:length(years), function(ii){
 
     # # calculate weights
     sliceOrg = igoOrgsFINAL[which(igoOrgsFINAL[, 'year'] == years[ii]),c('year', 'ioname', 'members')]
+    
+
     sListOrg = split(sliceOrg$members, sliceOrg$ioname)
     sListOrgInv = lapply(sListOrg, function(x) 1/x)
+ 
+
 
     # apply weights to joint membership
     jointMembershipPerYear = lapply(sList2, function(x) {
          x[,4]})
     weightedList =   Map('*', jointMembershipPerYear,  sListOrgInv)
- 
+
+
     # # # add weighted joint membership back into main data
     sList3= Map(cbind, sList2, weightedList)
+
+
+
 
     ## add back names to matrices
     sList3 = lapply(1:length(sList3), function(x) {
@@ -191,6 +203,8 @@ igoData= lapply(1:length(years), function(ii){
         colnames(mainMat) = c(colnames(nameMat), paste0( colnames(nameMat)[4], '_', 'weighted'))
         return(mainMat)
         } )
+    
+ 
 
     # recompile and aggregate unweighted and weighted joint membership
     sList4 = sList3[which(num(summary(sList3)[,1])>0)]
@@ -211,6 +225,7 @@ igoData= lapply(1:length(years), function(ii){
 # Combine
 igoData = do.call('rbind', igoData)
 
+
  
 # Cleaning
 igoDataFINAL = data.frame( igoData, row.names=NULL)
@@ -222,7 +237,7 @@ colnames(ccodes) = c('ccode1','ccode2')
 igoDataFINAL = cbind(ccodes, igoDataFINAL[,c('year','igo', 'igoWeighted')])
 igo = data.frame(apply(igoDataFINAL,2,num))
 
-head(igo) 
+ 
 ############################
 
 ############################

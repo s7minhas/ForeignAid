@@ -21,6 +21,8 @@ ally = ally[,c(
 	'ccode1','ccode2','state_name1','state_name2','year',
 	'defense', 'neutrality', 'nonaggression', 'entente'
 	)]
+
+ 
 ###############################################################
 
 ###############################################################
@@ -97,7 +99,8 @@ defAlly = summaryBy(defense ~ ccode1 + ccode2 + year, data=defAlly, keep.names=T
 wtAlly = ally[ally$wtAlly>=1,c('ccode1','ccode2','cname1','cname2','year','wtAlly')]
 wtAlly = summaryBy(wtAlly ~ ccode1 + ccode2 + year, data=wtAlly, keep.names=TRUE, FUN=sum)
 
-###############################################################
+
+ ###############################################################
 
 ###############################################################
 # Convert to list
@@ -109,6 +112,9 @@ defEntSumAllyL = convToList(defEntSumAlly, yrs, 'year', c('ccode1','ccode2'), 'd
 defAllyL = convToList(defAlly, yrs, 'year', c('ccode1','ccode2'), 'defense', standardize=FALSE, addDyadLabel=TRUE)
 wtAllyL = convToList(wtAlly, yrs, 'year', c('ccode1','ccode2'), 'wtAlly', standardize=FALSE, addDyadLabel=TRUE)
 
+
+ 
+
 ###############################################################
 
 ###############################################################
@@ -118,6 +124,6 @@ save(
 	anyAlly, anyAllyL, 
 	defEntAlly, defEntAllyL, 
 	defEntSumAlly, defEntSumAllyL, 	
-	defAlly, defAllyL, 	wtAllyL,
+	defAlly, defAllyL, 	wtAlly, wtAllyL,
 	file=paste0(pathTnsr, 'ally.rda'))
 ###############################################################

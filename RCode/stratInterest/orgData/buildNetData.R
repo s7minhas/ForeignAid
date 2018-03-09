@@ -9,7 +9,8 @@ load( paste0(pathTnsr, 'ally.rda') )
 load( paste0(pathTnsr, 'un.rda') )
 load( paste0(pathTnsr, 'unIdealPt.rda') )
 load( paste0(pathTnsr, 'igo.rda') )
-
+load( paste0(pathTnsr, 'mids.rda') )
+load( paste0(pathTnsr, 'sipri.rda') )
 
 ############################
 
@@ -40,11 +41,22 @@ amData = lapply(yrs, function(yr){
 	igoSl = igoL[[char(yr)]]
 	igoSWl = igoWL[[char(yr)]]
 
+	# Pull yearly slice from mids data
+	hostLevSl = hostLevL[[char(yr)]]
+	midCountSl = midCountL[[char(yr)]]
+	fatalMidsSl = fatalMidsL[[char(yr)]]
+
+	# pull arms data
+	 armsTrsfrsSl = armsTrsfrsL[[char(yr)]]
+	 armsPopSl =  armsPopL[[char(yr)]]
+	 armsGdpSl = armsGdpL[[char(yr)]]
+
+
 	# Merge covariate data into frame slice
 	stdz = function(x, na=TRUE){ (x - mean(x, na.rm=na))/sd(x, na.rm=na) }
 	addVar = function(
 		fromVar, fromID, toID=fSl$ij, 
-		naZero=TRUE, rescale=FALSE, stdzVar=FALSE){
+		naZero=TRUE, rescale=TRUE, stdzVar=FALSE){
 		tmp = fromVar[match(toID, fromID)]
 		tmp = num(tmp)
 		if(naZero){ tmp[is.na(tmp)] = 0  }
@@ -65,6 +77,12 @@ amData = lapply(yrs, function(yr){
 	fSl$allyWt = addVar(wtAllySl$wtAlly, wtAllySl $ij)
 	fSl$igo = addVar(igoSl$igo, igoSl$ij)
 	fSl$igoWt = addVar(igoSWl$igoWeighted, igoSWl$ij)
+	fSl$hostLev = addVar(hostLevSl$HostLevRev, hostLevSl$ij)
+	fSl$midCount = addVar(midCountSl$midCountRev, midCountSl$ij)
+	fSl$fatalMids = addVar(fatalMidsSl$fatalMidsRev, fatalMidsSl$ij)
+	fSl$armsTrsfrs = addVar(armsTrsfrsSl$armsTransfers, armsTrsfrsSl$ij)
+	fSl$armsPop = addVar(armsPopSl$armsPop, armsPopSl$ij)
+	fSl$armsGdp = addVar(armsGdpSl$armsGdp, armsGdpSl$ij)
 
 	# Create empty array
 	cntries = c( fSl$i, fSl$j ) %>% unique() %>% char() %>% sort() 
@@ -84,11 +102,12 @@ names(amData) = yrs
 
  
 
+ 
 ############################s
 
 ############################
 # Save
-save(amData, file=paste0(pathTnsr,'amenData_all.rda'))
-# save(amData, file=paste0(pathTnsr,'amenData_all_rescaled.rda'))
+#save(amData, file=paste0(pathTnsr,'amenData_all.rda'))
+save(amData, file=paste0(pathTnsr,'amenData_all_rescaled.rda'))
 # save(amData, file=paste0(pathTnsr,'amenData_all_stdz.rda'))
 ############################
