@@ -1,3 +1,5 @@
+if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
+  source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()["user"]=="cindycheng"){
     source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
