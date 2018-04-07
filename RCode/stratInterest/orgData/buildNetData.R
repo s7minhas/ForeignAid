@@ -56,7 +56,7 @@ amData = lapply(yrs, function(yr){
 	stdz = function(x, na=TRUE){ (x - mean(x, na.rm=na))/sd(x, na.rm=na) }
 	addVar = function(
 		fromVar, fromID, toID=fSl$ij, 
-		naZero=TRUE, rescale=TRUE, stdzVar=FALSE){
+		naZero=TRUE, rescale=FALSE, stdzVar=TRUE){
 		tmp = fromVar[match(toID, fromID)]
 		tmp = num(tmp)
 		if(naZero){ tmp[is.na(tmp)] = 0  }
@@ -108,6 +108,6 @@ names(amData) = yrs
 ############################
 # Save
 #save(amData, file=paste0(pathTnsr,'amenData_all.rda'))
-save(amData, file=paste0(pathTnsr,'amenData_all_rescaled.rda'))
-# save(amData, file=paste0(pathTnsr,'amenData_all_stdz.rda'))
+#save(amData, file=paste0(pathTnsr,'amenData_all_rescaled.rda'))
+save(amData, file=paste0(pathTnsr,'amenData_all_stdz.rda'))
 ############################
