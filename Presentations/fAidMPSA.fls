@@ -417,15 +417,3 @@ INPUT Graphics/modCoef.tex
 INPUT Graphics/modCoef.tex
 INPUT Graphics/effects.tex
 INPUT Graphics/effects.tex
-INPUT Graphics/timeCross.tex
-INPUT Graphics/timeCross.tex
-INPUT Graphics/cntryCross.tex
-INPUT Graphics/cntryCross.tex
-INPUT Graphics/modCoef2.tex
-INPUT Graphics/modCoef2.tex
-INPUT Graphics/intEffect.tex
-INPUT Graphics/intEffect.tex
-OUTPUT fAidMPSA.nav
-OUTPUT fAidMPSA.toc
-OUTPUT fAidMPSA.snm
-INPUT fAidMPSA.aux
