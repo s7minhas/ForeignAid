@@ -4,9 +4,12 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 ################################################################
 # Load DV
 setwd(pathData)
-load('aidDataQwids.rda'); rm(list=c('aidMats'))
+# load('aidDataQwids.rda'); rm(list=c('aidMats'))
+# aidData$commitUSD13[which(aidData$commitUSD13<0)] = 0
 
-aidData$commitUSD13[which(aidData$commitUSD13<0)] = 0 
+load('aidDataDisagg.rda'); rm(list=c('aidMats', 'aidMatsEmergency', 'aidMatsHumanitarian', 'aidMatsReconstruction',
+	'aidMatsDisaster', 'aidMatsHumanitarianTotal', 'aidMatsNotHumanitarianTotal'))
+ 
 ################################################################
 
 ################################################################
@@ -91,6 +94,7 @@ milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
 covData=lagData(covData, 'cyear', 'ccode', vars)
  
 # Subset datasets by time
+head(aidData)
 aidData = aidData[aidData$year>1974 & aidData$year<=2005,]
 stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
 milData = milData[milData$year>1974 & milData$year<=2005,]
@@ -146,7 +150,7 @@ regData$LunIdPt = unData$LunIdPt[match(regData$idYr, unData$idYr)]
 regData$LunIdPt[is.na(regData$LunIdPt)] = 0
 
 # Save pre imputation
-save(regData, file=paste0(pathData, '/noImputationData.rda'))
+save(regData, file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
 ################################################################
 
 ################################################################
@@ -156,18 +160,22 @@ idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
 lagVars=regVars[-which(regVars %in% c('colony'))]
 lagVars=regVars[grep('SL|L', regVars)]
- 
-# copula 
-impData=regData[,-which(names(regData)%in% c('idYr', 'cnameS', 'cnameR', 'Receiver', 'Sender', 'id'))]
 
+
+# copula 
+impData=regData[,-which(names(regData)%in% c('idYr', 'cnameS', 'cnameR', 'Receiver', 'Sender', 'id', 'humanitarianTotal', 'notHumanitarianTotal'))]
+
+ 
 # Divide up data into monadic and dyadic
-ids = names(impData)[c(1:3,5:6)]
+ids = names(impData)[which(names(impData) %in% c('cyearS', 'cyearR', 'year', 'ccodeS', 'ccodeR'))]
 nodeVars = c( 'Lpolity2', 'LlnGdpCap', 'LlifeExpect', 'Lno_disasters', 'Lcivwar', 
 	'SLpolity2', 'SLlnGdpCap', 'SLlifeExpect', 'SLno_disasters', 'SLcivwar' )
-dyadVars = c( 'commitUSD13', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
+# dyadVars = c( 'commitUSD13', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
+dyadVars = c( 'commitment_amount_usd_constant_sum', 'emergencyResponse', 'humanitarianAid', 'reconstructionRelief', 'disasterPreventionRelief', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
 nodeData = unique(impData[,c(ids,nodeVars)])
 senVars = c(ids[c(1,3:4)], nodeVars[6:10])
 recVars = c(ids[c(2,3,5)], nodeVars[1:5])
+install.packages("abind")
 library(abind)
 tmp = abind(
 	nodeData[,senVars],
@@ -176,6 +184,7 @@ tmp = abind(
 	)
 nodeData = unique(tmp)
 dyadData = impData[,c(ids,dyadVars)]
+dyadVars
 
 library(sbgcop) 
 source(paste0(pathCode, '/sbgcop_l2.R'))
@@ -187,14 +196,14 @@ sbgCor = sbgCor[sbgCor$X1 != sbgCor$X2,]
 sbgCor$v12 = paste0(sbgCor$X1, sbgCor$X2)
 tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) + geom_line() + facet_wrap(~X1, scales='free_y') + xlab('') + ylab('')
 tmp=tmp + theme(axis.ticks=element_blank(), panel.border=element_blank(), legend.title=element_blank(), legend.position='bottom')
-ggsave(tmp, file=paste0(pathGraphics, '/nodalImputationConvergenceSBGCOP.pdf'))
+ggsave(tmp, file=paste0(pathGraphics, '/nodalImputationConvergenceSBGCOPDisagg.pdf'))
 
 sbgCor = melt(imp$'C.psamp_l2')
 sbgCor = sbgCor[sbgCor$X1 != sbgCor$X2,]
 sbgCor$v12 = paste0(sbgCor$X1, sbgCor$X2)
 tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) + geom_line() + facet_wrap(~X1, scales='free_y') + xlab('') + ylab('')
 tmp=tmp + theme(axis.ticks=element_blank(), panel.border=element_blank(), legend.title=element_blank(), legend.position='bottom')
-ggsave(tmp, file=paste0(pathGraphics, '/fullImputationConvergenceSBGCOP.pdf'))
+ggsave(tmp, file=paste0(pathGraphics, '/fullImputationConvergenceSBGCOPDisagg.pdf'))
 
 # Sample 5 from posterior
 impPost = imp$'Y.impute_l2'[,,sample(800:1000, 5)]
@@ -216,6 +225,6 @@ iData = lapply(1:dim(impPost)[3], function(ii){
 	})
 
 setwd(pathData)
-save(iData, file = "iData.rda")
-save(imp, file='sbgOutput_nodalDyadicImputation.rda')
+save(iData, file = "iDataDisagg.rda")
+save(imp, file='sbgOutput_nodalDyadicImputationDisagg.rda')
 ################################################################
