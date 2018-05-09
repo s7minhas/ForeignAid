@@ -19,7 +19,6 @@ source('~/Research/ForeignAid/RCode/Analysis/nullGBME.R')
 results=nullGBME(matList=allyDirMats, matName='allyDir', yrs=names(allyDirMats), 
 	direct=TRUE,family='binomial')   
 
-
 source('~/Documents/Papers/ForeignAid/RCode/Analysis/stratVar/nullGBME.R')
 results=nullGBME(matList=armsMats, matName='arms', yrs=names(armsMats), 
 	direct=TRUE,family='gaussian')   
