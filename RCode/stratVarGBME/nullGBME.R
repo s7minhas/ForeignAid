@@ -38,6 +38,7 @@ nullGBME=function( matList, matName, yrs,
 			ufile=paste(matName, yrs[t], 'U', sep='_')
 			vfile=paste(matName, yrs[t], 'V', sep='_')
 			setwd(pathResults)
+			set.seed(6886)
 			gbme(Y = Y, fam=family, k=2, directed=direct,
 				efilename=ufile, ffilename = vfile, 
 				owrite=T, awrite=F, bwrite=F, 

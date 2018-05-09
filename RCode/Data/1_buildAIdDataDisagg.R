@@ -4,7 +4,6 @@ library(dplyr)
 ################################################################
 setwd(paste0(pathData, '/components/AidDataCore_ResearchRelease_Level1_v3'))
 
-
 load(paste0(pathData, '/iData_v2.rda'))
 
 senders = iData[[1]]$ccodeS %>% unique() %>% as.character() %>% as.numeric()
@@ -16,8 +15,12 @@ panel$CNTRY_NAME[match(recipients, panel$ccode)] %>% unique() %>% sort()
 
 aidDataRaw= read.csv('AidDataCoreDonorRecipientYearPurpose_ResearchRelease_Level1_v3.1.csv', stringsAsFactors = FALSE)
 
-# Get aggregated data, note you double checked and this aggregation matches the data found in 'AidDataCoreDonorRecipientYear_ResearchRelease_Level1_v3.1.csv'
-aidDataAgg = aidDataRaw %>% group_by(donor, recipient, year) %>% summarise(commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)) %>% data.frame()
+# Get aggregated data, note you double checked and this aggregation 
+# matches the data found in 'AidDataCoreDonorRecipientYear_ResearchRelease_Level1_v3.1.csv'
+aidDataAgg = aidDataRaw %>%
+	group_by(donor, recipient, year) %>%
+	summarise(commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)) %>%
+	data.frame()
 
 # Get humanitarian data
 aidDataRaw$purposeNameAgg = NA
@@ -33,9 +36,9 @@ aidDataHumanitarianAgg = aidDataHumanitarian %>% group_by(donor, recipient, year
 
  
 aidDataHumanitarianAgg = reshape(aidDataHumanitarianAgg,
-								 timevar = "purposeNameAgg",
-								 idvar = c('donor', 'recipient', 'year'),
-								 direction = 'wide')
+	timevar = "purposeNameAgg",
+	idvar = c('donor', 'recipient', 'year'),
+	direction = 'wide')
 names(aidDataHumanitarianAgg) = gsub('commitment_amount_usd_constant_sum.', '', names(aidDataHumanitarianAgg))
 aidDataHumanitarianAgg$humanitarianTotal = rowSums(aidDataHumanitarianAgg[, c('emergencyResponse', 'humanitarianAid', 'reconstructionRelief', 'disasterPreventionRelief')], na.rm = TRUE)
 
@@ -44,9 +47,6 @@ aidDataHumanitarianAgg$humanitarianTotal = rowSums(aidDataHumanitarianAgg[, c('e
 aidData = merge(aidDataAgg, aidDataHumanitarianAgg, by = c('donor', 'recipient', 'year'), all.x = TRUE)
 aidData[is.na(aidData)] = 0
 aidData$notHumanitarianTotal = aidData$commitment_amount_usd_constant_sum - aidData$humanitarianTotal
-
-
- 
 ################################################################
 
 ################################################################
@@ -121,8 +121,6 @@ aidMatsHumanitarianTotal = DyadBuild(variable='humanitarianTotal', dyadData=aidD
 aidMatsNotHumanitarianTotal = DyadBuild(variable='notHumanitarianTotal', dyadData=aidData,
 	cntry1='ccodeS', cntry2='ccodeR', time='year',
 	pd=1970:2010, panel=panel, directed=TRUE) 
-
-
 ################################################################
 
 ###############################################################
@@ -136,8 +134,6 @@ aidData = aidData[which(!aidData$cnameR %in% oecd),]
 # Limit to set number of donors and receivers
 dCntries = unique(aidData$cnameS)
 rCntries = unique(aidData$cnameR)
- 
-
 ################################################################
 
 ################################################################
@@ -145,9 +141,3 @@ setwd(pathData)
 save(aidData, aidMats, aidMatsEmergency, aidMatsHumanitarian, aidMatsReconstruction,
 	aidMatsDisaster, aidMatsHumanitarianTotal, aidMatsNotHumanitarianTotal, file='aidDataDisagg.rda')
 ################################################################
-
-
-
-
-
-

@@ -7,13 +7,8 @@ if(Sys.info()['user']=='s7m'){
 if(Sys.info()['user']=='cindycheng'){ 
 	pathCode='~/Documents/Papers/ForeignAid/RCode' }
 
-
-setwd(pathCode); source('setup.R')
-
- 
+setwd(pathCode); source('setup.R') 
 load(paste0(pathData,'/stratInterestMatrics.rda'))
-
-
 #######################################################
 
 #######################################################
@@ -145,6 +140,4 @@ meltSymm=function(x, yr, vnme, symm){
 	colnames(edgeVal)=c('ccode1','ccode2','year',paste0(vnme,'Dist'))
 	apply(edgeVal, 2, num)
 }
-
-
 #######################################################

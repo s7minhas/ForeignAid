@@ -4,14 +4,14 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 ################################################################
 # Load reg data
 setwd(pathData)
-load('iData_v2.rda')
+load('iDataDisagg.rda')
 # Add dyad random effect
 iData = lapply(iData, function(x){
 	# add dyadic id
 	x$id = paste(x$ccodeS, x$ccodeR, sep='_')
 	x$id = factor(x$id)
 	# log aid flow
-	x$commitUSD13 = log(x$commitUSD13 + 1)
+	x$commitUSD13 = log(x$commitment_amount_usd_constant_sum + 1)
 	return(x)
 	})
 ################################################################
@@ -45,21 +45,16 @@ genModelForm = function(var, type, struc, interaction = FALSE){
 			paste0(  'commitUSD13 ~ ',  # DV
 			paste(c(var, paste(c(var, 'Lno_disasters'), collapse = '*')), collapse=' + '), ' + ', # add key var
 			paste(cntrlVars, collapse=' + '), # add control vars
-			strucChar )  )
-	}
+			strucChar )  ) }
+	return(form) }
 
-	return(form)
-}
-
- 
 # filename gen
 genFileName = function(train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
 	b = mod ; c = type ; d = if(zeroInf){ 'zi' } ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
 	g = paste0(paste(a,b,c,d,e,f, sep='_'), '.rda')
-	return( gsub('__','_',g) )
-}
+	return( gsub('__','_',g) ) }
 
 # Run models in parallel across imputed datasets
 runModelParallel = function(
@@ -122,32 +117,23 @@ runModelParallel = function(
 # Full sample model, random effect, LstratMu, runs in a couple of minutes
 runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LstratMu', int = T)
 
- 
 # Full sample model, random effect, LallyWt, runs in a couple of minutes
 runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LallyWt', int = T)
 
 # Full sample model, random effect, LunIDpt, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', int = T)
-
- 
+runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', int = T) 
 
 # Full sample model, random effect, LunIDpt, runs in a couple of minutes
 runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='Ligo', int = T)
-
  
 # Full sample model, random effect, LallyWt + LunIdPt + Ligo, runs in a couple of minutes
 runModelParallel(trainLogic=FALSE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'), int = T)
-
- 
 
 # robustness check, fixed effects, takes about 30 mins to run
 runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu', int = TRUE)
 # ################################################################
 
 ################################################################
-
-
-
 # Compare to existing measures using two fold temporally cut cv
 # Training, random effect, Lstratmu
 runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='LstratMu')
