@@ -12,6 +12,12 @@ iData = lapply(iData, function(x){
 	x$id = factor(x$id)
 	# log aid flow
 	x$commitUSD13 = log(x$commitment_amount_usd_constant_sum + 1)
+	# create humanitarian aid
+	x$totalHumanitarianAid = x$emergencyResponse + x$humanitarianAid + x$disasterPreventionRelief + x$reconstructionRelief
+	# x$LtotHumanAid = log(x$totalHumanitarianAid + 1)
+	# x$commitUSD13 = x$LtotHumanAid
+	x$commitUSD13 = x$commitment_amount_usd_constant_sum - x$totalHumanitarianAid
+	x$commitUSD13 = log(x$commitUSD13 + 1)
 	return(x)
 	})
 ################################################################
@@ -29,20 +35,20 @@ cntrlVars=c(
 	)
 
 # model spec gen
-genModelForm = function(var, type, struc, interaction = FALSE){
+genModelForm = function(dv='commitUSD13', var, type, struc, interaction = FALSE){
 	if(type=='re'){ strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
 	if(type=='fe'){ strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
 	if(type=='none'){ strucChar=NULL }
 
 	if ( interaction == FALSE){
 			form = formula(
-			paste0(  'commitUSD13 ~ ',  # DV
+			paste0(  dv, ' ~ ',  # DV
 			paste(var, collapse=' + '), ' + ', # add key var
 			paste(cntrlVars, collapse=' + '), # add control vars
 			strucChar )  )}
 	else if (interaction == TRUE){
 			form = formula(
-			paste0(  'commitUSD13 ~ ',  # DV
+			paste0(  dv, ' ~ ',  # DV
 			paste(c(var, paste(c(var, 'Lno_disasters'), collapse = '*')), collapse=' + '), ' + ', # add key var
 			paste(cntrlVars, collapse=' + '), # add control vars
 			strucChar )  ) }
@@ -61,6 +67,7 @@ runModelParallel = function(
 	cores=detectCores(),
 	dataList=iData, trainLogic=FALSE, trainEnd=2002, 
 	modType='re', modFamily='gaussian', zeroInfLogic=FALSE, 
+	depVar='commitUSD13',
 	keyRegVar='LstratMu', modStruc=c('id','year'), int = FALSE
 	){
 
