@@ -171,7 +171,7 @@ ids = names(impData)[which(names(impData) %in% c('cyearS', 'cyearR', 'year', 'cc
 nodeVars = c( 'Lpolity2', 'LlnGdpCap', 'LlifeExpect', 'Lno_disasters', 'Lcivwar', 
 	'SLpolity2', 'SLlnGdpCap', 'SLlifeExpect', 'SLno_disasters', 'SLcivwar' )
 # dyadVars = c( 'commitUSD13', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
-dyadVars = c( 'commitment_amount_usd_constant_sum', 'emergencyResponse', 'humanitarianAid', 'reconstructionRelief', 'disasterPreventionRelief', 'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
+dyadVars = c( 'commitment_amount_usd_constant_sum', 'emergencyResponse', 'humanitarianAid', 'reconstructionRelief', 'disasterPreventionRelief', 'civSocietyTotal', 'developTotal',  'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony'  )
 nodeData = unique(impData[,c(ids,nodeVars)])
 senVars = c(ids[c(1,3:4)], nodeVars[6:10])
 recVars = c(ids[c(2,3,5)], nodeVars[1:5])
