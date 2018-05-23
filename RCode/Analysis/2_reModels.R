@@ -5,37 +5,59 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/Foreign
 # Load reg data
 setwd(pathData)
 load('iDataDisagg.rda')
+
+# vars for analysis
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
+ids = names(iData[[1]])[c(1:3,25)]
+ivs = names(iData[[1]])[9:24]
+
+# quick function to create lags for tscs
+addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
+	newData = do.call('cbind', lapply(toLag, function(toLagNumber){
+		base = data[,c(idNames, dvNames, ivNames)]
+		covData = data[,c(idNames, ivNames)]
+		covData$year = num(covData$year) + toLagNumber
+		covData$id = with(covData, paste(ccodeS, ccodeR, year, sep='_'))
+		names(covData)[5:ncol(covData)] = paste0(
+			names(covData)[5:ncol(covData)],'_',toLagNumber+1)
+		for(v in setdiff(names(covData), names(base))){
+			base$var = covData[match(base$id, covData$id), v]
+			names(base)[ncol(base)] = v }
+		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
+	return(cbind(data, newData)) }
+
 # Add dyad random effect
 iData = lapply(iData, function(x){
+	# add lags
+	x = addLags(1:5, x)
 	# add dyadic id
 	x$id = paste(x$ccodeS, x$ccodeR, sep='_')
 	x$id = factor(x$id)
-	# log aid flow
-	x$commitUSD13 = log(x$commitment_amount_usd_constant_sum + 1)
-	# create humanitarian aid
-	x$totalHumanitarianAid = x$emergencyResponse + x$humanitarianAid + x$disasterPreventionRelief + x$reconstructionRelief
-	# x$LtotHumanAid = log(x$totalHumanitarianAid + 1)
-	# x$commitUSD13 = x$LtotHumanAid
-	x$commitUSD13 = x$commitment_amount_usd_constant_sum - x$totalHumanitarianAid
-	x$commitUSD13 = log(x$commitUSD13 + 1)
-	return(x)
-	})
+	# create total aid
+	x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
+	# log dvs
+	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
+	return(x) })
+
+# change dvs
+dvs = c(dvs, 'aidTotal')
 ################################################################
 
 ################################################################
 # RE model
 
 ## mod formula
+disVar = 'Lno_disasters'
 cntrlVars=c(
 	'colony' # Colonial variable
 	,'Lpolity2' # Institutions
 	,'LlnGdpCap' # Macroecon controls
-	,'LlifeExpect', 'Lno_disasters' # Humanitarian
+	,'LlifeExpect' # Humanitarian
 	,'Lcivwar' # Civil war
 	)
 
 # model spec gen
-genModelForm = function(dv='commitUSD13', var, type, struc, interaction = FALSE){
+genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_disasters'){
 	if(type=='re'){ strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
 	if(type=='fe'){ strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
 	if(type=='none'){ strucChar=NULL }
@@ -44,22 +66,22 @@ genModelForm = function(dv='commitUSD13', var, type, struc, interaction = FALSE)
 			form = formula(
 			paste0(  dv, ' ~ ',  # DV
 			paste(var, collapse=' + '), ' + ', # add key var
-			paste(cntrlVars, collapse=' + '), # add control vars
+			paste(c(cntrlVars, disVar), collapse=' + '), # add control vars
 			strucChar )  )}
 	else if (interaction == TRUE){
 			form = formula(
 			paste0(  dv, ' ~ ',  # DV
-			paste(c(var, paste(c(var, 'Lno_disasters'), collapse = '*')), collapse=' + '), ' + ', # add key var
-			paste(cntrlVars, collapse=' + '), # add control vars
+			paste(c(var, paste(c(var, disVar), collapse = '*')), collapse=' + '), ' + ', # add key var
+			paste(c(disVar, cntrlVars), collapse=' + '), # add control vars
 			strucChar )  ) }
 	return(form) }
 
 # filename gen
-genFileName = function(train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
+genFileName = function(dv, train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
 	b = mod ; c = type ; d = if(zeroInf){ 'zi' } ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
-	g = paste0(paste(a,b,c,d,e,f, sep='_'), '.rda')
+	g = paste0(dv, '_', paste(a,b,c,d,e,f, sep='_'), '.rda')
 	return( gsub('__','_',g) ) }
 
 # Run models in parallel across imputed datasets
@@ -67,12 +89,16 @@ runModelParallel = function(
 	cores=detectCores(),
 	dataList=iData, trainLogic=FALSE, trainEnd=2002, 
 	modType='re', modFamily='gaussian', zeroInfLogic=FALSE, 
-	depVar='commitUSD13',
-	keyRegVar='LstratMu', modStruc=c('id','year'), int = FALSE
+	depVar,
+	keyRegVar='LstratMu', modStruc=c('id','year'), 
+	int = FALSE, disVarName = 'Lno_disasters'
 	){
 
-	modForm = genModelForm(var=keyRegVar, type=modType, struc=modStruc, interaction = int)
-	modName = genFileName(train=trainLogic, mod=modFamily, type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar, interaction = int)
+	modForm = genModelForm(
+		dv=depVar, var=keyRegVar, type=modType, struc=modStruc, interaction = int, disVar=disVarName)
+	modName = genFileName(
+		dv=depVar, train=trainLogic, mod=modFamily, 
+		type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar, interaction = int)
 
 	print(paste0('Running model: ', Reduce(paste, deparse(modForm))))
 	print(paste0('Saving to: ', modName))
@@ -107,53 +133,73 @@ runModelParallel = function(
 }
 ################################################################
 
-# ################################################################
-# # Run main models
-# # Full sample model, random effect, LstratMu, runs in a couple of minutes
-# runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LstratMu')
+################################################################
+# Run main models
+# Full sample model, random effect, LstratMu, runs in a couple of minutes
+for(dv in dvs){ runModelParallel(
+	trainLogic=FALSE, modType='re', 
+	keyRegVar='LstratMu', disVarName='Lno_disasters', depVar=dv)}
 
 # # robustness check, random effect with zero inflation, takes about six hours to run
 # runModelParallel(trainLogic=FALSE, modType='re', zeroInfLogic=TRUE, keyRegVar='LstratMu')
 
 # # robustness check, fixed effects, takes about 30 mins to run
 # runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu')
-# ################################################################
+################################################################
 
 ################################################################
 # # Run interaction models
 # Full sample model, random effect, LstratMu, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LstratMu', int = T)
+kivDiffLags = c(paste0('LstratMu',c('',paste0('_',2:6))))
+disDiffLags = c(paste0('Lno_disasters',c('',paste0('_',2:6))))
+for(dv in dvs){
+	for(i in 1:length(kivDiffLags)){
+		runModelParallel(
+			trainLogic=FALSE, modType='re', 
+			keyRegVar=kivDiffLags[i], disVarName=disDiffLags[i], 
+			depVar=dv, int = T)
+	} }
 
 # Full sample model, random effect, LallyWt, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LallyWt', int = T)
+for(dv in dvs){runModelParallel(
+	trainLogic=FALSE, modType='re', keyRegVar='LallyWt', depVar=dv, int = T)}
 
 # Full sample model, random effect, LunIDpt, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', int = T) 
+for(dv in dvs){runModelParallel(
+	trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', depVar=dv, int = T)}
 
 # Full sample model, random effect, LunIDpt, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar='Ligo', int = T)
+for(dv in dvs){runModelParallel(
+	trainLogic=FALSE, modType='re', keyRegVar='Ligo', depVar=dv, int = T)}
  
 # Full sample model, random effect, LallyWt + LunIdPt + Ligo, runs in a couple of minutes
-runModelParallel(trainLogic=FALSE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'), int = T)
+for(dv in dvs){runModelParallel(
+	trainLogic=FALSE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'), depVar=dv, int = T)}
 
-# robustness check, fixed effects, takes about 30 mins to run
-runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu', int = TRUE)
-# ################################################################
+# # robustness check, fixed effects, takes about 30 mins to run
+# runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu', int = TRUE)
+################################################################
 
 ################################################################
 # Compare to existing measures using two fold temporally cut cv
 # Training, random effect, Lstratmu
-runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='LstratMu')
+for(dv in dvs){
+	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, keyRegVar='LstratMu')}
 
 # Training, random effect, LallyWt
-runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='LallyWt')
+for(dv in dvs){
+	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, keyRegVar='LallyWt')}
 
 # Training, random effect, LunIdPt
-runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='LunIdPt')
+for(dv in dvs){
+	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, keyRegVar='LunIdPt')}
 
 # Training, random effect, Ligo
-runModelParallel(trainLogic=TRUE, modType='re', keyRegVar='Ligo')
+for(dv in dvs){
+	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, keyRegVar='Ligo')}
 
 # Training, random effect, LallyWt + LunIdPt + Ligo
-runModelParallel(trainLogic=TRUE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'))
+for(dv in dvs){
+	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, 
+		keyRegVar=c('LallyWt', 'LunIdPt','Ligo'))}
 ################################################################

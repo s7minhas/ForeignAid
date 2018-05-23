@@ -4,13 +4,17 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCod
 
 ################################################################
 # load data
-load(paste0(pathData, '/noImputationData.rda'))
-load(paste0(pathData, '/iData_v2.rda'))
+load(paste0(pathData, '/noImputationDataAidDisagg.rda'))
+load(paste0(pathData, '/iDataDisagg.rda'))
 
 # load model
-fullSampPath = paste0(pathResults, '/fullSamp_gaussian_re_')
-load(paste0(fullSampPath, 'LstratMu.rda')) ; stratMuMods = mods
-load(paste0(fullSampPath, 'LstratMu_interaction.rda')) ; stratMuIntMods = mods ; rm(mods)
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal','aidTotal')
+modPaths = lapply(dvs, function(dv){
+  paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_.rda') })
+intModPaths = lapply(dvs, function(dv){
+  paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
+stratMuMods = lapply(modPaths, function(x){load(x);return(mods)}) ; names(stratMuMods) = dvs
+stratMuIntMods = lapply(intModPaths, function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
 
 # 
 allMods = list( stratMu=stratMuMods, stratMuInt=stratMuIntMods )
