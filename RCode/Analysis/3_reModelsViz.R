@@ -8,17 +8,14 @@ load(paste0(pathData, '/noImputationDataAidDisagg.rda'))
 load(paste0(pathData, '/iDataDisagg.rda'))
 
 # load model
-dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal','aidTotal')
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
+dvNames = c('Humanitarian', 'Development', 'Civil Society', 'Non-Humanitarian')
 modPaths = lapply(dvs, function(dv){
   paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_.rda') })
 intModPaths = lapply(dvs, function(dv){
   paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
 stratMuMods = lapply(modPaths, function(x){load(x);return(mods)}) ; names(stratMuMods) = dvs
 stratMuIntMods = lapply(intModPaths, function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
-
-# 
-allMods = list( stratMu=stratMuMods, stratMuInt=stratMuIntMods )
-modSumm = lapply(allMods, rubinCoef)
 
 # vars
 cntrlVars=c(
@@ -32,39 +29,61 @@ cntrlVarNames = c(
   'Life Expectancy$_{r,t-1}$',
   'Civil War$_{r,t-1}$'
   )
+varsNoInt=c('(Intercept)','LstratMu', cntrlVars)
+varNamesNoInt = c('(Intercept)','Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
+varsInt=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters')
+varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
+  'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
+
+# 
+coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
+  "Negative"= rgb(222, 45, 38, maxColorValue=255),
+  "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
+  "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
+  "Insig" = rgb(150, 150, 150, maxColorValue=255))
+
+summarizeMods = function(mods, dirtyVars, cleanVars){
+  modSumm = lapply(1:length(mods), function(i){
+    mod = mods[[i]]; summ = rubinCoef(mod)
+    summ$dv = names(mods)[i]
+    summ$up95 = with(summ, beta + qnorm(.975)*se) ; summ$lo95 = with(summ, beta - qnorm(.975)*se)
+    summ$up90 = with(summ, beta + qnorm(.95)*se); summ$lo90 = with(summ, beta - qnorm(.95)*se)
+    summ$varClean = cleanVars[match(summ$var, dirtyVars)]
+    summ$dvClean = dvNames[match(summ$dv, dvs)]
+    summ$sig = NA
+    summ$sig[summ$lo90 > 0 & summ$lo95 < 0] = "Positive at 90"
+    summ$sig[summ$lo95 > 0] = "Positive"
+    summ$sig[summ$up90 < 0 & summ$up95 > 0] = "Negative at 90"
+    summ$sig[summ$up95 < 0] = "Negative"
+    summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"
+    return(summ) }) %>% do.call('rbind', .)
+  return(modSumm) }
+
+#
+noIntModSumm = summarizeMods(stratMuMods, varsNoInt, varNamesNoInt)
+intModSumm = summarizeMods(stratMuIntMods, varsInt, varNamesInt)
 ################################################################
 
 ################################################################
 # Model results
-genCoefPlot = function(mod, meltImpute=TRUE,
-  vars, varNames, dropIndex=1, fName){
-
-  # Coefficient plot
-  if(!meltImpute){coefData=summary(mod)$coefficients}
-  if(meltImpute){coefData=rubinCoef(mod, matrixFormat=TRUE)}
-  coefP=ggcoefplot(coefData, vars[-dropIndex], varNames[-dropIndex])
-  return(coefP) }
-
-
 # no interaction models
-varNamesNoInt = c('(Intercept)','Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
-
-# sig
-# tikz(file=paste0(pathGraphics, '/stratMuModCoef.tex'), width=8, height=5, standAlone=F)
-# genCoefPlot(stratMuMods,
-#   vars=c('(Intercept)','LstratMu', cntrlVars),
-#   varNames=varNamesNoInt)
-# dev.off()
-
-# # interaction models
-varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
-  'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
-
-# tikz(file=paste0(pathGraphics, '/stratMuIntCoef.tex'), width=8, height=5, standAlone=F)
-# genCoefPlot(stratMuIntMods,
-#   vars=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters'),
-#   varNames=varNamesInt )
-# dev.off()
+modSumm = intModSumm
+modSumm = modSumm[modSumm$var!='(Intercept)',]
+modSumm = modSumm[modSumm$dv!='notHumanitarianTotal',]
+ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
+  geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
+  geom_point() +
+  geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
+  geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
+  scale_color_manual(values=coefp_colors) +
+  coord_flip() +
+  facet_wrap(~dvClean, ncol=4, scales='free_x') +
+  ylab('') + xlab('') + 
+  theme(
+    axis.ticks = element_blank(), 
+    panel.border=element_blank(),
+    legend.position='none'
+    )
 #########################################################
 
 #########################################################
@@ -102,7 +121,11 @@ disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData,
 
 # disastEffect + geom_bar(data=stuff, aes(x=Var1, y=freqScale), stat='identity', alpha=.4) 
 
-disastEffect = disastEffect + geom_rug(data=regData[regData$Lno_disasters<=10,], aes(x=Lno_disasters), sides='b') + scale_x_continuous(limits=c(1,10))
+disastEffect = disastEffect +
+  geom_rug(
+    data=regData[regData$Lno_disasters<=10,], 
+    aes(x=Lno_disasters), sides='b') +
+  scale_x_continuous(limits=c(1,10))
 tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlone=F)
 disastEffect
 dev.off()

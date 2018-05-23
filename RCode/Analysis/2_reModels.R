@@ -38,9 +38,6 @@ iData = lapply(iData, function(x){
 	# log dvs
 	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
 	return(x) })
-
-# change dvs
-dvs = c(dvs, 'aidTotal')
 ################################################################
 
 ################################################################
@@ -136,9 +133,13 @@ runModelParallel = function(
 ################################################################
 # Run main models
 # Full sample model, random effect, LstratMu, runs in a couple of minutes
-for(dv in dvs){ runModelParallel(
-	trainLogic=FALSE, modType='re', 
-	keyRegVar='LstratMu', disVarName='Lno_disasters', depVar=dv)}
+kivDiffLags = c(paste0('LstratMu',c('',paste0('_',2:6))))
+disDiffLags = c(paste0('Lno_disasters',c('',paste0('_',2:6))))
+for(dv in dvs){ 
+	for(i in 1:length(kivDiffLags)){	
+		runModelParallel(
+			trainLogic=FALSE, modType='re', 
+			keyRegVar=kivDiffLags[i], disVarName=disDiffLags[i], depVar=dv) } }
 
 # # robustness check, random effect with zero inflation, takes about six hours to run
 # runModelParallel(trainLogic=FALSE, modType='re', zeroInfLogic=TRUE, keyRegVar='LstratMu')
@@ -157,27 +158,7 @@ for(dv in dvs){
 		runModelParallel(
 			trainLogic=FALSE, modType='re', 
 			keyRegVar=kivDiffLags[i], disVarName=disDiffLags[i], 
-			depVar=dv, int = T)
-	} }
-
-# Full sample model, random effect, LallyWt, runs in a couple of minutes
-for(dv in dvs){runModelParallel(
-	trainLogic=FALSE, modType='re', keyRegVar='LallyWt', depVar=dv, int = T)}
-
-# Full sample model, random effect, LunIDpt, runs in a couple of minutes
-for(dv in dvs){runModelParallel(
-	trainLogic=FALSE, modType='re', keyRegVar='LunIdPt', depVar=dv, int = T)}
-
-# Full sample model, random effect, LunIDpt, runs in a couple of minutes
-for(dv in dvs){runModelParallel(
-	trainLogic=FALSE, modType='re', keyRegVar='Ligo', depVar=dv, int = T)}
- 
-# Full sample model, random effect, LallyWt + LunIdPt + Ligo, runs in a couple of minutes
-for(dv in dvs){runModelParallel(
-	trainLogic=FALSE, modType='re', keyRegVar=c('LallyWt', 'LunIdPt','Ligo'), depVar=dv, int = T)}
-
-# # robustness check, fixed effects, takes about 30 mins to run
-# runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu', int = TRUE)
+			depVar=dv, int = T) } }
 ################################################################
 
 ################################################################
