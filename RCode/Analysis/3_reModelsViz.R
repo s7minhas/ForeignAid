@@ -66,79 +66,84 @@ intModSumm = summarizeMods(stratMuIntMods, varsInt, varNamesInt)
 
 ################################################################
 # Model results
-# no interaction models
-modSumm = intModSumm
-modSumm = modSumm[modSumm$var!='(Intercept)',]
-modSumm = modSumm[modSumm$dv!='notHumanitarianTotal',]
-ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
-  geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
-  geom_point() +
-  geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
-  geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
-  scale_color_manual(values=coefp_colors) +
-  coord_flip() +
-  facet_wrap(~dvClean, ncol=4, scales='free_x') +
-  ylab('') + xlab('') + 
-  theme(
-    axis.ticks = element_blank(), 
-    panel.border=element_blank(),
-    legend.position='none'
-    )
+plotRes = function(modSumm){
+  modSumm = modSumm[modSumm$var!='(Intercept)',]
+  modSumm = modSumm[modSumm$dv!='notHumanitarianTotal',]
+  ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
+    geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
+    geom_point() +
+    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
+    geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
+    scale_color_manual(values=coefp_colors) +
+    coord_flip() +
+    facet_wrap(~dvClean, ncol=4, scales='free_x') +
+    ylab('') + xlab('') + 
+    theme(
+      axis.ticks = element_blank(), 
+      panel.border=element_blank(),
+      legend.position='none' ) }
+
+noIntGG = plotRes(noIntModSumm)
+intGG = plotRes(intModSumm)
+ggsave(noIntGG, file=paste0(pathGraphics, '/noIntCoef.pdf'), width=8, height=6)
+ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 #########################################################
 
-#########################################################
-# Substantive effects
-## Strategic interest
-mod = stratMuMods[[1]] # results consistent for other model iters
-simVars = c('LstratMu', cntrlVars)
+# #########################################################
+# # Substantive effects
+# ## Strategic interest
+# mod = stratMuMods$'humanitarianTotal'[[1]] # results consistent for other model iters
+# simVars = c('LstratMu', cntrlVars)
 
-stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-  vars=simVars, actual=FALSE, brk=0.01, 
-  # vRange=regData$LstratMu[!is.na(regData$LstratMu)],
-  vRange=seq(min(regData$LstratMu,na.rm=TRUE), max(regData$LstratMu, na.rm=TRUE), 0.01),
-  vi='LstratMu', ostat=median, sigma=FALSE, intercept=TRUE,
-  ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
-  plotType='ribbon'
-  ) + theme(axis.title.y=element_text(vjust=1))
-# regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
-# stratEffect = stratEffect + geom_rug(data=regData, aes(x=LstratMu), sides='b') + ylim(0.3,.9)
-tikz(file=paste0(pathGraphics, '/stratEffect.tex'), width=8, height=5, standAlone=F)
-stratEffect
-dev.off()
+# stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+#   vars=simVars, actual=FALSE, brk=0.01, 
+#   # vRange=regData$LstratMu[!is.na(regData$LstratMu)],
+#   vRange=seq(min(regData$LstratMu,na.rm=TRUE), max(regData$LstratMu, na.rm=TRUE), 0.01),
+#   vi='LstratMu', ostat=median, sigma=FALSE, intercept=TRUE,
+#   ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
+#   plotType='ribbon'
+#   ) + theme(axis.title.y=element_text(vjust=1))
+# # regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
+# # stratEffect = stratEffect + geom_rug(data=regData, aes(x=LstratMu), sides='b') + ylim(0.3,.9)
+# tikz(file=paste0(pathGraphics, '/stratEffect.tex'), width=8, height=5, standAlone=F)
+# stratEffect
+# dev.off()
 
-## Natural disaster 
-disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-  vars=simVars, actual=FALSE, brk=1, vRange=1:10,
-  # vRange=regData$Lno_disasters[!is.na(regData$Lno_disasters)],
-  # vRange=seq(min(regData$Lno_disasters,na.rm=TRUE), max(regData$Lno_disasters, na.rm=TRUE), 0.01),
-  vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
-  ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
-  plotType='errorBar'
-  ) + theme(axis.title.y=element_text(vjust=1))
-# regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
-# stuff=data.frame(table(regData$Lno_disasters))
-# stuff$freqScale = rescale(stuff$Freq, max(disastEffect$data$Fit), min(disastEffect$data$Fit))
+# ## Natural disaster 
+# disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
+#   vars=simVars, actual=FALSE, brk=1, vRange=1:10,
+#   # vRange=regData$Lno_disasters[!is.na(regData$Lno_disasters)],
+#   # vRange=seq(min(regData$Lno_disasters,na.rm=TRUE), max(regData$Lno_disasters, na.rm=TRUE), 0.01),
+#   vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
+#   ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
+#   plotType='errorBar'
+#   ) + theme(axis.title.y=element_text(vjust=1))
+# # regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
+# # stuff=data.frame(table(regData$Lno_disasters))
+# # stuff$freqScale = rescale(stuff$Freq, max(disastEffect$data$Fit), min(disastEffect$data$Fit))
 
-# disastEffect + geom_bar(data=stuff, aes(x=Var1, y=freqScale), stat='identity', alpha=.4) 
+# # disastEffect + geom_bar(data=stuff, aes(x=Var1, y=freqScale), stat='identity', alpha=.4) 
 
-disastEffect = disastEffect +
-  geom_rug(
-    data=regData[regData$Lno_disasters<=10,], 
-    aes(x=Lno_disasters), sides='b') +
-  scale_x_continuous(limits=c(1,10))
-tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlone=F)
-disastEffect
-dev.off()
+# disastEffect = disastEffect +
+#   geom_rug(
+#     data=regData[regData$Lno_disasters<=10,], 
+#     aes(x=Lno_disasters), sides='b') +
+#   scale_x_continuous(limits=c(1,10))
+# tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlone=F)
+# disastEffect
+# dev.off()
 
-##
-tikz(file=paste0(pathGraphics, '/effects.tex'), width=8, height=4, standAlone=F)
-multiplot(list(stratEffect, disastEffect), cols=2)
-dev.off()
-#########################################################
+# ##
+# tikz(file=paste0(pathGraphics, '/effects.tex'), width=8, height=4, standAlone=F)
+# multiplot(list(stratEffect, disastEffect), cols=2)
+# dev.off()
+# #########################################################
 
 #########################################################
 # switch to interaction mod
-mod = stratMuIntMods[[1]]
+someplots = lapply(1:length(stratMuIntMods), function(i){
+mod = stratMuIntMods[[i]][[1]]
+modTitle = dvNames[i]
 var = 'LstratMu'
 
 # Create scenario matrix
@@ -146,12 +151,12 @@ stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
 stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
 disRange=with(data=regData, seq(min(Lno_disasters), 10, 2) )
 scen = with(data=regData, 
-	expand.grid(
-		1, stratRange, disRange, 
-		median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
-		median(LlnGdpCap,na.rm=TRUE), 
-		median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
-		) )
+  expand.grid(
+    1, stratRange, disRange, 
+    median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
+    median(LlnGdpCap,na.rm=TRUE), 
+    median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
+    ) )
 
 # Add interaction term
 scen = cbind( scen, scen[,2]*scen[,3] )
@@ -165,7 +170,7 @@ sysInts90 = t(apply(sysUncert, 1, function(x){ quantile(x, c(0.05, 0.95), na.rm=
 
 # Combine for plotting
 ggData=data.frame(
-		cbind(pred, sysInts95, sysInts90, scen[,var], scen[,'Lno_disasters'])
+    cbind(pred, sysInts95, sysInts90, scen[,var], scen[,'Lno_disasters'])
     )
 names(ggData)=c('fit', 'sysLo95', 'sysHi95', 'sysLo90', 'sysHi90', var, 'Lno_disasters')
 
@@ -179,10 +184,19 @@ tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit)) +
   geom_ribbon(aes(ymin=sysLo95, ymax=sysHi95), alpha=.4) +
   facet_grid(~Lno_disasters) +
   xlab('Pol. Strat. Distance$_{sr,t-1}$') + ylab("Log(Aid)$_{t}$") +
+  ggtitle(modTitle) + 
   theme(
     axis.ticks=element_blank(), 
     panel.border = element_blank()
   )
+return(tmp)
+})
+
+
+loadPkg('gridExtra')
+simComboPlot=grid.arrange(someplots[[1]], someplots[[2]], someplots[[3]], someplots[[4]], nrow=length(stratMuIntMods))
+ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
+
 tikz(file=paste0(pathGraphics, '/intEffect.tex'), width=8, height=5, standAlone=F)
 tmp
 dev.off()
