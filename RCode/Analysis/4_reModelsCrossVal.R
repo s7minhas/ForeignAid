@@ -4,9 +4,8 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCod
 
 ################################################################
 # load data
-load(paste0(pathData, '/noImputationData.rda'))
-load(paste0(pathData, '/iData_v2.rda'))
-regData = iData[[5]]
+load(paste0(pathData, '/iDataDisagg.rda'))
+regData = iData[[1]]
 regData$id = with(regData, paste(ccodeS, ccodeR, sep='_'))
 regData$year = num(regData$year)
 regData$ccodeS = num(regData$ccodeS)

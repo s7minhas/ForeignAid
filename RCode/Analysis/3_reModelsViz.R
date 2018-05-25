@@ -98,56 +98,6 @@ ggsave(noIntGG, file=paste0(pathGraphics, '/noIntCoef.pdf'), width=8, height=6)
 ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 #########################################################
 
-# #########################################################
-# # Substantive effects
-# ## Strategic interest
-# mod = stratMuMods$'humanitarianTotal'[[1]] # results consistent for other model iters
-# simVars = c('LstratMu', cntrlVars)
-
-# stratEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=simVars, actual=FALSE, brk=0.01, 
-#   # vRange=regData$LstratMu[!is.na(regData$LstratMu)],
-#   vRange=seq(min(regData$LstratMu,na.rm=TRUE), max(regData$LstratMu, na.rm=TRUE), 0.01),
-#   vi='LstratMu', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="Strategic Distance$_{t-1}$",
-#   plotType='ribbon'
-#   ) + theme(axis.title.y=element_text(vjust=1))
-# # regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
-# # stratEffect = stratEffect + geom_rug(data=regData, aes(x=LstratMu), sides='b') + ylim(0.3,.9)
-# tikz(file=paste0(pathGraphics, '/stratEffect.tex'), width=8, height=5, standAlone=F)
-# stratEffect
-# dev.off()
-
-# ## Natural disaster 
-# disastEffect = ggsimplot(modelResults=mod, sims=10000, simData=regData, 
-#   vars=simVars, actual=FALSE, brk=1, vRange=1:10,
-#   # vRange=regData$Lno_disasters[!is.na(regData$Lno_disasters)],
-#   # vRange=seq(min(regData$Lno_disasters,na.rm=TRUE), max(regData$Lno_disasters, na.rm=TRUE), 0.01),
-#   vi='Lno_disasters', ostat=median, sigma=FALSE, intercept=TRUE,
-#   ylabel="Log(Aid)$_{t}$", xlabel="No. Disasters$_{t-1}$",
-#   plotType='errorBar'
-#   ) + theme(axis.title.y=element_text(vjust=1))
-# # regData$Fit=0 ; regData$Lo95=0 ; regData$Hi95=0 ; regData$Lo90=0; regData$Hi90=0
-# # stuff=data.frame(table(regData$Lno_disasters))
-# # stuff$freqScale = rescale(stuff$Freq, max(disastEffect$data$Fit), min(disastEffect$data$Fit))
-
-# # disastEffect + geom_bar(data=stuff, aes(x=Var1, y=freqScale), stat='identity', alpha=.4) 
-
-# disastEffect = disastEffect +
-#   geom_rug(
-#     data=regData[regData$Lno_disasters<=10,], 
-#     aes(x=Lno_disasters), sides='b') +
-#   scale_x_continuous(limits=c(1,10))
-# tikz(file=paste0(pathGraphics, '/disastEffect.tex'), width=8, height=5, standAlone=F)
-# disastEffect
-# dev.off()
-
-# ##
-# tikz(file=paste0(pathGraphics, '/effects.tex'), width=8, height=4, standAlone=F)
-# multiplot(list(stratEffect, disastEffect), cols=2)
-# dev.off()
-# #########################################################
-
 #########################################################
 # switch to interaction mod
 regData = iData[[1]]
