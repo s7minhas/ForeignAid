@@ -22,7 +22,8 @@ vars=c(
 ## Run model on full sample
 ### Results consistent across various specifications
 modForm=formula(paste0(
-	'commitUSD13 ~ ', paste(vars, collapse=' + '), 
+	'commitUSD13 ~ ', paste(vars, collapse=' + '),
+	'+ LstratMu*Lno_disasters', 
 	'+ (1|id) + (1|year)'))	# Sender + year random effects
 
 # Cross val by country
