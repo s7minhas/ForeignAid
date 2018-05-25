@@ -4,12 +4,11 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCod
 
 ################################################################
 # load data
-load(paste0(pathData, '/noImputationDataAidDisagg.rda'))
 load(paste0(pathData, '/iDataDisagg.rda'))
 
 # load model
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
-dvNames = c('Humanitarian', 'Development', 'Civil Society', 'Non-Humanitarian')
+dvNames = paste(c('Humanitarian', 'Development', 'Civil Society', 'Non-Humanitarian'), 'Aid')
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
   "Negative"= rgb(222, 45, 38, maxColorValue=255),
   "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
@@ -36,7 +35,7 @@ for(i in 1:length(dvs)){
     summ$sig[summ$up90 < 0 & summ$up95 > 0] = "Negative at 90"
     summ$sig[summ$up95 < 0] = "Negative"
     summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"  
-    summ$varFacet = c('LstratMu', 'Lno_disasters')
+    summ$varFacet = c('Strategic Distance', 'No. Disasters')
     return(summ) }))
 
   tmp=ggplot(modSumm, aes(x=lag, y=beta, color=sig)) +
@@ -45,7 +44,7 @@ for(i in 1:length(dvs)){
     geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
     geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
     scale_color_manual(values=coefp_colors) +
-    ggtitle(dvNames[1]) +
+    ggtitle(dvNames[i]) +
     facet_wrap(~varFacet, nrow=2, scales='free_x') +
     ylab('') + xlab('') + 
     theme(
@@ -76,7 +75,7 @@ for(i in 1:length(dvs)){
     summ$sig[summ$up90 < 0 & summ$up95 > 0] = "Negative at 90"
     summ$sig[summ$up95 < 0] = "Negative"
     summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"  
-    summ$varFacet = c('LstratMu', 'Lno_disasters', 'LstratMu x Lno_disasters')
+    summ$varFacet = c('Strategic Distance', 'No. Disasters', 'Strategic Distance x No. Disasters')
     return(summ) }))
 
   tmp=ggplot(modSumm, aes(x=lag, y=beta, color=sig)) +
@@ -85,7 +84,7 @@ for(i in 1:length(dvs)){
     geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
     geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
     scale_color_manual(values=coefp_colors) +
-    ggtitle(dvNames[1]) +
+    ggtitle(dvNames[i]) +
     facet_wrap(~varFacet, nrow=3, scales='free_x') +
     ylab('') + xlab('') + 
     theme(

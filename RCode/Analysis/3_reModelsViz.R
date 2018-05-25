@@ -30,10 +30,10 @@ cntrlVarNames = c(
   'Civil War$_{r,t-1}$'
   )
 varsNoInt=c('LstratMu', cntrlVars)
-varNamesNoInt = c('Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
+varNamesNoInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames)
 varsInt=c('LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
-varNamesInt = c('Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames[1],
-  'Pol. Strat. Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', cntrlVarNames[-1])
+varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
+  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', cntrlVarNames[-1])
 
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
@@ -73,7 +73,7 @@ plotRes = function(modSumm){
   # fix some labels
   xlabels = TeX(char(modSumm$varClean))
   xlabels[char(modSumm$varClean)==varNamesInt[3]] = expression( atop(
-      'Pol. Strat. Distance' ['sr,t-1'],
+      'Strategic Distance' ['sr,t-1'],
       'x No. Disasters' ['r,t-1'] ) )
 
   # viz
@@ -209,7 +209,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
     geom_rug(data=actData, aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
     facet_grid(~Lno_disasters, labeller=as_labeller(facet_labeller, default = label_parsed)) +
     labs(
-      x=TeX('Pol. Strat. Distance$_{sr,t-1}$'),
+      x=TeX('Strategic Distance$_{sr,t-1}$'),
       y=TeX("Log(Aid)$_{t}$"),
       title=modTitle
       ) +
