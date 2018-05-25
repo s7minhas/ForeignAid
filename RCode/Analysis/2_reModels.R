@@ -26,7 +26,7 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
 	return(cbind(data, newData)) }
 
-# Add dyad random effect
+# 
 iData = lapply(iData, function(x){
 	# add lags
 	x = addLags(1:5, x)

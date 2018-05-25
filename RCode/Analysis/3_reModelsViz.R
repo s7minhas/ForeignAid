@@ -8,8 +8,8 @@ load(paste0(pathData, '/noImputationDataAidDisagg.rda'))
 load(paste0(pathData, '/iDataDisagg.rda'))
 
 # load model
-dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
-dvNames = c('Humanitarian', 'Development', 'Civil Society', 'Non-Humanitarian')
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
+dvNames = paste0(c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 modPaths = lapply(dvs, function(dv){
   paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_.rda') })
 intModPaths = lapply(dvs, function(dv){
@@ -29,11 +29,11 @@ cntrlVarNames = c(
   'Life Expectancy$_{r,t-1}$',
   'Civil War$_{r,t-1}$'
   )
-varsNoInt=c('(Intercept)','LstratMu', cntrlVars)
-varNamesNoInt = c('(Intercept)','Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
-varsInt=c('(Intercept)','LstratMu', cntrlVars, 'LstratMu:Lno_disasters')
-varNamesInt = c( '(Intercept)', 'Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames, 
-  'Pol. Strat. Distance$_{sr,t-1}$ \n x No. Disasters$_{r,t-1}$')
+varsNoInt=c('LstratMu', cntrlVars)
+varNamesNoInt = c('Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames)
+varsInt=c('LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
+varNamesInt = c('Pol. Strat. Distance$_{sr,t-1}$', cntrlVarNames[1],
+  'Pol. Strat. Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', cntrlVarNames[-1])
 
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
@@ -48,6 +48,7 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
     summ$dv = names(mods)[i]
     summ$up95 = with(summ, beta + qnorm(.975)*se) ; summ$lo95 = with(summ, beta - qnorm(.975)*se)
     summ$up90 = with(summ, beta + qnorm(.95)*se); summ$lo90 = with(summ, beta - qnorm(.95)*se)
+    summ = summ[summ$var!='(Intercept)',]    
     summ$varClean = cleanVars[match(summ$var, dirtyVars)]
     summ$dvClean = dvNames[match(summ$dv, dvs)]
     summ$sig = NA
@@ -57,6 +58,7 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
     summ$sig[summ$up95 < 0] = "Negative"
     summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"
     return(summ) }) %>% do.call('rbind', .)
+  modSumm$varClean = factor(modSumm$varClean, levels=rev(cleanVars))
   return(modSumm) }
 
 #
@@ -67,17 +69,23 @@ intModSumm = summarizeMods(stratMuIntMods, varsInt, varNamesInt)
 ################################################################
 # Model results
 plotRes = function(modSumm){
-  modSumm = modSumm[modSumm$var!='(Intercept)',]
-  modSumm = modSumm[modSumm$dv!='notHumanitarianTotal',]
+  # fix some labels
+  xlabels = TeX(char(modSumm$varClean))
+  xlabels[char(modSumm$varClean)==varNamesInt[3]] = expression( atop(
+      'Pol. Strat. Distance' ['sr,t-1'],
+      'x No. Disasters' ['r,t-1'] ) )
+
+  # viz
   ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
     geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
     geom_point() +
     geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
     geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
     scale_color_manual(values=coefp_colors) +
+    scale_x_discrete('',labels=xlabels) +    
     coord_flip() +
     facet_wrap(~dvClean, ncol=4, scales='free_x') +
-    ylab('') + xlab('') + 
+    labs( y='' ) +
     theme(
       axis.ticks = element_blank(), 
       panel.border=element_blank(),
@@ -141,7 +149,9 @@ ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 
 #########################################################
 # switch to interaction mod
-someplots = lapply(1:length(stratMuIntMods), function(i){
+regData = iData[[1]]
+# someplots = lapply(1:length(stratMuIntMods), function(i){
+i=1
 mod = stratMuIntMods[[i]][[1]]
 modTitle = dvNames[i]
 var = 'LstratMu'

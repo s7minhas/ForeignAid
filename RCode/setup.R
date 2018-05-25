@@ -22,7 +22,7 @@ if(Sys.info()["user"]=="cindycheng") {
  
 # Loading libraries and functions
 toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape2', 
-	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 
+	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 'latex2exp',
   'foreach', 'doParallel',
 	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid')
 

@@ -43,6 +43,7 @@ vars=c(
 	'polity2', # Institutions
 	'lnGdpCap', # Macroecon controls
 	'lifeExpect', 'no_disasters', # Humanitarian
+	'no_killed', 'no_injured', 'no_affected',
 	'civwar' )
 	names(covData)
 covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
@@ -228,3 +229,28 @@ setwd(pathData)
 save(iData, file = "iDataDisagg.rda")
 save(imp, file='sbgOutput_nodalDyadicImputationDisagg.rda')
 ################################################################
+
+# ################################################################
+# setwd(pathData)
+# load(paste0(pathData, "/iDataDisagg_0.rda"))
+# emdat = read.csv(paste0(pathData, '/components/emdat/emdat.csv'))
+# emdat$cname = cname(emdat$country_name)
+# emdat$cname[emdat$country_name=='Czechoslovakia'] = cname('Czech Republic')
+# emdat$cname[emdat$country_name=='Yugoslavia'] = cname('Serbia')
+# emdat = emdat[!is.na(emdat$cname),] # drop azores and canary is
+# emdat$ccode = panel$ccode[match(emdat$cname, panel$cname)]
+# emdat = emdat[!is.na(emdat$ccode),]  # drop small countries
+# emdat$year = emdat$year + 1
+# emdat$cyear = with(emdat, paste(ccode, year, sep='_'))
+
+# iData = lapply(iData, function(x){
+# 	x$rYear = with(x, paste(ccodeR, year, sep='_'))
+# 	for(v in names(emdat)[5:10]){
+# 		x$tmp = emdat[match(x$rYear, emdat$cyear),v]
+# 		x$tmp[is.na(x$tmp)] = 0
+# 		x$tmp = log(x$tmp + 1)
+# 		names(x)[ncol(x)] = paste0('L',v) }
+# 	return(x)
+# })
+# save(iData, file=paste0(pathData, '/iDataDisagg.rda'))
+# ################################################################
