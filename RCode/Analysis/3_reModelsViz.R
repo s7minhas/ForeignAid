@@ -173,4 +173,9 @@ simComboPlot=grid.arrange(
   simPlots[[1]], simPlots[[3]], simPlots[[2]],
   nrow=length(stratMuIntMods))
 ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
+
+ggsave(simPlots[[1]], file=paste0(pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
+
+
+
 #########################################################
