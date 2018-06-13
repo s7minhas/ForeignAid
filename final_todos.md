@@ -7,6 +7,6 @@
 - updating the reg table in the appendiz
 - checking out of sample performance relative to components
 - take a closer look at the gbme section
-- redo plots in fig2
-- simplify interpretation of interactive effect -- does the effect diminish over time
+- redo plots in fig2: done kinda
+- simplify interpretation of interactive effect -- does the effect diminish over time: done kinda
 
