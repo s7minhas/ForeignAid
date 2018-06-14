@@ -183,6 +183,7 @@ aidMats=DyadBuild(variable='commitment_amount_usd_constant_sum', dyadData=aidDat
 oecd = c('AUSTRIA', 'BELGIUM', 'CANADA', 'DENMARK', 'FRANCE', 'GERMANY',
 	'GREECE', 'ICELAND', 'IRELAND', 'ITALY', 'LUXEMBOURG', 'NETHERLANDS',
 	'NORWAY', 'PORTUGAL', 'SPAIN', 'SWEDEN', 'UNITED KINGDOM', 'UNITED STATES' )
+ 
 aidData = aidData[which(aidData$cnameS %in% oecd),]
 aidData = aidData[which(!aidData$cnameR %in% oecd),]
 
