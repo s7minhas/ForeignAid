@@ -4,7 +4,8 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCod
 
 ################################################################
 # load data
-load(paste0(pathData, '/iDataDisagg.rda'))
+load(paste0(pathData, '/iDataDisagg_wLags.rda'))
+regData = iData[[1]]
 
 # load model
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
@@ -14,6 +15,7 @@ coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255),
   "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
   "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
   "Insig" = rgb(150, 150, 150, maxColorValue=255))
+################################################################
 
 ################################################################
 for(i in 1:length(dvs)){
@@ -57,16 +59,16 @@ for(i in 1:length(dvs)){
 
 ################################################################
 for(i in 1:length(dvs)){
-  stratMuMods = lapply(c('',paste0(2:6, '_')), function(x){
+  stratMuIntMods = lapply(c('',paste0(2:6, '_')), function(x){
     pth = paste0(pathResults, '/', dvs[i], '_fullSamp_gaussian_re_LstratMu_', x, 'interaction.rda')
     load(pth) ; return(mods) })
-  names(stratMuMods) = paste0('Lag ', 1:6)
+  names(stratMuIntMods) = paste0('Lag ', 1:6)
 
-  modSumm = do.call('rbind', lapply(1:length(stratMuMods), function(i){
-    x = stratMuMods[[i]]
+  modSumm = do.call('rbind', lapply(1:length(stratMuIntMods), function(i){
+    x = stratMuIntMods[[i]]
     x = rubinCoef(x)
     summ = x[c(2,3,9),,drop=FALSE]
-    summ$lag = names(stratMuMods)[i]
+    summ$lag = names(stratMuIntMods)[i]
     summ$up95 = with(summ, beta + qnorm(.975)*se) ; summ$lo95 = with(summ, beta - qnorm(.975)*se)
     summ$up90 = with(summ, beta + qnorm(.95)*se); summ$lo90 = with(summ, beta - qnorm(.95)*se)  
     summ$sig = NA
@@ -96,6 +98,91 @@ for(i in 1:length(dvs)){
 ################################################################
 
 ################################################################
-# run with all lags at once
+# calc substantive effect
+simPlots = list()
+for(i in 1:length(dvs)){
+  stratMuIntMods = lapply(c('',paste0(c(3,5), '_')), function(x){
+    pth = paste0(
+      pathResults, '/', 
+      dvs[i], '_fullSamp_gaussian_re_LstratMu_', x, 'interaction.rda')
+    load(pth) ; return(mods) })
+  names(stratMuIntMods) = paste0('Lag ', c(1,3,5))
 
+  simResults = lapply(1:length(stratMuIntMods), function(j){
+    mod = stratMuIntMods[[j]][[1]] ; var = names(fixef(mod))[2]
+    disVar = names(fixef(mod))[3]
+
+    # Create scenario matrix
+    stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
+    stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
+    disRange=seq( min(regData[,disVar],na.rm=TRUE), 4, 2 ) 
+    scen = with(data=regData, 
+      expand.grid(
+        1, stratRange, disRange, 
+        median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
+        median(LlnGdpCap,na.rm=TRUE), 
+        median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
+        ) )
+
+    # Add interaction term
+    scen = cbind( scen, scen[,2]*scen[,3] )
+    colnames(scen) = names(fixef(mod))
+    scen = data.matrix(scen)
+    pred = scen %*% mod@beta
+    draws = mvrnorm(10000, mod@beta, vcov(mod))
+    sysUncert = scen %*% t(draws)
+    sysInts95 = t(apply(sysUncert, 1, function(x){
+      quantile(x, c(0.025, 0.975), na.rm=TRUE) }))
+    sysInts90 = t(apply(sysUncert, 1, function(x){
+      quantile(x, c(0.05, 0.95), na.rm=TRUE) }))
+
+    # Combine for plotting
+    ggData=data.frame(
+        cbind(pred, sysInts95, sysInts90, 
+          scen[,var], scen[,disVar])
+        )
+    names(ggData)=c('fit', 'sysLo95', 'sysHi95', 
+      'sysLo90', 'sysHi90', var, disVar)
+    names(ggData)[6:7] = c('LstratMu','Lno_disasters')
+
+    # Plot rel at various cuts of disasters
+    disRange=with(data=regData, seq(
+      min(Lno_disasters), 4, 2) )
+    ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
+
+    # change facet labels
+    ggDataSmall$Lno_disasters = paste(ggDataSmall$Lno_disasters, 'Disasters$_{r}$')
+
+    #
+    ggDataSmall$lagID = names(stratMuIntMods)[j]
+    return(ggDataSmall) })
+
+  # viz
+  ggData = do.call('rbind', simResults)
+  facet_labeller = function(string){ TeX(string) }
+  modTitle = dvNames[i]
+  tmp=ggplot(ggData, aes(x=LstratMu, y=fit)) +
+    geom_line() +
+    geom_ribbon(aes(ymin=sysLo90, ymax=sysHi90), alpha=.6) +
+    geom_ribbon(aes(ymin=sysLo95, ymax=sysHi95), alpha=.4) +
+    facet_grid(Lno_disasters~lagID, labeller=as_labeller(facet_labeller, default = label_parsed)) +
+    labs(
+      x=TeX('Strategic Distance$_{sr}$'),
+      y=TeX("Log(Aid)$_{t}$"),
+      title=modTitle
+      ) +
+    theme(
+      axis.ticks=element_blank(), 
+      panel.border = element_blank() )
+  simPlots[[i]] = tmp
+}
+
+loadPkg('gridExtra')
+simComboPlot=grid.arrange(
+  simPlots[[1]], simPlots[[3]], 
+  # simPlots[[2]], # results similar so leaving out for space
+  nrow=length(stratMuIntMods)-1)
+
+ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot_lag.pdf'), width=8, height=8)
+ggsave(simPlots[[2]], file=paste0(pathGraphics, '/simComboPlot_lag_devAid.pdf'), width=7, height=4)
 ################################################################

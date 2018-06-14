@@ -38,6 +38,7 @@ iData = lapply(iData, function(x){
 	# log dvs
 	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
 	return(x) })
+save(iData, file=paste0(pathData, '/iDataDisagg_wLags.rda'))
 ################################################################
 
 ################################################################
