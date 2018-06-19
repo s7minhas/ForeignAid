@@ -177,12 +177,7 @@ for(i in 1:length(dvs)){
   simPlots[[i]] = tmp
 }
 
-loadPkg('gridExtra')
-simComboPlot=grid.arrange(
-  simPlots[[1]], simPlots[[3]], 
-  simPlots[[2]], # results similar so leaving out for space
-  nrow=length(stratMuIntMods))
-
-ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot_lag.pdf'), width=8, height=8)
-ggsave(simPlots[[3]], file=paste0(pathGraphics, '/simComboPlot_lag_hAid.pdf'), width=7, height=4)
+ggsave(simPlots[[1]], file=paste0(pathGraphics, '/simComboPlot_lag_hAid.pdf'), width=7, height=4)
+ggsave(simPlots[[2]], file=paste0(pathGraphics, '/simComboPlot_lag_dAid.pdf'), width=7, height=4)
+ggsave(simPlots[[3]], file=paste0(pathGraphics, '/simComboPlot_lag_cAid.pdf'), width=7, height=4)
 ################################################################
