@@ -1,7 +1,13 @@
 
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+	source('~/Documents/Papers/ForeignAid/RCode/setup.R')
+	setwd("/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data")
+}
+if(Sys.info()['user']=='s7m'){
+	source('~/Research/ForeignAid/RCode/setup.R')
+	setwd(paste0(pathData))
+}
 
-setwd("/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data")
 library(dplyr)
 
 
@@ -9,7 +15,7 @@ library(dplyr)
 # receiver = 'Iran'
 
 
-unique(aidDataRaw$donor)
+# unique(aidDataRaw$donor)
 
 sender = 'United States'
 receiver = 'China'
@@ -27,7 +33,7 @@ subAidDataRaw$commitment_amount_usd_constant_sum = subAidDataRaw$commitment_amou
 dim(subAidDataRaw)
  
  
-print(ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum, group= coalesced_purpose_name, shape = coalesced_purpose_name))+
+ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum, group= coalesced_purpose_name, shape = coalesced_purpose_name))+
 	geom_jitter(size = 3)+
 	geom_line(aes( color = coalesced_purpose_name), size = 1.5)+
 	theme(axis.title = element_text(size = 12),
@@ -38,12 +44,11 @@ print(ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum
 	labs( y = "Committed Amount (USD Constant Dollars, millions)", x = 'Year', shape = "Sector" , color = "Sector")
 	#guides(shape = guide_legend(title.position = "top", ncol = 2), color = guide_legend(title.position = "top", ncol = 2)
 	)
-)
  
 
  
 pdf(paste0(pathGraphics, '/US_Iran_aid.pdf'))
-print(ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum, group= coalesced_purpose_name, shape = coalesced_purpose_name))+
+ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum, group= coalesced_purpose_name, shape = coalesced_purpose_name))+
 	geom_jitter(size = 3)+
 	geom_line(aes( color = coalesced_purpose_name), size = 1.5)+
 	theme(axis.title = element_text(size = 12),
@@ -58,7 +63,6 @@ print(ggplot(subAidDataRaw, aes(x = year, y = commitment_amount_usd_constant_sum
 	scale_x_continuous(breaks = c(2002:2013))+
 	labs( y = "Committed Amount (USD Constant Dollars, millions)", x = 'Year', shape = "Sector" , color = "Sector")+
 	guides(shape = guide_legend(title.position = "top", ncol = 2), color = guide_legend(title.position = "top", ncol = 2))
-)
 dev.off()
 
 
