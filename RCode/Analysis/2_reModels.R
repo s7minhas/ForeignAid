@@ -1,10 +1,12 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/ForeignAid1/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ################################################################
 # Load reg data
 setwd(pathData)
 load('iDataDisagg.rda')
+
+
 
 # vars for analysis
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
@@ -184,4 +186,18 @@ for(dv in dvs){
 for(dv in dvs){
 	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, 
 		keyRegVar=c('LallyWt', 'LunIdPt','Ligo'))}
+
+
 ################################################################
+
+################################################################
+# Run full models for alternate strategic interest variables
+ivs = c('LallyWt', 'LunIdPt', 'Ligo')
+for (iv in ivs){
+	for(dv in dvs[-4]){
+	runModelParallel(trainLogic=FALSE, modType='re', depVar=dv, keyRegVar=iv, int = T)}
+}
+
+
+
+
