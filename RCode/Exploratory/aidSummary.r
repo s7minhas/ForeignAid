@@ -1,9 +1,18 @@
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+ 
 
-setwd("/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data")
+if(Sys.info()['user']=='cindycheng'){
+	source('~/Documents/Papers/ForeignAid/RCode/setup.R')
+	setwd("/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data")
+}
+if(Sys.info()['user']=='s7m'){
+	source('~/Research/ForeignAid/RCode/setup.R')
+	setwd(paste0(pathData))
+}
+ 
 library(dplyr)
 
-
+ 
+ 
 sender = 'United States'
 receiver = 'Iran'
 
@@ -20,7 +29,6 @@ aidDataDisaggLong = reshape(aidData[, c('Receiver', 'Sender', 'year', names(aidD
 
 subAidDataRaw = aidDataDisaggLong[which(aidDataDisaggLong$Receiver == receiver & aidDataDisaggLong$Sender == sender),]
 
- 
 subAidDataRaw = subAidDataRaw[which(subAidDataRaw$year > 1974),]
 subAidDataRaw$aidAmt = subAidDataRaw$aidAmt/1000000
 
@@ -28,26 +36,27 @@ subAidDataRaw$aidLabel = as.factor(subAidDataRaw$aidType)
 levels(subAidDataRaw$aidLabel) = c('Civil Society Aid', 'Development Aid', 'Humanitarian Aid')
 subAidDataRaw$aidLabel = factor(subAidDataRaw$aidLabel, levels(subAidDataRaw$aidLabel)[c(3,1,2)])
  
+
+ 
 pdf(paste0(pathGraphics, '/US_Iran_aid.pdf'))
 print(ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel))+
 	# geom_jitter(size = 3)+
 	geom_line(aes( linetype = aidLabel), size = 1.5, alpha = .65, position=position_jitter(w=0.00, h=.05))+
 	geom_point()+
-		# scale_color_manual(labels = c('Civil Society Aid', 'Humanitarian Aid', 'Development Aid'))+
- guides(linetype=guide_legend(title=""))+
+   guides(linetype=guide_legend(title=""))+
 	theme(axis.title = element_text(size = 16),
 		  axis.text.x = element_text(angle = 90, hjust = 1, size = 12),
 		  axis.text.y = element_text(size = 12),
 		  legend.position = 'bottom' ,
 		  legend.text = element_text(size = 12),
 		  	legend.title = element_text(size = 14)) + 
-#	scale_color_manual(values=c(rep("#999999", 4), "#E69F00", rep("#999999", 4), "#56B4E9", rep("#999999", 4), "#DB4811", rep("#999999", 1)  ))+
-	scale_x_continuous(breaks = c(2002:2013))+
+ 
   scale_linetype_manual(values=c("solid", "dashed", "dotted"))+
-
 	labs( y = "Committed Amount (USD Constant Dollars, millions)", x = 'Year', shape = "Sector" , color = "Sector")
 	#guides(shape = guide_legend(title.position = "top", ncol = 2), color = guide_legend(title.position = "top", ncol = 2))
 )
+ 
+	 
 dev.off()
 
 
