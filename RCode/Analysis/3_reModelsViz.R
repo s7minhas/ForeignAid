@@ -101,6 +101,7 @@ ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 #########################################################
 # switch to interaction mod
 regData = iData[[1]]
+noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
   mod = stratMuIntMods[[i]][[1]]
   modTitle = dvNames[i] ; var = 'LstratMu'
@@ -109,7 +110,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
   stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
   stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
   disRange=with(data=regData, seq(
-    min(Lno_disasters), 4, 2) )
+    min(Lno_disasters), noDisast, 2) )  
   scen = with(data=regData, 
     expand.grid(
       1, stratRange, disRange, 
@@ -140,10 +141,10 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 
   # Plot rel at various cuts of disasters
   disRange=with(data=regData, seq(
-    min(Lno_disasters), 4, 2) )
+    min(Lno_disasters), noDisast, 2) )    
   ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
   actData = regData[,c('LstratMu', 'Lno_disasters')]
-  actData = actData[actData$Lno_disasters %in% seq(0,4,2),]
+  actData = actData[actData$Lno_disasters %in% seq(0,noDisast,2),]
   actData = actData[actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
 
   # change facet labels
