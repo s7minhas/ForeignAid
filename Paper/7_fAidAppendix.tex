@@ -34,43 +34,46 @@ Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
 \label{table:polval}
 \end{center}
 \end{table}
+\FloatBarrier
 
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad.
 
 
-Next, we assess the relative model fit of our strategic interest variable compared to the raw components of our strategic interest variable (``Raw UN Votes'', ``Alliances'', ``IGO Membership'')  as well as alternative measures of strategic interest (``UN Ideal Point'', ``S-Score, Unweighted'', ``S-Score, Weighted''). We assess the model fit by conducting 10-Fold Cross validations of each imputed dataset and calculating the subsequent root mean squared error (RMSE) for each model. We plot the RMSES for each possible partition of the data, donor country (Figure \ref{rmse:donor}), recipient country (Figure \ref{rmse:recipient}), and year (Figure \ref{rmse:year}) and find that the model fit when using our strategic interest variable is not significantly different to the model fit when using other possible measures of strategic interest.
+% Next, we assess the relative model fit of our strategic interest variable compared to the raw components of our strategic interest variable (``Raw UN Votes'', ``Alliances'', ``IGO Membership'')  as well as alternative measures of strategic interest (``UN Ideal Point'', ``S-Score, Unweighted'', ``S-Score, Weighted''). We assess the model fit by conducting 10-Fold Cross validations of each imputed dataset and calculating the subsequent root mean squared error (RMSE) for each model. We plot the RMSES for each possible partition of the data, donor country (Figure \ref{rmse:donor}), recipient country (Figure \ref{rmse:recipient}), and year (Figure \ref{rmse:year}) and find that the model fit when using our strategic interest variable is not significantly different to the model fit when using other possible measures of strategic interest.
 	
 
 
-\begin{figure}
-\centering
-\caption{RMSES of 10-Fold Cross validation, partitioned by Donor Country}
-\label{rmse:donor}
-\includegraphics[height = 4in]{rmse_10FoldCrossVal_ccodeS.pdf}
-\end{figure}
+% \begin{figure}
+% \centering
+% \caption{RMSES of 10-Fold Cross validation, partitioned by Donor Country}
+% \label{rmse:donor}
+% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_ccodeS.pdf}
+% \end{figure}
 
-\begin{figure}
-\centering
-\caption{RMSES of 10-Fold Cross validation, partitioned by Recipient Country}
-\label{rmse:recipient}
-\includegraphics[height = 4in]{rmse_10FoldCrossVal_ccodeR.pdf}
-\end{figure}
+% \begin{figure}
+% \centering
+% \caption{RMSES of 10-Fold Cross validation, partitioned by Recipient Country}
+% \label{rmse:recipient}
+% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_ccodeR.pdf}
+% \end{figure}
 
-\begin{figure}
-\centering
-\caption{RMSES of 10-Fold Cross validation, partitioned by Year}
-\label{rmse:year}
-\includegraphics[height = 4in]{rmse_10FoldCrossVal_year.pdf}
-\end{figure}
+% \begin{figure}
+% \centering
+% \caption{RMSES of 10-Fold Cross validation, partitioned by Year}
+% \label{rmse:year}
+% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_year.pdf}
+% \end{figure}
+% \FloatBarrier
 
 
-
+\clearpage
 \subsection{Analyses for models without interaction terms}
+
 \label{app:rawModels}
 
 \begin{figure}[h!]
 \centering
-\includegraphics[height = 5in]{noIntCoef.pdf}
+\includegraphics[width=1\textwidth]{noIntCoef.pdf}
 \caption{Coefficient plots for the analyses  without interaction terms for each dependent variable, humanitarian aid, civil society aid and development aid.  Coefficients that are significant at the 5\% level are shaded in blue if the coefficient is positive and red if the coefficient is negative. Coefficients that are not significant at the 5\% level are shaded in gray. }
 \label{fig:nointCoef}
 \end{figure}
