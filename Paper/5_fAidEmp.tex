@@ -1,66 +1,85 @@
 \section*{Analysis}
 \label{empirics}
 
-\begin{align*}
-  Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1}) \\
-  & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
-  & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \; Expect_{r,t-1}) \\  
-  & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) 
-\end{align*}
+%% just taking this out because this model equation doesnt account for the hierarchical structure
+% \begin{align*}
+%   Log(Aid_{sr,t}) &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1}) \\
+%   & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
+%   & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \; Expect_{r,t-1}) \\  
+%   & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) 
+% \end{align*}
 
 \subsection*{Estimation Method}
 
-To model aid flows using our directed-dyadic panel dataset, we utilize a hierarchical model. To implement this we nest receivers within senders and senders within years. We include random intercepts in our model for every sender and year. The results of this analyis are shown below in Figure \ref{fig:coef1}.
-
-\begin{figure}[ht]
-\centering
-\resizebox{1\textwidth}{!}{\input{stratMuModCoef.tex}}
-\caption{Darker colors indicates that the coefficient estimate is significantly different from zero at a 95\% CI, while lighter the same for a 90\% CI. Grey indicates that the estimate is not significantly different from zero at either of those intervals.}
-\label{fig:coef1}
-\end{figure}
-
-
-The results for the political strategic relationship variable align with the extant literature, we can see that countries are likely to send greater levels of aid to those with whom they have strong political relationships.% The same does not hold for strong military relationships, the relationship with this variable and aid is actually slightly negative. We also see that countries are more likely to send aid to former colonies, a finding which also has received support in previous literature. 
-
-Next we turn to particular characteristics of receiver countries that are associated with higher levels of aid flows. Our analysis finds that countries which are poorer, more democratic, or that have recently faced a natural disaster receive higher levels of aid on average. %Lower levels of life expectancy, however, are not associated with greater levels of aid. 
-
-\begin{figure}[ht]
-\centering
-\resizebox{1\textwidth}{!}{\input{effects.tex}}
-\caption{Expected values for GDP growth based on scenarios where all variables are held to their constants but Ln(Min. Conflict Dist.) varies from its minimum to maximum. The 90\% interval of each distribution is shaded in dark grey and the 95\% in a lighter color.}
-\label{fig:sim1}
-\end{figure}
-
-
-
-\begin{figure}[ht]
-\centering
-\resizebox{1\textwidth}{!}{\input{timeCross.tex}} \\
-\resizebox{1\textwidth}{!}{\input{cntryCross.tex}}
-\caption{Each line here in the left panel shows the coefficient estimate of $Ln(Min. \; Capital \; Dist.)_{i,t-1}$ from rerunning the model on six random subsamples within the dataset. The panel on the right shows the same for $Ln(Min. \; City \; Dist.)_{i,t-1}$. All the covariates used in the initial model shown in figure \ref{fig:coef1} were included as well.}
-\label{fig:timeCross}
-\end{figure}
-
-\subsection*{Conditional Effect of Disasters}
+To model aid flows using our directed-dyadic panel dataset, we utilize a hierarchical model. To implement this, we nest aid receivers within aid senders and aid senders within years. We include random intercepts in our model for every sender and year. More concretely, we fit the following model: 
 
 \begin{align*}
   Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1})  \\
   & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
   & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \;Expect_{r,t-1}) \\  
   & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) \\
-  & \;+\; \beta_{8}(Pol. \; Strat.  \; Interest_{sr,t-1} \times No. \; Disasters_{r,t-1})
+  & \;+\; \beta_{8}(Pol. \; Strat.  \; Interest_{sr,t-1} \times No. \; Disasters_{r,t-1}) \\
+   & \;+\; \delta_s  \;+\; \rho_r \\
 \end{align*}
 
-\begin{figure}[ht]
+\noindent Where $\delta_s$ and $\rho_r$ are the sender and receiver random effects respectively. 
+
+The results of this analysis are shown below in a coefficient plot in Figure \ref{fig:intCoef}.\footnote{Note, to examine the model results without the interaction effects, please see Figure \ref{fig:nointCoef} in Appendix \ref{app:rawModels}} We test Hypothesis 1A and 1B using the model with `Humanitarian Aid' as the dependent variable. The results show a positive and statistically significant relationship between the interaction of \textit{Strategic Distance} and the \textit{No. Disasters}. To interpret these results, we turn to Figure \ref{fig:simEffects} (`Humanitarian Aid' panel) where we plot the substantive effect of this interaction term on humanitarian aid over the range of \textit{Strategic Distance} for different levels of natural disaster severity. 
+
+\begin{figure}
 \centering
-\resizebox{1\textwidth}{!}{\input{stratMuIntCoef.tex}}
-\caption{Regression results using conflict distance from capital city on the left, and the chart on the right shows regression results using minimum conflict distance from any major city. Darker colors indicates that the coefficient estimate is significantly different from zero at a 95\% CI, while lighter the same for a 90\% CI. Grey indicates that the estimate is not significantly different from zero at either of those intervals.}
-\label{fig:coef2}
+\includegraphics[height = 5in]{intCoef.pdf}
+\caption{Coefficient plots for the main analyses with interaction terms across each dependent variable, humanitarian aid, civil society aid and development aid.  Coefficients that are significant at the 5\% level are shaded in blue if the coefficient is positive and red if the coefficient is negative. Coefficients that are not significant at the 5\% level are shaded in gray. }
+\label{fig:intCoef}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}
 \centering
-\resizebox{.8\textwidth}{!}{\input{intEffect.tex}}
-\caption{Expected values for GDP growth based on scenarios where all variables are held to their constants but Ln(Min. Conflict Dist.) varies from its minimum to maximum. The 90\% interval of each distribution is shaded in dark grey and the 95\% in a lighter color.}
-\label{fig:sim2}
+\includegraphics[height = 5.5in]{simComboPlot.pdf}
+\caption{Simulated substantive effect plots for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure.}
+\label{fig:simEffects}
+\end{figure}
+
+These results suggest that the greater the number of natural disasters a country experiences, the more likely it is to receive humanitarian aid from a strategic adversary. This is apparent in the rising slope of the relationship between strategic interest and humanitarian aid as the number of natural disasters increases. As such, these results are consistent with H1B, which suggests that donors may be more likely to dispense humanitarian aid to their strategic adversaries because such disasters humanize them. Conversely, these results do not support H1A, which hypothesizes that donors are more likely to give to their strategic allies in the wake of a natural disaster to further their own self-interest. This result suggests that donors do not always act in their self interest when dispensing foreign aid under some circumstances. Notably when natural disasters are particularly severe, they may have, at least in the short term, a humanizing effect on strategic adversaries. 
+
+Meanwhile, we test H2 by examining the effect of the interaction between strategic interest and natural disasters on civil society aid. In Figure \ref{fig:intCoef} we similarly find a positive and significant relationship between this interaction and civil society aid. The substantive effects plot (in the `Civil Society Aid' panel in Figure \ref{fig:simEffects}) meanwhile also suggests that donors are more likely to target aid to civil society in their strategic adversaries the more natural disasters that country experiences, supporting H2. These results suggest that donors may not be completely abandoning their strategic interest but are also acting to take advantage of vulnerable recipients to mold the relationship to their interests. 
+
+Finally, we test H3 by analyzing how the interaction between strategic interest and natural disasters affects development aid allocation. From, Figure  \ref{fig:intCoef}, we can see that this coefficient is not statistically significant. Examining the substantive significance in Figure \ref{fig:simEffects} (`Development Aid' panel) we can see that while the level of development aid does increase as the number of natural disasters increases, the slope between strategic interest and development aid is only minimally affected, suggesting little support for H3. These results suggest that whatever humanitarian impulse donors may have felt toward their strategic adversaries (which H1B suggests exists), this effect only applies to short-term humanitarian aid and not long-term development aid. 
+
+\subsection*{Persistence of foreign aid allocation over time}
+
+How persistent are these changes that we observe? To answer this question, we re-estimate the original models for different lag lengths for the main interaction terms\footnote{The covariates are measured using a one-year lag throughout}. These models are estimated separately for each lag length (lags of 1 through 6 years). The coefficient plots for the interaction term of interest and its constituent terms, number of natural disasters and strategic distance are shown in Figures \ref{fig:humanIntCoef}, \ref{fig:civIntCoef}, and \ref{fig:devIntCoef} for the outcome variables humanitarian aid, civil society aid and development aid respectively across each lag value.
+
+From Figure \ref{fig:humanIntCoef}, we can see that the interaction between strategic interest and natural disasters is rather persistent. This suggests that donors are more likely to allocate humanitarian aid to their strategic adversaries for some time following a natural disaster, suggesting some staying power for the ability of natural disasters to shift donors from acting in their own strategic interests to acting in the humanitarian interest of aid recipients (supporting H1B).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[height = 4in]{simComboPlot_lag_hAid.pdf}
+\caption{ }
+\label{fig:simLag}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[height = 5in]{humanitarianTotal_int_lagEffect.pdf}
+\caption{ }
+\label{fig:humanIntCoef}
+\end{figure}
+
+Meanwhile, Figure \ref{fig:civIntCoef} shows that while the interaction between strategic interest and natural disasters positively affects the allocation of civil society aid, this effect is only consistently significant for the first three years following a natural disaster (supporting H2). One way to interpret these results is that donors recognize the difficulty of trying to influence domestic politics through civil society aid relatively quickly and waste relatively little time in abandoning such attempts. Another interpretation is that civil society aid is actually rather effective and as such, recipients governments are likely to push back against allowing it in fairly short order. Teasing out the exact mechanism would be a fruitful area for future research.
+
+Finally, Figure \ref{fig:devIntCoef} extends the earlier finding that the interaction between strategic interest and natural disasters has little effect on development aid across a variety of different lags. This result further suggests that there is little support for H3, that is natural disasters do not seem to prompt donors to care concern themselves with recipient's long-term interests.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[height = 5in]{civSocietyTotal_int_lagEffect.pdf}
+\caption{ }
+\label{fig:civIntCoef}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[height = 5in]{developTotal_int_lagEffect.pdf}
+\caption{ }
+\label{fig:devIntCoef}
 \end{figure}
