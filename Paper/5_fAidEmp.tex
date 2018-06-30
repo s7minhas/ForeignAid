@@ -13,7 +13,7 @@
 
 To model aid flows using our directed-dyadic panel dataset, we utilize a hierarchical model. To implement this, we nest aid receivers within aid senders and aid senders within years. We include random intercepts in our model for every sender and year. More concretely, we fit the following model: 
 
-The results of this analysis are shown below in a coefficient plot in Figure \ref{fig:intCoef}.\footnote{Note, to examine the model results without the interaction effects, please see Figure \ref{fig:nointCoef} in Appendix \ref{app:rawModels}} We test Hypothesis 1A and 1B using the model with `Humanitarian Aid' as the dependent variable. The results show a positive and statistically significant relationship between the interaction of \textit{Strategic Distance} and the \textit{No. Disasters}. To interpret these results, we turn to Figure \ref{fig:simEffects} (`Humanitarian Aid' panel) where we plot the substantive effect of this interaction term on humanitarian aid over the range of \textit{Strategic Distance} for different levels of natural disaster severity. 
+The results of this analysis are shown below in a coefficient plot in Figure \ref{fig:intCoef}.\footnote{Note, to examine the model results without the interaction effects, please see Figure \ref{fig:nointCoef} in Appendix \ref{app:rawModels}} We test Hypothesis 1A, 1B and 1C using the model with `Humanitarian Aid' as the dependent variable. The results show a positive and statistically significant relationship between the interaction of \textit{Strategic Distance} and the \textit{No. Disasters}. To interpret these results, we turn to Figure \ref{fig:simEffects} (`Humanitarian Aid' panel) where we plot the substantive effect of this interaction term on humanitarian aid over the range of \textit{Strategic Distance} for different levels of natural disaster severity. 
 
 \begin{align*}
   Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1})  \\
@@ -34,7 +34,14 @@ The results of this analysis are shown below in a coefficient plot in Figure \re
 \end{figure}
 \FloatBarrier
 
-These results suggest that the greater the number of natural disasters a country experiences, the more likely it is to receive humanitarian aid from a strategic adversary. This is apparent in the rising slope of the relationship between strategic interest and humanitarian aid as the number of natural disasters increases. As such, these results are consistent with H1B, which suggests that donors may be more likely to dispense humanitarian aid to their strategic adversaries because such disasters humanize them. Conversely, these results do not support H1A, which hypothesizes that donors are more likely to give to their strategic allies in the wake of a natural disaster to further their own self-interest. This result suggests that donors do not always act in their self interest when dispensing foreign aid under some circumstances. Notably when natural disasters are particularly severe, they may have, at least in the short term, a humanizing effect on strategic adversaries. 
+These results suggest that the greater the number of natural disasters a country experiences, the more likely it is to receive humanitarian aid from a strategic adversary. This is apparent in the rising slope of the relationship between strategic interest and humanitarian aid as the number of natural disasters increases. As such, these results are consistent with H1C, which suggests that donors may be more likely to dispense humanitarian aid to their strategic adversaries because such disasters present unique opportunities to improve bilateral relations. Notably when natural disasters are particularly severe, donors may dispense a great deal more aid to strategic opponents compared to strategic allies to further their strategic interests.  
+
+Conversely, to find support for H1A, which hypothesizes that donors are more likely to give to their strategic allies in the wake of a natural disaster to further their own self-interest, we would have expected the parameter estimate for the interaction term between strategic interest and natural disasters to be negative, which it is not. Moreover, we would have expected there to be a downward sloping relationship between strategic interest and humanitarian interest as the number of natural disasters increases. This is clearly not evidenced in the ``Humanitarian Aid'' panel in Figure \ref{fig:simEffects}. 
+
+Meanwhile, support for H1B is also missing. In particular, we would have expected there be a downward sloping relationship between strategic interest and humanitarian aid when there are no natural disasters. However, if natural disasters had a humanizing effect on strategic opponents, then we would have expected the slope between strategic interest and humanitarian aid to flatten as the number of natural disasters increased, which we do not find.  
+
+
+
 
 \begin{figure}
 	\centering
@@ -58,7 +65,7 @@ How persistent are these changes that we observe? To answer this question, we re
 	\label{fig:humanIntCoef}
 \end{figure}
 
-From Figure \ref{fig:humanIntCoef}, we can see that the interaction between strategic interest and natural disasters is rather persistent until approximately five years after a natural disaster. This suggests that donors are more likely to allocate humanitarian aid to their strategic adversaries for some time following a natural disaster, suggesting some staying power for the ability of natural disasters to shift donors from acting in their own strategic interests to acting in the humanitarian interest of aid recipients (supporting H1B).
+From Figure \ref{fig:humanIntCoef}, we can see that the interaction between strategic interest and natural disasters is rather persistent until approximately five years after a natural disaster. This suggests that donors are more likely to allocate humanitarian aid to their strategic adversaries for some time following a natural disaster, suggesting that donors seek to use natural disasters as a tactic to improve relations with strategic opponents for quite some time after the initial disaster  (supporting H1C).
 
 \begin{figure}[h!]
 	\centering
