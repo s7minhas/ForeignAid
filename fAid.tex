@@ -1,94 +1,87 @@
-\documentclass[12pt]{article} 
+\documentclass[doublespaced,bibtex]{cupjournal}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-% -------------------- defaults -------------------- %
-% load lots o' packages
+% % -------------------- defaults -------------------- %
+% % load lots o' packages
 
-% approx iid
-\newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
+% % approx iid
+% \newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
 
-% define bibliography style
-\usepackage{natbib}
-\usepackage{titlecaps}
-\Addlcwords{a about above after again against all am an and any are aren't as at be because been before being below between both but by can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further had hadn't has hasn't have haven't having he he'd he'll he's her here here's hers herself him himself his how how's i i'd i'll i'm i've if in into is isn't it it's its itself let's me more most mustn't my myself no nor not of off on once only or other ought our ours ourselves out over own same shan't she she'd she'll she's should shouldn't so some such than that that's the their theirs them themselves then there there's these they they'd they'll they're they've this those through to too under until up very was wasn't we we'd we'll we're we've were weren't what what's when when's where where's which while who who's whom why why's with won't would wouldn't you you'd you'll you're you've your yours yourself yourselves}
+% % define bibliography style
+ 
+% % Fonts
+% % at some point figure out bolding ...
+% \usepackage[utf8]{inputenc}
 
-% Fonts
-% at some point figure out bolding ...
-\usepackage[default,osfigures,scale=0.95]{opensans}
-%\usepackage[sfdefault,scaled=.85]{FiraSans}
-\usepackage[T1]{fontenc}
-\usepackage{textcomp}
-\usepackage[varqu,varl]{zi4}% inconsolata typewriter
-\usepackage{amsmath,amsthm}
-\usepackage[cmintegrals]{newtxsf}
-\usepackage[T1]{fontenc}
-\usepackage{ae}
+ 
 
-% layout control
-\usepackage[paper=a4paper,left=25mm,right=25mm,top=20mm,bottom=25mm]{geometry}
-\usepackage[doublespacing]{setspace}
-\setlength{\parskip}{.5em}
-\usepackage{rotating}
-\usepackage{setspace}
-\usepackage{fancyhdr}
-\usepackage{parallel}
-\usepackage{parcolumns}
-\usepackage{pdflscape}
-% math typesetting
-\usepackage{array}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
 
-% tables
+% % layout control
+% %\usepackage[doublespacing]{setspace}
+% %\setlength{\parskip}{.5em}
+% \usepackage{rotating}
+% \usepackage{setspace}
+% \usepackage{fancyhdr}
+% \usepackage{parallel}
+% \usepackage{parcolumns}
+% \usepackage{pdflscape}
+% % math typesetting
+% \usepackage{array}
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+
+% % tables
 \usepackage{tabularx}
-\usepackage{booktabs}
-\usepackage{multicol}
+% \usepackage{booktabs}
+% \usepackage{multicol}
 \usepackage{multirow}
-\usepackage{longtable}
+% \usepackage{longtable}
 
-\usepackage[%
-decimalsymbol=.,
-digitsep=fullstop
-]{siunitx}
+% \usepackage[%
+% decimalsymbol=.,
+% digitsep=fullstop
+% ]{siunitx}
 
-% to adapt caption style
-\usepackage[font={small},labelfont=bf]{caption}
+% % to adapt caption style
+% %\usepackage[font={small},labelfont=bf]{caption}
 
-% footnotes at bottom
-\usepackage[bottom]{footmisc}
+% % footnotes at bottom
+% %\usepackage[bottom]{footmisc}
 
-% to change enumeration symbols begin{enumerate}[(a)]
-\usepackage{enumerate}
+% % to change enumeration symbols begin{enumerate}[(a)]
+% \usepackage{enumerate}
 
-% to make enumerations and itemizations within paragraphs or
-% lines. f.i. begin{inparaenum} for (a) is (b) and (c)
-\usepackage{paralist}
+% % to make enumerations and itemizations within paragraphs or
+% % lines. f.i. begin{inparaenum} for (a) is (b) and (c)
+% \usepackage{paralist}
 
-% to colorize links in document. See color specification below
+% % to colorize links in document. See color specification below
 \usepackage[x11names]{xcolor}
 
-% for multiple references and insertion of the word "figure" or "table"
-% \usepackage{cleveref}
+% % for multiple references and insertion of the word "figure" or "table"
+% % \usepackage{cleveref}
 
-% load the hyper-references package and set document info
+% % load the hyper-references package and set document info
 \usepackage[pdftex]{hyperref}
 
-% graphics stuff
-\usepackage{subfig}
+% % graphics stuff
+% \usepackage{subfig}
 \usepackage{graphicx}
-\usepackage[space]{grffile} % allows us to specify directories that have spaces
+% \usepackage[space]{grffile} % allows us to specify directories that have spaces
 \usepackage[section]{placeins} % prevents floats from moving past a \FloatBarrier or section
-\usepackage{tikz}
-\usepackage{caption}
+% \usepackage{tikz}
+% \usepackage{caption}
 
-% \usepackage{pgfplots}
+% % \usepackage{pgfplots}
 
-% define clickable links and their colors
+% % define clickable links and their colors
 \hypersetup{
 	unicode=false,          % non-Latin characters in Acrobat's bookmarks
 	pdftoolbar=true,        % show Acrobat's toolbar?
@@ -96,8 +89,8 @@ digitsep=fullstop
 	pdffitwindow=false,     % window fit to page when opened
 	pdfstartview={FitH},    % fits the width of the page to the window
 	pdfnewwindow=true,%
-	pdfauthor={Cindy Cheng and Shahryar Minhas},%
-	pdftitle={Aid something},%
+	%pdfauthor={Cindy Cheng and Shahryar Minhas},%
+	%pdftitle={Aid something},%
 	colorlinks,%
 	citecolor=black,%
 	filecolor=black,%
@@ -105,35 +98,36 @@ digitsep=fullstop
 	urlcolor=RoyalBlue4%
 	}
 
-% Including External Code
-\usepackage{verbatim}
-\usepackage{listings}
-\lstset{
-	language=R,
-	basicstyle=\scriptsize\ttfamily,
-	commentstyle=\ttfamily\color{gray},
-	numbers=left,
-	numberstyle=\ttfamily\color{gray}\footnotesize,
-	stepnumber=1,
-	numbersep=5pt,
-	backgroundcolor=\color{white},
-	showspaces=false,
-	showstringspaces=false,
-	showtabs=false,
-	frame=single,
-	tabsize=2,
-	captionpos=b,
-	breaklines=true,
-	breakatwhitespace=false,
-	title=\lstname,
-	escapeinside={},
-	keywordstyle={},
-	morekeywords={}
-	}
+% % Including External Code
+% \usepackage{verbatim}
+% \usepackage{listings}
+% \lstset{
+% 	language=R,
+% 	basicstyle=\scriptsize\ttfamily,
+% 	commentstyle=\ttfamily\color{gray},
+% 	numbers=left,
+% 	numberstyle=\ttfamily\color{gray}\footnotesize,
+% 	stepnumber=1,
+% 	numbersep=5pt,
+% 	backgroundcolor=\color{white},
+% 	showspaces=false,
+% 	showstringspaces=false,
+% 	showtabs=false,
+% 	frame=single,
+% 	tabsize=2,
+% 	captionpos=b,
+% 	breaklines=true,
+% 	breakatwhitespace=false,
+% 	title=\lstname,
+% 	escapeinside={},
+% 	keywordstyle={},
+% 	morekeywords={}
+% 	}
 
 % -------------------------------------------------- %
 
-
+\usepackage{graphicx}
+\usepackage{amssymb}
 % -------------------- title -------------------- %
 
 \title{Keeping Friends Close, But Enemies Closer: Foreign Aid Responses to Natural Disasters}
@@ -154,6 +148,11 @@ digitsep=fullstop
 % \chead{\fancyplain{}{}}
 % \rhead{\fancyplain{}{}}
 % \rfoot{\fancyplain{}{}}
+
+
+ 
+
+
 
 % ----------------------------------------------- %
 
@@ -186,25 +185,41 @@ digitsep=fullstop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\addbibresource{Paper/fAidRefs.bib}
 
-\doublespacing 
+\usepackage{enumitem}
+\newlist{inparaenum}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenum]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumi}\alph*: }% labels for top level
+\setlist[inparaenum,2]{label=\arabic{inparaenumi}\alph*:) }% labels for second level
 
 \begin{document}
+
+
+ 
+\markboth{Author}{Keeping Enemies Close}
+\journalname{Research Article Submission to B.J.Pol.S.}
+\journalvolume{XX}
+\journalyear{2018}
+\pagecount{X--XX}
+\doinumber{XXX}
+%doi:10.1017/XXXX
 
 \maketitle
 
 \begin{abstract}
 
-\singlespacing{
-	
-% While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we show natural disasters act as an exogenous shock to the strategic calculus donor countries undertake when making foreign aid allocation decisions. Specifically, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of whether natural disasters have occurred in countries that are strategic opponents. Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
+ 
+While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we show natural disasters act as an exogenous shock to the strategic calculus donor countries undertake when making foreign aid allocation decisions. Specifically, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of whether natural disasters have occurred in countries that are strategic opponents. Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
 
-While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of the occurrence of natural disasters . Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
-}
+%While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of the occurrence of natural disasters . Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
+
 
 \end{abstract}
 
-\newpage
+ 
+
+ 
+
 
 %%%%%%%% INTRO %%%%%%%%
 \input{Paper/1_fAidIntro}
@@ -232,7 +247,7 @@ While the existing literature shows that bilateral donors primarily allocate aid
 %%%%%%%%%%%%%%%%%%%%%%
 
 \newpage
-\bibliographystyle{Paper/sm}
+\bibliographystyle{chicago}
 \bibliography{Paper/fAidRefs.bib}
 
 %%%%% Appendix %%%%%
