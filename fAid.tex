@@ -189,8 +189,18 @@
 
 \usepackage{enumitem}
 \newlist{inparaenum}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
-\setlist[inparaenum]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumi}\alph*: }% labels for top level
+\setlist[inparaenum]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumi}\Alph*: }% labels for top level
 \setlist[inparaenum,2]{label=\arabic{inparaenumi}\alph*:) }% labels for second level
+
+
+\newlist{inparaenumb}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenumb]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumbi}B: }% labels for top level
+\setlist[inparaenumb,2]{label=\arabic{inparaenumbi}\alph*:) }% labels for second level
+
+\newlist{inparaenumc}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenumc]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumci}C: }% labels for top level
+\setlist[inparaenumc,2]{label=\arabic{inparaenumci}\alph*:) }% labels for second level
+
 
 \begin{document}
 
@@ -218,7 +228,6 @@ While the existing literature shows that bilateral donors primarily allocate aid
 
  
 
- 
 
 
 %%%%%%%% INTRO %%%%%%%%
