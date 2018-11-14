@@ -1,0 +1,71 @@
+9:54
+
+Hello! So my name is Cindy Cheng I'm excited to present this paper, which is a joint work with Shahryar Minhas who unfortunately couldn’t be here today, entitled "Keeping Friends Close, But Enemies Closer: Foreign Aid Responses to Natural Disasters". So, Shahryar and I have been working on this paper for a while, longer than I care to think about, but I think we've been driven to work on this paper so long because we think there are some interesting things about the drivers of foreign aid that haven't been fully investigated before.
+
+In particular, what struck us is that while there is a pretty robust finding in the foreign aid literature that aid is given for strategic purposes, this seems to be at odds  from how aid is commonly discussed in the wider world. So, for most people, the context in which they hear about aid is when a natural disaster happens.  And the the typical script that people are used to is, okay, a natural disaster strikes, suffering abounds, aid pours in from other countries.  Which is what happened in 2003 in bam iran, when a devastating eathquake killed 26-40 percent of the local population, the local infrastractre was just basically flattened, and all these countries including the us gave aid.
+
+So you know what’s the big deal right? This happens all the time. What was particularly striking about this was at the time us Iran relations were particularly bad. 
+
+So just the year prior, Bush was busy characterizing Iran as part of the Axis of Evil and relations were pretty tense because of Iran's nuclear program. So it wasn't at all a given that the US would give any aid. And the most remarkable thing perhaps isn’t that it did give aid, but that it had to  really had to want to, Bush was obliged to put in a request to Congress to do so actually because the US has had Iran under embargo for decades. And Iran had to agree to allow military planes land in Iran
+
+And what is particularly interesting is that not only did humanitarian aid go up after the earthquake, but all kinds of other aid did as well. From this graph we can see
+
+is bam just an anomoly or indicative of a larger pattern? developmental aid and if the latter, how do we square this with the existing literature that foreign aid is given for strategic purposes? and just be really happy that disaster has struck its opponents
+
+In order to explain why this might be happening, we first distinguish between aid that is given for short term and long term goals. Distinguishing between the two is important in this case because natural disaster happens, what happens in the short term can be crucial to the recovery effort and humanitarian aid is aimed at precisely serving as a stop gap to address the immediate effects of the crisis. 
+
+
+We can imagine at least three different explanations for how natural disasters affect the distribution of short term aid,  we can imagine the Bam story being interpreted in at least three different ways 
+
+Just everybody gives in response to a natural disaster,
+
+Or we only pay attention to natural disasters in kind of strategically important countries, so that actually
+
+Strategic antagonists actually go above and beyond strategic allies in giving aid. Think about the Bam case ——, the US didn’t just give aid to Iran, it had to sign a temporary executive order in order to lift a 20 year embargo in order to give aid. 
+
+
+So we first seek to explain we seek to explain how natural disasters affect how donors allocate humanitarian aid depending on their strategic interest. The first hypothesis is drawn from a strict realist interpretation of the world; countries are the primary actors and they are purely driven by self interest. Thus, donors should be more inclined to give to their strategic allies in the event of a natural disaster because its in their self interest to help out their friends. As such H1A
+
+The second hypothesis is drawn from the constructivist literature. And perhaps to over-simplify, the main message here is that context matters. What this means for foreign aid and natural disasters is that countries may be motivated to give more aid to their strategic opponents than they otherwise would because the social norms around natural disasters prompt them to act according to a more humanitarian frame of mind
+
+H1B:  Donors who are strategic opponents of the recipient are more likely than strategic allies to be sensitive to the humanizing effect of natural disasters and consequently, are likely to send more development aid.
+
+Usually however, foreign aid is given in order to accomplish some sort of goal, here we distinguish between  civil society and development goals
+ The next set of hypotheses are about the factors that influence civil society aid and development aid respectively. So civil society aid is aid given to promote civil society; there was this idea in the 90s that part of the reason why foreign aid wasn't working was that there was no buy-in from the people on the ground and no monitoring of how the money was being spent; supporting a vibrant civil society was seen as a way to increase governance capacity and thus improve development outcomes. Supporting civil society is as such, an inherently political act. To that end, we argue that to some extent, countries are well aware of the fact that natural disasters can change social norms, and strategically take advantage of this fact in order to increase their influence over strategic opponents. One way in which they can do so, and still abide by the norm of `helping` recipients in their time of crisis is to increase aid to civil society. As such, we come to H2A
+
+ \textit{H2A: Natural disasters present an opportune window for donors to exert influence over recipients who are their strategic opponents and as such, donors are more likely to send civil society aid to their strategic opponents.}  
+
+ At the same time, we also consider the possibility that the constructivist approach that we had previously discussed with regards to short term humanitarian aid, for H1B, might also hold for aid with longer-term development goals. Development aid in fact, is aimed toward forwarding the long-term economic development of a country. This leads us to H2B
+
+
+\textit{H2B: Natural disasters have a long-term humanizing effect on their strategic opponents and as such, donors are more likely to send development aid to their strategic opponents.} 
+
+
+
+
+We've only just incorporated some of the comments we got at MPSA and finalized the analysis so the write-up for the empirical section may be a little rough, any feedback on that, if there are things you found confusing think we can make clearer, would be good to know. Similarly for the theory section, we've kind of rearranged it a bit, would be good to know what you think of that .
+
+
+
+
+
+
+ In this paper, we argue that natural disasters can drastically shift the social context of a dyadic relationship toward emphasizing its altruistic or humanitarian dimensions. This shift is greater depending on the severity of the natural disaster and the extent to which the baseline dyadic relationship can be characterized as contentious.
+
+
+}: countries may be motivated to give more aid to their strategic opponents than they otherwise would because the social norms around natural disasters prompt them to act according to a more humanitarian frame of mind
+
+here we're drawing from the behavorial economics and psychology literature that says that social context matters to behavior
+
+an experiment which kind of typifies this logic
+
+context of economic exchange
+
+and we think this is what might be going on with regards to natural disasters and foreign aid, which would be kind of cool because we don't know of any work that has looked at this kind of dynamic going on at the country level, but maybe some of you in the audience can enlighten us
+
+so they are aware of the dynamic in number 1,a nd they want to take advangtage of that in the hope that it will give them more leverage in their relationship later on
+
+but in this paper, again we're mostly just concerned with seeing if this relationship exists at all
+
+and to do so, its pretty important for us
+

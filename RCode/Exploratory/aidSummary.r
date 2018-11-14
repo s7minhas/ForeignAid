@@ -59,10 +59,47 @@ print(ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel))+
 	 
 dev.off()
 
+pdf(paste0(pathGraphics, '/US_Iran_aid_presentation.pdf'))
+print(ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel))+
+	# geom_jitter(size = 3)+
+	geom_line(aes( linetype = aidLabel), size = 1.5, alpha = .65, position=position_jitter(w=0.00, h=.05))+
+	geom_point()+
+   guides(linetype=guide_legend(title=""))+
+	theme(axis.title = element_text(size = 20),
+		  axis.text.x = element_text(angle = 90, hjust = 1, size = 16),
+		  axis.text.y = element_text(size = 16),
+		  legend.position = 'bottom' ,
+		  legend.text = element_text(size = 14),
+		  	legend.title = element_text(size = 18)) + 
+ 
+  scale_linetype_manual(values=c("solid", "dashed", "dotted"))+
+	labs( y = "Committed Amount (USD Constant, millions)", x = 'Year', shape = "Sector" , color = "Sector")
+	#guides(shape = guide_legend(title.position = "top", ncol = 2), color = guide_legend(title.position = "top", ncol = 2))
+)
+ 
+	 
+dev.off()
+
 
 # ---------- Humanitarian Disaggregation --------------
 load('noImputationDataAidDisagg.rda')
+
+head(regData)
+
+
+sum(regData$humanitarianTotal)
+
+
 load('aidDataDisagg.rda')
+
+aidData$humanitarianTotal %>% sum() / aidData$commitment_amount_usd_constant_sum %>% sum()
+aidData$civSocietyTotal %>% sum() / aidData$commitment_amount_usd_constant_sum %>% sum()
+aidData$developTotal %>% sum() / aidData$commitment_amount_usd_constant_sum %>% sum()
+
+head(aidData)
+
+
+
 library(ggplot2)
 library(reshape)
 

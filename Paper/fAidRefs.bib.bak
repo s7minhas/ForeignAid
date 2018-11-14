@@ -4640,11 +4640,6 @@
   publisher = {Wiley Online Library},
 }
 
-@Article{,
-  owner     = {cindycheng},
-  timestamp = {2017.07.26},
-}
-
 @Article{yang:2008,
   author  = {Yang, Dean},
   title   = {Coping with disaster: The impact of hurricanes on international financial flows, 1970-2002},
@@ -4756,6 +4751,16 @@
   number    = {4},
   pages     = {698--712},
   publisher = {Blackwell Publishing Ltd Oxford, UK},
+}
+
+@InBook{buthecheng:2013,
+  author     = {Buthe, Tim and Cheng, Cindy},
+  title      = {Private Transnational Governance of Economic Development: International Development Aid},
+  booktitle  = {Handbook of global economic governance},
+  year       = {2013},
+  bookauthor = {Moschella, Manuela and Weaver, Catherine},
+  owner      = {cindycheng},
+  timestamp  = {2018.05.28},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

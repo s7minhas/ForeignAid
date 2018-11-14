@@ -1,0 +1,234 @@
+\documentclass[12pt]{article} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% -------------------- defaults -------------------- %
+% load lots o' packages
+
+% approx iid
+\newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
+\usepackage{natbib}
+\usepackage{titlecaps}
+\Addlcwords{a about above after again against all am an and any are aren't as at be because been before being below between both but by can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further had hadn't has hasn't have haven't having he he'd he'll he's her here here's hers herself him himself his how how's i i'd i'll i'm i've if in into is isn't it it's its itself let's me more most mustn't my myself no nor not of off on once only or other ought our ours ourselves out over own same shan't she she'd she'll she's should shouldn't so some such than that that's the their theirs them themselves then there there's these they they'd they'll they're they've this those through to too under until up very was wasn't we we'd we'll we're we've were weren't what what's when when's where where's which while who who's whom why why's with won't would wouldn't you you'd you'll you're you've your yours yourself yourselves}
+
+% Fonts
+% at some point figure out bolding ...
+\usepackage[default,osfigures,scale=0.95]{opensans}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[varqu,varl]{zi4}% inconsolata typewriter
+\usepackage{amsmath,amsthm}
+\usepackage[cmintegrals]{newtxsf}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+
+% layout control
+\usepackage[paper=a4paper,left=25mm,right=25mm,top=20mm,bottom=25mm]{geometry}
+\usepackage[onehalfspacing]{setspace}
+\setlength{\parskip}{.5em}
+\usepackage{rotating}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{parallel}
+\usepackage{parcolumns}
+\usepackage{pdflscape}
+% math typesetting
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+% tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+
+\usepackage[%
+decimalsymbol=.,
+digitsep=fullstop
+]{siunitx}
+
+% to adapt caption style
+\usepackage[font={small},labelfont=bf]{caption}
+
+% footnotes at bottom
+\usepackage[bottom]{footmisc}
+
+% to change enumeration symbols begin{enumerate}[(a)]
+\usepackage{enumerate}
+
+% to make enumerations and itemizations within paragraphs or
+% lines. f.i. begin{inparaenum} for (a) is (b) and (c)
+\usepackage{paralist}
+
+% to colorize links in document. See color specification below
+\usepackage[x11names]{xcolor}
+
+% for multiple references and insertion of the word "figure" or "table"
+% \usepackage{cleveref}
+
+% load the hyper-references package and set document info
+\usepackage[pdftex]{hyperref}
+
+% graphics stuff
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[space]{grffile} % allows us to specify directories that have spaces
+\usepackage[section]{placeins} % prevents floats from moving past a \FloatBarrier or section
+\usepackage{tikz}
+\usepackage{caption}
+
+% \usepackage{pgfplots}
+
+% define clickable links and their colors
+\hypersetup{
+	unicode=false,          % non-Latin characters in Acrobat's bookmarks
+	pdftoolbar=true,        % show Acrobat's toolbar?
+	pdfmenubar=true,        % show Acrobat's menu?
+	pdffitwindow=false,     % window fit to page when opened
+	pdfstartview={FitH},    % fits the width of the page to the window
+	pdfnewwindow=true,%
+	pdfauthor={Cindy Cheng and Shahryar Minhas},%
+	pdftitle={Aid something},%
+	colorlinks,%
+	citecolor=black,%
+	filecolor=black,%
+	linkcolor=black,%
+	urlcolor=RoyalBlue4%
+	}
+
+
+
+% Including External Code
+\usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+	language=R,
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\color{gray},
+	numbers=left,
+	numberstyle=\ttfamily\color{gray}\footnotesize,
+	stepnumber=1,
+	numbersep=5pt,
+	backgroundcolor=\color{white},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	frame=single,
+	tabsize=2,
+	captionpos=b,
+	breaklines=true,
+	breakatwhitespace=false,
+	title=\lstname,
+	escapeinside={},
+	keywordstyle={},
+	morekeywords={}
+	}
+
+\title{Keeping Friends Close But Enemies Closer: Foreign Aid Responses to Natural Disasters}
+\author{	Cindy Cheng \footnote{Cindy Cheng is a postdoctoral research fellow at the Bavarian School of Public Policy at the Technical University of Munich.} \\
+	\texttt{cindy.cheng@hfp.tum.de}
+	\and
+	Shahryar Minhas \footnote{Shahryar Minhas is an Assistant Professor at Michigan State University in the Department of Political Science and the Social Science Data Analytics Program (SSDA).} %\footnote{The authors would like to thank Tim Buthe, Tobias Rommel, Laura Mahrenbach, and Vittoria Meissner for the helfpul comments that they provided on this paper.} 
+	\\
+	\texttt{minhassh@msu.edu}}
+\date{\today}
+
+% -------------------- customizations -------------------- %
+
+%\graphicspath{{~/Users/cindycheng/Dropbox/ForeignAid/graphics/}}
+\graphicspath{{graphics/}}
+\makeatletter
+\def\input@path{{graphics/}}
+ \makeatother
+
+% \makeatletter
+%\def\input@path{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
+% \makeatother
+%\graphicspath{{/Users/janus829/Dropbox/Research/ForeignAid/Graphics/}}
+
+% easy commands for number propers
+\newcommand{\first}{$1^{\text{st}}$}
+\newcommand{\second}{$2^{\text{nd}}$}
+\newcommand{\third}{$3^{\text{rd}}$}
+\newcommand{\nth}[1]{${#1}^{\text{th}}$}
+
+% easy command for boldface math symbols
+\newcommand{\mbs}[1]{\boldsymbol{#1}}
+
+% define bibliography style
+
+
+
+\date{}
+\begin{document}
+
+
+
+ 
+\maketitle
+
+
+% \begin{center}
+% {\large\textit{Paper prepared for the International Political Economy Society Conference 2018}}\\
+% Massachusetts Institute of Technology (MIT)\\
+% Room 1, Friday November 2, 2:00 - 2:30
+% \end{center}
+
+\begin{abstract}
+
+ 
+While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we show natural disasters act as an exogenous shock to the strategic calculus donor countries undertake when making foreign aid allocation decisions. Specifically, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of whether natural disasters have occurred in countries that are strategic opponents. Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
+
+%While the existing literature shows that bilateral donors primarily allocate aid to strategic allies, anecdotal evidence suggests that following natural disasters, bilateral aid flows to strategic opponents quite generously. We build on this literature in three ways. First, we differentiate between the three major types of aid: humanitarian, civil society, and development. Next, we argue that donor countries use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid. However, donors still primarily reserve development aid for strategic allies irrespective of the occurrence of natural disasters . Last, we substantiate our findings using a new measure of strategic interest that accounts for the indirect ties states share and the multiple dimensions upon which they interact.
+
+
+\end{abstract}
+
+\doublespacing 
+ 
+ 
+
+
+%%%%%%%% INTRO %%%%%%%%
+\input{Paper/1_fAidIntro}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Lit Review %%%%%
+\input{Paper/2_fAidLit}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Theory %%%%%
+\input{Paper/3_fAidTheory}
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% Theory %%%%%
+\input{Paper/4_fAidData}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Empirics %%%%%
+\input{Paper/5_fAidEmp}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Conclusion %%%%%
+\input{Paper/6_fAidConcl}
+%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\bibliographystyle{chicago}
+\bibliography{Paper/fAidRefs.bib}
+
+%%%%% Appendix %%%%%
+\input{Paper/7_fAidAppendix}
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{document} 

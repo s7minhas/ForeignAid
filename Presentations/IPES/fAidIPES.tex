@@ -1,0 +1,422 @@
+%!TEX TS-program = xelatex
+\documentclass[10pt, compress]{beamer}
+
+\usetheme[usetitleprogressbar]{m}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{subfig}
+\captionsetup[subfigure]{labelformat=empty}
+\usepackage{multicol}
+%\graphicspath{{./Graphics/}}
+\graphicspath{{../}}
+\title[Foreign Aid]{\textsc{Keeping Friends Close, But Enemies Closer: Foreign Aid Responses to Natural Disasters}}
+\author[Cheng \& Minhas]{Cindy Cheng \hspace{1.65in}   Shahryar Minhas \\
+Bavarian School of Public Policy \hspace{.5in} Michigan State University \\
+\\
+International Political Economy Society 2018 Conference} 
+
+\date{\today}
+
+\begin{document}
+\frame{\titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Puzzle}
+  \begin{itemize}
+  \item How do we explain foreign aid dispersements in the wake of natural disasters given the existing literature which finds that aid is given for strategic purposes?
+  \end{itemize}    
+} 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Motivating Example}
+\begin{figure}
+\includegraphics[width = 3in]{Graphics/bam.jpg}
+\end{figure}
+} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\vspace{-.4in}
+  \frametitle{Motivating Example}
+\begin{figure}
+\includegraphics[width = 2.8in]{Graphics/US_Iran_aid_presentation.pdf}
+\caption{US aid commitments to Iran, 2002 - 2013}
+\end{figure}
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{ 
+  \frametitle{Sneak Preview}
+  \begin{itemize}
+  \item Donors use natural disasters as opportunities to exert influence on strategic opponents through the allocation of humanitarian and civil society aid.
+  \item  
+  \item However, donors still primarily reserve development aid for strategic allies irrespective of whether natural disasters have occurred in countries
+  \end{itemize}    
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Questions}
+  \begin{itemize}
+  \item What drives the allocation of ....  
+  \begin{itemize}
+  \item aid targeted toward providing short-term relief in the wake of a natural disaster?
+   \item aid targeted toward long-term development goals in the wake of a natural disaster?
+\end{itemize}
+  \end{itemize}    
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame
+{
+  \frametitle{Drivers of Short-term (Humanitarian) Aid}
+
+ 
+\textit{H1A:  Donors who are strategic opponents of the recipient are more likely than strategic allies to be sensitive to the humanizing effect of natural disasters. As such, following natural disasters, donors are likely to send \textbf{similar amounts of humanitarian aid to strategic allies and strategic opponents.}} 
+
+ 
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Drivers of Short-term (Humanitarian) Aid}
+
+ 
+\textit{H1B: Donors are driven by self-interest and in the event of a natural disaster, donors are \textbf{likely to send less humanitarian aid to their strategic opponents vs their strategic allies.}}
+
+
+} 
+ 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\textit{H1C:  Donors see natural disasters as a strategic opportunity to improve their relations with strategic opponents and are thus are  likely to send \textbf{more humanitarian aid to strategic opponents versus allies.}} 
+
+ }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Drivers of Long-term (Civil Society) Aid}
+
+
+
+\textit{H2: Natural disasters present an opportune window for donors to exert influence over recipients who are their strategic opponents and as such, donors are more likely to send additional \textbf{civil society aid} to their strategic opponents.}  
+
+ 
+
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+  \frametitle{Drivers of Long-term (Development) Aid}
+
+\textit{H3: Donors are more likely to send greater \textbf{development aid} to their strategic allies irrespective of the number of natural disasters. }  
+
+
+} 
+ 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame
+{
+  \frametitle{Extant Approaches to Modeling Strategic Interest}
+  \begin{itemize}
+ % \item  Consensus is that strategic interest takes precedence over humanitarian ones in country level foreign aid allocation
+ % \pause
+  \item Within this literature strategic interest takes on a variety of operationalizations, most commonly: 
+  \begin{itemize}
+    \item Alliances (e..g, Schraeder et al. 1998)
+    \item UN Voting Scores (e.g., Dreher and Fuchs 2015)
+    \item Common IGO Membership (e.g., Bermeo 2008)
+  \end{itemize}
+  \pause
+  \item Alesina and Dollar (2000): 
+  \begin{quote}
+    unfortunately the measurement of what a ``strategic interest'' is varies from study to study and is occasionaly tautological
+  \end{quote}  
+  \end{itemize}    
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{A new measure of strategic relationships}
+  \begin{itemize}
+  \item Knowing something about the relationship between $i$ and $j$ as well as between $i$ and $k$ may reveal something about the relationship between $i$ and $k$
+  \end{itemize}    
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \frame
+% {
+%   \frametitle{Data for Strategic Interest Variable}
+%   \begin{itemize}
+%   \item Political Strategic Interest
+%     \begin{itemize}
+%       \item COW Alliances (Gibler 2009)
+%       \item UN Voting Data (Strezhnev 2012)
+%       \item IGOs (Pevehouse 2004)
+%     \end{itemize}
+%   \end{itemize}
+% }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Latent Space Analysis}
+
+\begin{align*}
+\theta_{i,j} = a_i + b_j + \gamma_{i,j} + z_i'z_j
+\end{align*}
+
+\begin{itemize}
+  \item where $\theta_{i,j}$ is the dyadic variable of interest
+  \item $a_i$ estimates sender effects
+  \item $b_j$ estimates receiver effects
+  \item $z_i'z_j$ is the bilinear effect which estimates the latent space
+\end{itemize}
+
+We estimate the model via Gibbs sampling using the full conditionals of the parameters
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Latent Space of Political Strategic Interest Measure: 2005}
+  \begin{figure}[ht]
+  \centering
+  \vspace*{-.5in}
+  \begin{tabular}{cc}
+    \subfloat[SubFigure 1][Alliances]{
+    \includegraphics[width=.35\textwidth]{Graphics/ally_2005.pdf}
+    \label{fig:latAlly}} &
+    \subfloat[SubFigure 1][UN voting]{
+    \includegraphics[width=.35\textwidth]{Graphics/un_2005.pdf}
+    \label{fig:latUN}} \\
+    \multicolumn{2}{c}{\subfloat[SubFigure 1][IGO Membership]{
+        \includegraphics[width=.35\textwidth]{Graphics/igo_2005.pdf}
+        \label{fig:latIGO}} }
+  \end{tabular}
+  \label{fig:latPol}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Dimension Reduction}
+  \begin{itemize}
+  \item Next we estimate the euclidean distance between the posterior positions of every country for every year
+  \pause
+  \item We estimate a PCA for each year separately and use the first principal component for each year as our measure of strategic interest
+  % \item On average over all the years, we find that our political strategic interest variable, that is the first component of our PCA of the combination of alliances explains about 71\% of its variance
+  \end{itemize}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Dependent Variable \& Sample}
+  \begin{itemize}
+  \item Data for foreign aid flows taken from the AidData project (Tierny et al. 2001). 
+  \item We use the country level aggregated version of this database to create a directed-dyadic dataset of total aid dollars committed
+  \item We focus on the 18 most active senders and 167 receivers of aid flows from 1975 to 2005
+  \end{itemize}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Measuring Natural Disasters}
+  \begin{itemize}
+  %\item Life expectancy at birth (Banks 2013)
+%  \pause
+  \item Number of Natural Disasters (EM-DAT 2009):
+  \pause
+  \begin{itemize}
+    \item Ten or more people reported killed
+    \item A hundred or more people reported affected
+    \item Declaration of a state of emergency
+    \item Call for international assistance
+  \end{itemize}
+  \end{itemize}    
+} 
+
+% For a disaster to be included into the database, at least one of the following criteria must be fulfilled: (a) Ten or more people reported killed (b) A hundred or more people reported affected (c) Declaration of a state of emergency (d) Call for international assistance.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Aid Model Specification }
+\begin{align*}
+  Log(Aid)_{sr,t} &= \beta_{1}( Strat.  \; Distance_{sr,t-1})\\
+  & \;+\;  \beta_{2}(No. \; Disasters_{r,t-1}) \\
+  & \;+\; \beta_{3}(Colony_{sr,t-1}) \;+\; \beta_{4}(Polity_{r,t-1}) \\
+  & \;+\; \beta_{5}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{6}(Life \;Expect_{r,t-1}) \\  
+  & \;+\;  \beta_{7}(Civil \; War_{r,t-1}) \\
+  & \;+\; \beta_{8}(Strat.  \; Distance_{sr,t-1} \times No. \; Disasters_{r,t-1})
+\end{align*}
+
+Sample: 18 most active senders and 167 receivers of aid flows from 1975 to 2006. 
+
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Incorporate Interaction}
+   \hspace*{-.6in}
+    \vspace*{-.9in}
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/intCoef.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simHumanitarianPlot.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simCivilPlot.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simDevelopmentPlot.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+ 
+\frame
+{
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simComboPlot_lag_hAid.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simComboPlot_lag_cAid.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+\vspace{-.4in}
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/simComboPlot_lag_dAid.pdf}
+\end{figure}
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{ 
+  \frametitle{Contribution}
+  \begin{itemize}
+  \item Strategic interests still matter in foreign aid distribution, but social norms can change how they manifest themselves
+  \item A novel measure of strategic interest that better captures the decision making process behind foreign aid
+  \end{itemize}    
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\plain{Thank You}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+  \frametitle{Appendix}
+   \hspace*{-.6in}
+    \vspace*{-.9in}
+\begin{figure}
+\centering
+\includegraphics[width = 4.5in]{Graphics/noIntCoef.pdf}
+\end{figure}
+  
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

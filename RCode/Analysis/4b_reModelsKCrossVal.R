@@ -10,6 +10,7 @@ load(paste0(pathData, '/Components/VoetenData/un.rda'))
  
 library(stringr)
 library(dplyr)
+library(wesanderson)
 
 
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
