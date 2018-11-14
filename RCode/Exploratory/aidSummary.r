@@ -35,29 +35,29 @@ subAidDataRaw$aidAmt = subAidDataRaw$aidAmt/1000000
 subAidDataRaw$aidLabel = as.factor(subAidDataRaw$aidType) 
 levels(subAidDataRaw$aidLabel) = c('Civil Society Aid', 'Development Aid', 'Humanitarian Aid')
 subAidDataRaw$aidLabel = factor(subAidDataRaw$aidLabel, levels(subAidDataRaw$aidLabel)[c(3,1,2)])
- 
 
- 
-pdf(paste0(pathGraphics, '/US_Iran_aid.pdf'))
-print(ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel))+
-	# geom_jitter(size = 3)+
+# viz 
+usiran = ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel)) +
 	geom_line(aes( linetype = aidLabel), size = 1.5, alpha = .65, position=position_jitter(w=0.00, h=.05))+
 	geom_point()+
-   guides(linetype=guide_legend(title=""))+
-	theme(axis.title = element_text(size = 16),
-		  axis.text.x = element_text(angle = 90, hjust = 1, size = 12),
-		  axis.text.y = element_text(size = 12),
-		  legend.position = 'bottom' ,
-		  legend.text = element_text(size = 12),
-		  	legend.title = element_text(size = 14)) + 
- 
-  scale_linetype_manual(values=c("solid", "dashed", "dotted"))+
-	labs( y = "Committed Amount (USD Constant Dollars, millions)", x = 'Year', shape = "Sector" , color = "Sector")
-	#guides(shape = guide_legend(title.position = "top", ncol = 2), color = guide_legend(title.position = "top", ncol = 2))
-)
- 
-	 
-dev.off()
+	guides(linetype=guide_legend(title=""))+
+	theme(
+		axis.title = element_text(size = 16),
+		axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+		axis.text.y = element_text(size = 12),
+		legend.position = 'bottom' ,
+		legend.text = element_text(size = 12),
+		legend.title = element_text(size = 14),
+		panel.border = element_blank(),
+		axis.ticks = element_blank()
+		) +
+	scale_linetype_manual(values=c("solid", "dashed", "dotted")) +
+	labs(
+		y = "Committed Amount\n(USD Constant Dollars, millions)",
+		x = 'Year', shape = "Sector" , color = "Sector")
+ggsave(usiran, file=paste0(pathGraphics, '/US_Iran_aid.pdf'), width=12, height=8)
+pathGraphics = '~/Research/10739895rngwzsfjtzbw/graphics'
+ggsave(usiran, file=paste0(pathGraphics, '/US_Iran_aid.pdf'), width=12, height=8)
 
 pdf(paste0(pathGraphics, '/US_Iran_aid_presentation.pdf'))
 print(ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel))+
