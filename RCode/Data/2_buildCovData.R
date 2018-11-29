@@ -1,10 +1,11 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()["user"]=="cindycheng"){
 	source("~/Documents/Papers/ForeignAid/RCode/setup.R") }
+ 
 
 ###############################################################
 # WB data
-setwd(paste(pathData, '/Components/WB/',sep=''))
+setwd(paste(pathData, '/components/wb/',sep=''))
 WBgdp=read.csv('NY.GDP.MKTP.CD_Indicator_MetaData_en_EXCEL.csv')
 WBgdpCap=read.csv('NY.GDP.PCAP.CD_Indicator_MetaData_en_EXCEL.csv')
 WBgdpgr=read.csv('NY.GDP.MKTP.KD.ZG_Indicator_MetaData_en_EXCEL.csv')
@@ -113,6 +114,8 @@ names(table(polity2$cnameYear)[table(polity2$cnameYear)>1]) # Dupe check
 polity2$ccode=panel$ccode[match(polity2$cname,panel$cname)]
 polity2$cyear=paste(polity2$ccode, polity2$year, sep='')
 table(polity2$cyear)[table(polity2$cyear)>1] # Dupe check
+
+ 
 ###############################################################
 
 ###############################################################
@@ -351,6 +354,51 @@ names(table(emdat$cyear)[table(emdat$cyear)>1])
 ###############################################################
 
 ###############################################################
+# fdi data
+
+
+library(readstata13)
+fdi = read.dta13(paste0(pathData, '/components/FDI/fdi-data_cindy.dta'))
+names(fdi)[which(names(fdi) == 'cname')] = 'country_name'
+
+fdi$country_name[fdi$country_name=='Congo-Brazzaville']='Congo, Republic of'
+fdi$country_name[fdi$country_name=='Congo-Kinshasa']='Congo, Democratic Republic of'
+
+fdi$cname=cname(fdi$country_name)
+fdi$cname[fdi$country_name=='Yemen, South']='S. YEMEN'
+fdi$cname[fdi$country_name=='Czechoslovakia'] = "CZECH REPUBLIC"
+fdi$cname[fdi$country_name=='Yugoslavia'] = "SERBIA"
+
+# Drop some countries
+fdi$drop=0
+fdi[fdi$country_name == 'Soviet Union', 'drop']=1
+fdi[fdi$country_name == 'Yugoslavia' & fdi$year >=1992, 'drop']=1
+fdi[fdi$country_name == 'Serbia' & fdi$year <1992, 'drop']=1
+fdi[fdi$country_name == 'Czechoslovakia' & fdi$year >=1993, 'drop']=1
+fdi[fdi$country_name == 'Czech Republic' & fdi$year <1993, 'drop']=1
+fdi = fdi[which(fdi$drop!=1),]
+
+
+# Dupe check
+fdi$cnameYear=paste(fdi$cname, fdi$year, sep='')
+names(table(fdi$cnameYear)[table(fdi$cnameYear)>1]) # Dupe check
+
+ 
+# Add countrycode
+fdi$ccode=panel$ccode[match(fdi$cname,panel$cname)]
+fdi$cyear=paste(fdi$ccode,fdi$year,sep='')
+
+# Drop countries with no ccodes: throws away small islands
+fdi = fdi[!is.na(fdi$ccode),] 
+fdi[is.na(fdi$ccode),'cname'] %>% unique() 
+ 
+# Final dupe check
+names(table(fdi$cyear)[table(fdi$cyear)>1])
+
+
+###############################################################
+
+###############################################################
 # Combining data
 
 dframe = panel[which(panel$year>1959 & panel$year<2013), c('ccode', 'cname', 'year')]
@@ -372,6 +420,9 @@ covData=merge(covData, food2[,c(3,ncol(food2))],by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 covData=merge(covData, emdat[,c(4:10,15)], by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+covData=merge(covData, fdi[,c(8:27,32)], by='cyear', all.x=T, all.y=F)
+unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
+
 
 setwd(pathData)
 if( length(unique(covData$cyear)) == dim(covData)[1] ){

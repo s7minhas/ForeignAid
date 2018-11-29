@@ -5,12 +5,27 @@ library(dplyr)
 setwd(paste0(pathData, '/components/AidDataCore_ResearchRelease_Level1_v3'))
 aidDataRaw= read.csv('AidDataCoreDonorRecipientYearPurpose_ResearchRelease_Level1_v3.1.csv', stringsAsFactors = FALSE)
 
-# Get aggregated data, note you double checked and this aggregation 
+# Check to make sure that disaggregated data  
 # matches the data found in 'AidDataCoreDonorRecipientYear_ResearchRelease_Level1_v3.1.csv'
-aidDataAgg = aidDataRaw %>%
-	group_by(donor, recipient, year) %>%
-	summarise(commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)) %>%
-	data.frame()
+# per reviewer 2's comments
+
+# aidDataAgg = aidDataRaw %>%
+# 	group_by(donor, recipient, year) %>%
+# 	summarise(commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)) %>%
+# 	data.frame()
+# aidDataAgg = aidDataAgg[order(aidDataAgg$year, aidDataAgg$donor, aidDataAgg$recipient),]
+ 
+# aidDataAggCheck = read.csv('AidDataCoreDonorRecipientYear_ResearchRelease_Level1_v3.1.csv', stringsAsFactors = FALSE)
+# aidDataAggCheck = aidDataAggCheck[order(aidDataAggCheck$year, aidDataAggCheck$donor, aidDataAggCheck$recipient),]
+
+ 
+# for ( i in 1:length(unique(aidDataAgg$year))){
+# 	print('******************')
+# 	print(unique(aidDataAgg$year)[i])
+# all(aidDataAgg[which(aidDataAgg$year == unique(aidDataAgg$year)[i]),'commitment_amount_usd_constant_sum'] == aidDataAggCheck[which(aidDataAggCheck$year == unique(aidDataAgg$year)[i]),'commitment_amount_usd_constant_sum']) %>% print()
+# }
+
+
 
 # Get humanitarian data
 aidDataRaw$purposeNameAgg = NA
@@ -75,7 +90,9 @@ aidDataRaw$purposeNameAgg[which(aidDataRaw$coalesced_purpose_code %in% c(
 # refugees
 # unallocated/unsepcified
 # administrative costs of donors
- aidDataSectors= aidDataRaw[-which(is.na(aidDataRaw$purposeNameAgg)),]
+
+
+aidDataSectors= aidDataRaw[-which(is.na(aidDataRaw$purposeNameAgg)),]
 aidDataSectorsAgg = aidDataSectors %>%
 	group_by(donor, recipient, year, purposeNameAgg) %>%
 	summarise(commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)) %>%

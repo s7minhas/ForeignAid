@@ -15,7 +15,7 @@ if(Sys.info()["user"]=="cindycheng") {
   pathGraphics="~/Dropbox/Documents/Papers/ForeignAid/graphics";
   pathData="~/Dropbox/Documents/Papers/ForeignAid/data";
   pathCode="~/Documents/Papers/ForeignAid/RCode/Funcs";
-  pathFunctions="~/Dropbox/Documents/Methods/R Functions"
+  rPath = "~/Documents/Papers/ForeignAid/RCode";
   pathResults = '~/Dropbox/Documents/Papers/ForeignAid/Results'
   pathTnsr="~/Dropbox/Documents/Papers/ForeignAid/Data/tnsrData/"
 }
@@ -48,7 +48,9 @@ theme_set(theme_bw())
 
 ### PACKAGE VERIONS
 ## Must have countrycode version 0.16 installed
-
+# require(devtools)
+# install_version("countrycode", version = "0.16", repos = "http://cran.us.r-project.org")
+ 
 # Helper dataset
 setwd(pathData)
 load('panel.rda')

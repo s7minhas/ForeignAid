@@ -1,5 +1,5 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Dropbox/Documents/Papers/ForeignAid1/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 ################################################################
 # Load DV
@@ -19,6 +19,26 @@ load('PCA/PCA_FullData_allyIGOUN.rda')
 stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
 load('PCA/PCA_FullData_midWarArmsSum.rda')
 milData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
+
+################################################################
+
+################################################################
+# dyadic trade
+trade_raw = read.csv(paste0(pathData, '/COW_Trade_4.0/Dyadic_COW_4.0.csv'))
+
+# reorganize data such that data is reported in terms of exports instead of imports (as it currently is)
+trade1 = trade_raw[, grep('ccode2|1', names(trade_raw))]
+names(trade1)[which(names(trade1) %in% c('ccode1', 'ccode2'))] = c('ccode2', 'ccode1')
+trade1 = trade1[, c('ccode1', 'ccode2', names(trade1)[3:10])]
+names(trade1)[3:10] = gsub('1', '', names(trade1)[3:10])
+
+ 
+trade2 = trade_raw[, grep('ccode1|2', names(trade_raw))]
+names(trade2)[3:10] = gsub('2', '', names(trade2)[3:10])
+
+trade = rbind(trade1, trade2)
+
+trade$idYr = paste0(trade$ccode1, '9999', trade$cccode2, trade$year)
 ################################################################
 
 ################################################################
@@ -95,7 +115,6 @@ milData=lagData(milData, 'idYr', 'id', names(milData)[4:6])
 covData=lagData(covData, 'cyear', 'ccode', vars)
  
 # Subset datasets by time
-head(aidData)
 aidData = aidData[aidData$year>1974 & aidData$year<=2005,]
 stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
 milData = milData[milData$year>1974 & milData$year<=2005,]
@@ -103,7 +122,7 @@ covData = covData[covData$year>1974 & covData$year<=2005,]
 
 # Merge datasets
 regData=aidData 
-dim(regData)
+
 # Add strategic variable to regData
 regData=merge(regData, stratData[,c(8,9)], by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
@@ -152,6 +171,16 @@ regData$LunIdPt[is.na(regData$LunIdPt)] = 0
 
 # Save pre imputation
 save(regData, file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
+
+load(file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
+
+head(regData)
+
+unique(regData$ccodeS)%>% length() * unique(regData$ccodeR)%>% length() * length(1975:2005)
+head(regData)
+summary(regData$commitment_amount_usd_constant_sum)
+summary(regData)
+
 ################################################################
 
 ################################################################
