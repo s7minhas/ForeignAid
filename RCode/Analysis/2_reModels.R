@@ -6,8 +6,6 @@ if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCod
 setwd(pathData)
 load('iDataDisagg.rda')
 
-
-
 # vars for analysis
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
 ids = names(iData[[1]])[c(1:3,25)]
@@ -129,26 +127,8 @@ runModelParallel = function(
 		return(m)
 	}
 	stopCluster(cl)
-	save(mods, file=paste0(pathResults, '/', modName)) # Save output	
+	# save(mods, file=paste0(pathResults, '/', modName)) # Save output	
 }
-################################################################
-
-################################################################
-# Run main models
-# Full sample model, random effect, LstratMu, runs in a couple of minutes
-kivDiffLags = c(paste0('LstratMu',c('',paste0('_',2:6))))
-disDiffLags = c(paste0('Lno_disasters',c('',paste0('_',2:6))))
-for(dv in dvs){ 
-	for(i in 1:length(kivDiffLags)){	
-		runModelParallel(
-			trainLogic=FALSE, modType='re', 
-			keyRegVar=kivDiffLags[i], disVarName=disDiffLags[i], depVar=dv) } }
-
-# # robustness check, random effect with zero inflation, takes about six hours to run
-# runModelParallel(trainLogic=FALSE, modType='re', zeroInfLogic=TRUE, keyRegVar='LstratMu')
-
-# # robustness check, fixed effects, takes about 30 mins to run
-# runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu')
 ################################################################
 
 ################################################################
@@ -186,8 +166,6 @@ for(dv in dvs){
 for(dv in dvs){
 	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, 
 		keyRegVar=c('LallyWt', 'LunIdPt','Ligo'))}
-
-
 ################################################################
 
 ################################################################
@@ -197,7 +175,4 @@ for (iv in ivs){
 	for(dv in dvs[-4]){
 	runModelParallel(trainLogic=FALSE, modType='re', depVar=dv, keyRegVar=iv, int = T)}
 }
-
-
-
-
+################################################################

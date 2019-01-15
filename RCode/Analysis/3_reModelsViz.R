@@ -10,11 +10,8 @@ load(paste0(pathData, '/iDataDisagg.rda'))
 # load model
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
 dvNames = paste0(c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
-modPaths = lapply(dvs, function(dv){
-  paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_.rda') })
 intModPaths = lapply(dvs, function(dv){
   paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
-stratMuMods = lapply(modPaths, function(x){load(x);return(mods)}) ; names(stratMuMods) = dvs
 stratMuIntMods = lapply(intModPaths, function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
 
 # vars
@@ -63,7 +60,6 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
   return(modSumm) }
 
 #
-noIntModSumm = summarizeMods(stratMuMods, varsNoInt, varNamesNoInt)
 intModSumm = summarizeMods(stratMuIntMods, varsInt, varNamesInt)
 ################################################################
 
@@ -92,9 +88,7 @@ plotRes = function(modSumm){
       panel.border=element_blank(),
       legend.position='none' ) }
 
-noIntGG = plotRes(noIntModSumm)
 intGG = plotRes(intModSumm)
-ggsave(noIntGG, file=paste0(pathGraphics, '/noIntCoef.pdf'), width=8, height=6)
 ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 #########################################################
 
@@ -178,7 +172,4 @@ ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot.pdf'), width=8, he
 ggsave(simPlots[[1]], file=paste0(pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
 ggsave(simPlots[[2]], file=paste0(pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
 ggsave(simPlots[[3]], file=paste0(pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
-
- pathGraphics
-
 #########################################################
