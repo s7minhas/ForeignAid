@@ -87,9 +87,9 @@ genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_d
 # filename gen
 genFileName = function(dv, train, type, keyVar, trainEnd=2002, interaction = FALSE){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
-	b = mod ; c = type ; e = paste(keyVar, collapse='')
+	c = type ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
-	g = paste0(dv, '_', paste(a,b,c,e,f, sep='_'), '.rda')
+	g = paste0(dv, '_', paste(a,c,e,f, sep='_'), '.rda')
 	return( gsub('__','_',g) ) }
 
 # Run models in parallel across imputed datasets
@@ -112,7 +112,7 @@ runModelParallel = function(
 	print(paste0('Saving to: ', modName))
 
 	cl=makeCluster(cores) ; registerDoParallel(cl)
-	mods = foreach(ii=1:length(dataList), .packages=c('glmmADMB', 'lme4')) %dopar% {
+	mods = foreach(ii=1:length(dataList), .packages=c('lme4')) %dopar% {
 
 		regData = dataList[[ii]] # Subset to relevant data
 
@@ -128,7 +128,7 @@ runModelParallel = function(
 		return(m)
 	}
 	stopCluster(cl)
-	# save(mods, file=paste0(pathResults, '/', modName)) # Save output	
+	save(mods, file=paste0(pathResults, '/', modName)) # Save output	
 }
 ################################################################
 

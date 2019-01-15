@@ -171,7 +171,6 @@ regData$LunIdPt[is.na(regData$LunIdPt)] = 0
 
 # Save pre imputation
 save(regData, file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
-
 load(file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
 
 head(regData)
