@@ -8,8 +8,16 @@ load('iDataDisagg.rda')
 
 # vars for analysis
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
-ids = names(iData[[1]])[c(1:3,25)]
-ivs = names(iData[[1]])[9:24]
+ids = c("year", "ccodeS", "ccodeR", "id")
+ivs = c(
+	"LstratMu", "LmilMu", "LallyWt", "Ligo", 
+	"LunIdPt", "colony", "SLpolity2", "SLlnGdpCap", 
+	"SLlifeExpect", "SLno_disasters", "SLcivwar", "Lpolity2", 
+	"LlnGdpCap", "LlifeExpect", "Lno_disasters", "Lcivwar"	
+	)
+
+# make some var transformations and add to data
+
 
 # quick function to create lags for tscs
 addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
@@ -37,6 +45,8 @@ iData = lapply(iData, function(x){
 	x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
 	# log dvs
 	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
+	# add binary version of disaster variable
+
 	return(x) })
 save(iData, file=paste0(pathData, '/iDataDisagg_wLags.rda'))
 ################################################################
@@ -75,11 +85,11 @@ genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_d
 	return(form) }
 
 # filename gen
-genFileName = function(dv, train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
+genFileName = function(dv, train, type, keyVar, trainEnd=2002, interaction = FALSE){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
-	b = mod ; c = type ; d = if(zeroInf){ 'zi' } ; e = paste(keyVar, collapse='')
+	b = mod ; c = type ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
-	g = paste0(dv, '_', paste(a,b,c,d,e,f, sep='_'), '.rda')
+	g = paste0(dv, '_', paste(a,b,c,e,f, sep='_'), '.rda')
 	return( gsub('__','_',g) ) }
 
 # Run models in parallel across imputed datasets
