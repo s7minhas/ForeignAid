@@ -86,7 +86,7 @@ genFileName = function(dv, train, mod, type, zeroInf, keyVar, trainEnd=2002, int
 runModelParallel = function(
 	cores=detectCores(),
 	dataList=iData, trainLogic=FALSE, trainEnd=2002, 
-	modType='re', modFamily='gaussian', zeroInfLogic=FALSE, 
+	modType='re', 
 	depVar,
 	keyRegVar='LstratMu', modStruc=c('id','year'), 
 	int = FALSE, disVarName = 'Lno_disasters'
@@ -95,8 +95,8 @@ runModelParallel = function(
 	modForm = genModelForm(
 		dv=depVar, var=keyRegVar, type=modType, struc=modStruc, interaction = int, disVar=disVarName)
 	modName = genFileName(
-		dv=depVar, train=trainLogic, mod=modFamily, 
-		type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar, interaction = int)
+		dv=depVar, train=trainLogic, 
+		type=modType, keyVar=keyRegVar, interaction = int)
 
 	print(paste0('Running model: ', Reduce(paste, deparse(modForm))))
 	print(paste0('Saving to: ', modName))
@@ -111,18 +111,9 @@ runModelParallel = function(
 			regData$year=factor(regData$year, levels=sort(unique(regData$year)))
 		}	
 
-		if(modType=='re' & !zeroInfLogic){
-			m=lmer(modForm, data=regData)
-		}
-		
-		if(modType=='re' & zeroInfLogic){
-			m=glmmadmb(modForm, data=regData, zeroInflation=zeroInfLogic, family=modFamily, extra.args="-ndi 100000")
-		}
+		if(modType=='re'){ m=lmer(modForm, data=regData) }
 
-		if(modType=='fe'){
-			stopifnot(modFamily=='gaussian')
-			m=lm(modForm, data=regData)
-		}
+		if(modType=='fe'){ m=lm(modForm, data=regData) }
 		
 		return(m)
 	}
