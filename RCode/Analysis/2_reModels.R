@@ -122,6 +122,41 @@ summary(civModFE)$'coefficients'[c(1:2,nrow(summary(civModFE)$'coefficients')),]
 summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
 summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
 
+
+humModv2 = lmer(
+	humanitarianTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+civModv2 = lmer(
+	civSocietyTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+devModv2= lmer(
+	developTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
+summary(humModv2)$'coefficients'[c(2:3,nrow(summary(humModv2)$'coefficients')),]
+
+summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
+summary(civModv2)$'coefficients'[c(2:3,nrow(summary(civModv2)$'coefficients')),]
+
+summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
+summary(devModv2)$'coefficients'[c(2:3,nrow(summary(devModv2)$'coefficients')),]
+
+
 ## mod formula
 disVar = 'Lno_disasters'
 cntrlVars=c(
