@@ -93,7 +93,7 @@ humModFE = lm(
 	humanitarianTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year), 
+		factor(ccodeS) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -101,7 +101,7 @@ civModFE = lm(
 	civSocietyTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year), 
+		factor(ccodeS) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -109,18 +109,18 @@ devModFE = lm(
 	developTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year), 
+		factor(ccodeS) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
 summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
-summary(humModFE)$'coefficients'[c(2:3,nrow(summary(humModFE)$'coefficients')),]
+summary(humModFE)$'coefficients'[c(1:2,nrow(summary(humModFE)$'coefficients')),]
 
 summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
-summary(civModFE)$'coefficients'[c(2:3,nrow(summary(civModFE)$'coefficients')),]
+summary(civModFE)$'coefficients'[c(1:2,nrow(summary(civModFE)$'coefficients')),]
 
 summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
-summary(devModFE)$'coefficients'[c(2:3,nrow(summary(devModFE)$'coefficients')),]
+summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
 
 ## mod formula
 disVar = 'Lno_disasters'
