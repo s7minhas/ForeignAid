@@ -1,4 +1,5 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+	source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()["user"]=="cindycheng"){
 	source("~/Documents/Papers/ForeignAid/RCode/setup.R") }
  
@@ -69,8 +70,6 @@ wbData=data.frame(cbind(WBgdpClean,
 	schPre=schPreClean[,4],
 	schPri=schPriClean[,4]
 	 ) )
-
- 
 ###############################################################
 
 ###############################################################
@@ -83,15 +82,23 @@ polity2=polity[polity$year>=1960,3:ncol(polity)]
  
 polity2$country=as.character(polity2$country)
 polity2$country[polity2$country=='UAE']='United Arab Emirates'
-polity2$country[polity2$country=='Congo Brazzaville']='Congo, Republic of'
-polity2$country[polity2$country=='Congo Kinshasa']='Congo, Democratic Republic of'
-polity2$country[polity2$country=='Germany East']="Germany Democratic Republic"
+polity2$country[
+	polity2$country=='Congo Brazzaville'
+	]='Congo, Republic of'
+polity2$country[
+	polity2$country=='Congo Kinshasa'
+	]='Congo, Democratic Republic of'
+polity2$country[
+	polity2$country=='Germany East'
+	]="Germany Democratic Republic"
 polity2$cname=cname(polity2$country)
 polity2$cname[polity2$country=='Yemen South']="S. YEMEN"
 polity2$cname[polity2$country=='Vietnam South']="S. VIETNAM"
 polity2[polity2$country=='Yugoslavia', 'cname']='SERBIA'
 polity2[polity2$country=='Czechoslovakia', 'cname']='CZECH REPUBLIC'
-polity2[polity2$country=='Germany Democratic Republic', 'cname']='GERMAN DEMOCRATIC REPUBLIC'
+polity2[
+	polity2$country=='Germany Democratic Republic', 'cname'
+	]='GERMAN DEMOCRATIC REPUBLIC'
 polity2[polity2$country=='South Sudan', 'cname']='SOUTH SUDAN'
 
   
@@ -105,7 +112,8 @@ polity2[polity2$scode=='YGS' & polity2$year==2006, 'drop']=1
 polity2[polity2$scode=='SDN' & polity2$year==2011, 'drop']=1
 polity2[polity2$scode=='DRV' & polity2$year==1976, 'drop']=1
 polity2[polity2$scode=='YAR' & polity2$year==1990, 'drop']=1
-polity2=polity2[polity2$drop==0,]; polity2=polity2[,1:(ncol(polity2)-1)]
+polity2=polity2[polity2$drop==0,]
+polity2=polity2[,1:(ncol(polity2)-1)]
 
  
 names(table(polity2$cnameYear)[table(polity2$cnameYear)>1]) # Dupe check
@@ -209,7 +217,9 @@ banks2$cname[banks2$country=="Yemen PDR (So. Yemen)"]='S. YEMEN'
 banks2$cname[banks2$country=="Yugoslavia"]='SERBIA'
 banks2=banks2[banks2$cname!='HONG KONG',]
 banks2$cname[banks2$country=="Czechoslovakia"]='CZECH REPUBLIC'
-banks2$cname[banks2$country=="Germany Democratic Republic"]='GERMAN DEMOCRATIC REPUBLIC'
+banks2$cname[
+	banks2$country=="Germany Democratic Republic"
+	]='GERMAN DEMOCRATIC REPUBLIC'
 banks2$cname[banks2$country=="South Sudan"]='SOUTH SUDAN'
 
 drop=unique(banks2[is.na(banks2$cname),c('country')])
@@ -252,17 +262,27 @@ fh[fh$Country=='Czechoslovakia' & fh$Year>=1993, 'drop']=1
 fh[fh$Country=='Yugoslavia (Serbia & Montenegro)' & fh$Year>=1992, 'drop']=1
 fh=fh[fh$drop==0,]; fh=fh[,1:(ncol(fh)-1)]
 
-fh$Country[fh$Country=='Congo (Brazzaville)']='Congo, Republic of'
-fh$Country[fh$Country=='Congo (Kinshasa)']='Congo, Democratic Republic of'
-fh$Country[fh$Country=='Germany, E.']="Germany Democratic Republic" 
+fh$Country[
+	fh$Country=='Congo (Brazzaville)'
+	]='Congo, Republic of'
+fh$Country[
+	fh$Country=='Congo (Kinshasa)'
+	]='Congo, Democratic Republic of'
+fh$Country[
+	fh$Country=='Germany, E.'
+	]="Germany Democratic Republic" 
 fh$Country[fh$Country=='Germany, W.']="Germany" 
 
 
 fh$cname=cname(fh$Country)
 fh$cname[fh$Country=='Vietnam, S.']='S. VIETNAM'
 fh$cname[fh$Country=='Yemen, S.']='S. YEMEN'
-fh$cname[fh$Country=='Germany Democratic Republic']='GERMAN DEMOCRATIC REPUBLIC'
-fh$cname[fh$Country=='North Korea']="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+fh$cname[
+	fh$Country=='Germany Democratic Republic'
+	]='GERMAN DEMOCRATIC REPUBLIC'
+fh$cname[
+	fh$Country=='North Korea'
+	]="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
 fh$cname[fh$Country=='Czechoslovakia']='CZECH REPUBLIC'
 fh$cname[fh$Country=='South Sudan']='SOUTH SUDAN'
 
@@ -302,10 +322,18 @@ food2[food2$Country=='Czech Republic' & food2$year<1993,'drop']=1
 food2=food2[food2$drop!=1,]; food2=food2[,1:(ncol(food2)-1)]
 
 food2$cname=cname(food2$Country)
-food2$cname[food2$Country=="Yugoslav SFR"]='SERBIA'
-food2$cname[food2$Country=="Czechoslovakia"]='CZECH REPUBLIC'
-food2$cname[food2$Country=="Democratic People's Republic of Korea"]="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
-food2$cname[food2$Country=="Republic of Korea"]="KOREA, REPUBLIC OF"
+food2$cname[
+	food2$Country=="Yugoslav SFR"
+	]='SERBIA'
+food2$cname[
+	food2$Country=="Czechoslovakia"
+	]='CZECH REPUBLIC'
+food2$cname[
+	food2$Country=="Democratic People's Republic of Korea"
+	]="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+food2$cname[
+	food2$Country=="Republic of Korea"
+	]="KOREA, REPUBLIC OF"
 food2$cnameYear=paste(food2$cname, food2$year, sep='')
 names(table(food2$cnameYear)[table(food2$cnameYear)>1])
 
@@ -323,7 +351,9 @@ emdat=emdat2
 
 # Convert to standard country names
 emdat$country_name=trim(emdat$country_name)
-emdat$country_name[emdat$country_name=='Germany Dem Rep']="Germany Democratic Republic"
+emdat$country_name[
+	emdat$country_name=='Germany Dem Rep'
+	]="Germany Democratic Republic"
 emdat$cname=cname(emdat$country_name)
 
 # Drop some countries
@@ -335,7 +365,9 @@ emdat = emdat[which(emdat$drop!=1),]
 emdat$cname[emdat$country_name=='Czechoslovakia']='CZECH REPUBLIC'
 emdat$cname[emdat$country_name=='Yemen P Dem Rep']='S. YEMEN'
 emdat$cname[emdat$country_name=='Yugoslavia']='SERBIA'
-emdat$cname[emdat$country_name=='Germany Democratic Republic']='GERMAN DEMOCRATIC REPUBLIC'
+emdat$cname[
+	emdat$country_name=='Germany Democratic Republic'
+	]='GERMAN DEMOCRATIC REPUBLIC'
 emdat$cname[emdat$country_name=='South Sudan']='SOUTH SUDAN'
 
 # Dupe check
@@ -361,8 +393,12 @@ library(readstata13)
 fdi = read.dta13(paste0(pathData, '/components/FDI/fdi-data_cindy.dta'))
 names(fdi)[which(names(fdi) == 'cname')] = 'country_name'
 
-fdi$country_name[fdi$country_name=='Congo-Brazzaville']='Congo, Republic of'
-fdi$country_name[fdi$country_name=='Congo-Kinshasa']='Congo, Democratic Republic of'
+fdi$country_name[
+	fdi$country_name=='Congo-Brazzaville'
+	]='Congo, Republic of'
+fdi$country_name[
+	fdi$country_name=='Congo-Kinshasa'
+	]='Congo, Democratic Republic of'
 
 fdi$cname=cname(fdi$country_name)
 fdi$cname[fdi$country_name=='Yemen, South']='S. YEMEN'
@@ -401,26 +437,47 @@ names(table(fdi$cyear)[table(fdi$cyear)>1])
 ###############################################################
 # Combining data
 
-dframe = panel[which(panel$year>1959 & panel$year<2013), c('ccode', 'cname', 'year')]
+dframe = panel[
+	which(
+		panel$year>1959 & panel$year<2013), 
+	c('ccode', 'cname', 'year')]
 dframe$cyear  = paste(dframe$ccode, dframe$year, sep = "")
  
-covData=merge(dframe, wbData[,c(4,8:ncol(wbData))],by='cyear',all.x=T,all.y=F)
+covData=merge(dframe, 
+	wbData[,c(4,8:ncol(wbData))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, polity2[,c(7:10,12:20,ncol(polity2))],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	polity2[,c(7:10,12:20,ncol(polity2))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, icrg2[,c(5:16,ncol(icrg2))],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	icrg2[,c(5:16,ncol(icrg2))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, banks2[,c(5:13,ncol(banks2))],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	banks2[,c(5:13,ncol(banks2))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, civwar[,6:7],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	civwar[,6:7],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, fh[,c(3:5,ncol(fh))],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	fh[,c(3:5,ncol(fh))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, food2[,c(3,ncol(food2))],by='cyear',all.x=T,all.y=F)
+covData=merge(covData, 
+	food2[,c(3,ncol(food2))],
+	by='cyear',all.x=T,all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, emdat[,c(4:10,15)], by='cyear', all.x=T, all.y=F)
+covData=merge(covData, 
+	emdat[,c(4:10,15)], 
+	by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-covData=merge(covData, fdi[,c(8:27,32)], by='cyear', all.x=T, all.y=F)
+covData=merge(covData, 
+	fdi[,c(8:27,32)], 
+	by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
 
 
