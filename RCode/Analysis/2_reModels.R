@@ -1,5 +1,7 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+	source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+################################################################
 
 ################################################################
 # Load reg data
@@ -16,7 +18,7 @@ ivs = c(
 	"LlnGdpCap", "LlifeExpect", "Lno_disasters", "Lcivwar"	
 	)
 
-# make some var transformations and add to data
+# add some more variables based on reviewer comments
 
 
 # quick function to create lags for tscs

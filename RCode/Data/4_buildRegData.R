@@ -117,7 +117,7 @@ stratData = stratData[stratData$year>1974 & stratData$year<=2005,]
 covData = covData[covData$year>1974 & covData$year<=2005,]
 
 # Merge datasets
-regData=aidData 
+regData=aidData
 
 # Add strategic variable to regData
 regData=merge(regData, 

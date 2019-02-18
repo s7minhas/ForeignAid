@@ -79,7 +79,6 @@ polity=read.csv('p4v2011.csv')
 
 polity2=polity[polity$year>=1960,3:ncol(polity)]
 
- 
 polity2$country=as.character(polity2$country)
 polity2$country[polity2$country=='UAE']='United Arab Emirates'
 polity2$country[
@@ -101,7 +100,6 @@ polity2[
 	]='GERMAN DEMOCRATIC REPUBLIC'
 polity2[polity2$country=='South Sudan', 'cname']='SOUTH SUDAN'
 
-  
 polity2$cnameYear=paste(polity2$cname, polity2$year, sep='')
 
 polity2$drop=0
@@ -115,15 +113,12 @@ polity2[polity2$scode=='YAR' & polity2$year==1990, 'drop']=1
 polity2=polity2[polity2$drop==0,]
 polity2=polity2[,1:(ncol(polity2)-1)]
 
- 
 names(table(polity2$cnameYear)[table(polity2$cnameYear)>1]) # Dupe check
 
 # Adding in codes from panel
 polity2$ccode=panel$ccode[match(polity2$cname,panel$cname)]
 polity2$cyear=paste(polity2$ccode, polity2$year, sep='')
 table(polity2$cyear)[table(polity2$cyear)>1] # Dupe check
-
- 
 ###############################################################
 
 ###############################################################
@@ -141,7 +136,6 @@ drop=c("Hong Kong", "New Caledonia")
 icrg2=icrg2[which(!icrg2$Country %in% drop),]
 icrg2$cname=cname(icrg2$Country)
 
-
 icrg2$drop=0
 icrg2[icrg2$Country=='Serbia and Montenegro' & icrg2$Year>=2006, 'drop']=1
 icrg2[icrg2$Country=='Serbia' & icrg2$Year<2006, 'drop']=1
@@ -154,7 +148,6 @@ icrg2$cnameYear=paste(icrg2$cname, icrg2$Year, sep='')
  
 table(icrg2$cnameYear)[table(icrg2$cnameYear)>1]
 
- 
 # Adding in codes from panel
 icrg2$ccode=panel$ccode[match(icrg2$cname,panel$cname)]
 icrg2$cyear=paste(icrg2$ccode, icrg2$Year, sep='')
@@ -387,8 +380,6 @@ names(table(emdat$cyear)[table(emdat$cyear)>1])
 
 ###############################################################
 # fdi data
-
-
 library(readstata13)
 fdi = read.dta13(paste0(pathData, '/components/FDI/fdi-data_cindy.dta'))
 names(fdi)[which(names(fdi) == 'cname')] = 'country_name'
@@ -414,11 +405,9 @@ fdi[fdi$country_name == 'Czechoslovakia' & fdi$year >=1993, 'drop']=1
 fdi[fdi$country_name == 'Czech Republic' & fdi$year <1993, 'drop']=1
 fdi = fdi[which(fdi$drop!=1),]
 
-
 # Dupe check
 fdi$cnameYear=paste(fdi$cname, fdi$year, sep='')
 names(table(fdi$cnameYear)[table(fdi$cnameYear)>1]) # Dupe check
-
  
 # Add countrycode
 fdi$ccode=panel$ccode[match(fdi$cname,panel$cname)]
@@ -430,13 +419,10 @@ fdi[is.na(fdi$ccode),'cname'] %>% unique()
  
 # Final dupe check
 names(table(fdi$cyear)[table(fdi$cyear)>1])
-
-
 ###############################################################
 
 ###############################################################
 # Combining data
-
 dframe = panel[
 	which(
 		panel$year>1959 & panel$year<2013), 
@@ -479,7 +465,6 @@ covData=merge(covData,
 	fdi[,c(8:27,32)], 
 	by='cyear', all.x=T, all.y=F)
 unique(covData[is.na(covData$ccode), 1:5]); dim(covData)
-
 
 setwd(pathData)
 if( length(unique(covData$cyear)) == dim(covData)[1] ){
