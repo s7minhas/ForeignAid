@@ -25,7 +25,8 @@ load(paste0(pathData, '/covData.rda'))
 ### Subset monadic covariates to relevant years set
 vars=c(
 	'fdiGdp', 'no_killed', 
-	'no_injured', 'no_affected'
+	'no_injured', 'no_affected', 
+	'no_homeless', 'total_dam'
 	)
 covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
 ################################################################
@@ -75,10 +76,17 @@ iData = lapply(iData, function(x){
 		names(x)[ncol(x)] = v }
 	return(x) })
 
+# remove old set of covData vars
+toAdd = paste0('L',vars)
+iData = lapply(iData, function(x){
+	x = x[,-na.omit(match(c(toAdd,'Ltotal_affected'),names(x)))]
+	return(x) })
+
 # Add receiver level covariates
 iData = lapply(iData, function(x){
+	# merge
 	recMatch = with(x, paste0(ccodeR, year))
-	for(v in names(covData)[9:12]){
+	for(v in toAdd){
 		x$tmp = covData[match(recMatch, covData$cyear),v]
 		names(x)[ncol(x)] = v }
 	return(x) })
@@ -88,9 +96,11 @@ iData = lapply(iData, function(x){
 	x$Lno_killed[is.na(x$Lno_killed)] = 0
 	x$Lno_injured[is.na(x$Lno_injured)] = 0
 	x$Lno_affected[is.na(x$Lno_affected)] = 0
+	x$Lno_homeless[is.na(x$Lno_homeless)] = 0
+	x$Ltotal_dam[is.na(x$Ltotal_dam)] = 0
 	return(x) })
-################################################################	
+################################################################
 
-################################################################	
-save(iData, file = "iDataDisagg_v2.rda")
-################################################################	
+################################################################
+save(iData, file = paste0(pathData, "/iDataDisagg_v2.rda"))
+################################################################

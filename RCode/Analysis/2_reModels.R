@@ -1,25 +1,32 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
 	source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+	source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 ################################################################
 
 ################################################################
 # Load reg data
-setwd(pathData)
-load('iDataDisagg.rda')
+load(paste0(pathData, "/iDataDisagg_v2.rda"))
 
 # vars for analysis
-dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
+dvs = c(
+	'humanitarianTotal', 'developTotal', 
+	'civSocietyTotal', 'notHumanitarianTotal'
+	)
 ids = c("year", "ccodeS", "ccodeR", "id")
 ivs = c(
-	"LstratMu", "LmilMu", "LallyWt", "Ligo", 
-	"LunIdPt", "colony", "SLpolity2", "SLlnGdpCap", 
-	"SLlifeExpect", "SLno_disasters", "SLcivwar", "Lpolity2", 
-	"LlnGdpCap", "LlifeExpect", "Lno_disasters", "Lcivwar"	
+	"LstratMu", 'LstratStratUp', 'LstratStratLo',
+	"LallyWt", "Ligo", "LunIdPt",
+	'LallyDist', 'LigoDist', 'LunDist', 
+	'Ltrade', "colony", 
+	"Lpolity2", "LlnGdpCap", "LlifeExpect", "Lcivwar",	
+	"Lno_disasters", 'Lno_killed', 
+	'Lno_injured', 'Lno_affected'
 	)
-
-# add some more variables based on reviewer comments
-
+kivs = c(
+	"Lno_disasters", 'Lno_killed', 
+	'Lno_injured', 'Lno_affected'	
+	)
 
 # quick function to create lags for tscs
 addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
@@ -37,24 +44,83 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 	return(cbind(data, newData)) }
 
 # 
-iData = lapply(iData, function(x){
-	# add lags
-	x = addLags(1:5, x)
-	# add dyadic id
-	x$id = paste(x$ccodeS, x$ccodeR, sep='_')
-	x$id = factor(x$id)
-	# create total aid
-	x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
-	# log dvs
-	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
-	# add binary version of disaster variable
-
-	return(x) })
-save(iData, file=paste0(pathData, '/iDataDisagg_wLags.rda'))
+if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))){
+	iData = lapply(iData, function(x){
+		# add lags
+		x = addLags(1:5, x)
+		# add dyadic id
+		x$id = paste(x$ccodeS, x$ccodeR, sep='_')
+		x$id = factor(x$id)
+		# create total aid
+		x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
+		# log dvs
+		for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
+		return(x) })
+	save(iData, file=paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+} else {
+	load(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+}
 ################################################################
 
 ################################################################
 # RE model
+
+humMod = lmer(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+civMod = lmer(
+	civSocietyTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+devMod = lmer(
+	developTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+humModFE = lm(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year), 
+	data=iData[[1]]
+	)
+
+civModFE = lm(
+	civSocietyTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year), 
+	data=iData[[1]]
+	)
+
+devModFE = lm(
+	developTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year), 
+	data=iData[[1]]
+	)
+
+summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
+summary(humModFE)$'coefficients'[c(2:3,nrow(summary(humModFE)$'coefficients')),]
+
+summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
+summary(civModFE)$'coefficients'[c(2:3,nrow(summary(civModFE)$'coefficients')),]
+
+summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
+summary(devModFE)$'coefficients'[c(2:3,nrow(summary(devModFE)$'coefficients')),]
 
 ## mod formula
 disVar = 'Lno_disasters'
@@ -67,9 +133,14 @@ cntrlVars=c(
 	)
 
 # model spec gen
-genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_disasters'){
-	if(type=='re'){ strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
-	if(type=='fe'){ strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
+genModelForm = function(
+	dv, var, type, struc, 
+	interaction = FALSE, disVar='Lno_disasters'
+	){
+	if(type=='re'){ 
+		strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
+	if(type=='fe'){ 
+		strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
 	if(type=='none'){ strucChar=NULL }
 
 	if ( interaction == FALSE){
@@ -87,7 +158,10 @@ genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_d
 	return(form) }
 
 # filename gen
-genFileName = function(dv, train, type, keyVar, trainEnd=2002, interaction = FALSE){
+genFileName = function(
+	dv, train, type, keyVar, 
+	trainEnd=2002, interaction = FALSE
+	){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
 	c = type ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
@@ -105,7 +179,8 @@ runModelParallel = function(
 	){
 
 	modForm = genModelForm(
-		dv=depVar, var=keyRegVar, type=modType, struc=modStruc, interaction = int, disVar=disVarName)
+		dv=depVar, var=keyRegVar, type=modType, 
+		struc=modStruc, interaction = int, disVar=disVarName)
 	modName = genFileName(
 		dv=depVar, train=trainLogic, 
 		type=modType, keyVar=keyRegVar, interaction = int)
@@ -119,7 +194,7 @@ runModelParallel = function(
 		regData = dataList[[ii]] # Subset to relevant data
 
 		if(trainLogic){
-			regData$year=as.numeric(as.character(regData$year)); regData=regData[regData$year<trainEnd,]
+			regData$year=num(regData$year); regData=regData[regData$year<trainEnd,]
 			regData$year=factor(regData$year, levels=sort(unique(regData$year)))
 		}	
 
