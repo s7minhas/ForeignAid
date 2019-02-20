@@ -1,17 +1,32 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+	source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+	source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+################################################################
 
 ################################################################
 # Load reg data
-setwd(pathData)
-load('iDataDisagg.rda')
-
-
+load(paste0(pathData, "/iDataDisagg_v2.rda"))
 
 # vars for analysis
-dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal', 'notHumanitarianTotal')
-ids = names(iData[[1]])[c(1:3,25)]
-ivs = names(iData[[1]])[9:24]
+dvs = c(
+	'humanitarianTotal', 'developTotal', 
+	'civSocietyTotal', 'notHumanitarianTotal'
+	)
+ids = c("year", "ccodeS", "ccodeR", "id")
+ivs = c(
+	"LstratMu", 'LstratStratUp', 'LstratStratLo',
+	"LallyWt", "Ligo", "LunIdPt",
+	'LallyDist', 'LigoDist', 'LunDist', 
+	'Ltrade', "colony", 
+	"Lpolity2", "LlnGdpCap", "LlifeExpect", "Lcivwar",	
+	"Lno_disasters", 'Lno_killed', 
+	'Lno_injured', 'Lno_affected'
+	)
+kivs = c(
+	"Lno_disasters", 'Lno_killed', 
+	'Lno_injured', 'Lno_affected'	
+	)
 
 # quick function to create lags for tscs
 addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
@@ -29,22 +44,118 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 	return(cbind(data, newData)) }
 
 # 
-iData = lapply(iData, function(x){
-	# add lags
-	x = addLags(1:5, x)
-	# add dyadic id
-	x$id = paste(x$ccodeS, x$ccodeR, sep='_')
-	x$id = factor(x$id)
-	# create total aid
-	x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
-	# log dvs
-	for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
-	return(x) })
-save(iData, file=paste0(pathData, '/iDataDisagg_wLags.rda'))
+if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))){
+	iData = lapply(iData, function(x){
+		# add lags
+		x = addLags(1:5, x)
+		# add dyadic id
+		x$id = paste(x$ccodeS, x$ccodeR, sep='_')
+		x$id = factor(x$id)
+		# create total aid
+		x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
+		# log dvs
+		for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
+		return(x) })
+	save(iData, file=paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+} else {
+	load(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+}
 ################################################################
 
 ################################################################
 # RE model
+
+humMod = lmer(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+civMod = lmer(
+	civSocietyTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+devMod = lmer(
+	developTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+humModFE = lm(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year) - 1, 
+	data=iData[[1]]
+	)
+
+civModFE = lm(
+	civSocietyTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year) - 1, 
+	data=iData[[1]]
+	)
+
+devModFE = lm(
+	developTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		factor(ccodeS) + factor(year) - 1, 
+	data=iData[[1]]
+	)
+
+summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
+summary(humModFE)$'coefficients'[c(1:2,nrow(summary(humModFE)$'coefficients')),]
+
+summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
+summary(civModFE)$'coefficients'[c(1:2,nrow(summary(civModFE)$'coefficients')),]
+
+summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
+summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
+
+
+humModv2 = lmer(
+	humanitarianTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+civModv2 = lmer(
+	civSocietyTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+devModv2= lmer(
+	developTotal ~ 
+		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
+		(1|id) + (1|year), 
+	data=iData[[1]]
+	)
+
+summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
+summary(humModv2)$'coefficients'[c(2:3,nrow(summary(humModv2)$'coefficients')),]
+
+summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
+summary(civModv2)$'coefficients'[c(2:3,nrow(summary(civModv2)$'coefficients')),]
+
+summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
+summary(devModv2)$'coefficients'[c(2:3,nrow(summary(devModv2)$'coefficients')),]
+
 
 ## mod formula
 disVar = 'Lno_disasters'
@@ -57,9 +168,14 @@ cntrlVars=c(
 	)
 
 # model spec gen
-genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_disasters'){
-	if(type=='re'){ strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
-	if(type=='fe'){ strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
+genModelForm = function(
+	dv, var, type, struc, 
+	interaction = FALSE, disVar='Lno_disasters'
+	){
+	if(type=='re'){ 
+		strucChar=paste0(' + ', paste('(1|',struc, ')', collapse=' + ')) }
+	if(type=='fe'){ 
+		strucChar=paste0(' + ', paste('factor(',struc,')',collapse=' + '), ' - 1') }
 	if(type=='none'){ strucChar=NULL }
 
 	if ( interaction == FALSE){
@@ -77,78 +193,55 @@ genModelForm = function(dv, var, type, struc, interaction = FALSE, disVar='Lno_d
 	return(form) }
 
 # filename gen
-genFileName = function(dv, train, mod, type, zeroInf, keyVar, trainEnd=2002, interaction = FALSE){
+genFileName = function(
+	dv, train, type, keyVar, 
+	trainEnd=2002, interaction = FALSE
+	){
 	a = ifelse(train, 'trainSamp', 'fullSamp')
-	b = mod ; c = type ; d = if(zeroInf){ 'zi' } ; e = paste(keyVar, collapse='')
+	c = type ; e = paste(keyVar, collapse='')
 	f = ifelse(interaction, 'interaction', '' )
-	g = paste0(dv, '_', paste(a,b,c,d,e,f, sep='_'), '.rda')
+	g = paste0(dv, '_', paste(a,c,e,f, sep='_'), '.rda')
 	return( gsub('__','_',g) ) }
 
 # Run models in parallel across imputed datasets
 runModelParallel = function(
 	cores=detectCores(),
 	dataList=iData, trainLogic=FALSE, trainEnd=2002, 
-	modType='re', modFamily='gaussian', zeroInfLogic=FALSE, 
+	modType='re', 
 	depVar,
 	keyRegVar='LstratMu', modStruc=c('id','year'), 
 	int = FALSE, disVarName = 'Lno_disasters'
 	){
 
 	modForm = genModelForm(
-		dv=depVar, var=keyRegVar, type=modType, struc=modStruc, interaction = int, disVar=disVarName)
+		dv=depVar, var=keyRegVar, type=modType, 
+		struc=modStruc, interaction = int, disVar=disVarName)
 	modName = genFileName(
-		dv=depVar, train=trainLogic, mod=modFamily, 
-		type=modType, zeroInf=zeroInfLogic, keyVar=keyRegVar, interaction = int)
+		dv=depVar, train=trainLogic, 
+		type=modType, keyVar=keyRegVar, interaction = int)
 
 	print(paste0('Running model: ', Reduce(paste, deparse(modForm))))
 	print(paste0('Saving to: ', modName))
 
 	cl=makeCluster(cores) ; registerDoParallel(cl)
-	mods = foreach(ii=1:length(dataList), .packages=c('glmmADMB', 'lme4')) %dopar% {
+	mods = foreach(ii=1:length(dataList), .packages=c('lme4')) %dopar% {
 
 		regData = dataList[[ii]] # Subset to relevant data
 
 		if(trainLogic){
-			regData$year=as.numeric(as.character(regData$year)); regData=regData[regData$year<trainEnd,]
+			regData$year=num(regData$year); regData=regData[regData$year<trainEnd,]
 			regData$year=factor(regData$year, levels=sort(unique(regData$year)))
 		}	
 
-		if(modType=='re' & !zeroInfLogic){
-			m=lmer(modForm, data=regData)
-		}
-		
-		if(modType=='re' & zeroInfLogic){
-			m=glmmadmb(modForm, data=regData, zeroInflation=zeroInfLogic, family=modFamily, extra.args="-ndi 100000")
-		}
+		if(modType=='re'){ m=lmer(modForm, data=regData) }
 
-		if(modType=='fe'){
-			stopifnot(modFamily=='gaussian')
-			m=lm(modForm, data=regData)
-		}
+		if(modType=='fe'){ m=lm(modForm, data=regData) }
 		
 		return(m)
 	}
 	stopCluster(cl)
 	save(mods, file=paste0(pathResults, '/', modName)) # Save output	
 }
-################################################################
-
-################################################################
-# Run main models
-# Full sample model, random effect, LstratMu, runs in a couple of minutes
-kivDiffLags = c(paste0('LstratMu',c('',paste0('_',2:6))))
-disDiffLags = c(paste0('Lno_disasters',c('',paste0('_',2:6))))
-for(dv in dvs){ 
-	for(i in 1:length(kivDiffLags)){	
-		runModelParallel(
-			trainLogic=FALSE, modType='re', 
-			keyRegVar=kivDiffLags[i], disVarName=disDiffLags[i], depVar=dv) } }
-
-# # robustness check, random effect with zero inflation, takes about six hours to run
-# runModelParallel(trainLogic=FALSE, modType='re', zeroInfLogic=TRUE, keyRegVar='LstratMu')
-
-# # robustness check, fixed effects, takes about 30 mins to run
-# runModelParallel(trainLogic=FALSE, modType='fe', keyRegVar='LstratMu')
 ################################################################
 
 ################################################################
@@ -186,8 +279,6 @@ for(dv in dvs){
 for(dv in dvs){
 	runModelParallel(trainLogic=TRUE, modType='re', depVar=dv, 
 		keyRegVar=c('LallyWt', 'LunIdPt','Ligo'))}
-
-
 ################################################################
 
 ################################################################
@@ -197,7 +288,4 @@ for (iv in ivs){
 	for(dv in dvs[-4]){
 	runModelParallel(trainLogic=FALSE, modType='re', depVar=dv, keyRegVar=iv, int = T)}
 }
-
-
-
-
+################################################################
