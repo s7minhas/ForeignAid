@@ -24,7 +24,8 @@ if(Sys.info()["user"]=="cindycheng") {
 toLoad=c('snow', 'mcmcplots', 'foreign', 'cshapes', 'countrycode', 'reshape2', 
 	'gtools', 'ggplot2', 'doBy', 'Amelia', 'tikzDevice', 'latex2exp',
   'foreach', 'doParallel',
-	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid')
+	'igraph', 'bipartite', 'lme4', 'glmmADMB','MASS', 'grid',
+  'dplyr')
 
 #' function to install and/or load packages
 #' 

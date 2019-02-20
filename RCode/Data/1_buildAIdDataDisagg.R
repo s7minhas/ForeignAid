@@ -1,6 +1,6 @@
 if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
 if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
-library(dplyr)
+
 ################################################################
 setwd(paste0(pathData, '/components/AidDataCore_ResearchRelease_Level1_v3'))
 aidDataRaw= read.csv('AidDataCoreDonorRecipientYearPurpose_ResearchRelease_Level1_v3.1.csv', stringsAsFactors = FALSE)
@@ -112,7 +112,7 @@ aidDataSectorsAgg$developTotal = rowSums(aidDataSectorsAgg[,
 		'economicInfrastructureAndServices', 'industryMiningConstruction', 
 		'environmentalProtection', 'otherDevelopmentAid', 'debtRelief')], na.rm = TRUE)
  
-  
+
  
  
 # combine 
@@ -216,3 +216,15 @@ save(aidData,
 	#aidMatsDisaster, aidMatsHumanitarianTotal, aidMatsNotHumanitarianTotal, 
 	file='aidDataDisagg.rda')
 ################################################################
+
+# Check percentage of non labeled purpose codes
+#aidDataRaw[-which(is.na(aidDataRaw$purposeNameAgg)), 'commitment_amount_usd_constant_sum'] %>% sum()
+#aidDataRaw[which(is.na(aidDataRaw$purposeNameAgg)), 'commitment_amount_usd_constant_sum'] %>% sum()
+#sum(aidData[, c('humanitarianTotal', 'civSocietyTotal', 'developTotal')])
+
+# Check percentage of development given to women
+#aidDataRaw[which(aidDataRaw$coalesced_purpose_code %in% c(42010)), 'commitment_amount_usd_constant_sum'] %>% sum()
+#aidDataRaw[which(aidDataRaw$purposeNameAgg %in% c('govCivilSociety','ngoGovSupport', 'womenSupport' )), 'commitment_amount_usd_constant_sum'] %>% sum()
+#aidDataRaw[-which(is.na(aidDataRaw$purposeNameAgg)), 'commitment_amount_usd_constant_sum'] %>% sum()
+#sum(aidData[, c('womenSupport')])/sum(aidData[, c('humanitarianTotal', 'civSocietyTotal', 'developTotal')])
+#sum(aidData[, c('womenSupport')])/sum(aidData[, c('civSocietyTotal')])
