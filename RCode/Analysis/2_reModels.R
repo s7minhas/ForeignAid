@@ -187,7 +187,8 @@ genModelForm = function(
 	else if (interaction == TRUE){
 			form = formula(
 			paste0(  dv, ' ~ ',  # DV
-			paste(c(var, paste(c(var, disVar), collapse = '*')), collapse=' + '), ' + ', # add key var
+			paste(c(var, 
+				paste(c(var, disVar), collapse = '*')), collapse=' + '), ' + ', # add key var
 			paste(c(disVar, cntrlVars), collapse=' + '), # add control vars
 			strucChar )  ) }
 	return(form) }
