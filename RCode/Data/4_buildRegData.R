@@ -56,12 +56,13 @@ covData$polity2 = covData$polity2 + abs(min(covData$polity2,na.rm=TRUE)) + 1
 ### Log transformations
 covData$lnGdpCap = log(covData$gdpCAP)
 
+
 ### Subset monadic covariates to relevant years set
 vars=c(
 	'polity2', # Institutions
 	'lnGdpCap', # Macroecon controls
 	'lifeExpect', 'no_disasters', # Humanitarian
-	'no_killed', 'no_injured', 'no_affected',
+	'no_killed', 'total_affected', 'total_dam', 'no_killed', 
 	'civwar' )
 covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
 ################################################################
@@ -118,7 +119,7 @@ covData = covData[covData$year>1974 & covData$year<=2005,]
 
 # Merge datasets
 regData=aidData
-
+ 
 # Add strategic variable to regData
 regData=merge(regData, 
 	stratData[,c(8,9)], 
@@ -126,13 +127,29 @@ regData=merge(regData,
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add receiver level covariates
 regData=merge(regData, 
-	covData[,c(1, 10:14)], 
+	covData[,c('cyear',
+		 		"Lpolity2",
+		 		"LlnGdpCap", 
+		 		"LlifeExpect",
+		 		"Lno_disasters",  
+		 		"Ltotal_affected",
+		 		'Lno_killed',
+		 		"Ltotal_dam",
+		 		"Lcivwar")], 
 	by.x='cyearR', by.y='cyear', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add sender level covariates
 names(covData)=paste0('S',names(covData))
 regData=merge(regData, 
-	covData[,c(1, 10:14)], 
+	covData[,c('Scyear',
+		 		"SLpolity2",
+		 		"SLlnGdpCap", 
+		 		"SLlifeExpect",
+		 		"SLno_disasters", 
+		 		'SLno_killed', 
+		 		"SLtotal_affected",
+		 		"SLtotal_dam",
+		 		"SLcivwar")], 
 	by.x='cyearS', by.y='Scyear', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add colony variable
@@ -173,9 +190,29 @@ unData = unData[unData$year>=1975 & unData$year<=2005,]
 regData$LunIdPt = unData$LunIdPt[match(regData$idYr, unData$idYr)]
 regData$LunIdPt[is.na(regData$LunIdPt)] = 0
 
+
+### fix 0's for emdat data
+regData$Lno_disasters[which(is.na(regData$Lno_disasters))]  = 0
+regData$Ltotal_affected[which(regData$Ltotal_affected == 0)] = NA
+regData$Ltotal_affected[which(regData$Lno_disasters == 0)]  = 0
+regData$Ltotal_dam[which(regData$Ltotal_dam == 0)]= NA
+regData$Ltotal_dam[which(regData$Lno_disasters == 0)]  = 0
+regData$Lno_killed[which(regData$Lno_killed == 0)] = NA
+regData$Lno_killed[which(regData$Lno_disasters == 0)]  = 0
+ 
+regData$SLno_disasters[which(is.na(regData$SLno_disasters))]  = 0
+regData$SLtotal_affected[which(regData$SLtotal_affected == 0)] = NA
+regData$SLtotal_affected[which(regData$SLno_disasters == 0)]  = 0
+regData$SLtotal_dam[which(regData$SLtotal_dam == 0)]= NA
+regData$SLtotal_dam[which(regData$SLno_disasters == 0)]  = 0
+regData$SLno_killed[which(regData$SLno_killed == 0)] = NA
+regData$SLno_killed[which(regData$SLno_disasters == 0)]  = 0
+  
+ 
+
 # Save pre imputation
-save(regData, file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
-load(file=paste0(pathData, '/noImputationDataAidDisagg.rda'))
+save(regData, file=paste0(pathData, '/noImputationDataAidDisagg_v3.rda'))
+load(file=paste0(pathData, '/noImputationDataAidDisagg_v3.rda'))
 ################################################################
 
 ################################################################
@@ -185,7 +222,8 @@ idVars=c('cyearS', 'cyearR', 'idYr', 'Receiver', 'Sender',
 regVars=names(regData)[-which(names(regData) %in% c(idVars, 'id', 'year'))]
 lagVars=regVars[-which(regVars %in% c('colony'))]
 lagVars=regVars[grep('SL|L', regVars)]
-
+summary(regData$humanitarianTotal)
+summary(regData$)
 # copula 
 impData=regData[,-which(names(regData) %in%
 	c(
@@ -199,18 +237,19 @@ ids = names(impData)[which(names(impData) %in% c(
 	))]
 nodeVars = c(
 	'Lpolity2', 'LlnGdpCap', 'LlifeExpect', 
-	'Lno_disasters', 'Lcivwar', 'SLpolity2', 
-	'SLlnGdpCap', 'SLlifeExpect', 'SLno_disasters', 'SLcivwar' )
+	'Lno_disasters', 'Ltotal_dam', 'Ltotal_affected', 'Lno_killed', 'Lcivwar', 
+	'SLpolity2', 'SLlnGdpCap', 'SLlifeExpect',
+	 'SLno_disasters', 'SLtotal_dam', 'SLtotal_affected', 'SLno_killed', 'SLcivwar' )
 dyadVars = c( 
 	'commitment_amount_usd_constant_sum', 
 	'emergencyResponse', 'humanitarianAid', 
 	'reconstructionRelief', 'disasterPreventionRelief', 
 	'civSocietyTotal', 'developTotal',  
-	'LstratMu', 'LmilMu', 'LallyWt', 'Ligo', 'LunIdPt', 'colony' )
+	'LstratMu',  'LallyWt', 'Ligo', 'LunIdPt', 'colony' )
 nodeData = unique(impData[,c(ids,nodeVars)])
-senVars = c(ids[c(1,3:4)], nodeVars[6:10])
-recVars = c(ids[c(2,3,5)], nodeVars[1:5])
-
+senVars = c(ids[c(1,3:4)], nodeVars[9:16])
+recVars = c(ids[c(2,3,5)], nodeVars[1:8])
+ 
 #
 tmp = abind(
 	nodeData[,senVars],
@@ -220,6 +259,7 @@ tmp = abind(
 nodeData = unique(tmp)
 dyadData = impData[,c(ids,dyadVars)]
 
+ 
 source(paste0(pathCode, '/sbgcop_l2.R'))
 imp = sbgcop.mcmc_l2(
 	Y=nodeData[,-1], 
@@ -243,7 +283,7 @@ tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) +
 		)
 ggsave(tmp, file=paste0(
 	pathGraphics, 
-	'/nodalImputationConvergenceSBGCOPDisagg.pdf' ))
+	'/nodalImputationConvergenceSBGCOPDisagg_v3.pdf' ))
 
 sbgCor = melt(imp$'C.psamp_l2')
 sbgCor = sbgCor[sbgCor$X1 != sbgCor$X2,]
@@ -260,9 +300,10 @@ tmp=ggplot(sbgCor, aes(x=X3, y=value, color=X2)) +
 		)
 ggsave(tmp, file=paste0(
 	pathGraphics, 
-	'/fullImputationConvergenceSBGCOPDisagg.pdf' ))
+	'/fullImputationConvergenceSBGCOPDisagg_v3.pdf' ))
 
 # Sample 5 from posterior
+set.seed(2)
 impPost = imp$'Y.impute_l2'[,,sample(800:1000, 5)]
 
 # Cleanup
@@ -272,16 +313,22 @@ iData = lapply(1:dim(impPost)[3], function(ii){
 	x = data.frame( x )
 
 	# Adjust covariates
-	x$LmilMu = x$LmilMu + abs(x$LmilMu)
+	# x$LmilMu = x$LmilMu + abs(x$LmilMu)
 
 	# Grouping factors for hierarchical framework
 	x$year = factor(x$year, levels=sort(unique(x$year)))
 	x$ccodeS = factor(x$ccodeS)
 	x$ccodeR = factor(x$ccodeR)
+	
+	x$id = paste(x$ccodeS, x$ccodeR, sep='_')
+	x$humanitarianTotal = x$emergencyResponse + x$humanitarianAid + x$reconstructionRelief + x$disasterPreventionRelief
 	return(x)
 	})
 
+ 
+
 setwd(pathData)
-save(iData, file = "iDataDisagg.rda")
-save(imp, file='sbgOutput_nodalDyadicImputationDisagg.rda')
+save(iData, file = "iDataDisagg_v3.rda")
+save(imp, file='sbgOutput_nodalDyadicImputationDisagg_v3.rda')
+
 ################################################################

@@ -6,26 +6,26 @@ if(Sys.info()['user']=='cindycheng'){
 
 ################################################################
 # Load reg data
-load(paste0(pathData, "/iDataDisagg_v2.rda"))
-
+load(paste0(pathData, "/iDataDisagg_v3.rda"))
+ 
 # vars for analysis
 dvs = c(
 	'humanitarianTotal', 'developTotal', 
-	'civSocietyTotal', 'notHumanitarianTotal'
+	'civSocietyTotal' 
 	)
-ids = c("year", "ccodeS", "ccodeR", "id")
+ids = c("year", "ccodeS", "ccodeR", 'id')
 ivs = c(
-	"LstratMu", 'LstratStratUp', 'LstratStratLo',
-	"LallyWt", "Ligo", "LunIdPt",
-	'LallyDist', 'LigoDist', 'LunDist', 
-	'Ltrade', "colony", 
+	"LstratMu", 
+	#'LstratStratUp', 'LstratStratLo',
+	#"LallyWt", "Ligo", "LunIdPt",
+	#'LallyDist', 'LigoDist', 'LunDist', 
+	#'Ltrade', 
+	"colony", 
 	"Lpolity2", "LlnGdpCap", "LlifeExpect", "Lcivwar",	
-	"Lno_disasters", 'Lno_killed', 
-	'Lno_injured', 'Lno_affected'
+	"Lno_disasters", 'Lno_killed', 'Ltotal_affected', 'Ltotal_dam'
 	)
 kivs = c(
-	"Lno_disasters", 'Lno_killed', 
-	'Lno_injured', 'Lno_affected'	
+	"Lno_disasters",  'Lno_killed', 'Ltotal_affected', 'Ltotal_dam'
 	)
 
 # quick function to create lags for tscs
@@ -43,23 +43,26 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
 	return(cbind(data, newData)) }
 
-# 
-if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))){
+
+lapply(iData, function(x){setdiff(c(ids, dvs, ivs), names(x))})
+if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 	iData = lapply(iData, function(x){
 		# add lags
-		x = addLags(1:5, x)
+		# x = addLags(1:5, x)
 		# add dyadic id
 		x$id = paste(x$ccodeS, x$ccodeR, sep='_')
 		x$id = factor(x$id)
 		# create total aid
-		x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
-		# log dvs
-		for(dv in c('aidTotal',dvs)){ x[,dv] = log(x[,dv] + 1) }
+		#x$aidTotal = x$notHumanitarianTotal + x$humanitarianTotal
+		#log dvs
+		for(dv in c(dvs)){ x[,dv] = log(x[,dv] + 1) }
+
 		return(x) })
-	save(iData, file=paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+	save(iData, file=paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 } else {
-	load(paste0(pathData, '/iDataDisagg_wLags_v2.rda'))
+	load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 }
+
 ################################################################
 
 ################################################################
@@ -69,24 +72,24 @@ humMod = lmer(
 	humanitarianTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]]
+		(1|id) + (1|year)  +(1|ccodeS) +(1|ccodeR) , 
+	data=iData[[1]] 
 	)
 
 civMod = lmer(
 	civSocietyTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]]
+		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR) , 
+	data=iData[[1]] 
 	)
 
 devMod = lmer(
 	developTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]]
+		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR), 
+	data=iData[[1]] 
 	)
 
 humModFE = lm(
@@ -125,28 +128,29 @@ summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
 
 humModv2 = lmer(
 	humanitarianTotal ~ 
-		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		LstratMu +   LstratMu *  log(Ltotal_dam +1) +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
+		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR), 
 	data=iData[[1]]
 	)
 
 civModv2 = lmer(
 	civSocietyTotal ~ 
-		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		LstratMu  + LstratMu * log(Ltotal_dam +1) +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]]
+		(1|id) + (1|year)+(1|ccodeS) +(1|ccodeR)  , 
+	data=iData[[1]] 
 	)
 
 devModv2= lmer(
 	developTotal ~ 
-		LstratMu + log(Lno_killed+1) + LstratMu * log(Lno_killed+1) +
+		LstratMu   + LstratMu * log(Ltotal_dam+1)+
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]]
+		(1|id) + (1|year)+(1|ccodeS) +(1|ccodeR) , 
+	data=iData[[1]] 
 	)
 
+ 
 summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
 summary(humModv2)$'coefficients'[c(2:3,nrow(summary(humModv2)$'coefficients')),]
 
@@ -156,6 +160,7 @@ summary(civModv2)$'coefficients'[c(2:3,nrow(summary(civModv2)$'coefficients')),]
 summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
 summary(devModv2)$'coefficients'[c(2:3,nrow(summary(devModv2)$'coefficients')),]
 
+  
 
 ## mod formula
 disVar = 'Lno_disasters'

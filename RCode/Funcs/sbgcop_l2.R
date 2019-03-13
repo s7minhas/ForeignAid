@@ -103,8 +103,7 @@ sbgcop.mcmc_l2 <- function (
             print (paste(c('****************', 'nsamp is', ns), collasep = ' '))
             head(Y_l2)
            # print(paste(c("old column names"), paste(colnames(Y_l2), collapse = ' '), sep = ' '))
-                  Y_l2 = Y_l2[,-which(colnames(Y_l2) %in% c(paste0('S',vars), vars))] 
-            print(head(Y_l2))}
+                  Y_l2 = Y_l2[,-which(colnames(Y_l2) %in% c(paste0('S',vars), vars))] }
             #print(paste("new column names", paste(colnames(Y_l2), collapse = ' '), sep = ' '))}
         
         # Resume merge
