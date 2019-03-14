@@ -96,7 +96,7 @@ humModFE = lm(
 	humanitarianTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -104,7 +104,7 @@ civModFE = lm(
 	civSocietyTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -112,7 +112,7 @@ devModFE = lm(
 	developTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
