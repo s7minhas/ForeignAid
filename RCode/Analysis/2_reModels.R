@@ -72,7 +72,7 @@ humMod = lmer(
 	humanitarianTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
+		(1|ccodeS) + (1|ccodeR) + (1|year), 
 	data=iData[[1]] 
 	)
 
@@ -80,7 +80,7 @@ civMod = lmer(
 	civSocietyTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
+		(1|ccodeS) + (1|ccodeR) + (1|year), 
 	data=iData[[1]] 
 	)
 
@@ -88,7 +88,7 @@ devMod = lmer(
 	developTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
+		(1|ccodeS) + (1|ccodeR) + (1|year), 
 	data=iData[[1]] 
 	)
 
@@ -96,7 +96,7 @@ humModFE = lm(
 	humanitarianTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -104,7 +104,7 @@ civModFE = lm(
 	civSocietyTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
@@ -112,19 +112,56 @@ devModFE = lm(
 	developTotal ~ 
 		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
 		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
+		factor(ccodeS) + factor(ccodeR) + factor(year) - 1, 
 	data=iData[[1]]
 	)
 
-summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
-summary(humModFE)$'coefficients'[c(1:2,nrow(summary(humModFE)$'coefficients')),]
+round(
+	summary(humMod)$'coefficients'[
+	c(2:3,nrow(summary(humMod)$'coefficients')),],
+	3)
+round(
+	summary(humModFE)$'coefficients'[
+	c(1:2,nrow(summary(humModFE)$'coefficients')),],
+	3)
 
-summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
-summary(civModFE)$'coefficients'[c(1:2,nrow(summary(civModFE)$'coefficients')),]
+round(
+	summary(civMod)$'coefficients'[
+	c(2:3,nrow(summary(civMod)$'coefficients')),],
+	3)
+round(
+	summary(civModFE)$'coefficients'[
+	c(1:2,nrow(summary(civModFE)$'coefficients')),],
+	3)
 
-summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
-summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
+round(
+	summary(devMod)$'coefficients'[
+	c(2:3,nrow(summary(devMod)$'coefficients')),],
+	3)
+round(
+	summary(devModFE)$'coefficients'[
+	c(1:2,nrow(summary(devModFE)$'coefficients')),],
+	3)
 
+loadPkg('plm')
+
+a = plm(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar, 
+		data=iData[[1]], index=c('id','year'), 
+		model='random'
+	)
+
+b = plm(
+	humanitarianTotal ~ 
+		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
+		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar, 
+		data=iData[[1]], index=c('id','year'), 
+		model='within', effect='twoways'
+	)
+
+phtest(a, b)
 
 humModv2 = lmer(
 	humanitarianTotal ~ 
