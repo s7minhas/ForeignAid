@@ -43,8 +43,6 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
 	return(cbind(data, newData)) }
 
-
-lapply(iData, function(x){setdiff(c(ids, dvs, ivs), names(x))})
 if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 	iData = lapply(iData, function(x){
 		# add lags

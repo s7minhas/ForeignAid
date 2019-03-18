@@ -1,5 +1,7 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+  source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+  source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 ################################################################
 
 ################################################################
@@ -11,8 +13,10 @@ load(paste0(pathData, '/iDataDisagg.rda'))
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
 dvNames = paste0(c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 intModPaths = lapply(dvs, function(dv){
-  paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
-stratMuIntMods = lapply(intModPaths, function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
+  paste0(pathResults, '/', dv, 
+    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
+stratMuIntMods = lapply(intModPaths, 
+  function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
 
 # vars
 cntrlVars=c(
@@ -30,7 +34,8 @@ varsNoInt=c('LstratMu', cntrlVars)
 varNamesNoInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames)
 varsInt=c('LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
 varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
-  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', cntrlVarNames[-1])
+  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
+  cntrlVarNames[-1])
 
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
@@ -43,8 +48,10 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
   modSumm = lapply(1:length(mods), function(i){
     mod = mods[[i]]; summ = rubinCoef(mod)
     summ$dv = names(mods)[i]
-    summ$up95 = with(summ, beta + qnorm(.975)*se) ; summ$lo95 = with(summ, beta - qnorm(.975)*se)
-    summ$up90 = with(summ, beta + qnorm(.95)*se); summ$lo90 = with(summ, beta - qnorm(.95)*se)
+    summ$up95 = with(summ, beta + qnorm(.975)*se)
+    summ$lo95 = with(summ, beta - qnorm(.975)*se)
+    summ$up90 = with(summ, beta + qnorm(.95)*se)
+    summ$lo90 = with(summ, beta - qnorm(.95)*se)
     summ = summ[summ$var!='(Intercept)',]    
     summ$varClean = cleanVars[match(summ$var, dirtyVars)]
     summ$dvClean = dvNames[match(summ$dv, dvs)]

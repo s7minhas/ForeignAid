@@ -6,59 +6,63 @@ if(Sys.info()['user']=='cindycheng'){
 
 ################################################################
 # Load reg data
-load(paste0(pathData, "/iDataDisagg_v3.rda"))
+load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
+dvs = c(
+	'humanitarianTotal',
+	'civSocietyTotal',
+	'developTotal' )
+baseSpec = paste(
+	c( 'LstratMu', 'Lno_disasters', 
+		'LstratMu * Lno_disasters', 'colony', 
+		'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
+		'Lcivwar' ), collapse=' + ' )
+reStruc = '(1|id) + (1|year)'
+feStruc = 'factor(id) + factor(year) - 1'
+
+# set up formulas
+reModSpecs = lapply(dvs, function(y){
+	formula(paste0(y, '~', baseSpec, '+', reStruc)) })
+feModSpecs = lapply(dvs, function(y){
+	formula(paste0(y, '~', baseSpec, '+', feStruc)) })
 ################################################################
 
 ################################################################
 # run random effect models
-humMod = lmer(
-	humanitarianTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]] 
-	)
+cl=makeCluster(5) ; registerDoParallel(cl)
 
-civMod = lmer(
-	civSocietyTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]] 
-	)
+## humanitarian model
+humModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
+	lmer(reModSpecs[[1]], data=df) }
+humSummRE = rubinCoef(humModRE)
 
-devMod = lmer(
-	developTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year), 
-	data=iData[[1]] 
-	)
+## civ society model
+civModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
+	lmer(reModSpecs[[2]], data=df) }
+civSummRE = rubinCoef(civModRE)
+
+## dev model
+devModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
+	lmer(reModSpecs[[3]], data=df) }
+devSummRE = rubinCoef(devModRE)
 
 # run fixed effect models
-humModFE = lm(
-	humanitarianTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
-	data=iData[[1]]
-	)
+## humanitarian model
+humModFE= foreach(df=iData) %dopar% {
+	lm(feModSpecs[[1]], data=df) }
+# humSummFE = rubinCoef(humModFE)
 
-civModFE = lm(
-	civSocietyTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
-	data=iData[[1]]
-	)
+## civ society model
+civModFE = foreach(df=iData) %dopar% {
+	lm(feModSpecs[[2]], data=df) }
+# civSummFE = rubinCoef(civModFE)
 
-devModFE = lm(
-	developTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(id) + factor(year) - 1, 
-	data=iData[[1]]
-	)
+## dev model
+devModFE = foreach(df=iData) %dopar% {
+	lm(feModSpecs[[3]], data=df) }
+# devSummFE = rubinCoef(devModFE)
+
+#
+stopCluster(cl)
 ################################################################
 
 ################################################################
@@ -139,11 +143,14 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
   ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
   actData = regData[,c('LstratMu', 'Lno_disasters')]
   actData = actData[actData$Lno_disasters %in% seq(0,noDisast,2),]
-  actData = actData[actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
+  actData = actData[
+  	actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
 
   # change facet labels
-  ggDataSmall$Lno_disasters = paste(ggDataSmall$Lno_disasters, 'Disasters$_{r,t-1}$')
-  actData$Lno_disasters = paste(actData$Lno_disasters, 'Disasters$_{r,t-1}$')
+  ggDataSmall$Lno_disasters = paste(
+  	ggDataSmall$Lno_disasters, 'Disasters$_{r,t-1}$')
+  actData$Lno_disasters = paste(
+  	actData$Lno_disasters, 'Disasters$_{r,t-1}$')
 
   # viz
   facet_labeller = function(string){ TeX(string) }
@@ -151,8 +158,12 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
     geom_line() +
     geom_ribbon(aes(ymin=sysLo90, ymax=sysHi90), alpha=.6) +
     geom_ribbon(aes(ymin=sysLo95, ymax=sysHi95), alpha=.4) +
-    geom_rug(data=actData, aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
-    facet_grid(~Lno_disasters, labeller=as_labeller(facet_labeller, default = label_parsed)) +
+    geom_rug(data=actData, 
+    	aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
+    facet_grid(
+    	~Lno_disasters, 
+    	labeller=as_labeller(
+    		facet_labeller, default = label_parsed)) +
     labs(
       x=TeX('Strategic Distance$_{sr,t-1}$'),
       y=TeX("Log(Aid)$_{t}$"),
@@ -168,8 +179,20 @@ simComboPlot=grid.arrange(
   simPlots[[1]], simPlots[[3]], simPlots[[2]],
   nrow=length(stratMuIntMods))
  simPlots[[3]]
-ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
-ggsave(simPlots[[1]], file=paste0(pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[2]], file=paste0(pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[3]], file=paste0(pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
+ggsave(simComboPlot, 
+	file=paste0(
+		pathGraphics, '/simComboPlot.pdf'), 
+	width=8, height=8)
+ggsave(simPlots[[1]], 
+	file=paste0(
+		pathGraphics, '/simHumanitarianPlot.pdf'), 
+	width = 7, height = 4)
+ggsave(simPlots[[2]], 
+	file=paste0(
+		pathGraphics, '/simDevelopmentPlot.pdf'), 
+	width = 7, height = 4)
+ggsave(simPlots[[3]], 
+	file=paste0(
+		pathGraphics, '/simCivilPlot.pdf'), 
+	width = 7, height = 4)
 ################################################################
