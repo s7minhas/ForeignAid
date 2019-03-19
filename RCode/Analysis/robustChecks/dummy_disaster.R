@@ -8,6 +8,7 @@ if(Sys.info()['user']=='cindycheng'){
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 
+# add binary version of disaster variable
 iData = lapply( iData, function(df){
 	df$L_disaster = 1*(df$Lno_disasters>0)
 	return(df) })
