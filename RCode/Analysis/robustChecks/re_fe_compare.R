@@ -65,35 +65,36 @@ devModFE = foreach(df=iData) %dopar% {
 stopCluster(cl)
 ################################################################
 
-# ################################################################
-# # coef summaries
-# round(
-# 	summary(humMod)$'coefficients'[
-# 	c(2:3,nrow(summary(humMod)$'coefficients')),],
-# 	3)
-# round(
-# 	summary(humModFE)$'coefficients'[
-# 	c(1:2,nrow(summary(humModFE)$'coefficients')),],
-# 	3)
+################################################################
+# coef summaries
+set.seed(2342) ; impN = sample(1:4, 1)
+round(
+	summary(humModRE[[impN]])$'coefficients'[
+	c(2:3,nrow(summary(humModRE[[1]])$'coefficients')),],
+	3)
+round(
+	summary(humModFE[[impN]])$'coefficients'[
+	c(1:2,nrow(summary(humModFE[[1]])$'coefficients')),],
+	3)
 
-# round(
-# 	summary(civMod)$'coefficients'[
-# 	c(2:3,nrow(summary(civMod)$'coefficients')),],
-# 	3)
-# round(
-# 	summary(civModFE)$'coefficients'[
-# 	c(1:2,nrow(summary(civModFE)$'coefficients')),],
-# 	3)
+round(
+	summary(civModRE[[impN]])$'coefficients'[
+	c(2:3,nrow(summary(civModRE[[1]])$'coefficients')),],
+	3)
+round(
+	summary(civModFE[[impN]])$'coefficients'[
+	c(1:2,nrow(summary(civModFE[[1]])$'coefficients')),],
+	3)
 
-# round(
-# 	summary(devMod)$'coefficients'[
-# 	c(2:3,nrow(summary(devMod)$'coefficients')),],
-# 	3)
-# round(
-# 	summary(devModFE)$'coefficients'[
-# 	c(1:2,nrow(summary(devModFE)$'coefficients')),],
-# 	3)
-# ################################################################
+round(
+	summary(devModRE[[impN]])$'coefficients'[
+	c(2:3,nrow(summary(devModRE[[1]])$'coefficients')),],
+	3)
+round(
+	summary(devModFE[[impN]])$'coefficients'[
+	c(1:2,nrow(summary(devModFE[[1]])$'coefficients')),],
+	3)
+################################################################
 
 
 ################################################################
@@ -103,7 +104,7 @@ noDisast = 4
 # stratMuIntMods = list( humModRE, civModRE, devModRE )
 stratMuIntMods = list( humModFE, civModFE, devModFE )
 names(stratMuIntMods) = dvs
-dvNames = paste0(c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
+dvNames = paste0(c('Humanitarian', 'Civil Society', 'Development'), ' Aid')
 simPlots = lapply(1:length(stratMuIntMods), function(i){
   mod = stratMuIntMods[[i]][[1]]
   modTitle = dvNames[i] ; var = 'LstratMu'
@@ -196,7 +197,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 
 loadPkg('gridExtra')
 simComboPlot=grid.arrange(
-  simPlots[[1]], simPlots[[3]], simPlots[[2]],
+  simPlots[[1]], simPlots[[2]], simPlots[[3]],
   nrow=length(stratMuIntMods))
  ggsave(simComboPlot,
 	file=paste0(
@@ -304,7 +305,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 
 loadPkg('gridExtra')
 simComboPlot=grid.arrange(
-  simPlots[[1]], simPlots[[3]], simPlots[[2]],
+  simPlots[[1]], simPlots[[2]], simPlots[[3]],
   nrow=length(stratMuIntMods))
  ggsave(simComboPlot,
 	file=paste0(
