@@ -8,9 +8,8 @@ if(Sys.info()['user']=='cindycheng'){
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 
-vars = names(iData[[1]])[28:30]
 iData = lapply( iData, function(df){
-	for(v in vars){ df[,v] = log(df[,v] + 1) }
+	df$L_disaster = 1*(df$Lno_disasters>0)
 	return(df) })
 ################################################################
 
@@ -22,8 +21,8 @@ covarsOrig = c(
 	'colony', 'Lpolity2', 'LlnGdpCap', 
 	'LlifeExpect', 'Lcivwar' )
 covarsRev = c(
-	'LstratMu', 'Lno_killed', 
-	'LstratMu * Lno_killed',
+	'LstratMu', 'L_disaster', 
+	'LstratMu * L_disaster',
 	'colony', 'Lpolity2', 'LlnGdpCap', 
 	'LlifeExpect', 'Lcivwar' )
 struc = c('+ (1|id) + (1|year)')
@@ -57,19 +56,19 @@ names(modsRev_full) = dvs
 modsRev = lapply(modsRev_full,rubinCoef,matrixFormat=TRUE)
 ################################################################
 
-################################################################
+###############################################################
 # lapply(modsOrig, function(x){ round(x[c(2:3,nrow(x)),],3) })
 # lapply(modsRev, function(x){ round(x[c(2:3,nrow(x)),],3) })
 
-# round(modsOrig[[1]][c(2:3,nrow(modsOrig[[1]])),], 3)
-# round(modsRev[[1]][c(2:3,nrow(modsOrig[[1]])),], 3)
+round(modsOrig[[1]][c(2:3,nrow(modsOrig[[1]])),], 3)
+round(modsRev[[1]][c(2:3,nrow(modsOrig[[1]])),], 3)
 
-# round(modsOrig[[2]][c(2:3,nrow(modsOrig[[1]])),], 3)
-# round(modsRev[[2]][c(2:3,nrow(modsOrig[[1]])),], 3)
+round(modsOrig[[2]][c(2:3,nrow(modsOrig[[1]])),], 3)
+round(modsRev[[2]][c(2:3,nrow(modsOrig[[1]])),], 3)
 
-# round(modsOrig[[3]][c(2:3,nrow(modsOrig[[1]])),], 3)
-# round(modsRev[[3]][c(2:3,nrow(modsOrig[[1]])),], 3)
-################################################################
+round(modsOrig[[3]][c(2:3,nrow(modsOrig[[1]])),], 3)
+round(modsRev[[3]][c(2:3,nrow(modsOrig[[1]])),], 3)
+###############################################################
 
 # #########################################################
 # # switch to interaction mod
@@ -164,7 +163,7 @@ modsRev = lapply(modsRev_full,rubinCoef,matrixFormat=TRUE)
 #########################################################
 # switch to interaction mod
 regData = iData[[1]]
-noDisast = 8
+noDisast = 1
 stratMuIntMods = modsRev_full
 dvNames = paste0(
   c('Humanitarian', 'Civil Society', 'Development'), ' Aid')
@@ -177,7 +176,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
   stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
   stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
   disRange=with(data=regData, seq(
-    0, 8, 4) )  
+    0, 1, 1) )  
   scen = with(data=regData, 
     expand.grid(
       1, stratRange, disRange, 
@@ -201,25 +200,25 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
   # Combine for plotting
   ggData=data.frame(
       cbind(pred, sysInts95, sysInts90, 
-        scen[,var], scen[,'Lno_killed'])
+        scen[,var], scen[,'L_disaster'])
       )
   names(ggData)=c('fit', 'sysLo95', 'sysHi95', 
-    'sysLo90', 'sysHi90', var, 'Lno_killed')
+    'sysLo90', 'sysHi90', var, 'L_disaster')
 
   # Plot rel at various cuts of disasters
   disRange=with(data=regData, seq(
-    min(Lno_killed), noDisast, 2) )    
-  ggDataSmall = ggData[which(ggData$Lno_killed %in% disRange),]
-  actData = regData[,c('LstratMu', 'Lno_killed')]
-  actData = actData[actData$Lno_killed %in% seq(0,noDisast,2),]
+    min(L_disaster), noDisast, 1) )    
+  ggDataSmall = ggData[which(ggData$L_disaster %in% disRange),]
+  actData = regData[,c('LstratMu', 'L_disaster')]
+  actData = actData[actData$L_disaster %in% seq(0,noDisast,1),]
   actData = actData[
     actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
 
   # change facet labels
-  ggDataSmall$Lno_killed = paste(
-    ggDataSmall$Lno_killed, 'Log(Killed)$_{r,t-1}$')
-  actData$Lno_killed = paste(
-    actData$Lno_killed, 'Log(Killed)$_{r,t-1}$')
+  ggDataSmall$L_disaster = paste(
+    ggDataSmall$L_disaster, 'Disaster$_{r,t-1}$')
+  actData$L_disaster = paste(
+    actData$L_disaster, 'Disaster$_{r,t-1}$')
 
   # viz
   facet_labeller = function(string){ TeX(string) }
@@ -231,7 +230,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
       data=actData, 
       aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
     facet_grid(
-      ~Lno_killed, 
+      ~L_disaster, 
       labeller=as_labeller(facet_labeller, default = label_parsed)) +
     labs(
       x=TeX('Strategic Distance$_{sr,t-1}$'),
@@ -248,5 +247,5 @@ simComboPlot=grid.arrange(
   simPlots[[1]], simPlots[[2]], simPlots[[3]],
   nrow=length(stratMuIntMods))
 ggsave(simComboPlot, file=paste0(
-  '~/Desktop/simComboPlot_no_killed.pdf'), width=8, height=8)
+  '~/Desktop/simComboPlot_bin_disaster.pdf'), width=8, height=8)
 #########################################################
