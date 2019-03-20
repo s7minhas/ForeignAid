@@ -67,31 +67,46 @@ stopCluster(cl)
 
 ################################################################
 # coef summaries
-set.seed(2342) ; impN = sample(1:4, 1)
-round(
-	summary(humModRE[[impN]])$'coefficients'[
-	c(2:3,nrow(summary(humModRE[[1]])$'coefficients')),],
-	3)
-round(
-	summary(humModFE[[impN]])$'coefficients'[
-	c(1:2,nrow(summary(humModFE[[1]])$'coefficients')),],
-	3)
+# set.seed(2342) ; impN = sample(1:4, 1)
+# round(
+# 	summary(humModRE[[impN]])$'coefficients'[
+# 	c(2:3,nrow(summary(humModRE[[1]])$'coefficients')),],
+# 	3)
+# round(
+# 	summary(humModFE[[impN]])$'coefficients'[
+# 	c(1:2,nrow(summary(humModFE[[1]])$'coefficients')),],
+# 	3)
 
-round(
-	summary(civModRE[[impN]])$'coefficients'[
-	c(2:3,nrow(summary(civModRE[[1]])$'coefficients')),],
-	3)
-round(
-	summary(civModFE[[impN]])$'coefficients'[
-	c(1:2,nrow(summary(civModFE[[1]])$'coefficients')),],
-	3)
+# round(
+# 	summary(civModRE[[impN]])$'coefficients'[
+# 	c(2:3,nrow(summary(civModRE[[1]])$'coefficients')),],
+# 	3)
+# round(
+# 	summary(civModFE[[impN]])$'coefficients'[
+# 	c(1:2,nrow(summary(civModFE[[1]])$'coefficients')),],
+# 	3)
 
-round(
-	summary(devModRE[[impN]])$'coefficients'[
-	c(2:3,nrow(summary(devModRE[[1]])$'coefficients')),],
-	3)
-round(
-	summary(devModFE[[impN]])$'coefficients'[
-	c(1:2,nrow(summary(devModFE[[1]])$'coefficients')),],
-	3)
+# round(
+# 	summary(devModRE[[impN]])$'coefficients'[
+# 	c(2:3,nrow(summary(devModRE[[1]])$'coefficients')),],
+# 	3)
+# round(
+# 	summary(devModFE[[impN]])$'coefficients'[
+# 	c(1:2,nrow(summary(devModFE[[1]])$'coefficients')),],
+# 	3)
+
+reMods = list(
+	rubinCoef(humModRE),
+	rubinCoef(civModRE),
+	rubinCoef(devModRE)
+	)
+
+feMods = list(
+	rubinCoef(humModFE),
+	rubinCoef(civModFE),
+	rubinCoef(devModFE)	
+	)
+
+reMods
+feMods
 ################################################################
