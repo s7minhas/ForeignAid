@@ -102,9 +102,9 @@ reMods = list(
 	)
 
 feMods = list(
-	rubinCoef(humModFE),
-	rubinCoef(civModFE),
-	rubinCoef(devModFE)	
+	rubinCoef(humModFE, modType='fe'),
+	rubinCoef(civModFE, modType='fe'),
+	rubinCoef(devModFE, modType='fe')	
 	)
 
 reMods
