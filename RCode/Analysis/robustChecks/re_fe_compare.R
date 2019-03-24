@@ -7,112 +7,105 @@ if(Sys.info()['user']=='cindycheng'){
 ################################################################
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
+
 dvs = c(
 	'humanitarianTotal',
 	'civSocietyTotal',
 	'developTotal' )
 baseSpec = paste(
-	c( 'LstratMu', 'Lno_disasters', 
+	c(
+		'LstratMu', 'Lno_disasters', 
 		'LstratMu * Lno_disasters', 'colony', 
 		'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
-		'Lcivwar' ), collapse=' + ' )
-reStruc = '(1|id) + (1|year)'
-feStruc = 'factor(id) + factor(year) - 1'
+		'Lcivwar'
+	), collapse=' + ' )
+feStruc = '+ factor(id) + factor(year) - 1'
 
 # set up formulas
-reModSpecs = lapply(dvs, function(y){
-	formula(paste0(y, '~', baseSpec, '+', reStruc)) })
 feModSpecs = lapply(dvs, function(y){
-	formula(paste0(y, '~', baseSpec, '+', feStruc)) })
+	formula(paste0(y, '~', baseSpec, feStruc)) })
 ################################################################
 
 ################################################################
-# run random effect models
-cl=makeCluster(5) ; registerDoParallel(cl)
+# run models
+# if(!file.exists(
+# 	paste0(pathResults, '/feMods_robustCheck.rda')
+# 	)){
+	cl=makeCluster(5) ; registerDoParallel(cl)
 
-## humanitarian model
-humModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
-	lmer(reModSpecs[[1]], data=df) }
-humSummRE = rubinCoef(humModRE)
+	# run fixed effect models
+	## humanitarian model
+	humModFE= foreach(df=iData) %dopar% {
+		summary(
+			lm(feModSpecs[[1]], data=df)
+			)$'coefficients' }
 
-## civ society model
-civModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
-	lmer(reModSpecs[[2]], data=df) }
-civSummRE = rubinCoef(civModRE)
+	## civ society model
+	civModFE = foreach(df=iData) %dopar% {
+		summary(
+			lm(feModSpecs[[2]], data=df)
+			)$'coefficients' }
 
-## dev model
-devModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
-	lmer(reModSpecs[[3]], data=df) }
-devSummRE = rubinCoef(devModRE)
+	## dev model
+	devModFE = foreach(df=iData) %dopar% {
+		summary(
+			lm(feModSpecs[[3]], data=df)
+			)$'coefficients' }
 
-# run fixed effect models
-## humanitarian model
-humModFE= foreach(df=iData) %dopar% {
-	lm(feModSpecs[[1]], data=df) }
-# humSummFE = rubinCoef(humModFE)
+	#
+	stopCluster(cl)
 
-## civ society model
-civModFE = foreach(df=iData) %dopar% {
-	lm(feModSpecs[[2]], data=df) }
-# civSummFE = rubinCoef(civModFE)
-
-## dev model
-devModFE = foreach(df=iData) %dopar% {
-	lm(feModSpecs[[3]], data=df) }
-# devSummFE = rubinCoef(devModFE)
-
-#
-stopCluster(cl)
+	#
+	feMods = list(
+		humModFE, devModFE, civModFE )
+	names(feMods) = dvs
+# 	save(feMods, 
+# 		file=paste0(pathResults, '/feMods_robustCheck.rda')
+# 		)
+# } else {
+	# load(paste0(pathResults, '/feMods_robustCheck.rda'))
+# }
 ################################################################
 
 ################################################################
+# load re model for comparison
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
+dvNames = paste0(
+  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
+intModPaths = lapply(dvs, function(dv){
+  paste0(pathResults, '/', dv, 
+    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
+reMods = lapply(intModPaths, 
+  function(x){load(x);return(mods)})
+names(reMods) = dvs
+
+# get coef summaries for both fe and re mods
+reMods = lapply(reMods, function(mod){
+	rubinCoef(mod, modType='re') })
+
 # coef summaries
-# set.seed(2342) ; impN = sample(1:4, 1)
-# round(
-# 	summary(humModRE[[impN]])$'coefficients'[
-# 	c(2:3,nrow(summary(humModRE[[1]])$'coefficients')),],
-# 	3)
-# round(
-# 	summary(humModFE[[impN]])$'coefficients'[
-# 	c(1:2,nrow(summary(humModFE[[1]])$'coefficients')),],
-# 	3)
+feMods = lapply(feMods, function(mod){
+	rubinCoef(mod, modType='fe') })
+feMods = feMods[dvs]
 
-# round(
-# 	summary(civModRE[[impN]])$'coefficients'[
-# 	c(2:3,nrow(summary(civModRE[[1]])$'coefficients')),],
-# 	3)
-# round(
-# 	summary(civModFE[[impN]])$'coefficients'[
-# 	c(1:2,nrow(summary(civModFE[[1]])$'coefficients')),],
-# 	3)
+feMods = lapply(feMods, function(mod){
+	mod$pval = round(2*pnorm(-abs(mod$t)),3)
+	return(mod[c(1,2,nrow(mod)),c(ncol(mod)-1,1,ncol(mod))]) } )
+reMods = lapply(reMods, function(mod){
+	mod$pval = round(2*pnorm(-abs(mod$t)),3)
+	return(mod[c(2,3,nrow(mod)),c(ncol(mod)-1,1,ncol(mod))]) } )
 
-# round(
-# 	summary(devModRE[[impN]])$'coefficients'[
-# 	c(2:3,nrow(summary(devModRE[[1]])$'coefficients')),],
-# 	3)
-# round(
-# 	summary(devModFE[[impN]])$'coefficients'[
-# 	c(1:2,nrow(summary(devModFE[[1]])$'coefficients')),],
-# 	3)
-
-reMods = list(
-	rubinCoef(humModRE),
-	rubinCoef(civModRE),
-	rubinCoef(devModRE)
-	)
-
-feMods = list(
-	rubinCoef(humModFE, modType='fe'),
-	rubinCoef(civModFE, modType='fe'),
-	rubinCoef(devModFE, modType='fe')	
-	)
-
-reMods
-feMods
+for(ii in 1:length(feMods)){
+	print(feMods[ii])
+	print(reMods[ii])
+}
 ################################################################
 
 ################################################################
 # vars
+dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
+dvNames = paste0(
+  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 cntrlVars=c(
   'Lno_disasters', 'colony', 'Lpolity2',
   'LlnGdpCap', 'LlifeExpect', 'Lcivwar' )
@@ -131,66 +124,69 @@ varsInt=c(
 varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
   'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
   cntrlVarNames[-1])
-
-# 
-coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
-  "Negative"= rgb(222, 45, 38, maxColorValue=255),
-  "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
-  "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
-  "Insig" = rgb(150, 150, 150, maxColorValue=255))
-
-summarizeMods = function(mods, dirtyVars, cleanVars){
-  modSumm = lapply(1:length(mods), function(i){
-    mod = mods[[i]]; summ = rubinCoef(mod)
-    summ$dv = names(mods)[i]
-    summ$up95 = with(summ, beta + qnorm(.975)*se)
-    summ$lo95 = with(summ, beta - qnorm(.975)*se)
-    summ$up90 = with(summ, beta + qnorm(.95)*se)
-    summ$lo90 = with(summ, beta - qnorm(.95)*se)
-    summ = summ[summ$var!='(Intercept)',]    
-    summ$varClean = cleanVars[match(summ$var, dirtyVars)]
-    summ$dvClean = dvNames[match(summ$dv, dvs)]
-    summ$sig = NA
-    summ$sig[summ$lo90 > 0 & summ$lo95 < 0] = "Positive at 90"
-    summ$sig[summ$lo95 > 0] = "Positive"
-    summ$sig[summ$up90 < 0 & summ$up95 > 0] = "Negative at 90"
-    summ$sig[summ$up95 < 0] = "Negative"
-    summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"
-    return(summ) }) %>% do.call('rbind', .)
-  modSumm$varClean = factor(modSumm$varClean, levels=rev(cleanVars))
-  modSumm$dvClean = factor(modSumm$dvClean, levels=dvNames[c(1,3,2)])
-  return(modSumm) }
-
-#
-intModSumm = summarizeMods(stratMuIntMods, varsInt, varNamesInt)
 ################################################################
 
 ################################################################
 # Model results
-plotRes = function(modSumm){
-  # fix some labels
-  xlabels = TeX(char(modSumm$varClean))
-  xlabels[char(modSumm$varClean)==varNamesInt[3]] = expression( atop(
-      'Strategic Distance' ['sr,t-1'],
-      'x No. Disasters' ['r,t-1'] ) )
+digs=3; noModels=length(modSumm)
+tableResults = matrix('', nrow=2*length(varDef[,1]), ncol=1+noModels)
+tableResults[,1] = rep(varDef[,1],2)
+colnames(tableResults) = c('Variable',paste0('Model ',1:noModels))
+for(ii in 2:ncol(tableResults)){
+	temp = modSumm[[ii-1]]
+	n = modResults[[ii-1]]$df.residual
+	temp = temp[match(tableResults[,'Variable'], rownames(temp)),]
+	estims = temp[1:nrow(varDef),'Estimate']
+	estims = round(as.numeric(as.character(estims)),digs)
+	tvals = abs(temp[1:nrow(varDef),'t value'])
+	tvals = round(as.numeric(as.character(tvals)),digs)
+	estims = ifelse(tvals>=qt(0.975,n) & !is.na(tvals) & tvals<qt(0.995,n), 
+		paste('$', estims,'^{\\ast}$',sep=''), estims)
+	estims = ifelse(tvals>=qt(0.995,n) & !is.na(tvals), 
+		paste('$', estims,'^{\\ast\\ast}$',sep=''), estims)	
+	estims = ifelse(is.na(estims),'',estims)
+	tableResults[1:nrow(varDef),ii] = estims
+	serrors = temp[(nrow(varDef)+1):nrow(tableResults),'Std. Error']
+	serrors = round(as.numeric(as.character(serrors)),digs)
+	serrors = paste('(',serrors,')',sep='')
+	serrors = ifelse(serrors=='(NA)','',serrors)
+	tableResults[(nrow(varDef)+1):nrow(tableResults),ii] = serrors
+}
 
-  # viz
-  ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
-    geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
-    geom_point() +
-    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
-    geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
-    scale_color_manual(values=coefp_colors) +
-    scale_x_discrete('',labels=xlabels) +    
-    coord_flip() +
-    facet_wrap(~dvClean, ncol=4, scales='free_x') +
-    labs( y='' ) +
-    theme(
-      axis.ticks = element_blank(), 
-      panel.border=element_blank(),
-      legend.position='none' ) }
+# Reorganizing rows and variable labels
+tableFinal = NULL
+for(ii in 1:nrow(varDef)){
+	temp = cbind('', t(tableResults[ii+nrow(varDef),2:ncol(tableResults)]))
+	tableFinal = rbind(tableFinal, tableResults[ii,], temp) }
 
-intGG = plotRes(intModSumm)
-ggsave(intGG, 
-  file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
+# Adding other info
+sSize = cbind('n', t(as.vector(mapply(x=modResults, 
+	function(x) FUN=length(x$residuals)))))
+gSize = cbind('N', t(as.vector(mapply(x=modResults, 
+	function(x) FUN=length(x$residuals)-x$df.residual-length(x$coefficient)))))
+rSQ = cbind('$R^{2}$', t(as.vector(mapply(x=modResults,
+		function(x) FUN=round(summary(x)$r.squared[1],2) ))))
+arSQ = cbind('Adj. $R^{2}$', t(as.vector(mapply(x=modResults,
+		function(x) FUN=round(summary(x)$r.squared[2],2) ))))
+rmse = round(mapply(x=modResults, function(x) FUN=sqrt(mean(x$residuals^2))),2)
+fRmse = cbind('RMSE', t(rmse))
+tableFinal = rbind(tableFinal, sSize, gSize, rSQ, arSQ, fRmse)
+nStats=5
+temp=varDef[match(tableFinal[,'Variable'], varDef[,1]),2]
+temp[which(is.na(temp))]=tableFinal[,'Variable'][which(is.na(temp))]
+tableFinal[,'Variable']=temp
+
+# Add & before every period
+tableFinal[,2:ncol(tableFinal)]=apply(tableFinal[,2:ncol(tableFinal)], c(1,2), 
+	function(x){ 
+		if( grepl('\\$', x) ){ gsub('\\$*\\.', '$&$.', x)
+		} else { gsub('\\.', '&.', x) } })
+
+setwd(pathLatex)
+print.xtable(xtable(tableFinal, align='llcccccc', caption=captionTable),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,nrow(varDef)*2,nrow(varDef)*2+nStats,nrow(varDef)*2+nStats),
+	size="footnotesize",	
+	file=fileTable )
 ################################################################

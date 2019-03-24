@@ -14,8 +14,7 @@ rubinCoef <-  function(
 
   # pull out results from re model
   if(modType=='fe'){
-    modCoef = lapply(mod, function(x){
-      summ = summary(x)$'coefficients'
+    modCoef = lapply(mod, function(summ){
       summ = summ[!grepl('factor',rownames(summ)),]
       summ = summ[,c('Estimate','Std. Error')]
       colnames(summ) = c('beta','se')
