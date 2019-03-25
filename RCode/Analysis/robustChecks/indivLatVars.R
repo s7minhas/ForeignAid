@@ -15,7 +15,7 @@ load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 ################################################################
 # add extra vars for reviewers
 ## the .rda below is created in latVarUncertainty.R
-load( paste0('iData_for_r3.rda') )
+load( paste0(pathData, 'iData_for_r3.rda') )
 ################################################################
 
 ################################################################

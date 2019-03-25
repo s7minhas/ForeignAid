@@ -15,7 +15,7 @@ load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 ################################################################
 # add extra vars for reviewers
 
-if(!file.exists( paste0('iData_for_r3.rda') )){
+if(!file.exists( paste0(pathData, 'iData_for_r3.rda') )){
   # PCA variable
   load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
   stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
@@ -80,9 +80,9 @@ if(!file.exists( paste0('iData_for_r3.rda') )){
     #
     return(df) })
 
-  save(iData, file=paste0('iData_for_r3.rda'))
+  save(iData, file=paste0(pathData, 'iData_for_r3.rda'))
 } else {
-  load( paste0('iData_for_r3.rda') ) }
+  load( paste0(pathData, 'iData_for_r3.rda') ) }
 
 # results similar across imputed datasets
 iData = iData[[length(iData)]]
