@@ -14,85 +14,8 @@ load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 
 ################################################################
 # add extra vars for reviewers
-
-if(!file.exists( paste0('iData_for_r3.rda') )){
-  # PCA variable
-  load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
-  stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
-
-  # component vars
-  gPth=paste0(pathResults, "/gbmeLatDist/")
-  load(paste0(gPth, 'allyWtDist.rda')) ; allyDist = data.frame(res)
-  load(paste0(gPth, 'igoDist.rda')) ; igoDist = data.frame(res)
-  load(paste0(gPth, 'unNewDist.rda')) ; unDist = data.frame(res)
-  load(paste0(pathData, '/cow_trade/trade.rda')) # returns `trade`
-  names(trade)[1:2] = paste0('ccode',1:2)
-
-  # Add ids to various frames
-  addIDs = function(x){
-    x$id = with(x, paste0(ccode1, 9999, ccode2) ) ; x$id = num(x$id)
-    x$idYr = with(x, paste0(id, year)) ; x$idYr = num(x$idYr)
-    return(x) }
-  stratData = addIDs(stratData) ; allyDist = addIDs(allyDist)
-  igoDist = addIDs(igoDist) ; unDist = addIDs(unDist)
-  trade = addIDs(trade)
-
-  # merge dyad vars
-  stratData$allyDist = allyDist$allyDist[match(
-    stratData$idYr, allyDist$idYr)]
-  stratData$igoDist = igoDist$igoDist[match(
-    stratData$idYr, igoDist$idYr)]
-  stratData$unDist = unDist$unDist[match(
-    stratData$idYr, unDist$idYr)]
-  stratData$trade = trade$trade[match(
-    stratData$idYr, trade$idYr)]
-  stratData$trade = log(stratData$trade + 1)
-
-  # minor cleanup
-  names(stratData)[4:6]=paste0('strat',c('StratMu','StratUp','StratLo'))
-
-  # lag
-  stratData=lagData(stratData, 
-    'idYr', 'id', 
-    names(stratData)[c(5:6,9:12)] )
-
-  # merge in with iData
-  vars = paste0('L',c(
-    'stratStratUp','stratStratLo',
-    'allyDist','igoDist','unDist','trade'
-    ))
-  iData = lapply(iData, function(df){
-
-    # add dyadic ids
-    df$did = with(df, 
-      paste(ccodeS, ccodeR, year, sep='_'))
-    stratData$did = with(stratData, 
-      paste(ccode1, ccode2, year, sep='_'))
-    
-    # merge in vars
-    for(v in vars){
-      df$v = stratData[match(df$did,stratData$did),v]
-      names(df)[ncol(df)] = v }
-    
-    # remove some empty dayds
-    df = df[!is.na(df$LstratStratUp),]
-    
-    #
-    return(df) })
-
-  save(iData, file=paste0('iData_for_r3.rda'))
-} else {
-  load( paste0('iData_for_r3.rda') ) }
-
-# results similar across imputed datasets
-iData = iData[[length(iData)]]
-
-# account for uncertainty in lat var
-iData$err = (iData$LstratMu-iData$LstratStratLo)/qnorm(.975)
-iData = lapply(1:100, function(i){
-  set.seed(i)
-  iData$LstratMu = rnorm(nrow(iData),iData$LstratMu,iData$err)
-  return(iData) })
+## the .rda below is created in latVarUncertainty.R
+load( paste0('iData_for_r3.rda') )
 ################################################################
 
 ################################################################
@@ -109,7 +32,7 @@ baseSpec = paste(
 		'LstratMu', 'Lno_disasters', 
 		'LstratMu * Lno_disasters', 'colony', 
 		'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
-		'Lcivwar'
+		'Lcivwar', 'Ltrade'
 	), collapse=' + ' )
 reStruc = '+ (1|id) + (1|year)'
 
@@ -121,7 +44,7 @@ reModSpecs = lapply(dvs, function(y){
 ################################################################
 # run models
 if(!file.exists(
-	paste0(pathResults, '/reMods_latVarUncert.rda')
+	paste0(pathResults, '/reMods_wTrade.rda')
 	)){
 	cl=makeCluster(5) ; registerDoParallel(cl)
 
@@ -153,13 +76,13 @@ if(!file.exists(
 		rubinCoef(devModRE,'fe'), 
 		rubinCoef(civModRE,'fe')
 		)
-
 	names(reMods) = dvs
+
 	save(reMods, 
-		file=paste0(pathResults, '/reMods_latVarUncert.rda')
+		file=paste0(pathResults, '/reMods_wTrade.rda')
 		)
 } else {
-	load(paste0(pathResults, '/reMods_latVarUncert.rda'))
+	load(paste0(pathResults, '/reMods_wTrade.rda'))
 }
 ################################################################
 
@@ -184,14 +107,15 @@ dvNames = paste0(
   c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 cntrlVars=c(
   'Lno_disasters', 'colony', 'Lpolity2',
-  'LlnGdpCap', 'LlifeExpect', 'Lcivwar' )
+  'LlnGdpCap', 'LlifeExpect', 'Lcivwar', 'Ltrade' )
 cntrlVarNames = c(
   'No. Disasters$_{r,t-1}$',    
   'Former Colony$_{sr,t-1}$',
   'Polity$_{r,t-1}$',
   'Log(GDP per capita)$_{r,t-1}$',
   'Life Expectancy$_{r,t-1}$',
-  'Civil War$_{r,t-1}$'
+  'Civil War$_{r,t-1}$',
+  'Trade$_{sr,t-1}$'
   )
 
 varsInt=c(
@@ -205,11 +129,11 @@ varDef = cbind(varsInt, varNamesInt)
 
 ################################################################
 modSumm=list(
-	reMods[[1]][c(1:7,nrow(reMods[[1]])),],
+	reMods[[1]][2:nrow(reMods[[1]]),],
 	reModsOrig[[1]][2:nrow(reModsOrig[[1]]),],
-	reMods[[2]][c(1:7,nrow(reMods[[2]])),],
+	reMods[[2]][2:nrow(reMods[[2]]),],
 	reModsOrig[[2]][2:nrow(reModsOrig[[2]]),],
-	reMods[[3]][c(1:7,nrow(reMods[[3]])),],
+	reMods[[3]][2:nrow(reMods[[3]]),],
 	reModsOrig[[3]][2:nrow(reModsOrig[[3]]),]
 	)
 names(modSumm) = c(
@@ -256,7 +180,7 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
 intModSumm = summarizeMods(modSumm, varsInt, varNamesInt)
 
 # clean up model type labels
-intModSumm$modelType[intModSumm$modelType=='re'] = 'Uncertainty in Latent Variable'
+intModSumm$modelType[intModSumm$modelType=='re'] = 'Including Trade'
 intModSumm$modelType[intModSumm$modelType=='reOrig'] = 'Original'
 intModSumm$modelType = factor(intModSumm$modelType,
   levels=unique(intModSumm$modelType)
@@ -289,6 +213,7 @@ plotRes = function(modSumm){
       legend.position='none' ) }
 
 intGG = plotRes(intModSumm)
+intGG
 ggsave(intGG, 
   file=paste0(pathGraphics, '/intCoef_latVarUncert.pdf'), 
   width=8, height=6)
