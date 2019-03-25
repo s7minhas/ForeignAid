@@ -29,16 +29,27 @@ dvNames = paste0(
   c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 baseSpec = paste(
 	c(
-		'LstratMu', 'Lno_disasters', 
-		'LstratMu * Lno_disasters', 'colony', 
+		'LallyDist', 
+    'LigoDist',
+    'LunDist',
+    'Lno_disasters', 
+		'colony', 
 		'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
-		'Lcivwar', 'Ltrade'
+		'Lcivwar'
 	), collapse=' + ' )
 reStruc = '+ (1|id) + (1|year)'
 
 # set up formulas
 reModSpecs = lapply(dvs, function(y){
 	formula(paste0(y, '~', baseSpec, reStruc)) })
+
+# stdz vars to allow comparison across
+vars = unlist(strsplit(baseSpec, ' + ', fixed=TRUE))
+iData = lapply(iData, function(df){
+  for(v in vars){
+    df[,v] = (df[,v]-mean(df[,v], na.rm=TRUE))/sd(df[,v],na.rm=TRUE)
+  }
+  return(df) })
 ################################################################
 
 ################################################################
@@ -87,28 +98,15 @@ if(!file.exists(
 ################################################################
 
 ################################################################
-# load re model for comparison
-intModPaths = lapply(dvs, function(dv){
-  paste0(pathResults, '/', dv, 
-    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
-reModsOrig = lapply(intModPaths, 
-  function(x){load(x);return(mods)})
-names(reModsOrig) = dvs
-
-# get coef summaries for both fe and re mods
-reModsOrig = lapply(reModsOrig, function(mod){
-	rubinCoef(mod, modType='re') })
-################################################################
-
-################################################################
 # vars
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
 dvNames = paste0(
   c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
-cntrlVars=c(
-  'Lno_disasters', 'colony', 'Lpolity2',
-  'LlnGdpCap', 'LlifeExpect', 'Lcivwar', 'Ltrade' )
+cntrlVars=unlist(strsplit(baseSpec, ' + ', fixed=TRUE))
 cntrlVarNames = c(
+  'Strategic Ally Distance$_{sr,t-1}$',
+  'Strategic IGO Distance$_{sr,t-1}$',
+  'Strategic UN Distance$_{sr,t-1}$',
   'No. Disasters$_{r,t-1}$',    
   'Former Colony$_{sr,t-1}$',
   'Polity$_{r,t-1}$',
@@ -118,29 +116,13 @@ cntrlVarNames = c(
   'Trade$_{sr,t-1}$'
   )
 
-varsInt=c(
-  'LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
-varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
-  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
-  cntrlVarNames[-1])
-
-varDef = cbind(varsInt, varNamesInt)
+varsInt=cntrlVars
+varNamesInt = cntrlVarNames
 ################################################################
 
 ################################################################
-modSumm=list(
-	reMods[[1]][2:nrow(reMods[[1]]),],
-	reModsOrig[[1]][2:nrow(reModsOrig[[1]]),],
-	reMods[[2]][2:nrow(reMods[[2]]),],
-	reModsOrig[[2]][2:nrow(reModsOrig[[2]]),],
-	reMods[[3]][2:nrow(reMods[[3]]),],
-	reModsOrig[[3]][2:nrow(reModsOrig[[3]]),]
-	)
-names(modSumm) = c(
-	paste0(c('re_','reOrig_'), dvs[1]),
-	paste0(c('re_','reOrig_'), dvs[2]),
-	paste0(c('re_','reOrig_'), dvs[3])
-	)
+modSumm=lapply(reMods, function(mod){ mod[2:nrow(mod),] } )
+names(modSumm) = names(reMods)
 ################################################################
 
 # 
@@ -160,11 +142,7 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
     summ$lo90 = with(summ, beta - qnorm(.95)*se)
     summ = summ[summ$var!='(Intercept)',]    
     summ$varClean = cleanVars[match(summ$var, dirtyVars)]
-    tmp = gsub('re_|reOrig_','',summ$dv)
-    summ$dvClean = dvNames[match(tmp, dvs)]
-    summ$modelType = unlist(lapply(
-    	strsplit(summ$dv,'_'),
-    	function(x){x[1]}))
+    summ$dvClean = dvNames[match(summ$dv, dvs)]
     summ$sig = NA
     summ$sig[summ$lo90 > 0 & summ$lo95 < 0] = "Positive at 90"
     summ$sig[summ$lo95 > 0] = "Positive"
@@ -177,14 +155,7 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
   return(modSumm) }
 
 #
-intModSumm = summarizeMods(modSumm, varsInt, varNamesInt)
-
-# clean up model type labels
-intModSumm$modelType[intModSumm$modelType=='re'] = 'Including Trade'
-intModSumm$modelType[intModSumm$modelType=='reOrig'] = 'Original'
-intModSumm$modelType = factor(intModSumm$modelType,
-  levels=unique(intModSumm$modelType)
-  )
+coefModSumm = summarizeMods(modSumm, varsInt, varNamesInt)
 ################################################################
 
 ################################################################
@@ -192,17 +163,14 @@ intModSumm$modelType = factor(intModSumm$modelType,
 plotRes = function(modSumm){
   # fix some labels
   xlabels = TeX(char(modSumm$varClean))
-  xlabels[char(modSumm$varClean)==varNamesInt[3]] = expression( atop(
-      'Strategic Distance' ['sr,t-1'],
-      'x No. Disasters' ['r,t-1'] ) )
 
   # viz
   posDodge = .7
-  ggplot(modSumm, aes(x=varClean, y=beta, color=sig, group=modelType)) +
+  ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
     geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
-    geom_point(aes(shape=modelType), size=2, position=position_dodge(width = posDodge)) + 
-    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3, position=position_dodge(width = posDodge)) + 
-    geom_linerange(aes(ymin=lo90,ymax=up90), size=1, position=position_dodge(width = posDodge)) + 
+    geom_point() + 
+    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) + 
+    geom_linerange(aes(ymin=lo90,ymax=up90), size=1) + 
     scale_color_manual(values=coefp_colors) +
     scale_x_discrete('',labels=xlabels) +    
     coord_flip() +
@@ -218,8 +186,8 @@ plotRes = function(modSumm){
       legend.title=element_blank()
       ) }
 
-intGG = plotRes(intModSumm)
-ggsave(intGG, 
+ggCoef = plotRes(coefModSumm)
+ggsave(ggCoef, 
   file=paste0(pathGraphics, '/intCoef_indivLatVars.pdf'), 
   width=8, height=4)
 #########################################################
