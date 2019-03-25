@@ -7,7 +7,74 @@ if(Sys.info()['user']=='cindycheng'){
 ################################################################
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
+################################################################
 
+################################################################
+# add extra vars for reviewers
+
+# PCA variable
+load(paste0(pathResults, '/PCA/PCA_FullData_allyIGOUN.rda'))
+stratData=PCA_FullData$PCA_AllYrs; rm(list='PCA_FullData')
+
+# component vars
+gPth=paste0(pathResults, "/gbmeLatDist/")
+load(paste0(gPth, 'allyWtDist.rda')) ; allyDist = data.frame(res)
+load(paste0(gPth, 'igoDist.rda')) ; igoDist = data.frame(res)
+load(paste0(gPth, 'unNewDist.rda')) ; unDist = data.frame(res)
+load(paste0(pathData, '/cow_trade/trade.rda')) # returns `trade`
+names(trade)[1:2] = paste0('ccode',1:2)
+
+# Add ids to various frames
+addIDs = function(x){
+  x$id = with(x, paste0(ccode1, 9999, ccode2) ) ; x$id = num(x$id)
+  x$idYr = with(x, paste0(id, year)) ; x$idYr = num(x$idYr)
+  return(x) }
+stratData = addIDs(stratData) ; allyDist = addIDs(allyDist)
+igoDist = addIDs(igoDist) ; unDist = addIDs(unDist)
+trade = addIDs(trade)
+
+# merge dyad vars
+stratData$allyDist = allyDist$allyDist[match(stratData$idYr, allyDist$idYr)]
+stratData$igoDist = igoDist$igoDist[match(stratData$idYr, igoDist$idYr)]
+stratData$unDist = unDist$unDist[match(stratData$idYr, unDist$idYr)]
+stratData$trade = trade$trade[match(stratData$idYr, trade$idYr)]
+stratData$trade = log(stratData$trade + 1)
+
+# minor cleanup
+names(stratData)[4:6]=paste0('strat',c('StratMu','StratUp','StratLo'))
+
+# lag
+stratData=lagData(stratData, 
+  'idYr', 'id', 
+  names(stratData)[c(5:6,9:12)] )
+
+# merge in with iData
+vars = paste0('L',c(
+  'stratStratUp','stratStratLo',
+  'allyDist','igoDist','unDist','trade'
+  ))
+iData = lapply(iData, function(df){
+
+  # add dyadic ids
+  df$did = with(df, 
+    paste(ccodeS, ccodeR, year, sep='_'))
+  stratData$did = with(stratData, 
+    paste(ccode1, ccode2, year, sep='_'))
+  
+  # merge in vars
+  for(v in vars){
+    df$v = stratData[match(df$did,stratData$did),v]
+    names(df)[ncol(df)] = v }
+  
+  # remove some empty dayds
+  df = df[!is.na(df$LstratStratUp),]
+  
+  #
+  return(df) })
+################################################################
+
+################################################################
+# specs
 dvs = c(
 	'humanitarianTotal',
 	'developTotal',
