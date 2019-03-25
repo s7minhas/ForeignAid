@@ -51,7 +51,11 @@ reModSpecsAlt = lapply(dvs, function(y){
   formula(paste0(y, '~', altSpec, reStruc)) })
 
 # combine specs
-allSpecs = list(reModSpecs, reModSpecsAlt)
+allSpecs = unlist(list(reModSpecs, reModSpecsAlt))
+specNames = c(
+  paste0('orig_', dvs),
+  paste0('alt_', dvs)
+  )
 ################################################################
 
 ################################################################
@@ -64,6 +68,7 @@ allSpecs = list(reModSpecs, reModSpecsAlt)
 nFolds = 30
 iData$fold = sample(1:nFolds, nrow(iData), replace=TRUE)
 
+rmseStats = matrix(NA,nrow=nFolds,ncol=length(allSpecs))
 for(f in 1:nFolds){
   
   # divide into train and test
@@ -71,9 +76,25 @@ for(f in 1:nFolds){
   test = iData[iData$fold == f,]
 
   # run train models
-  mods = 
+  mods = lapply(allSpecs, function(spec){
+    return(lmer(reModSpecs[[1]], data=iData)) }) 
+  names(mods) = specNames
 
-}
+  # gen predictions in test
+  rmseFold = lapply(1:length(mods), function(i){
+    modSpec = names(mods)[i]
+    dv = unlist(lapply(strsplit(modSpec, '_'),function(x){x[2]}))
+    m = mods[[modSpec]]
+    preds = predict(m, newdata=test)
+    obs = test[,dv]
+    rmse = sqrt( mean( (preds-obs)^2 ) )
+    return(rmse) })
+  names(rmseFold) = specNames
+
+  # store
+  rmseStats[f,] = unlist(rmseFold) }
+
+apply(rmseStats, 2, mean)
 
   ## humanitarian model
   humModRE= lmer(reModSpecs[[1]], data=iData)
