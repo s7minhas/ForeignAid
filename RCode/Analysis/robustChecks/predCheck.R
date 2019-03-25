@@ -65,12 +65,13 @@ specNames = c(
 #   )){
 
 # out of sample set up for comparison
-nFolds = 30
+nFolds = 40
 iData$fold = sample(1:nFolds, nrow(iData), replace=TRUE)
-
 rmseStats = matrix(NA,nrow=nFolds,ncol=length(allSpecs))
-for(f in 1:nFolds){
-  
+
+cl=makeCluster(8) ; registerDoParallel(cl)
+
+rmseStats = foreach(f=1:nFolds, .packages=c('lme4')) %dopar% {
   # divide into train and test
   train = iData[iData$fold != f,]
   test = iData[iData$fold == f,]
@@ -89,11 +90,17 @@ for(f in 1:nFolds){
     obs = test[,dv]
     rmse = sqrt( mean( (preds-obs)^2 ) )
     return(rmse) })
+  rmseFold = unlist(rmseFold)
   names(rmseFold) = specNames
 
   # store
-  rmseStats[f,] = unlist(rmseFold) }
+  return(rmseFold) }
 
+#
+stopCluster(cl)
+
+# 
+rmseStats = do.call('rbind', rmseStats)
 apply(rmseStats, 2, mean)
 
   ## humanitarian model
