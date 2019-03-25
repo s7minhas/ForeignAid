@@ -197,24 +197,29 @@ plotRes = function(modSumm){
       'x No. Disasters' ['r,t-1'] ) )
 
   # viz
-  ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
+  posDodge = .7
+  ggplot(modSumm, aes(x=varClean, y=beta, color=sig, group=modelType)) +
     geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
-    geom_point() +
-    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
-    geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
+    geom_point(aes(shape=modelType), size=2, position=position_dodge(width = posDodge)) + 
+    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3, position=position_dodge(width = posDodge)) + 
+    geom_linerange(aes(ymin=lo90,ymax=up90), size=1, position=position_dodge(width = posDodge)) + 
     scale_color_manual(values=coefp_colors) +
     scale_x_discrete('',labels=xlabels) +    
     coord_flip() +
-    facet_grid(modelType~dvClean, scales='free_x') +
+    facet_grid(~dvClean, scales='free_x') +
     labs( y='' ) +
+    guides(
+      colour=FALSE
+      ) + 
     theme(
       axis.ticks = element_blank(), 
       panel.border=element_blank(),
-      legend.position='none' ) }
+      legend.position='bottom',
+      legend.title=element_blank()
+      ) }
 
 intGG = plotRes(intModSumm)
-intGG
 ggsave(intGG, 
-  file=paste0(pathGraphics, '/intCoef_latVarUncert.pdf'), 
-  width=8, height=6)
+  file=paste0(pathGraphics, '/intCoef_trade.pdf'), 
+  width=8, height=4)
 #########################################################

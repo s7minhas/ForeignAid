@@ -156,5 +156,5 @@ plotRes = function(modSumm){
 
 intGG = plotRes(intModSumm)
 ggsave(intGG, 
-  file=paste0(pathGraphics, '/totAid_Coef.pdf'), width=8, height=6)
+  file=paste0(pathGraphics, '/totAid_Coef.pdf'), width=8, height=4)
 ################################################################
