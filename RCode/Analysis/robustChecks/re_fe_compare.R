@@ -10,8 +10,11 @@ load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 
 dvs = c(
 	'humanitarianTotal',
-	'civSocietyTotal',
-	'developTotal' )
+	'developTotal',
+	'civSocietyTotal'
+	)
+dvNames = paste0(
+  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 baseSpec = paste(
 	c(
 		'LstratMu', 'Lno_disasters', 
@@ -28,9 +31,9 @@ feModSpecs = lapply(dvs, function(y){
 
 ################################################################
 # run models
-# if(!file.exists(
-# 	paste0(pathResults, '/feMods_robustCheck.rda')
-# 	)){
+if(!file.exists(
+	paste0(pathResults, '/feMods_robustCheck.rda')
+	)){
 	cl=makeCluster(5) ; registerDoParallel(cl)
 
 	# run fixed effect models
@@ -57,21 +60,22 @@ feModSpecs = lapply(dvs, function(y){
 
 	#
 	feMods = list(
-		humModFE, devModFE, civModFE )
+		rubinCoef(humModFE,'fe'), 
+		rubinCoef(devModFE,'fe'), 
+		rubinCoef(civModFE,'fe')
+		)
+
 	names(feMods) = dvs
-# 	save(feMods, 
-# 		file=paste0(pathResults, '/feMods_robustCheck.rda')
-# 		)
-# } else {
-	# load(paste0(pathResults, '/feMods_robustCheck.rda'))
-# }
+	save(feMods, 
+		file=paste0(pathResults, '/feMods_robustCheck.rda')
+		)
+} else {
+	load(paste0(pathResults, '/feMods_robustCheck.rda'))
+}
 ################################################################
 
 ################################################################
 # load re model for comparison
-dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
-dvNames = paste0(
-  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 intModPaths = lapply(dvs, function(dv){
   paste0(pathResults, '/', dv, 
     '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
@@ -85,20 +89,11 @@ reMods = lapply(reMods, function(mod){
 
 # coef summaries
 feMods = lapply(feMods, function(mod){
-	rubinCoef(mod, modType='fe') })
-feMods = feMods[dvs]
-
-feMods = lapply(feMods, function(mod){
-	mod$pval = round(2*pnorm(-abs(mod$t)),3)
-	return(mod[c(1,2,nrow(mod)),c(ncol(mod)-1,1,ncol(mod))]) } )
+	mod$pval = 2*pnorm(-abs(mod$t))
+	return(mod) } )
 reMods = lapply(reMods, function(mod){
-	mod$pval = round(2*pnorm(-abs(mod$t)),3)
-	return(mod[c(2,3,nrow(mod)),c(ncol(mod)-1,1,ncol(mod))]) } )
-
-for(ii in 1:length(feMods)){
-	print(feMods[ii])
-	print(reMods[ii])
-}
+	mod$pval = 2*pnorm(-abs(mod$t))
+	return(mod) } )
 ################################################################
 
 ################################################################
@@ -117,76 +112,100 @@ cntrlVarNames = c(
   'Life Expectancy$_{r,t-1}$',
   'Civil War$_{r,t-1}$'
   )
-varsNoInt=c('LstratMu', cntrlVars)
-varNamesNoInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames)
+
 varsInt=c(
   'LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
 varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
   'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
   cntrlVarNames[-1])
+
+varDef = cbind(varsInt, varNamesInt)
+################################################################
+
+################################################################
+modSumm=list(
+	feMods[[1]][c(1:7,nrow(feMods[[1]])),],
+	reMods[[1]][2:nrow(reMods[[1]]),],
+	feMods[[2]][c(1:7,nrow(feMods[[2]])),],
+	reMods[[2]][2:nrow(reMods[[2]]),],
+	feMods[[3]][c(1:7,nrow(feMods[[3]])),],
+	reMods[[3]][2:nrow(reMods[[3]]),]
+	)
+names(modSumm) = c(
+	paste0(c('fe_','re_'), dvs[1]),
+	paste0(c('fe_','re_'), dvs[2]),
+	paste0(c('fe_','re_'), dvs[3])
+	)
+################################################################
+
+# 
+coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
+  "Negative"= rgb(222, 45, 38, maxColorValue=255),
+  "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
+  "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
+  "Insig" = rgb(150, 150, 150, maxColorValue=255))
+
+summarizeMods = function(mods, dirtyVars, cleanVars){
+  modSumm = lapply(1:length(mods), function(i){
+    summ = mods[[i]]
+    summ$dv = names(mods)[i]
+    summ$up95 = with(summ, beta + qnorm(.975)*se)
+    summ$lo95 = with(summ, beta - qnorm(.975)*se)
+    summ$up90 = with(summ, beta + qnorm(.95)*se)
+    summ$lo90 = with(summ, beta - qnorm(.95)*se)
+    summ = summ[summ$var!='(Intercept)',]    
+    summ$varClean = cleanVars[match(summ$var, dirtyVars)]
+    tmp = gsub('fe_|re_','',summ$dv)
+    summ$dvClean = dvNames[match(tmp, dvs)]
+    summ$modelType = unlist(lapply(
+    	strsplit(summ$dv,'_'),
+    	function(x){x[1]}))
+    summ$sig = NA
+    summ$sig[summ$lo90 > 0 & summ$lo95 < 0] = "Positive at 90"
+    summ$sig[summ$lo95 > 0] = "Positive"
+    summ$sig[summ$up90 < 0 & summ$up95 > 0] = "Negative at 90"
+    summ$sig[summ$up95 < 0] = "Negative"
+    summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"
+    return(summ) }) %>% do.call('rbind', .)
+  modSumm$varClean = factor(modSumm$varClean, levels=rev(cleanVars))
+  modSumm$dvClean = factor(modSumm$dvClean, levels=dvNames[c(1,3,2)])
+  return(modSumm) }
+
+#
+intModSumm = summarizeMods(modSumm, varsInt, varNamesInt)
+
+# clean up model type labels
+intModSumm$modelType[intModSumm$modelType=='fe'] = 'FE'
+intModSumm$modelType[intModSumm$modelType=='re'] = 'RE'
 ################################################################
 
 ################################################################
 # Model results
-digs=3; noModels=length(modSumm)
-tableResults = matrix('', nrow=2*length(varDef[,1]), ncol=1+noModels)
-tableResults[,1] = rep(varDef[,1],2)
-colnames(tableResults) = c('Variable',paste0('Model ',1:noModels))
-for(ii in 2:ncol(tableResults)){
-	temp = modSumm[[ii-1]]
-	n = modResults[[ii-1]]$df.residual
-	temp = temp[match(tableResults[,'Variable'], rownames(temp)),]
-	estims = temp[1:nrow(varDef),'Estimate']
-	estims = round(as.numeric(as.character(estims)),digs)
-	tvals = abs(temp[1:nrow(varDef),'t value'])
-	tvals = round(as.numeric(as.character(tvals)),digs)
-	estims = ifelse(tvals>=qt(0.975,n) & !is.na(tvals) & tvals<qt(0.995,n), 
-		paste('$', estims,'^{\\ast}$',sep=''), estims)
-	estims = ifelse(tvals>=qt(0.995,n) & !is.na(tvals), 
-		paste('$', estims,'^{\\ast\\ast}$',sep=''), estims)	
-	estims = ifelse(is.na(estims),'',estims)
-	tableResults[1:nrow(varDef),ii] = estims
-	serrors = temp[(nrow(varDef)+1):nrow(tableResults),'Std. Error']
-	serrors = round(as.numeric(as.character(serrors)),digs)
-	serrors = paste('(',serrors,')',sep='')
-	serrors = ifelse(serrors=='(NA)','',serrors)
-	tableResults[(nrow(varDef)+1):nrow(tableResults),ii] = serrors
-}
+plotRes = function(modSumm){
+  # fix some labels
+  xlabels = TeX(char(modSumm$varClean))
+  xlabels[char(modSumm$varClean)==varNamesInt[3]] = expression( atop(
+      'Strategic Distance' ['sr,t-1'],
+      'x No. Disasters' ['r,t-1'] ) )
 
-# Reorganizing rows and variable labels
-tableFinal = NULL
-for(ii in 1:nrow(varDef)){
-	temp = cbind('', t(tableResults[ii+nrow(varDef),2:ncol(tableResults)]))
-	tableFinal = rbind(tableFinal, tableResults[ii,], temp) }
+  # viz
+  ggplot(modSumm, aes(x=varClean, y=beta, color=sig)) +
+    geom_hline(aes(yintercept=0), linetype='dashed', color='grey40') + 
+    geom_point() +
+    geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
+    geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
+    scale_color_manual(values=coefp_colors) +
+    scale_x_discrete('',labels=xlabels) +    
+    coord_flip() +
+    facet_grid(modelType~dvClean, scales='free_x') +
+    labs( y='' ) +
+    theme(
+      axis.ticks = element_blank(), 
+      panel.border=element_blank(),
+      legend.position='none' ) }
 
-# Adding other info
-sSize = cbind('n', t(as.vector(mapply(x=modResults, 
-	function(x) FUN=length(x$residuals)))))
-gSize = cbind('N', t(as.vector(mapply(x=modResults, 
-	function(x) FUN=length(x$residuals)-x$df.residual-length(x$coefficient)))))
-rSQ = cbind('$R^{2}$', t(as.vector(mapply(x=modResults,
-		function(x) FUN=round(summary(x)$r.squared[1],2) ))))
-arSQ = cbind('Adj. $R^{2}$', t(as.vector(mapply(x=modResults,
-		function(x) FUN=round(summary(x)$r.squared[2],2) ))))
-rmse = round(mapply(x=modResults, function(x) FUN=sqrt(mean(x$residuals^2))),2)
-fRmse = cbind('RMSE', t(rmse))
-tableFinal = rbind(tableFinal, sSize, gSize, rSQ, arSQ, fRmse)
-nStats=5
-temp=varDef[match(tableFinal[,'Variable'], varDef[,1]),2]
-temp[which(is.na(temp))]=tableFinal[,'Variable'][which(is.na(temp))]
-tableFinal[,'Variable']=temp
-
-# Add & before every period
-tableFinal[,2:ncol(tableFinal)]=apply(tableFinal[,2:ncol(tableFinal)], c(1,2), 
-	function(x){ 
-		if( grepl('\\$', x) ){ gsub('\\$*\\.', '$&$.', x)
-		} else { gsub('\\.', '&.', x) } })
-
-setwd(pathLatex)
-print.xtable(xtable(tableFinal, align='llcccccc', caption=captionTable),
-	include.rownames=FALSE,
-	sanitize.text.function = identity,
-	hline.after=c(0,0,nrow(varDef)*2,nrow(varDef)*2+nStats,nrow(varDef)*2+nStats),
-	size="footnotesize",	
-	file=fileTable )
-################################################################
+intGG = plotRes(intModSumm)
+ggsave(intGG, 
+  file=paste0(pathGraphics, '/intCoef_fe_re_compare.pdf'), 
+  width=8, height=6)
+#########################################################
