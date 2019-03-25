@@ -78,7 +78,7 @@ rmseStats = foreach(f=1:nFolds, .packages=c('lme4')) %dopar% {
 
   # run train models
   mods = lapply(allSpecs, function(spec){
-    return(lmer(reModSpecs[[1]], data=iData)) }) 
+    return(lmer(spec, data=iData)) }) 
   names(mods) = specNames
 
   # gen predictions in test
