@@ -4,7 +4,7 @@ if(Sys.info()['user']=='cindycheng'){
   source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 
 #
-loadPkg(c('lme4'))
+loadPkg(c('lme4','xtable'))
 ################################################################
 
 ################################################################
@@ -67,7 +67,7 @@ if(!file.exists(
   )){
 
   # out of sample set up for comparison
-  nFolds = 40
+  nFolds = 30
   iData$fold = sample(1:nFolds, nrow(iData), replace=TRUE)
   rmseStats = matrix(NA,nrow=nFolds,ncol=length(allSpecs))
 
@@ -108,6 +108,15 @@ if(!file.exists(
 } else {
   load( paste0(pathData, 'osamp_raw_compare.rda') )
 }
+
+# make latex table
+rmseResults = matrix(
+  apply(rmseStats,2,mean),
+  nrow=length(dvs), ncol=2, 
+  dimnames=list(dvNames, c('Latent Space Measure', 'Raw Alliance Measure')),
+  byrow=FALSE
+  )
+xtable(rmseResults)
 ################################################################
 
 ################################################################
