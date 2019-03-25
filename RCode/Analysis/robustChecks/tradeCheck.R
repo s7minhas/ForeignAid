@@ -55,13 +55,13 @@ if(!file.exists(
 			lmer(reModSpecs[[1]], data=df)
 			)$'coefficients' }
 
-	## civ society model
+	## dev model
 	devModRE = foreach(df=iData) %dopar% {
 		summary(
 			lmer(reModSpecs[[2]], data=df)
 			)$'coefficients' }
 
-	## dev model
+	## civ society model
 	civModRE = foreach(df=iData) %dopar% {
 		summary(
 			lmer(reModSpecs[[3]], data=df)
@@ -123,8 +123,6 @@ varsInt=c(
 varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
   'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
   cntrlVarNames[-1])
-
-varDef = cbind(varsInt, varNamesInt)
 ################################################################
 
 ################################################################
@@ -143,6 +141,7 @@ names(modSumm) = c(
 	)
 ################################################################
 
+################################################################
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
   "Negative"= rgb(222, 45, 38, maxColorValue=255),
