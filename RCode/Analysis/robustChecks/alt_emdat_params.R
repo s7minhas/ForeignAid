@@ -59,7 +59,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 	stratQts = quantile(regData[,var], probs=c(.05,.95), na.rm=TRUE)
 	stratRange=with(data=regData, seq(stratQts[1], stratQts[2], .01) )
 	# with(regData, quantile(Lno_killed[Lno_disasters>0], probs=c(0,.5,1)))
-	disRange=c(0, 4, 12)
+	disRange=c(0, 4, noDisast)
 	scen = with(data=regData, 
 	expand.grid(
 		1, stratRange, disRange, 
@@ -76,9 +76,9 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 	draws = mvrnorm(10000, mod@beta, vcov(mod))
 	sysUncert = scen %*% t(draws)
 	sysInts95 = t(apply(sysUncert, 1, function(x){
-	quantile(x, c(0.025, 0.975), na.rm=TRUE) }))
+		quantile(x, c(0.025, 0.975), na.rm=TRUE) }))
 	sysInts90 = t(apply(sysUncert, 1, function(x){
-	quantile(x, c(0.05, 0.95), na.rm=TRUE) }))
+		quantile(x, c(0.05, 0.95), na.rm=TRUE) }))
 
 	# Combine for plotting
 	ggData=data.frame(
@@ -100,7 +100,7 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
 	ggDataSmall$Lno_killed[
 		ggDataSmall$Lno_killed==4] = paste0('Medium', lab)
 	ggDataSmall$Lno_killed[
-		ggDataSmall$Lno_killed==12] = paste0('High', lab)
+		ggDataSmall$Lno_killed==noDisast] = paste0('High', lab)
 	ggDataSmall$Lno_killed = factor(
 		ggDataSmall$Lno_killed,
 		levels=paste0(c('Low','Medium','High'), lab)
