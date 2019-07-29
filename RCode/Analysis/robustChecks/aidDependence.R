@@ -64,7 +64,7 @@ if(!file.exists(
 	)){
 	cl=makeCluster(5) ; registerDoParallel(cl)
 
-	# run fixed effect models
+	# run models
 	## humanitarian model
 	humModRE= foreach(df=iData, .packages=c('lme4')) %dopar% {
 		summary(
@@ -159,7 +159,8 @@ names(modSumm) = c(
 	)
 ################################################################
 
-# 
+################################################################
+# org data for coef plot
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
   "Negative"= rgb(222, 45, 38, maxColorValue=255),
   "Positive at 90"=rgb(158, 202, 225, maxColorValue=255), 
@@ -201,9 +202,7 @@ intModSumm$modelType[intModSumm$modelType=='reOrig'] = 'Original'
 intModSumm$modelType = factor(intModSumm$modelType,
   levels=unique(intModSumm$modelType)
   )
-################################################################
 
-################################################################
 # Model results
 plotRes = function(modSumm){
   # fix some labels
@@ -235,17 +234,32 @@ plotRes = function(modSumm){
       ) }
 
 intGG = plotRes(intModSumm)
-ggsave(intGG, 
-  file=paste0(pathGraphics, '/intCoef_lagDV.pdf'), 
-  width=8, height=5)
+# ggsave(intGG, 
+#   file=paste0(pathGraphics, '/intCoef_lagDV.pdf'), 
+#   width=8, height=5)
 #########################################################
+
+################################################################
+# run models for sub effects
+cl=makeCluster(3) ; registerDoParallel(cl)
+
+# results consistent with other imputed datasets
+regData = iData[[1]] 
+stratMuIntMods = foreach(
+  spec = reModSpecs, .packages=c('lme4') ) %dopar% {
+  mod = lmer(spec, data=regData)
+  return(mod)
+}
+stopCluster(cl)
+names(stratMuIntMods) = dvs
+################################################################
 
 #########################################################
 # sub effects
 regData = iData[[1]]
 noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
-  mod = stratMuIntMods[[i]][[1]]
+  mod = stratMuIntMods[[i]]
   modTitle = dvNames[i] ; var = 'LstratMu'
 
   # Create scenario matrix
@@ -255,14 +269,16 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
     min(Lno_disasters), noDisast, 2) )  
   scen = with(data=regData, 
     expand.grid(
-      1, stratRange, disRange, 
+      1, 
+      median(get(paste0('L',names(stratMuIntMods)[i])), na.rm=TRUE),
+      stratRange, disRange, 
       median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
       median(LlnGdpCap,na.rm=TRUE), 
       median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
       ) )
 
   # Add interaction term
-  scen = cbind( scen, scen[,2]*scen[,3] )
+  scen = cbind( scen, scen[,3]*scen[,4] )
   colnames(scen) = names(fixef(mod))
   scen = data.matrix(scen)
   pred = scen %*% mod@beta
@@ -324,11 +340,11 @@ simComboPlot=grid.arrange(
   nrow=length(stratMuIntMods))
  simPlots[[3]]
 ggsave(simComboPlot, file=paste0(
-  pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
+  pathGraphics, '/simComboPlot_lagDV.pdf'), width=8, height=8)
 ggsave(simPlots[[1]], file=paste0(
-  pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
+  pathGraphics, '/simHumanitarianPlot_lagDV.pdf'), width = 7, height = 4)
 ggsave(simPlots[[2]], file=paste0(
-  pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
+  pathGraphics, '/simDevelopmentPlot_lagDV.pdf'), width = 7, height = 4)
 ggsave(simPlots[[3]], file=paste0(
-  pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
+  pathGraphics, '/simCivilPlot_lagDV.pdf'), width = 7, height = 4)
 #########################################################
