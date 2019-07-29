@@ -6,6 +6,7 @@ if(Sys.info()['user']=='cindycheng'){
 
 ################################################################
 # Load reg data
+  commit_ - human - civ - aid
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 
 # add total aid variable

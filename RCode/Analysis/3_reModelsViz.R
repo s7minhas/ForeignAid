@@ -103,7 +103,7 @@ ggsave(intGG,
 #########################################################
 
 #########################################################
-# switch to interaction mod
+# sub effects
 regData = iData[[1]]
 noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
