@@ -338,7 +338,7 @@ loadPkg('gridExtra')
 simComboPlot=grid.arrange(
   simPlots[[1]], simPlots[[3]], simPlots[[2]],
   nrow=length(stratMuIntMods))
- simPlots[[3]]
+
 ggsave(simComboPlot, file=paste0(
   pathGraphics, '/simComboPlot_lagDV.pdf'), width=8, height=8)
 ggsave(simPlots[[1]], file=paste0(
