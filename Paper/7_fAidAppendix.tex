@@ -1,8 +1,24 @@
-\newpage
+\clearpage
+
+\renewcommand{\thefigure}{A\arabic{figure}}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{A.\arabic{table}}
+\setcounter{table}{0}
+\renewcommand{\thesection}{A.\arabic{section}}
+\setcounter{section}{0}
 
 \appendix
 \section{Appendix}
 \label{sec:appendix}
+
+\subsection*{Using PCA of latent distance between dyadic pairs to construct measure of strategic interest}
+
+After having first estimated the latent space and then subsequently calculating the latent distance between each dyadic pair for each of our three variables, dyadic alliances, UN voting and joint membership in intergovernmental organizations, we then needed to combine these separate distances into one coherent measure.
+
+To do so, we built off of the work of \citet{chen:2012}. They developed a measure of relation strength similarity (RSS) which facilitates the discovery of relationships in complex networks. It allows for the combination of multiple-relationship networks (for the purposes of our paper, these are the latent distances between dyads as measured through alliances, UN voting scores and IGO membership), into a single weighted network (our measure of strategic interest). It does so using a principle components analysis (PCA) for each dyad. To that end, \citet{chen:2012} developed an R package \textit{dils} to calculate the RSS. 
+
+We identified a number of issues with the original coding that we have adapted for our analysis. In particular, we adjusted the code to : i)  scale and center the data as PCA analysis is sensitive to relative scaling of data ii) sample with replacement as best practice with bootstrapping would seem to indicate that the sample size of each bootstrapped sample should be the same as the size of the original sample iii) adjusted the code so that the directions of the eigenvectors are consistent across the dyads. We then use the adapted version of this code to calculate the PCA for each dyad pair for a given year and then used the first principle component as our measure of strategic interest, which on average explains 42\% of the variability across the three original measures. 
+
 
 \subsection*{Validating our measure of strategic interest}
 
@@ -38,45 +54,74 @@ Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
 
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad.
 
+\subsection*{Alternative Parameterization of Disaster Severity}
 
-% Next, we assess the relative model fit of our strategic interest variable compared to the raw components of our strategic interest variable (``Raw UN Votes'', ``Alliances'', ``IGO Membership'')  as well as alternative measures of strategic interest (``UN Ideal Point'', ``S-Score, Unweighted'', ``S-Score, Weighted''). We assess the model fit by conducting 10-Fold Cross validations of each imputed dataset and calculating the subsequent root mean squared error (RMSE) for each model. We plot the RMSES for each possible partition of the data, donor country (Figure \ref{rmse:donor}), recipient country (Figure \ref{rmse:recipient}), and year (Figure \ref{rmse:year}) and find that the model fit when using our strategic interest variable is not significantly different to the model fit when using other possible measures of strategic interest.
-	
+We have also run our analysis using a dummy variable for whether a natural disaster occurred instead of a count. We show the substantive results of this analysis below in Figure~\ref{fig:binaryDisasterSimulation}. The findings from this analysis reflect those that we observe when we use the count variable. However, given the variation in relationships that we observe when using a count of the number of natural disasters, we choose to focus on that in the main portion of our paper.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.9\textwidth]{graphics/simComboPlot_bin_disaster.pdf}
+	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and whether or not a recipient country experienced a natural disaster across the range of the strategic distance measure.}
+	\label{fig:binaryDisasterSimulation}
+\end{figure}			
+\FloatBarrier
 
-% \begin{figure}
-% \centering
-% \caption{RMSES of 10-Fold Cross validation, partitioned by Donor Country}
-% \label{rmse:donor}
-% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_ccodeS.pdf}
-% \end{figure}
+We have also run our analysis using the number killed from a natural disaster instead of a count of the number of natural disasters. We show the substantive results of this analysis in Figure~\ref{fig:killedSim}.
 
-% \begin{figure}
-% \centering
-% \caption{RMSES of 10-Fold Cross validation, partitioned by Recipient Country}
-% \label{rmse:recipient}
-% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_ccodeR.pdf}
-% \end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/simComboPlot_no_killed.pdf}
+	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity (specifically, the log of the number killed) across the range of the strategic distance measure.}
+	\label{fig:killedSim}
+\end{figure}	
+\FloatBarrier		
 
-% \begin{figure}
-% \centering
-% \caption{RMSES of 10-Fold Cross validation, partitioned by Year}
-% \label{rmse:year}
-% \includegraphics[width=.8\textwidth]{rmse_10FoldCrossVal_year.pdf}
-% \end{figure}
-% \FloatBarrier
+The substantive trends with respect to humanitarian aid and development aid are notably similar to results that rely on a count of the number of natural disasters. There is a difference, however, with respect to the finding for the civil society aid dependent variable. In our analysis with the count of the number of natural disasters we saw that at higher counts of natural disasters the slope between the amount of civil society aid given and strategic distance became positive. Here we see a less pronounced change in the slope between strategic distance when there are a higher number of deaths. This is perhaps explained by the fact that this measure has a missingness rate of 10.8\%.
 
+With regards to other potential measures, the EM-DAT database provides the data on number people injured, homeless, or affected and the dollar amount of the disaster. However such data has a high degree of missingness and, by their own admission, frequently imprecise or under-reported. For instance there is 79\% missingness for the number of injured, 36\% missingness for the total number of homeless and 33\% for the total damages. The number of affected has comparatively less missingness, with 9.6\%, however the EM-DAT Gudelines note that, ``The indicator affected is often reported and is widely used by different actors to convey the extent, impact, or severity of a disaster in non-spatial terms.  The ambiguity in the definitions and the different criteria and methods of estimation produce vastly different numbers, which are rarely comparable.'' Generally all the indicators have varying degrees of imprecision. For instance, the guidelines further state, ``Any related word like 'hospitalized' is considered as injured. If there is no precise number is given, such as 'hundreds of injured', 200 injured will be entered (although it is probably underestimated).'' Given these problems with these other potential measures, we decided to focus on the number of disasters as our measure of disaster intensity.
 
-% \clearpage
-% \subsection{Analyses for models without interaction terms}
+\subsection*{Fixed versus random effects}
 
-% \label{app:rawModels}
+In Figure~\ref{fig:devIntCoef_fixed} below we present the results of our analysis when using fixed effects. The results remain broadly the same. Additionally, when running a Hausman specification test for our models we fail to reject the null hypothesis at both the 90 and 95\% confidence intervals, providing at least some initial evidence that we are justified in our choice \citep{greene:2008}.
 
-% \begin{figure}[h!]
-% \centering
-% \includegraphics[width=1\textwidth]{noIntCoef.pdf}
-% \caption{Coefficient plots for the analyses  without interaction terms for each dependent variable, humanitarian aid, civil society aid and development aid.  Coefficients that are significant at the 5\% level are shaded in blue if the coefficient is positive and red if the coefficient is negative. Coefficients that are not significant at the 5\% level are shaded in gray. }
-% \label{fig:nointCoef}
-% \end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/intCoef_fe_re_compare.pdf}
+	\caption{Comparison between parameter estimates using fixed and random effects.}
+	\label{fig:devIntCoef_fixed}
+\end{figure}
+\FloatBarrier
 
+\subsection*{Temporal variation in patterns of aid}
 
+A limitation of our study is that it ends in 2005 because we face the constraint that the IGO data, an important component of our strategic interest measure, is simply not available past 2005. However, to show the potential relevance of our findings for more recent periods we have run our models using only data from the post Cold War period. The results are presented in Figure~\ref{fig:postColdWarSim} below and mirror the findings presented in the paper. 
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/simComboPlot_post_coldwar.pdf}
+	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for the post Cold War period.}
+	\label{fig:postColdWarSim}
+\end{figure}	
+\FloatBarrier
+
+Additionally, we also run our models using only data from 2002-2005 (post-2001 period in our sample). The results are presented in Figure~\ref{fig:post2001Sim} below and mirror the findings presented in the paper. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/simComboPlot_post_2001.pdf}
+	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for 2001-2005.}
+	\label{fig:post2001Sim}
+\end{figure}	
+\FloatBarrier
+
+\subsection*{Accounting for uncertainty in strategic interest measure}
+
+One methodological concern about our strategic interest measure is that since it is estimated from a model it comes with uncertainty. In Figure~\ref{fig:latVarUncert}, we show results when taking into account uncertainty in the latent variable compared with our original estimates. We do this by simulating 1000 values of each latent variable estimate from the underlying distribution. From this we create 1000 versions of our dataset in which for each dataset we have a different sampled value of the strategic interest variable. We then run each of our models on those 1000 datasets and combine the parameter estimates using Rubin's rules \citep{rubin:1987}. We present the results of this analysis juxtaposed against our original model where we just use the average value of the strategic uncertainty variable. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/intCoef_latVarUncert.pdf}
+	\caption{Effect of accounting for uncertainty in latent variable.}
+	\label{fig:latVarUncert}
+\end{figure}		
+\FloatBarrier
