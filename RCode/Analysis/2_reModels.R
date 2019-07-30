@@ -34,6 +34,7 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		base = data[,c(idNames, dvNames, ivNames)]
 		covData = data[,c(idNames, ivNames)]
 		covData$year = num(covData$year) + toLagNumber
+		base$id = with(base, paste(ccodeS, ccodeR, year, sep='_'))
 		covData$id = with(covData, paste(ccodeS, ccodeR, year, sep='_'))
 		names(covData)[5:ncol(covData)] = paste0(
 			names(covData)[5:ncol(covData)],'_',toLagNumber+1)

@@ -370,7 +370,14 @@ reModSpecs = lapply(dvs, function(y){
 })
 
 # run
-regData_3 = na.omit(regData[,c(dvs, 'id','year', lag3vars[-3])])
+regData_3 = na.omit(
+  regData[,
+    c(
+      dvs, paste0('L',dvs),
+      'id','year', 
+      lag3vars[-3])
+    ]
+  )
 cl=makeCluster(3) ; registerDoParallel(cl)
 stratMuIntMods_3 = foreach(
   spec = reModSpecs, .packages=c('lme4') ) %dopar% {
@@ -380,13 +387,12 @@ names(stratMuIntMods_3) = dvs
 
 # lag 5
 # run models for sub effects with varying lag structure
-baseSpec = paste(
-  c(
+lag5vars = c(
     'LstratMu_5', 'Lno_disasters_5', 
     'LstratMu_5 * Lno_disasters_5', 'colony', 
     'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
-    'Lcivwar'
-  ), collapse=' + ' )
+    'Lcivwar' )
+baseSpec = paste(lag5vars, collapse=' + ' )
 
 # set up formulas
 reModSpecs = lapply(dvs, function(y){
@@ -396,10 +402,18 @@ reModSpecs = lapply(dvs, function(y){
 })
 
 # run
-cl=makeCluster(5) ; registerDoParallel(cl)
+regData_5 = na.omit(
+  regData[,
+    c(
+      dvs, paste0('L',dvs),
+      'id','year', 
+      lag5vars[-3])
+    ]
+  )
+cl=makeCluster(3) ; registerDoParallel(cl)
 stratMuIntMods_5 = foreach(
   spec = reModSpecs, .packages=c('lme4') ) %dopar% {
-    mod = lmer(spec, data=regData)
+    mod = lmer(spec, data=regData_5)
     return(mod) } ; stopCluster(cl)
 names(stratMuIntMods_5) = dvs
 ################################################################
