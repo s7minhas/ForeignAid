@@ -59,7 +59,6 @@ totAidModRE = foreach(df=iData, .packages=c('lme4')) %dopar% {
 	lmer(reModSpec, data=df) }
 stopCluster(cl)	
 totAidSummRE = rubinCoef(totAidModRE)
-totAidSummRE
 ################################################################
 
 #########################################################
@@ -149,9 +148,11 @@ ggsave(tmp, file=paste0(
 ################################################################
 # vars
 cntrlVars=c(
+  'LtotAid',
   'Lno_disasters', 'colony', 'Lpolity2',
   'LlnGdpCap', 'LlifeExpect', 'Lcivwar' )
 cntrlVarNames = c(
+  'Total Aid$_{sr,t-1}$',
   'No. Disasters$_{r,t-1}$',    
   'Former Colony$_{sr,t-1}$',
   'Polity$_{r,t-1}$',
@@ -160,10 +161,10 @@ cntrlVarNames = c(
   'Civil War$_{r,t-1}$'
   )
 varsInt=c(
-  'LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
-varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
+  'LstratMu', cntrlVars[2], 'LstratMu:Lno_disasters', cntrlVars[-2])
+varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[2],
   'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
-  cntrlVarNames[-1])
+  cntrlVarNames[-2])
 
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
@@ -182,7 +183,6 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
     summ$lo90 = with(summ, beta - qnorm(.95)*se)
     summ = summ[summ$var!='(Intercept)',]    
     summ$varClean = cleanVars[match(summ$var, dirtyVars)]
-    summ$dvClean = dvNames[match(summ$dv, dvs)]
     summ$sig = NA
     summ$sig[summ$lo90 > 0 & summ$lo95 < 0] = "Positive at 90"
     summ$sig[summ$lo95 > 0] = "Positive"
@@ -191,11 +191,10 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
     summ$sig[summ$lo90 < 0 & summ$up90 > 0] = "Insig"
     return(summ) }) %>% do.call('rbind', .)
   modSumm$varClean = factor(modSumm$varClean, levels=rev(cleanVars))
-  modSumm$dvClean = factor(modSumm$dvClean, levels=dvNames[c(1,3,2,4)])
   return(modSumm) }
 
 #
-intModSumm = summarizeMods(reMods, varsInt, varNamesInt)
+intModSumm = summarizeMods(list(totAidSummRE), varsInt, varNamesInt)
 ################################################################
 
 ################################################################
@@ -216,7 +215,7 @@ plotRes = function(modSumm){
     scale_color_manual(values=coefp_colors) +
     scale_x_discrete('',labels=xlabels) +    
     coord_flip() +
-    facet_wrap(~dvClean, ncol=4, scales='free_x') +
+    # facet_wrap(~dvClean, ncol=4, scales='free_x') +
     labs( y='' ) +
     theme(
       axis.ticks = element_blank(), 
@@ -225,5 +224,5 @@ plotRes = function(modSumm){
 
 intGG = plotRes(intModSumm)
 ggsave(intGG, 
-  file=paste0(pathGraphics, '/totAidv2_Coef.pdf'), width=8, height=5)
+  file=paste0(pathGraphics, '/totAidv2_Coef.pdf'), width=3, height=4)
 ################################################################

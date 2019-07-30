@@ -28,6 +28,7 @@ iData = lapply(iData, function(df){
       'civSocietyTotal'
       )
     )
+
   return(df) })
 ################################################################
 
@@ -347,4 +348,61 @@ ggsave(simPlots[[2]], file=paste0(
   pathGraphics, '/simDevelopmentPlot_lagDV.pdf'), width = 7, height = 4)
 ggsave(simPlots[[3]], file=paste0(
   pathGraphics, '/simCivilPlot_lagDV.pdf'), width = 7, height = 4)
+#########################################################
+
+#########################################################
+# aid dependence lag structure
+
+# lag 3
+# run models for sub effects with varying lag structure
+lag3vars = c(
+    'LstratMu_3', 'Lno_disasters_3', 
+    'LstratMu_3 * Lno_disasters_3', 'colony', 
+    'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
+    'Lcivwar' )
+baseSpec = paste(lag3vars, collapse=' + ' )
+
+# set up formulas
+reModSpecs = lapply(dvs, function(y){
+  formula(
+    paste0(y, '~', paste0('L',y), ' + ', baseSpec, reStruc)
+    ) 
+})
+
+# run
+regData_3 = na.omit(regData[,c(dvs, 'id','year', lag3vars[-3])])
+cl=makeCluster(3) ; registerDoParallel(cl)
+stratMuIntMods_3 = foreach(
+  spec = reModSpecs, .packages=c('lme4') ) %dopar% {
+    mod = lmer(spec, data=regData_3)
+    return(mod) } ; stopCluster(cl)
+names(stratMuIntMods_3) = dvs
+
+# lag 5
+# run models for sub effects with varying lag structure
+baseSpec = paste(
+  c(
+    'LstratMu_5', 'Lno_disasters_5', 
+    'LstratMu_5 * Lno_disasters_5', 'colony', 
+    'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
+    'Lcivwar'
+  ), collapse=' + ' )
+
+# set up formulas
+reModSpecs = lapply(dvs, function(y){
+  formula(
+    paste0(y, '~', paste0('L',y), ' + ', baseSpec, reStruc)
+    ) 
+})
+
+# run
+cl=makeCluster(5) ; registerDoParallel(cl)
+stratMuIntMods_5 = foreach(
+  spec = reModSpecs, .packages=c('lme4') ) %dopar% {
+    mod = lmer(spec, data=regData)
+    return(mod) } ; stopCluster(cl)
+names(stratMuIntMods_5) = dvs
+################################################################
+
+
 #########################################################

@@ -46,7 +46,7 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 	iData = lapply(iData, function(x){
 		# add lags
-		# x = addLags(1:5, x)
+		x = addLags(1:5, x)
 		# add dyadic id
 		x$id = paste(x$ccodeS, x$ccodeR, sep='_')
 		x$id = factor(x$id)
