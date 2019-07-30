@@ -34,6 +34,7 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		base = data[,c(idNames, dvNames, ivNames)]
 		covData = data[,c(idNames, ivNames)]
 		covData$year = num(covData$year) + toLagNumber
+		base$id = with(base, paste(ccodeS, ccodeR, year, sep='_'))
 		covData$id = with(covData, paste(ccodeS, ccodeR, year, sep='_'))
 		names(covData)[5:ncol(covData)] = paste0(
 			names(covData)[5:ncol(covData)],'_',toLagNumber+1)
@@ -43,12 +44,10 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
 	return(cbind(data, newData)) }
 
-
-lapply(iData, function(x){setdiff(c(ids, dvs, ivs), names(x))})
 if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 	iData = lapply(iData, function(x){
 		# add lags
-		# x = addLags(1:5, x)
+		x = addLags(1:5, x)
 		# add dyadic id
 		x$id = paste(x$ccodeS, x$ccodeR, sep='_')
 		x$id = factor(x$id)
@@ -62,106 +61,10 @@ if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 } else {
 	load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 }
-
 ################################################################
 
 ################################################################
 # RE model
-
-humMod = lmer(
-	humanitarianTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year)  +(1|ccodeS) +(1|ccodeR) , 
-	data=iData[[1]] 
-	)
-
-civMod = lmer(
-	civSocietyTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR) , 
-	data=iData[[1]] 
-	)
-
-devMod = lmer(
-	developTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR), 
-	data=iData[[1]] 
-	)
-
-humModFE = lm(
-	humanitarianTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
-	data=iData[[1]]
-	)
-
-civModFE = lm(
-	civSocietyTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
-	data=iData[[1]]
-	)
-
-devModFE = lm(
-	developTotal ~ 
-		LstratMu + Lno_disasters + LstratMu * Lno_disasters +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		factor(ccodeS) + factor(year) - 1, 
-	data=iData[[1]]
-	)
-
-summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
-summary(humModFE)$'coefficients'[c(1:2,nrow(summary(humModFE)$'coefficients')),]
-
-summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
-summary(civModFE)$'coefficients'[c(1:2,nrow(summary(civModFE)$'coefficients')),]
-
-summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
-summary(devModFE)$'coefficients'[c(1:2,nrow(summary(devModFE)$'coefficients')),]
-
-
-humModv2 = lmer(
-	humanitarianTotal ~ 
-		LstratMu +   LstratMu *  log(Ltotal_dam +1) +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year) +(1|ccodeS) +(1|ccodeR), 
-	data=iData[[1]]
-	)
-
-civModv2 = lmer(
-	civSocietyTotal ~ 
-		LstratMu  + LstratMu * log(Ltotal_dam +1) +
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year)+(1|ccodeS) +(1|ccodeR)  , 
-	data=iData[[1]] 
-	)
-
-devModv2= lmer(
-	developTotal ~ 
-		LstratMu   + LstratMu * log(Ltotal_dam+1)+
-		colony + Lpolity2 + LlnGdpCap + LlifeExpect + Lcivwar + 
-		(1|id) + (1|year)+(1|ccodeS) +(1|ccodeR) , 
-	data=iData[[1]] 
-	)
-
- 
-summary(humMod)$'coefficients'[c(2:3,nrow(summary(humMod)$'coefficients')),]
-summary(humModv2)$'coefficients'[c(2:3,nrow(summary(humModv2)$'coefficients')),]
-
-summary(civMod)$'coefficients'[c(2:3,nrow(summary(civMod)$'coefficients')),]
-summary(civModv2)$'coefficients'[c(2:3,nrow(summary(civModv2)$'coefficients')),]
-
-summary(devMod)$'coefficients'[c(2:3,nrow(summary(devMod)$'coefficients')),]
-summary(devModv2)$'coefficients'[c(2:3,nrow(summary(devModv2)$'coefficients')),]
-
-  
-
 ## mod formula
 disVar = 'Lno_disasters'
 cntrlVars=c(

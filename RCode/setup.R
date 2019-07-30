@@ -2,12 +2,13 @@
 rm(list=ls())
 
 if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m" ){
-  pathMain="~/Dropbox/Research/ForeignAid";
-  pathGraphics="~/Dropbox/Research/ForeignAid/Graphics";
-  pathResults='~/Dropbox/Research/ForeignAid/Results';
+  pathMain = '/Volumes/Samsung_X5/Dropbox/Research/'
+  # pathMain = '~/Dropbox/Research/'
+  pathGraphics=paste0(pathMain, "ForeignAid/Graphics");
+  pathResults=paste0(pathMain, 'ForeignAid/Results');
   pathCode='~/Research/ForeignAid/RCode/Funcs'
-  pathData="~/Dropbox/Research/ForeignAid/Data"
-  pathTnsr="~/Dropbox/Research/ForeignAid/Data/tnsrData/"
+  pathData=paste0(pathMain, "ForeignAid/Data")
+  pathTnsr=paste0(pathMain, "ForeignAid/Data/tnsrData/")
 }
 
 if(Sys.info()["user"]=="cindycheng") {

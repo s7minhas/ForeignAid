@@ -1,5 +1,7 @@
-if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){ source('~/Research/ForeignAid/RCode/setup.R') }
-if(Sys.info()['user']=='cindycheng'){ source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='s7m' | Sys.info()['user']=='janus829'){
+  source('~/Research/ForeignAid/RCode/setup.R') }
+if(Sys.info()['user']=='cindycheng'){
+  source('~/Documents/Papers/ForeignAid/RCode/setup.R') }
 ################################################################
 
 ################################################################
@@ -9,10 +11,13 @@ load(paste0(pathData, '/iDataDisagg.rda'))
 
 # load model
 dvs = c('humanitarianTotal', 'developTotal', 'civSocietyTotal')
-dvNames = paste0(c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
+dvNames = paste0(
+  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 intModPaths = lapply(dvs, function(dv){
-  paste0(pathResults, '/', dv, '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
-stratMuIntMods = lapply(intModPaths, function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
+  paste0(pathResults, '/', dv, 
+    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
+stratMuIntMods = lapply(intModPaths, 
+  function(x){load(x);return(mods)}) ; names(stratMuIntMods) = dvs
 
 # vars
 cntrlVars=c(
@@ -28,9 +33,11 @@ cntrlVarNames = c(
   )
 varsNoInt=c('LstratMu', cntrlVars)
 varNamesNoInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames)
-varsInt=c('LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
+varsInt=c(
+  'LstratMu', cntrlVars[1], 'LstratMu:Lno_disasters', cntrlVars[-1])
 varNamesInt = c('Strategic Distance$_{sr,t-1}$', cntrlVarNames[1],
-  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', cntrlVarNames[-1])
+  'Strategic Distance$_{sr,t-1}$\n $\\times$ No. Disasters$_{r,t-1}$', 
+  cntrlVarNames[-1])
 
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
@@ -43,8 +50,10 @@ summarizeMods = function(mods, dirtyVars, cleanVars){
   modSumm = lapply(1:length(mods), function(i){
     mod = mods[[i]]; summ = rubinCoef(mod)
     summ$dv = names(mods)[i]
-    summ$up95 = with(summ, beta + qnorm(.975)*se) ; summ$lo95 = with(summ, beta - qnorm(.975)*se)
-    summ$up90 = with(summ, beta + qnorm(.95)*se); summ$lo90 = with(summ, beta - qnorm(.95)*se)
+    summ$up95 = with(summ, beta + qnorm(.975)*se)
+    summ$lo95 = with(summ, beta - qnorm(.975)*se)
+    summ$up90 = with(summ, beta + qnorm(.95)*se)
+    summ$lo90 = with(summ, beta - qnorm(.95)*se)
     summ = summ[summ$var!='(Intercept)',]    
     summ$varClean = cleanVars[match(summ$var, dirtyVars)]
     summ$dvClean = dvNames[match(summ$dv, dvs)]
@@ -89,11 +98,12 @@ plotRes = function(modSumm){
       legend.position='none' ) }
 
 intGG = plotRes(intModSumm)
-ggsave(intGG, file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
+ggsave(intGG, 
+  file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
 #########################################################
 
 #########################################################
-# switch to interaction mod
+# sub effects
 regData = iData[[1]]
 noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
@@ -139,11 +149,14 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
   ggDataSmall = ggData[which(ggData$Lno_disasters %in% disRange),]
   actData = regData[,c('LstratMu', 'Lno_disasters')]
   actData = actData[actData$Lno_disasters %in% seq(0,noDisast,2),]
-  actData = actData[actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
+  actData = actData[
+    actData$LstratMu>=stratQts[1] & actData$LstratMu<=stratQts[2],]
 
   # change facet labels
-  ggDataSmall$Lno_disasters = paste(ggDataSmall$Lno_disasters, 'Disasters$_{r,t-1}$')
-  actData$Lno_disasters = paste(actData$Lno_disasters, 'Disasters$_{r,t-1}$')
+  ggDataSmall$Lno_disasters = paste(
+    ggDataSmall$Lno_disasters, 'Disasters$_{r,t-1}$')
+  actData$Lno_disasters = paste(
+    actData$Lno_disasters, 'Disasters$_{r,t-1}$')
 
   # viz
   facet_labeller = function(string){ TeX(string) }
@@ -151,8 +164,12 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
     geom_line() +
     geom_ribbon(aes(ymin=sysLo90, ymax=sysHi90), alpha=.6) +
     geom_ribbon(aes(ymin=sysLo95, ymax=sysHi95), alpha=.4) +
-    geom_rug(data=actData, aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
-    facet_grid(~Lno_disasters, labeller=as_labeller(facet_labeller, default = label_parsed)) +
+    geom_rug(
+      data=actData, 
+      aes(x=LstratMu,y=min(ggDataSmall$fit)), sides='b', alpha=.1) +
+    facet_grid(
+      ~Lno_disasters, 
+      labeller=as_labeller(facet_labeller, default = label_parsed)) +
     labs(
       x=TeX('Strategic Distance$_{sr,t-1}$'),
       y=TeX("Log(Aid)$_{t}$"),
@@ -168,8 +185,12 @@ simComboPlot=grid.arrange(
   simPlots[[1]], simPlots[[3]], simPlots[[2]],
   nrow=length(stratMuIntMods))
  simPlots[[3]]
-ggsave(simComboPlot, file=paste0(pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
-ggsave(simPlots[[1]], file=paste0(pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[2]], file=paste0(pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[3]], file=paste0(pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
+ggsave(simComboPlot, file=paste0(
+  pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
+ggsave(simPlots[[1]], file=paste0(
+  pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
+ggsave(simPlots[[2]], file=paste0(
+  pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
+ggsave(simPlots[[3]], file=paste0(
+  pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
 #########################################################
