@@ -1,0 +1,965 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"world",
+				"world_trade"
+			],
+			[
+				"country",
+				"country_trade"
+			],
+			[
+				"trade",
+				"tradeDepend"
+			],
+			[
+				"den",
+				"dens95c"
+			],
+			[
+				"reg",
+				"reg_char"
+			],
+			[
+				"indicat",
+				"indicator_name"
+			],
+			[
+				"lpat",
+				"lpatentswipores"
+			],
+			[
+				"anti",
+				"anticompLaw6"
+			],
+			[
+				"non",
+				"noncountry"
+			],
+			[
+				"ant",
+				"anticompLaw2"
+			],
+			[
+				"lpatent",
+				"lpatentswipoNonres"
+			],
+			[
+				"pat",
+				"patentswipoNonres"
+			],
+			[
+				"paten",
+				"patentswipores"
+			],
+			[
+				"pates",
+				"patentswipohist3"
+			],
+			[
+				"Offi",
+				"OfficeCode"
+			],
+			[
+				"pate",
+				"patentW"
+			],
+			[
+				"wipoCOnv",
+				"wipoConv6"
+			],
+			[
+				"meeti",
+				"meeting_cac"
+			],
+			[
+				"eve",
+				"event_number_cac"
+			],
+			[
+				"me",
+				"meeting_cac"
+			],
+			[
+				"even",
+				"event_number"
+			],
+			[
+				"meet",
+				"meetingCount_cac"
+			],
+			[
+				"Effec",
+				"Effectiveness"
+			],
+			[
+				"covD",
+				"covDataAgg"
+			],
+			[
+				"CompLa",
+				"CompLawInEffect"
+			],
+			[
+				"tit",
+				"titleLogic"
+			],
+			[
+				"ip",
+				"IPLawInEffect"
+			],
+			[
+				"imput",
+				"imputedSumStat"
+			],
+			[
+				"impu",
+				"imputedSumStat"
+			],
+			[
+				"sumS",
+				"sumStat"
+			],
+			[
+				"sumSta",
+				"sumstatAll"
+			],
+			[
+				"sum",
+				"sumstatAll"
+			],
+			[
+				"rubinCo",
+				"rubinCoefLM"
+			],
+			[
+				"census",
+				"censuslast10"
+			],
+			[
+				"CompLawIn",
+				"CompLawInEffectContinuous"
+			],
+			[
+				"Comp",
+				"CompLawInEffect"
+			],
+			[
+				"yrs",
+				"yrsCompLawInEffect"
+			],
+			[
+				"anticom",
+				"anticompLaw3"
+			],
+			[
+				"antic",
+				"anticompLaw"
+			],
+			[
+				"ggp",
+				"ggintsimplotmi"
+			],
+			[
+				"lpate",
+				"lpatents1"
+			],
+			[
+				"plot",
+				"plot_years"
+			],
+			[
+				"iData",
+				"iDataBJ3"
+			],
+			[
+				"plotData",
+				"plotDataAggSub"
+			],
+			[
+				"Lno",
+				"Lno_disasters"
+			],
+			[
+				"pltoData",
+				"plotDataAgg"
+			],
+			[
+				"Lst",
+				"LstratMuQuintile"
+			],
+			[
+				"Ls",
+				"LstratMuQuintile"
+			],
+			[
+				"path",
+				"pathResults"
+			],
+			[
+				"tol",
+				"toLoadOLS"
+			],
+			[
+				"tidy",
+				"tidy_text"
+			],
+			[
+				"total",
+				"total_words"
+			],
+			[
+				"text_",
+				"text_tibble"
+			],
+			[
+				"text",
+				"textList"
+			],
+			[
+				"Ltot",
+				"Ltotal_dam"
+			],
+			[
+				"Lto",
+				"Ltotal_affected_dummy"
+			],
+			[
+				"Lno_kil",
+				"Lno_killed_dummy"
+			],
+			[
+				"Ltotal",
+				"Ltotal_affected"
+			],
+			[
+				"Ltota",
+				"Ltotal_affected"
+			],
+			[
+				"SLno",
+				"SLno_killed"
+			],
+			[
+				"Slto",
+				"SLtotal_affected"
+			],
+			[
+				"no",
+				"no_disasters"
+			],
+			[
+				"Lno_",
+				"Lno_disasters"
+			],
+			[
+				"Lno_ki",
+				"Lno_killed"
+			],
+			[
+				"Lno_k",
+				"Lno_killed"
+			],
+			[
+				"no_",
+				"no_killed"
+			],
+			[
+				"icn",
+				"icnMemberParticipation"
+			],
+			[
+				"wipoConv",
+				"wipoConv6"
+			],
+			[
+				"wipo",
+				"wipoConv6"
+			],
+			[
+				"ipLaw",
+				"ipLaw5"
+			],
+			[
+				"hum",
+				"humanitarianTotal"
+			],
+			[
+				"civM",
+				"civModHurdle"
+			],
+			[
+				"patent",
+				"patentgoogle"
+			],
+			[
+				"cou",
+				"countrydiff"
+			],
+			[
+				"panel",
+				"panelFINAL"
+			],
+			[
+				"antico",
+				"anticompLaw"
+			],
+			[
+				"HY",
+				"HYPERLIPIDEMIA"
+			],
+			[
+				"dise",
+				"diseaseMatrix"
+			],
+			[
+				"di",
+				"diseaseBaseline"
+			],
+			[
+				"dias",
+				"diseaseBaseline"
+			],
+			[
+				"tele",
+				"telecommunication"
+			],
+			[
+				"UNSPE",
+				"UNSPECIFIED"
+			],
+			[
+				"CCHI",
+				"CCH_ind_clean"
+			],
+			[
+				"mult",
+				"multi_ind"
+			],
+			[
+				"num",
+				"numberOfSITC"
+			],
+			[
+				"df",
+				"df_labels"
+			],
+			[
+				"SITC_",
+				"SITC_ind2"
+			],
+			[
+				"ind",
+				"indproblem"
+			],
+			[
+				"curr",
+				"current_amount"
+			],
+			[
+				"con",
+				"constant_amount"
+			],
+			[
+				"comm",
+				"commitment_amount_usd_constant_sum"
+			],
+			[
+				"not",
+				"notHumanitarianTotal"
+			],
+			[
+				"dev",
+				"developTotal"
+			],
+			[
+				"civ",
+				"civSocietyTotal"
+			],
+			[
+				"wom",
+				"womenSupport"
+			],
+			[
+				"purp",
+				"purposeNameAgg"
+			],
+			[
+				"dfa",
+				"dfAllClean"
+			],
+			[
+				"mul",
+				"multi_ind"
+			],
+			[
+				"SIT",
+				"SITC_4"
+			],
+			[
+				"case",
+				"casenumber"
+			],
+			[
+				"CCH",
+				"CCH_ind_clean"
+			],
+			[
+				"toLoad",
+				"toLoadBJ"
+			],
+			[
+				"ggsim",
+				"ggintsimplotmi"
+			],
+			[
+				"cntrl",
+				"cntrlNames"
+			],
+			[
+				"cntr",
+				"cntrlVarList"
+			],
+			[
+				"lde",
+				"ldelegates_"
+			],
+			[
+				"part",
+				"particip"
+			],
+			[
+				"partc",
+				"participAgg"
+			],
+			[
+				"inter",
+				"interest_group"
+			],
+			[
+				"par",
+				"particip"
+			],
+			[
+				"inco",
+				"incomeGroups"
+			],
+			[
+				"stdM",
+				"stdMissMatch2"
+			],
+			[
+				"mi",
+				"missingDelegInfo"
+			],
+			[
+				"parti",
+				"participAgg"
+			],
+			[
+				"str",
+				"str_trim"
+			],
+			[
+				"onl",
+				"onlyChairDum"
+			],
+			[
+				"event_sho",
+				"event_short"
+			],
+			[
+				"met",
+				"meta_particip"
+			],
+			[
+				"coef",
+				"coef_names"
+			],
+			[
+				"inc",
+				"income_group"
+			],
+			[
+				"partic",
+				"participType"
+			],
+			[
+				"ac",
+				"actor_name"
+			],
+			[
+				"head",
+				"headquarters"
+			],
+			[
+				"meeting",
+				"meetingCount"
+			],
+			[
+				"delegates",
+				"delegates_cac"
+			],
+			[
+				"delegat",
+				"delegations_cac"
+			],
+			[
+				"del",
+				"delegates_cac"
+			],
+			[
+				"delegation",
+				"delegations_cac"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Traditional"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Script Builder"
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/LaTeXTools/LaTeX.sublime-build",
+				"Traditional"
+			]
+		],
+		[
+			[
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/LaTeXTools/LaTeX.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/R/R.sublime-build",
+					""
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/R/R.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"repl",
+				"SublimeREPL: R"
+			],
+			[
+				"rep",
+				"SublimeREPL: ECL"
+			],
+			[
+				"",
+				"Build With: sublimerepl_build_system_hack"
+			],
+			[
+				"reppl",
+				"SublimeREPL: PHP"
+			],
+			[
+				"sid",
+				"View: Toggle Side Bar"
+			],
+			[
+				"side",
+				"View: Toggle Side Bar"
+			],
+			[
+				"REPL",
+				"SublimeREPL: R"
+			],
+			[
+				"rel",
+				"SublimeREPL: Elixir"
+			],
+			[
+				"re p l",
+				"SublimeREPL: R"
+			],
+			[
+				"epl",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"latex",
+				"LaTeXTools: View PDF"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 444.0
+	},
+	"console":
+	{
+		"height": 116.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2018/Replications/myCode/tabellini.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2018/Replications/myCode/brughnGallego.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2018/Replications/myCode/gsm.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2018/Week6/week6.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2018/Replications/myCode/chattDuflo.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/buildData.r",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Analysis/4_makeFigures.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Cleaning/3_makeIData.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2019/Week8/week8.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/2019/Week3/week3Class.R",
+		"/Users/cindycheng/Downloads/Code Rep2 Geography.R",
+		"/Users/cindycheng/Downloads/test1.r",
+		"/Users/cindycheng/Documents/stocks/stocks.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/2_runAnalysis.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/1_eda.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/SWIPE/swipeNotes",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Clean/cleanDoJData.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Data/getData/getIMF.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Cleaning/2_buildModData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Cleaning/1_buildCovData.R",
+		"/Users/cindycheng/Dropbox/Documents/Papers/compInnov/Data/Patents/WIPO data/wipo_march2019.R",
+		"/Users/cindycheng/Downloads/test",
+		"/Users/cindycheng/Dropbox/Documents/Life Stuff/Art/chinese poems and calligraphy",
+		"/Users/cindycheng/Documents/Papers/tensorZ/paperNotes",
+		"/Users/cindycheng/Documents/Papers/Codex/RCode/1_cleanData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/setup.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/vizMI.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/3_vizResults.R",
+		"/Users/cindycheng/Box Sync/AntiT3.2 US DoJ Project Management/RCode/compileDoJ.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Data/4_buildRegData.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Analysis/bjps_reviewers.r",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Data/1_buildAIdDataDisagg.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Data/2_buildCovData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Cleaning/buildCovData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Cleaning/buildModData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/0_makeIData.R",
+		"/Users/cindycheng/Dropbox/Documents/Papers/compInnov/RCode/Analysis/State Capacity/reAnalysis.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/4_analyResults.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/EHR/Conference/Talk/bigTransformationsTalk.tex",
+		"/Users/cindycheng/Documents/Papers/Codex/RCode/eda.r",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Analysis/2_reModels.R",
+		"/Users/cindycheng/LRZ Sync+Share/Electronic Medical Records Presse (Tim Büthe)/Code/buildCorpus.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/stratVarGBME/3_getPCA.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Exploratory/aidSummary.r",
+		"/Users/cindycheng/Dropbox/Documents/Papers/compInnov/Tables and Figures/tablesMar2019_BellJones.tex",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Analysis/3_reModelsViz.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Data/5_extraVarsForReviewers.R",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Analysis/5_compareStratInterestVars.R",
+		"/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data/components/EMDAT/emdat_collate.R",
+		"/Users/cindycheng/Dropbox/Documents/Papers/compInnov/Data/Patents/US Raw Patent Data/utilitypatents_march2019.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/catherine/gastric/2_analyzeData.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/catherine/gastric/analyzeData.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/catherine/gastric/cleanData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/US Competition Enforcement - Bust Trickle or Scare/RCode/Clean/buildConcordance.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week13/mattingly.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR2/2018/week11/bernhard_etal.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week13/tsai.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week13/luo_etal.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR2/2018/week12/financialcrises.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week13/week13.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week13/guo.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/RecLetters/bogdan/cindycheng_bogdan_coverletter.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR2/2018/week12/steinberg_malhotra.tex",
+		"/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data/AidData/untitled folder/readMe",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/Competition Law-Policy and Innovation/RCode/Analysis/reAnalysis.R",
+		"/Users/cindycheng/Documents/Papers/Codex/RCode/setup.R",
+		"/Users/cindycheng/Documents/Papers/Codex/RCode/results.rmd",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Maps/eda.R",
+		"/Users/cindycheng/Documents/Papers/Codex/RCode/results.Rmd",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/setup.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Grades/paperProposalsFeedback",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Data/2_buildDirDyad.R",
+		"/Users/cindycheng/Dropbox/Documents/Papers/ForeignAid/data/components/FDI/README",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Data/0_runGets.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR2/2018/Week2/krasner.tex",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR2/2018/Week3/hiscox.tex",
+		"/Users/cindycheng/Dropbox/Documents/Papers/compInnov/RCode/Analysis/modAnalyses.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/CEM Case Selection Chapter for Stakeholder Project/Code/setup.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/CEM Case Selection Chapter for Stakeholder Project/Code/2_cem.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/CEM Case Selection Chapter for Stakeholder Project/Code/1_builData.R",
+		"/Users/cindycheng/Dropbox/Documents/SNIS/CEM/Code/cem.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/CEM Case Selection Chapter for Stakeholder Project/Code/cem.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/CEM Case Selection Chapter for Stakeholder Project/Code/builData.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/setup.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Data/1_runGets.R",
+		"/Users/cindycheng/Dropbox/Documents/SNIS/CEM/Code/setup.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Analysis/1_runModels.R",
+		"/Users/cindycheng/Dropbox/Documents/SNIS/CEM/Code/builData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/setup.R",
+		"/Users/cindycheng/Documents/Papers/Codex/Documentation for Amending:Revising Codex Standards",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/Paper/tablePresentation.tex",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/Paper/tableResults.tex",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Analysis/2_analyseModels.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Clean/getComtradeData.r",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Analysis/3_estSubstEffects.R",
+		"/Users/cindycheng/Desktop/test.r",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/IR and Authoritarian Politics/2018/Week 2/fogelNotes.tex",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/Clean/cleanPPI.R",
+		"/Users/cindycheng/Downloads/testTensor.r",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/modAnlaysis.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/getComtradeData.r",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/buildMarketData.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/US Competition Enforcement - Bust Trickle or Scare/RCode/Clean/cleanPPI.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/cleanMktConcentration.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/concordance.R",
+		"/Users/cindycheng/LRZ Sync+Share/Shared Folder Cindy-Tim (Tim Büthe)/tradeCompetition/RCode/cleanDoJData.R",
+		"/Users/cindycheng/Library/Application Support/Sublime Text 3/Packages/User/SublimeREPL.sublime-settings",
+		"/Users/cindycheng/Box Sync/AntiT3.2 US DoJ Project Management/RCode/buildData.r",
+		"/Users/cindycheng/Box Sync/AntiT3.2 US DoJ Project Management/compileDoJ.R",
+		"/Users/cindycheng/Box Sync/AntiT3.2 US DoJ Project Management/concordance.R",
+		"/Users/cindycheng/LRZ Sync+Share/Lehrstuhl IR Shared Folder (Tim Büthe)/Survey Experiments Project/Refugee Survey/refugeePlots.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Run/runMult_tradeMatlConf.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Data/getData/getCrisp.R",
+		"/Users/cindycheng/Dropbox/tensorZ/Peter/SocInfRegMod/data.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Data/3_buildArray.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/ReasearchMeeting/Notes",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Talks/Florence Dafe Questions",
+		"/Users/cindycheng/Documents/Papers/tensorZ/R/Run/mleModelSelec.R",
+		"/Users/cindycheng/Documents/Papers/tensorZ/Paper/litNotes.tex",
+		"/Users/cindycheng/Dropbox/Documents/PhD Extracurriculars/Application Materials/Jobs/2018/Brown/cindycheng_brown_coverletter.tex",
+		"/Users/cindycheng/Dropbox/tensorZ/Peter/HLM/hlm_mlm_ols.r",
+		"/Users/cindycheng/Box Sync/AntiT3.2 US DoJ Project Management/SITC_Rev_3_english_structure.txt",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/EHR/matthiasUhlCommentsEHR",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Talks/omarTalkComments",
+		"/Users/cindycheng/Documents/Papers/ForeignAid/RCode/Exploratory/aidExtremesCheck.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/Grades/Herrmann, Lennart/PaperLennartHerrmann03677794/RSkriptforPaperLennartHerrmann03677794.R",
+		"/Users/cindycheng/LRZ Sync+Share/myTUM/Teaching/politicsOfDevelopment/Grades/Huang, Yingzhen Sarah/RCode_HuangYingzhenSarah.R",
+		"/Users/cindycheng/Dropbox/Documents/PhD Extracurriculars/Application Materials/Jobs/2018/Emory/JobCallEmory"
+	],
+	"find":
+	{
+		"height": 42.0
+	},
+	"find_in_files":
+	{
+		"height": 172.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 42.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.latextools":
+	{
+		"height": 98.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 100.0
+	},
+	"pinned_build_system": "",
+	"project": "2_reModels.sublime-project",
+	"replace":
+	{
+		"height": 80.0
+	},
+	"save_all_on_build": false,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"untitled"
+			],
+			[
+				"sales",
+				"~/Dropbox/Documents/Papers/foodGovResp/RCode/analysisBayes.R"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 90.0,
+		"last_filter": "epl",
+		"selected_items":
+		[
+			[
+				"epl",
+				"confIntervalPlot"
+			],
+			[
+				"",
+				"gapply"
+			]
+		],
+		"width": 592.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 512.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

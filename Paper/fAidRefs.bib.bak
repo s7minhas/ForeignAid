@@ -1,4 +1,202 @@
 % Encoding: x-MacRoman
+@article{resnick2012foreign,
+  title={Foreign aid in Africa-Tracing channels of influence on democratic transitions and consolidation. New York: United Nations University (UNU)},
+  author={Resnick, Danielle},
+  journal={World Institute for Development Economics Research (WIDER), WIDER Working Paper},
+  volume={15},
+  year={2012}
+}
+
+@book{ottaway2000funding,
+  title={Funding virtue: civil society aid and democracy promotion},
+  author={Ottaway, Marina and Carothers, Thomas},
+  year={2000},
+  publisher={Carnegie Endowment}
+}
+
+
+@article{henderson:2002,
+  title={Selling civil society: Western aid and the nongovernmental organization sector in Russia},
+  author={Henderson, Sarah L},
+  journal={Comparative political studies},
+  volume={35},
+  number={2},
+  pages={139--167},
+  year={2002},
+  publisher={Sage Publications Thousand Oaks}
+}
+
+@article{spina:2014,
+  title={Civil Society Aid to Post-communist Countries},
+  author={Spina, Nicholas and Raymond, Christopher},
+  journal={Political Studies},
+  volume={62},
+  number={4},
+  pages={878--894},
+  year={2014},
+  publisher={SAGE Publications Sage UK: London, England}
+}
+
+
+@article{hoff:2007b,
+  Author = {Hoff, Peter D.},
+  Date-Added = {2017-03-25 16:57:06 +0000},
+  Date-Modified = {2017-03-25 16:57:06 +0000},
+  Journal = {Journal of the American Statistical Association},
+  Number = {478},
+  Pages = {674--685},
+  Title = {Model averaging and dimension selection for the singular value decomposition},
+  Volume = {102},
+  Year = {2007}}
+
+@article{hoff:2015:arxiv,
+  Author = {Peter D. Hoff},
+  Journal = {arxiv},
+  Pages = {1-48},
+  Title = {Dyadic Data Analysis with \texttt{amen}},
+  Volume = {arxiv:1506.08237},
+  Year = {2015}}
+
+@unpublished{minhas:etal:2016:arxiv,
+  Author = {Shahryar Minhas and Peter D. Hoff and Michael D. Ward},
+  Month = {October},
+  Note = {Working paper available at \url{https://arxiv.org/abs/1611.00460}},
+  Title = {Let's Say Amen for Latent Factor Models},
+  Url = {https://arxiv.org/abs/1611.00460},
+  Year = {2016},
+  Bdsk-Url-1 = {https://arxiv.org/abs/1611.00460}}
+
+@article{samore:2015,
+  title={Sanctions against Iran: A Guide to Targets, Terms, and Timetables},
+  author={Samore, Gary},
+  journal={Belfer Center for Science and International Affairs},
+  pages={28--29},
+  year={2015}
+}
+
+@article{dietrich:2016,
+  title={Donor political economies and the pursuit of aid effectiveness},
+  author={Dietrich, Simone},
+  journal={International Organization},
+  volume={70},
+  number={1},
+  pages={65--102},
+  year={2016},
+  publisher={Cambridge University Press}
+}
+
+@article{dietrich:2013,
+  title={Bypass or engage? Explaining donor delivery tactics in foreign aid allocation},
+  author={Dietrich, Simone},
+  journal={International Studies Quarterly},
+  volume={57},
+  number={4},
+  pages={698--712},
+  year={2013},
+  publisher={Blackwell Publishing Ltd Oxford, UK}
+}
+
+@article{treier:2008,
+  title={Democracy as a latent variable},
+  author={Treier, Shawn and Jackman, Simon},
+  journal={American Journal of Political Science},
+  volume={52},
+  number={1},
+  pages={201--217},
+  year={2008},
+  publisher={Wiley Online Library}
+}
+@book{de:2012,
+  title={Portraying the Other in International Relations: Cases of Othering, Their Dynamics and the Potential for Transformation},
+  author={de Buitrago, Sybille Reinke},
+  year={2012},
+  publisher={Cambridge Scholars Publishing}
+}
+
+@article{buthe:2012,
+  title={The politics of private foreign aid: humanitarian principles, economic development objectives, and organizational interests in NGO private aid allocation},
+  author={B{\"u}the, Tim and Major, Solomon and e Souza, Andr{\'e} de Mello},
+  journal={International Organization},
+  volume={66},
+  number={4},
+  pages={571--607},
+  year={2012},
+  publisher={Cambridge University Press}
+}
+@InBook{buthecheng:2013,
+  author     = {Buthe, Tim and Cheng, Cindy},
+  title      = {Private Transnational Governance of Economic Development: International Development Aid},
+  booktitle  = {Handbook of global economic governance},
+  year       = {2013},
+  bookauthor = {Moschella, Manuela and Weaver, Catherine},
+  owner      = {cindycheng},
+  timestamp  = {2018.05.28},
+}
+@article{hollenbach:2014,
+  title={Fast \& Easy Imputation of Missing Social Science Data},
+  author={Hollenbach, Florian and Metternich, Nils W and Minhas, Shahryar and Ward, Michael D},
+  journal={arXiv preprint arXiv:1411.0647},
+  year={2014}
+}
+
+@book{liska:1960,
+  title={The new statecraft: foreign aid in American foreign policy},
+  author={Liska, George},
+  year={1960},
+  publisher={Chicago U. of Chicago P}
+}
+
+
+@article{andrabi:2017,
+  title={In Aid We Trust: Hearts and Minds and the Pakistan Earthquake of 2005},
+  author={Andrabi, Tahir and Das, Jishnu},
+  journal={Review of Economics and Statistics},
+  volume={99},
+  number={3},
+  pages={371--386},
+  year={2017},
+  publisher={MIT Press}
+}
+
+
+@article{davies:2016,
+  title={The domestic consequences of international over-cooperation: An experimental study of microfoundations},
+  author={Davies, Graeme AM and Johns, Robert},
+  journal={Conflict Management and Peace Science},
+  volume={33},
+  number={4},
+  pages={343--360},
+  year={2016},
+  publisher={Sage Publications Sage UK: London, England}
+}
+@article{colaresi:2004,
+  title={When doves cry: International rivalry, unreciprocated cooperation, and leadership turnover},
+  author={Colaresi, Michael},
+  journal={American Journal of Political Science},
+  volume={48},
+  number={3},
+  pages={555--570},
+  year={2004},
+  publisher={Wiley Online Library}
+}
+
+@article{katzman:2018,
+  title={Iran sanctions},
+  author={Katzman, Kenneth},
+  journal={Current Politics and Economics of the Middle East},
+  volume={5},
+  number={1},
+  pages={41},
+  year={2014},
+  publisher={Nova Science Publishers, Inc.}
+}
+
+@inproceedings{sharp:2010,
+  title={US foreign assistance to the Middle East: Historical background, recent trends, and the FY2011 request},
+  author={Sharp, Jeremy M},
+  year={2010},
+  organization={LIBRARY OF CONGRESS WASHINGTON DC CONGRESSIONAL RESEARCH SERVICE}
+}
 
 @article{kahneman:2003,
   title={Maps of bounded rationality: Psychology for behavioral economics},
@@ -45,12 +243,22 @@
   year={2005},
   publisher={BioMed Central}
 }
-
+@incollection{hoff_ward:2008,
+  title={Analyzing dependencies in geo-economics and geo-politics},
+  author={Ward, Michael D and Hoff, Peter D},
+  booktitle={War, Peace and Security},
+  pages={133--160},
+  year={2008},
+  publisher={Emerald Group Publishing Limited}
+}
 @article{natsios:1999,
   title={The politics of famine in North Korea},
   author={Natsios, Andrew},
   year={1999},
+   journal={United States Institute of Peace (USIP)},
+   volume = {Special Volume},
   publisher={United States Institute of Peace (USIP)}
+  
 }
 @article{olsen:2003,
   title={Humanitarian crises: what determines the level of emergency assistance? Media coverage, donor interests and the aid business},
@@ -237,7 +445,7 @@
 
 @ARTICLE{alesina:2000,
   author = {Alesina, A. and Dollar, D.},
-  title = {{Who gives foreign aid to whom and why?}},
+  title = {Who gives foreign aid to whom and why?},
   journal = {Journal of economic growth},
   year = {2000},
   volume = {5},
@@ -1863,7 +2071,7 @@
 @Article{emdat:2009,
   author    = {Guha-Sapir, D. and Below, R. and Hoyois, Ph.},
   title     = {EM-DAT: International Disaster Database},
-  journal   = {Universit? Catholique de Louvain, Brussels, Belgium},
+  journal   = {Universite Catholique de Louvain, Brussels, Belgium},
   year      = {2009},
   url       = {www.emdat.be},
   owner     = {cindycheng},
@@ -2084,7 +2292,7 @@
 }
 
 @ARTICLE{hoff:2005,
-  author = {Hoff, P.D.},
+  author = {Hoff, Peter D.},
   title = {Bilinear mixed-effects models for dyadic data},
   journal = {Journal of the american Statistical association},
   year = {2005},
@@ -4578,7 +4786,7 @@
 }
 
 @Article{hoff:2007,
-  author    = {Hoff, Peter D},
+  author    = {Hoff, Peter D.},
   title     = {Extending the rank likelihood for semiparametric copula estimation},
   journal   = {The Annals of Applied Statistics},
   year      = {2007},
@@ -4640,6 +4848,11 @@
   publisher = {Wiley Online Library},
 }
 
+@Article{,
+  owner     = {cindycheng},
+  timestamp = {2017.07.26},
+}
+
 @Article{yang:2008,
   author  = {Yang, Dean},
   title   = {Coping with disaster: The impact of hurricanes on international financial flows, 1970-2002},
@@ -4647,6 +4860,13 @@
   year    = {2008},
   volume  = {8},
   number  = {1},
+}
+
+@book{lancaster:2008,
+  title={Foreign aid: Diplomacy, development, domestic politics},
+  author={Lancaster, Carol},
+  year={2008},
+  publisher={University of Chicago Press}
 }
 
 @Article{david:2011,
@@ -4753,14 +4973,24 @@
   publisher = {Blackwell Publishing Ltd Oxford, UK},
 }
 
-@InBook{buthecheng:2013,
-  author     = {Buthe, Tim and Cheng, Cindy},
-  title      = {Private Transnational Governance of Economic Development: International Development Aid},
-  booktitle  = {Handbook of global economic governance},
-  year       = {2013},
-  bookauthor = {Moschella, Manuela and Weaver, Catherine},
-  owner      = {cindycheng},
-  timestamp  = {2018.05.28},
+@Article{tol:2018,
+  author    = {Tol, Richard SJ},
+  title     = {The economic impacts of climate change},
+  journal   = {Review of Environmental Economics and Policy},
+  year      = {2018},
+  volume    = {12},
+  number    = {1},
+  pages     = {4--25},
+  publisher = {Oxford University Press},
+}
+
+@Article{panayotou:2016,
+  author    = {Panayotou, Theodore},
+  title     = {Economic growth and the environment},
+  journal   = {The environment in anthropology},
+  year      = {2016},
+  pages     = {140--148},
+  publisher = {NYU Press New York},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

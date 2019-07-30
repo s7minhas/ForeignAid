@@ -54,7 +54,9 @@ usiran = ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel)) +
 	scale_linetype_manual(values=c("solid", "dashed", "dotted")) +
 	labs(
 		y = "Committed Amount\n(USD Constant Dollars, millions)",
-		x = 'Year', shape = "Sector" , color = "Sector")
+		x = 'Year', shape = "Sector" , color = "Sector")+
+	theme(legend.key.width = unit(3,"cm"))
+ 
 ggsave(usiran, file=paste0(pathGraphics, '/US_Iran_aid.pdf'), width=12, height=8)
 pathGraphics = '~/Research/10739895rngwzsfjtzbw/graphics'
 ggsave(usiran, file=paste0(pathGraphics, '/US_Iran_aid.pdf'), width=12, height=8)

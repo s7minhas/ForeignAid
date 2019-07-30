@@ -16,17 +16,17 @@ setwd(
 aidDataRaw= read.csv(
 	'AidDataCoreDonorRecipientYearPurpose_ResearchRelease_Level1_v3.1.csv', 
 	stringsAsFactors = FALSE)
-
+ 
 # Check to make sure that disaggregated data  
 # matches the data found in 
 # 'AidDataCoreDonorRecipientYear_ResearchRelease_Level1_v3.1.csv'
 # per reviewer 2's comments
-# aidDataAgg = aidDataRaw %>%
-# 	group_by(donor, recipient, year) %>%
-# 	summarise(
-# 	commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)
-# 	) %>%
-# 	data.frame()
+aidDataAgg = aidDataRaw %>%
+	group_by(donor, recipient, year) %>%
+	summarise(
+	commitment_amount_usd_constant_sum = sum(commitment_amount_usd_constant_sum)
+	) %>%
+	data.frame()
 # aidDataAgg = aidDataAgg[
 # 	order(
 # 		aidDataAgg$year, aidDataAgg$donor, aidDataAgg$recipient),]
@@ -166,7 +166,7 @@ aidDataSectorsAgg = aidDataSectors %>%
 			)
 		) %>%
 	data.frame()
-
+ 
 aidDataSectorsAgg = reshape(aidDataSectorsAgg,
 	timevar = "purposeNameAgg",
 	idvar = c('donor', 'recipient', 'year'),
@@ -179,15 +179,12 @@ aidDataSectorsAgg$humanitarianTotal = rowSums(aidDataSectorsAgg[,
 aidDataSectorsAgg$civSocietyTotal = rowSums(aidDataSectorsAgg[, 
 	c('govCivilSociety', 'womenSupport',  'ngoGovSupport')], na.rm = TRUE)
 aidDataSectorsAgg$developTotal = rowSums(aidDataSectorsAgg[, 
-<<<<<<< HEAD
+
 	c('education', 'health', 'waterSanitation', 'otherSocialInfrastructureAndServices', 
 		'economicInfrastructureAndServices', 'industryMiningConstruction', 
 		'environmentalProtection', 'otherDevelopmentAid', 'debtRelief')], na.rm = TRUE)
  
 
- 
- 
-=======
 	c('education', 'health', 'waterSanitation', 
 		'otherSocialInfrastructureAndServices', 
 		'economicInfrastructureAndServices', 
@@ -195,7 +192,7 @@ aidDataSectorsAgg$developTotal = rowSums(aidDataSectorsAgg[,
 		'environmentalProtection', 
 		'otherDevelopmentAid', 'debtRelief')], na.rm = TRUE)
 
->>>>>>> 430e210b79b9d144083a41ae38fb2c0d534dae14
+ 
 # combine 
 aidData = merge(aidDataAgg, aidDataSectorsAgg, 
 	by = c('donor', 'recipient', 'year'), all.x = TRUE)

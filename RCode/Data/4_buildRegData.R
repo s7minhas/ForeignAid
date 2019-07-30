@@ -56,13 +56,13 @@ covData$polity2 = covData$polity2 + abs(min(covData$polity2,na.rm=TRUE)) + 1
 ### Log transformations
 covData$lnGdpCap = log(covData$gdpCAP)
 
-
+ 
 ### Subset monadic covariates to relevant years set
 vars=c(
 	'polity2', # Institutions
 	'lnGdpCap', # Macroecon controls
 	'lifeExpect', 'no_disasters', # Humanitarian
-	'no_killed', 'total_affected', 'total_dam', 'no_killed', 
+	'no_killed', 'total_affected', 'total_dam', 'no_killed', 'no_affected', 'no_injured', 'no_homeless',
 	'civwar' )
 covData=covData[,c('cyear', 'ccode','cname', 'year', vars)]
 ################################################################
@@ -126,6 +126,7 @@ regData=merge(regData,
 	by='idYr', all.x=TRUE, all.y=FALSE)
 unique(regData[is.na(regData$idYr), 1:6]); dim(regData)
 # Add receiver level covariates
+
 regData=merge(regData, 
 	covData[,c('cyear',
 		 		"Lpolity2",
@@ -134,6 +135,9 @@ regData=merge(regData,
 		 		"Lno_disasters",  
 		 		"Ltotal_affected",
 		 		'Lno_killed',
+		 		'Lno_affected',
+		 		'Lno_homeless',
+		 		'Lno_injured',
 		 		"Ltotal_dam",
 		 		"Lcivwar")], 
 	by.x='cyearR', by.y='cyear', all.x=TRUE, all.y=FALSE)
@@ -199,6 +203,13 @@ regData$Ltotal_dam[which(regData$Ltotal_dam == 0)]= NA
 regData$Ltotal_dam[which(regData$Lno_disasters == 0)]  = 0
 regData$Lno_killed[which(regData$Lno_killed == 0)] = NA
 regData$Lno_killed[which(regData$Lno_disasters == 0)]  = 0
+
+# regData$Lno_affected[which(regData$Lno_affected == 0)] = NA
+# regData$Lno_affected[which(regData$Lno_disasters == 0)]  = 0
+# regData$Lno_homeless[which(regData$Lno_homeless == 0)] = NA
+# regData$Lno_homeless[which(regData$Lno_disasters == 0)]  = 0
+# regData$Lno_injured[which(regData$Lno_injured == 0)] = NA
+# regData$Lno_injured[which(regData$Lno_injured == 0)]  = 0
  
 regData$SLno_disasters[which(is.na(regData$SLno_disasters))]  = 0
 regData$SLtotal_affected[which(regData$SLtotal_affected == 0)] = NA
@@ -209,7 +220,6 @@ regData$SLno_killed[which(regData$SLno_killed == 0)] = NA
 regData$SLno_killed[which(regData$SLno_disasters == 0)]  = 0
   
  
-
 # Save pre imputation
 save(regData, file=paste0(pathData, '/noImputationDataAidDisagg_v3.rda'))
 load(file=paste0(pathData, '/noImputationDataAidDisagg_v3.rda'))
