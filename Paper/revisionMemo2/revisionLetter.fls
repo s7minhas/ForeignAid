@@ -171,7 +171,13 @@ INPUT /usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo2/rev1.tex
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo2/rev1.tex
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simComboPlot_lagDV.pdf
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simComboPlot_lagDV.pdf
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simComboPlot_lagDV.pdf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsl12.tfm
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simTotAidPlot_lagDV.pdf
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simTotAidPlot_lagDV.pdf
+INPUT /Volumes/Samsung_X5/Dropbox/Research/ForeignAid/graphics/simTotAidPlot_lagDV.pdf
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo2/rev3.tex
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo2/rev3.tex
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo2/revisionLetter.aux

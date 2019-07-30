@@ -142,10 +142,8 @@ tmp=ggplot(ggDataSmall, aes(x=LstratMu, y=fit)) +
   theme(
     axis.ticks=element_blank(), 
     panel.border = element_blank() )
-tmp
-
 ggsave(tmp, file=paste0(
-  pathGraphics, '/simTotAidPlot_lagDV.pdf'), width = 7, height = 4)
+  pathGraphics, '/simTotAidPlot_lagDV.pdf'), width = 7, height = 2.5)
 #########################################################
 
 ################################################################
@@ -227,5 +225,5 @@ plotRes = function(modSumm){
 
 intGG = plotRes(intModSumm)
 ggsave(intGG, 
-  file=paste0(pathGraphics, '/totAid_Coef.pdf'), width=8, height=5)
+  file=paste0(pathGraphics, '/totAidv2_Coef.pdf'), width=8, height=5)
 ################################################################
