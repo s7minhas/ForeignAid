@@ -7,11 +7,6 @@ if(Sys.info()['user']=='cindycheng'){
 ################################################################
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
-
-vars = names(iData[[1]])[28:30]
-iData = lapply( iData, function(df){
-	for(v in vars){ df[,v] = log(df[,v] + 1) }
-	return(df) })
 ################################################################
 
 ################################################################
