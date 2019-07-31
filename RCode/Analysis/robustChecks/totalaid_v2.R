@@ -12,9 +12,9 @@ load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
 iData = lapply(iData, function(df){
 
   # add total aid variable
-  df$totAid = log(df$commitment_amount_usd_constant_sum+1) -
-    df$humanitarianTotal -
-    df$civSocietyTotal  
+  df$totAid = log(df$commitment_amount_usd_constant_sum -
+    exp(df$humanitarianTotal) -
+    exp(df$civSocietyTotal) +3)
 
   # gen some ids
   df$id = with(df, paste0(ccodeS, 9999, ccodeR) )
