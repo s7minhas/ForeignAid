@@ -44,7 +44,7 @@ addLags = function(toLag, data, idNames=ids, dvNames=dvs, ivNames=ivs){
 		return( base[,paste0(ivs,'_',toLagNumber+1)] ) }) )
 	return(cbind(data, newData)) }
 
-if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
+# if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 	iData = lapply(iData, function(x){
 		# add lags
 		x = addLags(1:5, x)
@@ -58,9 +58,9 @@ if(!file.exists(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))){
 
 		return(x) })
 	save(iData, file=paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
-} else {
-	load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
-}
+# } else {
+# 	load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
+# }
 ################################################################
 
 ################################################################

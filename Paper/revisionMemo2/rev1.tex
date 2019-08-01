@@ -10,39 +10,37 @@
 	\item  First, I think the authors should move the specification with the lagged dependent variable into the main text and present this as the main model in the paper. The time dependency of aid giving is a well-established pattern in the aid literature, and it is the norm for the literature to model this time dependency in the main specifications. 
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		We have rerun each of the main analyses presented in the paper with a lagged dependent variable in the specification. 
+		We have rerun each of the main analyses presented in the paper with a lagged dependent variable in the specification. To show the robustness of our results when a lagged dependent variable is included in the specification we have created a new section in the Appendix titled, ``Reanalysis when Including Lagged Dependent Variable''. In this section we have reconstructed each of the key analyses in the main version of our paper: Figures 4-7. The interpretations of each of the analyses with and without the lagged dependent variable essentially mimic each other. As a result, we favor the more parismonious model specification be presented in the main paper, but agree with the importance of showcasing the robustness of our findings to the inclusion of a lagged dependent variable. We would also note that not including a lagged dependent variable in the main paper is not atypical in the recent literature on foreign aid. For example, the following are a small sampling of papers published since 2015, cited in our paper, that do not include a lagged dependent variable: Bermeo 2017 (published in International Organization), Carnegie \& Marinov 2017 (published in American Journal of Political Science), and Dreher et al. 2018 (published in International Studies Quarterly).
 	}}
 
-	\textcolor{red}{q for cc: i'm really not in favor of rerunning everything with a lagged dv and recentering all the analyses around that given one reviewer's request. i suggest htat we just say we will expand the appendix section with the lagged dv framework to show that it is consistent. the plot below is the sub effects plot for all three dvs using a lagged dv and it's basically the same. what do you think? }
+	% \begin{figure}
+	% 	\centering
+	% 	\includegraphics[width=1\textwidth]{simComboPlot_lagDV.pdf}
+	% 	\caption{Simulated substantive effect plots when including lagged dependent variable in the model for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
+	% 	\label{fig:simEffects_lagDV}
+	% \end{figure}
 
-	\begin{figure}
-		\centering
-		\includegraphics[width=1\textwidth]{simComboPlot_lagDV.pdf}
-		\caption{Simulated substantive effect plots when including lagged dependent variable in the model for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
-		\label{fig:simEffects_lagDV}
-	\end{figure}
+	% \begin{figure}[h!]
+	% 	\centering
+	% 	\includegraphics[width=1\textwidth]{simComboPlot_lag_hAid_lagDV.pdf}
+	% 	\caption{Simulated substantive effect plots when including lagged dependent variable in the model for humanitarian aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	% 	\label{fig:humanIntCoef_lagDV}
+	% \end{figure}
 
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\textwidth]{simComboPlot_lag_hAid_lagDV.pdf}
-		\caption{Simulated substantive effect plots when including lagged dependent variable in the model for humanitarian aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
-		\label{fig:humanIntCoef_lagDV}
-	\end{figure}
+	% \begin{figure}[h!]
+	% 	\centering
+	% 	\includegraphics[width=1\textwidth]{simComboPlot_lag_cAid_lagDV.pdf}
+	% 	\caption{Simulated substantive effect plots when including lagged dependent variable in the model for civil society aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	% 	\label{fig:civIntCoef_lagDV}
+	% \end{figure}
 
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\textwidth]{simComboPlot_lag_cAid_lagDV.pdf}
-		\caption{Simulated substantive effect plots when including lagged dependent variable in the model for civil society aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
-		\label{fig:civIntCoef_lagDV}
-	\end{figure}
-
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\textwidth]{simComboPlot_lag_dAid_lagDV.pdf}
-		\caption{Simulated substantive effect plots when including lagged dependent variable in the model for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
-		\label{fig:devIntCoef_lagDV}
-	\end{figure}
-	\FloatBarrier
+	% \begin{figure}[h!]
+	% 	\centering
+	% 	\includegraphics[width=1\textwidth]{simComboPlot_lag_dAid_lagDV.pdf}
+	% 	\caption{Simulated substantive effect plots when including lagged dependent variable in the model for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	% 	\label{fig:devIntCoef_lagDV}
+	% \end{figure}
+	% \FloatBarrier
 
 	\end{itemize}
 
@@ -50,74 +48,8 @@
 	\item Relatedly, I think the authors should provide the donor fixed effects specifications in the appendix and report the coefficients and standard errors in a table. It is difficult to tell for sure from the coefficient plot, but it looks like the coefficient on the main interaction term is no longer significant at the 95\% level in this specification. That's not necessarily a problem - it would just be nice to know for sure what the magnitude and uncertainty are in this specification.
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		Insert great response.
+		We have included tabular versions of the results with fixed effects in the appendix. 
 		}}
-
-\textcolor{red}{comment for cc: what an annoying reviewer, we can clean these tables up and put them in the appendix as well}
-
-humanitarianTotal
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
- & beta & se & t & var & pval \\ 
-  \hline
-1 & 0.81 & 0.10 & 8.11 & LstratMu & 0.00 \\ 
-  2 & -0.12 & 0.07 & -1.74 & Lno\_disasters & 0.08 \\ 
-  3 & 9.56 & 1.66 & 5.78 & colony & 0.00 \\ 
-  4 & 0.00 & 0.01 & 0.31 & Lpolity2 & 0.76 \\ 
-  5 & -1.08 & 0.08 & -12.80 & LlnGdpCap & 0.00 \\ 
-  6 & -0.03 & 0.01 & -2.30 & LlifeExpect & 0.02 \\ 
-  7 & 1.41 & 0.11 & 12.99 & Lcivwar & 0.00 \\ 
-  2410 & 0.08 & 0.02 & 4.11 & LstratMu:Lno\_disasters & 0.00 \\ 
-   \hline
-\end{tabular}
-\end{table}
-
-developTotal
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
- & beta & se & t & var & pval \\ 
-  \hline
-1 & -0.76 & 0.10 & -7.45 & LstratMu & 0.00 \\ 
-  2 & -0.04 & 0.07 & -0.50 & Lno\_disasters & 0.61 \\ 
-  3 & 9.70 & 1.67 & 5.81 & colony & 0.00 \\ 
-  4 & 0.04 & 0.01 & 4.96 & Lpolity2 & 0.00 \\ 
-  5 & -0.63 & 0.09 & -7.29 & LlnGdpCap & 0.00 \\ 
-  6 & 0.10 & 0.01 & 8.63 & LlifeExpect & 0.00 \\ 
-  7 & -0.73 & 0.11 & -6.67 & Lcivwar & 0.00 \\ 
-  2410 & 0.02 & 0.02 & 1.20 & LstratMu:Lno\_disasters & 0.23 \\ 
-   \hline
-\end{tabular}
-\end{table}
-
-civSocietyTotal
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
- & beta & se & t & var & pval \\ 
-  \hline
-1 & -0.18 & 0.09 & -2.03 & LstratMu & 0.04 \\ 
-  2 & -0.19 & 0.06 & -3.11 & Lno\_disasters & 0.00 \\ 
-  3 & 2.00 & 1.44 & 1.39 & colony & 0.16 \\ 
-  4 & 0.02 & 0.01 & 2.52 & Lpolity2 & 0.01 \\ 
-  5 & -0.62 & 0.07 & -8.48 & LlnGdpCap & 0.00 \\ 
-  6 & 0.02 & 0.01 & 2.32 & LlifeExpect & 0.02 \\ 
-  7 & -0.34 & 0.09 & -3.66 & Lcivwar & 0.00 \\ 
-  2410 & 0.10 & 0.02 & 5.83 & LstratMu:Lno\_disasters & 0.00 \\ 
-   \hline
-\end{tabular}
-\end{table}
-\FloatBarrier
 
 	\end{itemize}
 	\clearpage

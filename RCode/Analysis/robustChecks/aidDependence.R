@@ -60,9 +60,9 @@ reModSpecs = lapply(dvs, function(y){
 
 ################################################################
 # run models
-if(!file.exists(
-	paste0(pathResults, '/reMods_wLagDV.rda')
-	)){
+# if(!file.exists(
+# 	paste0(pathResults, '/reMods_wLagDV.rda')
+# 	)){
 	cl=makeCluster(5) ; registerDoParallel(cl)
 
 	# run models
@@ -98,9 +98,9 @@ if(!file.exists(
 	save(reMods, 
 		file=paste0(pathResults, '/reMods_wLagDV.rda')
 		)
-} else {
-	load(paste0(pathResults, '/reMods_wLagDV.rda'))
-}
+# } else {
+# 	load(paste0(pathResults, '/reMods_wLagDV.rda'))
+# }
 ################################################################
 
 ################################################################
@@ -235,9 +235,9 @@ plotRes = function(modSumm){
       ) }
 
 intGG = plotRes(intModSumm)
-# ggsave(intGG, 
-#   file=paste0(pathGraphics, '/intCoef_lagDV.pdf'), 
-#   width=8, height=5)
+ggsave(intGG, 
+  file=paste0(pathGraphics, '/intCoef_lagDV.pdf'), 
+  width=8, height=5)
 #########################################################
 
 ################################################################
