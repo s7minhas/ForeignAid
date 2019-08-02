@@ -169,7 +169,10 @@ v <- ggplot(plotDataAgg, aes(x = LstratMuQuintile, y = aidValue, fill = aidType)
  
  
 v+facet_grid(.~Lno_disasters, labeller = labeller(Lno_disasters = disast_labels ))
-ggsave(file = paste0(pathGraphics, '/developmentAidValueByType.pdf'))
+ggsave(
+	file = paste0(pathGraphics, '/developmentAidValueByType.pdf'),
+	width=6, height=4
+	)
  
 p <- ggplot(plotDataAgg, aes(x = LstratMuQuintile, y = prop, fill = aidType)) + 
 			geom_area()+
@@ -187,7 +190,10 @@ p <- ggplot(plotDataAgg, aes(x = LstratMuQuintile, y = prop, fill = aidType)) +
                          			"Other Social Infrastructure and Services",
                          			"Water Sanitation"))
 p+facet_grid(.~Lno_disasters, labeller = labeller(Lno_disasters = disast_labels ) )
-ggsave(file = paste0(pathGraphics, '/developmentAidValueByTypeProportion.pdf'))
+ggsave(
+	file = paste0(pathGraphics, '/developmentAidValueByTypeProportion.pdf'),
+	width=6, height=4
+	)
 
 
 ##################################)

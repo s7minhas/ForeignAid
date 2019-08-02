@@ -224,5 +224,5 @@ plotRes = function(modSumm){
 
 intGG = plotRes(intModSumm)
 ggsave(intGG, 
-  file=paste0(pathGraphics, '/totAidv2_Coef.pdf'), width=3, height=4)
+  file=paste0(pathGraphics, '/totAidv2_Coef.pdf'), width=5, height=4)
 ################################################################

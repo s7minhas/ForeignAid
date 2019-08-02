@@ -409,9 +409,9 @@ INPUT ./graphics/simComboPlot_bin_disaster.pdf
 INPUT graphics/simComboPlot_no_killed.pdf
 INPUT ./graphics/simComboPlot_no_killed.pdf
 INPUT ./graphics/simComboPlot_no_killed.pdf
-INPUT graphics/intCoef_fe_re_compare.pdf
-INPUT ./graphics/intCoef_fe_re_compare.pdf
-INPUT ./graphics/intCoef_fe_re_compare.pdf
+INPUT graphics/simComboPlot_fe.pdf
+INPUT ./graphics/simComboPlot_fe.pdf
+INPUT ./graphics/simComboPlot_fe.pdf
 INPUT graphics/simComboPlot_post_coldwar.pdf
 INPUT ./graphics/simComboPlot_post_coldwar.pdf
 INPUT ./graphics/simComboPlot_post_coldwar.pdf
