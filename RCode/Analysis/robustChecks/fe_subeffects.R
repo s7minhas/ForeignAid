@@ -72,22 +72,13 @@ devModFE = foreach(df=iData) %dopar% {
 #
 stopCluster(cl)
 
-#
-# feMods = list(
-# 	rubinCoef(humModFE,'fe'), 
-# 	rubinCoef(devModFE,'fe'), 
-# 	rubinCoef(civModFE,'fe')
-# 	)
-
-# # names(feMods) = dvs
+# org
 stratMuIntMods = list(
 	humModFE[[1]],
 	civModFE[[1]],
   devModFE[[1]]  
 	)
 names(stratMuIntMods) = dvs
-# save(stratMuIntMods, file='~/Desktop/tmp_small.rda')
-# load('~/Desktop/tmp_small.rda')
 ################################################################
 
 #########################################################
@@ -96,10 +87,7 @@ regData = iData[[1]]
 noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
   mod = stratMuIntMods[[i]]
-  vars = names(coef(mod))[c(1:8,
-    # 24, # ccode
-    # 55, # year
-    length(coef(mod)) )]
+  vars = names(coef(mod))[c(1:8, length(coef(mod)) )]
   modTitle = dvNames[i] ; var = 'LstratMu'
 
   # Create scenario matrix
@@ -114,9 +102,6 @@ simPlots = lapply(1:length(stratMuIntMods), function(i){
       median(colony,na.rm=TRUE), median(Lpolity2,na.rm=TRUE), 
       median(LlnGdpCap,na.rm=TRUE), 
       median(LlifeExpect,na.rm=TRUE),median(Lcivwar,na.rm=TRUE)
-      # ,1 # ccode
-      # ,
-      # 1 # year
       ) )
 
   # Add interaction term
