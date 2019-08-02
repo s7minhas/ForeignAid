@@ -55,7 +55,7 @@ Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
 \indent\indent  In brief, we find that our political strategic measure performs well against S scores and Kendall's $\tau_b$ for alliances  with and without fixed effects. Note that because the PCA is of latent distances between any two dyads, dyads that are closer in space will have smaller values and therefore represent a stronger strategic relationship. Therefore the negative relationship we find between the political strategic measure and S scores and $\tau_b$ are interpreted to mean the greater the foreign policy similarity as measured by the S score or Kendal's $\tau_b$ , the smaller the latent distance or the greater the political strategic relationship between a dyad.
 
 \clearpage
-\subsection*{Reanalysis when Including Lagged Dependent Variable}
+\subsection*{Incorporating Lagged Dependent Variable}
 
 We evaluate the robustness of our key findings when including a lagged dependent variable in our model specifications:
 
@@ -131,79 +131,16 @@ The substantive trends with respect to humanitarian aid and development aid are 
 With regards to other potential measures, the EM-DAT database provides the data on number people injured, homeless, or affected and the dollar amount of the disaster. However such data has a high degree of missingness and, by their own admission, frequently imprecise or under-reported. For instance there is 79\% missingness for the number of injured, 36\% missingness for the total number of homeless and 33\% for the total damages. The number of affected has comparatively less missingness, with 9.6\%, however the EM-DAT Gudelines note that, ``The indicator affected is often reported and is widely used by different actors to convey the extent, impact, or severity of a disaster in non-spatial terms.  The ambiguity in the definitions and the different criteria and methods of estimation produce vastly different numbers, which are rarely comparable.'' Generally all the indicators have varying degrees of imprecision. For instance, the guidelines further state, ``Any related word like 'hospitalized' is considered as injured. If there is no precise number is given, such as 'hundreds of injured', 200 injured will be entered (although it is probably underestimated).'' Given these problems with these other potential measures, we decided to focus on the number of disasters as our measure of disaster intensity.
 
 \clearpage
-\subsection*{Fixed versus random effects}
+\subsection*{Substantive Results when using Fixed Effects}
 
-In Figure~\ref{fig:devIntCoef_fixed} below we present the results of our analysis when using fixed effects. The results remain broadly the same. Additionally, when running a Hausman specification test for our models we fail to reject the null hypothesis at both the 90 and 95\% confidence intervals, providing at least some initial evidence that we are justified in our choice \citep{greene:2008}.
+In Figure~\ref{fig:devIntCoef_fixed} below we present the results of our analysis when using fixed effects. The results remain broadly the same as those shown in Figure~\ref{fig:simEffects} of the paper. Additionally, when running a Hausman specification test for our models we fail to reject the null hypothesis at both the 90 and 95\% confidence intervals, providing at least some initial evidence that we are justified in our choice \citep{greene:2008}.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\textwidth]{graphics/intCoef_fe_re_compare.pdf}
-	\caption{Comparison between parameter estimates using fixed and random effects.}
+	\includegraphics[width=1\textwidth]{graphics/simComboPlot_fe.pdf}
+	\caption{Simulated substantive effect plots when estimating using a fixed effects framework for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
 	\label{fig:devIntCoef_fixed}
 \end{figure}
-\FloatBarrier
-
-We also present tabular versions of the fixed effect results below:
-
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
-Humanitarian Aid & beta & se & t & var & pval \\ 
-  \hline
-& 0.81 & 0.10 & 8.11 & Pol. \; Strat.  \; Distance_{sr,t-1} & 0.00 \\ 
-& -0.12 & 0.07 & -1.74 & No. \; Disasters_{r,t-1} & 0.08 \\ 
-& 9.56 & 1.66 & 5.78 & Colony_{sr,t-1} & 0.00 \\ 
-& 0.00 & 0.01 & 0.31 & Polity_{r,t-1} & 0.76 \\ 
-& -1.08 & 0.08 & -12.80 & Log(GDP \; per \; capita_{r,t-1} & 0.00 \\ 
-& -0.03 & 0.01 & -2.30 & Life \;Expect_{r,t-1} & 0.02 \\ 
-& 1.41 & 0.11 & 12.99 & Civil \; War_{r,t-1} & 0.00 \\ 
-& 0.08 & 0.02 & 4.11 & Pol. \; Strat.  \; Distance_{sr,t-1}:No. \; Disasters_{r,t-1} & 0.00 \\ 
-   \hline
-\end{tabular}
-\end{table}
-
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
-Civil Society Aid & beta & se & t & var & pval \\ 
-  \hline
-& -0.18 & 0.09 & -2.03 & Pol. \; Strat.  \; Distance_{sr,t-1} & 0.04 \\ 
-   & -0.19 & 0.06 & -3.11 & No. \; Disasters_{r,t-1} & 0.00 \\ 
-   & 2.00 & 1.44 & 1.39 & Colony_{sr,t-1} & 0.16 \\ 
-   & 0.02 & 0.01 & 2.52 & Polity_{r,t-1} & 0.01 \\ 
-  & -0.62 & 0.07 & -8.48 & Log(GDP \; per \; capita_{r,t-1} & 0.00 \\ 
-  & 0.02 & 0.01 & 2.32 & Life \;Expect_{r,t-1} & 0.02 \\ 
-  & -0.34 & 0.09 & -3.66 & Civil \; War_{r,t-1} & 0.00 \\ 
-   & 0.10 & 0.02 & 5.83 & Pol. \; Strat.  \; Distance_{sr,t-1}:No. \; Disasters_{r,t-1} & 0.00 \\ 
-   \hline
-\end{tabular}
-\end{table}
-
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Mon Jul 29 22:38:35 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrlr}
-  \hline
-Development Aid & beta & se & t & var & pval \\ 
-  \hline
-& -0.76 & 0.10 & -7.45 & Pol. \; Strat.  \; Distance_{sr,t-1} & 0.00 \\ 
-   & -0.04 & 0.07 & -0.50 & No. \; Disasters_{r,t-1} & 0.61 \\ 
-   & 9.70 & 1.67 & 5.81 & Colony_{sr,t-1} & 0.00 \\ 
-   & 0.04 & 0.01 & 4.96 & Polity_{r,t-1} & 0.00 \\ 
-   & -0.63 & 0.09 & -7.29 & Log(GDP \; per \; capita_{r,t-1} & 0.00 \\ 
-   & 0.10 & 0.01 & 8.63 & Life \;Expect_{r,t-1} & 0.00 \\ 
-   & -0.73 & 0.11 & -6.67 & Civil \; War_{r,t-1} & 0.00 \\ 
-   & 0.02 & 0.02 & 1.20 & Pol. \; Strat.  \; Distance_{sr,t-1}:No. \; Disasters_{r,t-1} & 0.23 \\ 
-   \hline
-\end{tabular}
-\end{table}
 \FloatBarrier
 
 \clearpage
@@ -230,7 +167,7 @@ Additionally, we also run our models using only data from 2002-2005 (post-2001 p
 \FloatBarrier
 
 \clearpage
-\subsection*{Accounting for uncertainty in strategic interest measure}
+\subsection*{Accounting for Uncertainty in Strategic Interest Measure}
 
 One methodological concern about our strategic interest measure is that since it is estimated from a model it comes with uncertainty. In Figure~\ref{fig:latVarUncert}, we show results when taking into account uncertainty in the latent variable compared with our original estimates. We do this by simulating 1000 values of each latent variable estimate from the underlying distribution. From this we create 1000 versions of our dataset in which for each dataset we have a different sampled value of the strategic interest variable. We then run each of our models on those 1000 datasets and combine the parameter estimates using Rubin's rules \citep{rubin:1987}. We present the results of this analysis juxtaposed against our original model where we just use the average value of the strategic uncertainty variable. 
 
@@ -242,38 +179,33 @@ One methodological concern about our strategic interest measure is that since it
 \end{figure}		
 \FloatBarrier
 
-
-
 \clearpage
-\subsection*{Investigating the possibility of donor labelling of aid channels driving model results}
+\subsection*{Investigating the Possibility of Donor Labeling of Aid Channels Driving Model Results}
 
-One point of concern is that donors may find it easier to channel aid to strategic allies through pre-existing development channels in the wake of natural disasters. Since donors cannot rely on such pre-existing channels to funnel aid to strategic opponents, our finding that donors give more humanitarian aid to strategic opponents in the wake of natural disasters may simply be an artefact. That is, it is possible that strategic allies and opponents both get more aid following natural disasters; strategic allies just get tend to get it through development aid and strategic opponents tend to get it through humanitarian aid. 
+One point of concern is that donors may find it easier to channel aid to strategic allies through pre-existing development channels in the wake of natural disasters. Since donors cannot rely on such pre-existing channels to funnel aid to strategic opponents, our finding that donors give more humanitarian aid to strategic opponents in the wake of natural disasters may simply be an artifact. That is, it is possible that strategic allies and opponents both get more aid following natural disasters; strategic allies just get tend to get it through development aid and strategic opponents tend to get it through humanitarian aid. 
 
-We explore the possibility first through Figure \ref{fig:aidtype}. Here we break down how much development aid was given to countries experiencing that experienced either 0 disasters or 1-3 disasters across different types of development aid. The comparison between 0 or 1-3 disasters was used to maximized comparability, as around 40 percent of the country-years in the dataset had 0 disasters, while 43 percent experienced 1-3 disasters. This figure suggests that i) countries that are strategic allies (located at low levels of strategic distance) are more likely to get more aid related to economic infrastructure and services while ii) countries that experience disasters are much more likely to get debt relief when the they are strategic opponents (that is at high levels of strategic distance), compared to countries that experience 0 natural disasters. However, while Figure \ref{fig:aidtype} does seem to be consistent the hunch that it may be easier to distribute different types of aid depending on whether one is a strategic opponent or strategic ally, there does not seem to be much in the way of strategic labelling going on. That is,  the additional aid for economic infrastructure services to strategic allies and the additional aid for debt relief appear to be given in on top of existing levels of aid; neither appear to be offsetting other types of development aid. 
+We explore the possibility first through Figure \ref{fig:aidtype}. Here we break down how much development aid was given to countries experiencing that experienced either 0 disasters or 1-3 disasters across different types of development aid. The comparison between 0 or 1-3 disasters was used to maximized comparability, as around 40 percent of the country-years in the dataset had 0 disasters, while 43 percent experienced 1-3 disasters. This figure suggests that i) countries that are strategic allies (located at low levels of strategic distance) are more likely to get more aid related to economic infrastructure and services while ii) countries that experience disasters are much more likely to get debt relief when the they are strategic opponents (that is at high levels of strategic distance), compared to countries that experience 0 natural disasters. However, while Figure \ref{fig:aidtype} does seem to be consistent the hunch that it may be easier to distribute different types of aid depending on whether one is a strategic opponent or strategic ally, there does not seem to be much in the way of strategic labeling going on. That is, the additional aid for economic infrastructure services to strategic allies and the additional aid for debt relief appear to be given in on top of existing levels of aid; neither appear to be offsetting other types of development aid. 
 
-We also investigate whether strategic allies are more likely to get a greater total amount of aid following a natural disaster.  For instance, it is  possible that strategic allies may receive more non-humanitarian or non-civil society aid, like budget aid following a natural disaster. To find evidence against this possibilty and in support of the main argument in the paper, that natural disasters are indeed prompting more giving in strategic opponents compared to allies, we would expect a null effect of the interaction term between natural disasters and strategic distance on total aid (that is, subtracting out humanitarian aid and civil society aid from total aid). We indeed find that there is a null effect on the interaction between natural disasters and our measure of strategic interest on total aid (as defined as all aid minus total humanitarian aid and minus total civil society aid) (see Figure \ref{fig:coefPlot_totAidv2} . When we plot the interaction effects, we verify this null finding (see Figure \ref{fig:simEffects_totAid}fig:simEffects_totAid).
-
-}}
+We also investigate whether strategic allies are more likely to get a greater total amount of aid following a natural disaster.  For instance, it is  possible that strategic allies may receive more non-humanitarian or non-civil society aid, like budget aid following a natural disaster. To find evidence against this possibility and in support of the main argument in the paper, that natural disasters are indeed prompting more giving in strategic opponents compared to allies, we would expect a null effect of the interaction term between natural disasters and strategic distance on total aid (that is, subtracting out humanitarian aid and civil society aid from total aid). We indeed find that there is a null effect on the interaction between natural disasters and our measure of strategic interest on total aid (as defined as all aid minus total humanitarian aid and minus total civil society aid) (see Figure \ref{fig:coefPlot_totAidv2}. When we plot the interaction effects, we verify this null finding (see Figure \ref{fig:simEffects_totAid}).
           
-  \begin{figure}[h!]
-  \centering
-  \includegraphics[width = .9\textwidth]{graphics/developmentAidValueByType.pdf}
-  \caption{Value of Aid Commitments categorized by type of development aid and by the number of disasters}
-      \label{fig:aidtype}
-        \end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width = 1\textwidth]{graphics/developmentAidValueByType.pdf}
+	\caption{Value of Aid Commitments categorized by type of development aid and by the number of disasters}
+	\label{fig:aidtype}
+\end{figure}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{totAidv2_Coef.pdf}
+	\caption{Coefficient plot for total aid model.  Coefficients that are significant at the 5\% level are shaded in blue if the coefficient is positive and red if the coefficient is negative. Coefficients that are not significant at the 5\% level are shaded in gray.}
+	\label{fig:coefPlot_totAidv2}
+\end{figure}
 
-  \begin{figure}
-    \centering
-    \includegraphics[width=.5\textwidth]{totAidv2_Coef.pdf}
-    \caption{coefficient plot for total aid.}
-    \label{fig:coefPlot_totAidv2}
-  \end{figure}
-
-  \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{simTotAidPlot_lagDV.pdf}
-    \caption{Simulated substantive effect plots for total aid for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
-    \label{fig:simEffects_totAid}
-  \end{figure}
-        \FloatBarrier
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{simTotAidPlot_lagDV.pdf}
+	\caption{Simulated substantive effect plots for total aid for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
+	\label{fig:simEffects_totAid}
+\end{figure}
+\FloatBarrier

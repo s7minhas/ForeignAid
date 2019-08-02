@@ -72,7 +72,20 @@ devModFE = foreach(df=iData) %dopar% {
 #
 stopCluster(cl)
 
-# org
+# org for coef plot in re_fe_compare.R
+feMods = lapply(
+  list(humModFE, civModFE, devModFE),
+  function(impMods){
+    coefSumm=lapply(impMods, function(mod){
+      summ = summary(mod)$'coefficients'  
+      return(summ)
+    })
+    return(rubinCoef(coefSumm, 'fe'))
+  } )
+save(feMods,
+  file=paste0(pathResults, '/feMods_appendix.rda'))
+
+# org for sub effects analysis
 stratMuIntMods = list(
 	humModFE[[1]],
 	civModFE[[1]],

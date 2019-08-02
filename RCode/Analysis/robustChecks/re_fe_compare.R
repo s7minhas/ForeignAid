@@ -7,93 +7,6 @@ if(Sys.info()['user']=='cindycheng'){
 ################################################################
 # Load reg data
 load(paste0(pathData, '/iDataDisagg_wLags_v3.rda'))
-
-dvs = c(
-	'humanitarianTotal',
-	'developTotal',
-	'civSocietyTotal'
-	)
-dvNames = paste0(
-  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
-baseSpec = paste(
-	c(
-		'LstratMu', 'Lno_disasters', 
-		'LstratMu * Lno_disasters', 'colony', 
-		'Lpolity2', 'LlnGdpCap', 'LlifeExpect',
-		'Lcivwar'
-	), collapse=' + ' )
-feStruc = '+ factor(id) + factor(year) - 1'
-
-# set up formulas
-feModSpecs = lapply(dvs, function(y){
-	formula(paste0(y, '~', baseSpec, feStruc)) })
-################################################################
-
-################################################################
-# run models
-if(!file.exists(
-	paste0(pathResults, '/feMods_robustCheck.rda')
-	)){
-	cl=makeCluster(5) ; registerDoParallel(cl)
-
-	# run fixed effect models
-	## humanitarian model
-	humModFE= foreach(df=iData) %dopar% {
-		summary(
-			lm(feModSpecs[[1]], data=df)
-			)$'coefficients' }
-
-	## civ society model
-	civModFE = foreach(df=iData) %dopar% {
-		summary(
-			lm(feModSpecs[[2]], data=df)
-			)$'coefficients' }
-
-	## dev model
-	devModFE = foreach(df=iData) %dopar% {
-		summary(
-			lm(feModSpecs[[3]], data=df)
-			)$'coefficients' }
-
-	#
-	stopCluster(cl)
-
-	#
-	feMods = list(
-		rubinCoef(humModFE,'fe'), 
-		rubinCoef(devModFE,'fe'), 
-		rubinCoef(civModFE,'fe')
-		)
-
-	names(feMods) = dvs
-	save(feMods, 
-		file=paste0(pathResults, '/feMods_robustCheck.rda')
-		)
-} else {
-	load(paste0(pathResults, '/feMods_robustCheck.rda'))
-}
-################################################################
-
-################################################################
-# load re model for comparison
-intModPaths = lapply(dvs, function(dv){
-  paste0(pathResults, '/', dv, 
-    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
-reMods = lapply(intModPaths, 
-  function(x){load(x);return(mods)})
-names(reMods) = dvs
-
-# get coef summaries for both fe and re mods
-reMods = lapply(reMods, function(mod){
-	rubinCoef(mod, modType='re') })
-
-# coef summaries
-feMods = lapply(feMods, function(mod){
-	mod$pval = 2*pnorm(-abs(mod$t))
-	return(mod) } )
-reMods = lapply(reMods, function(mod){
-	mod$pval = 2*pnorm(-abs(mod$t))
-	return(mod) } )
 ################################################################
 
 ################################################################
@@ -123,13 +36,40 @@ varDef = cbind(varsInt, varNamesInt)
 ################################################################
 
 ################################################################
+# load already run fe models from fe_subeffects.R
+load(paste0(pathResults, '/feMods_appendix.rda'))
+################################################################
+
+################################################################
+# load re model for comparison
+intModPaths = lapply(dvs, function(dv){
+  paste0(pathResults, '/', dv, 
+    '_fullSamp_gaussian_re_LstratMu_interaction.rda') })
+reMods = lapply(intModPaths, 
+  function(x){load(x);return(mods)})
+names(reMods) = dvs
+
+# get coef summaries for both fe and re mods
+reMods = lapply(reMods, function(mod){
+	rubinCoef(mod, modType='re') })
+
+# coef summaries
+feMods = lapply(feMods, function(mod){
+	mod$pval = 2*pnorm(-abs(mod$t))
+	return(mod) } )
+reMods = lapply(reMods, function(mod){
+	mod$pval = 2*pnorm(-abs(mod$t))
+	return(mod) } )
+################################################################
+
+################################################################
 modSumm=list(
-	feMods[[1]][c(1:7,nrow(feMods[[1]])),],
-	reMods[[1]][2:nrow(reMods[[1]]),],
-	feMods[[2]][c(1:7,nrow(feMods[[2]])),],
-	reMods[[2]][2:nrow(reMods[[2]]),],
-	feMods[[3]][c(1:7,nrow(feMods[[3]])),],
-	reMods[[3]][2:nrow(reMods[[3]]),]
+  feMods[[1]][match(varDef[,1], feMods[[1]]$var),],
+  reMods[[1]][match(varDef[,1], reMods[[1]]$var),],
+  feMods[[2]][match(varDef[,1], feMods[[2]]$var),],
+  reMods[[2]][match(varDef[,1], reMods[[2]]$var),],
+  feMods[[3]][match(varDef[,1], feMods[[3]]$var),],
+  reMods[[3]][match(varDef[,1], reMods[[3]]$var),]
 	)
 names(modSumm) = c(
 	paste0(c('fe_','re_'), dvs[1]),
@@ -138,6 +78,7 @@ names(modSumm) = c(
 	)
 ################################################################
 
+################################################################
 # 
 coefp_colors = c("Positive"=rgb(54, 144, 192, maxColorValue=255), 
   "Negative"= rgb(222, 45, 38, maxColorValue=255),
