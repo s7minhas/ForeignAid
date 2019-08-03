@@ -145,12 +145,6 @@ INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/revisionLetter.out
 OUTPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/revisionLetter.out
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
-INPUT /usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev1.tex
-INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev1.tex
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
@@ -171,6 +165,12 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/stmaryrd/stmary10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/stmaryrd/stmary8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/stmaryrd/stmary6.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
+INPUT /usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev1.tex
+INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev1.tex
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsl12.tfm
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev2.tex
 INPUT /Users/s7m/Research/ForeignAid/Paper/revisionMemo/rev2.tex
