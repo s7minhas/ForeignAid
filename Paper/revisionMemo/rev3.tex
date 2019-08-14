@@ -3,37 +3,79 @@
 \subsection*{Major Comments}
 
 \begin{enumerate}
-	\item This paper argues that the extent to which natural disasters lead to an increase in bilateral aid allocation is a dependent upon the strategic relations between countries. They examine this relationship using dyadic data, and a novel measure of strategic interest. I find the discussion of potential theoretical mechanisms surrounding the impact of natural disasters upon aid allocation to be well executed and rather common sense. Therefore I think the main contribution of the paper is its empirical analysis, particularly with respect to the effect of strategic interest. Thus I would suggest a revise and resubmit. However, as a primarily empirical contribution the empirical analysis needs to be expanded considerably to be suitable for publication.
+	\item This paper argues that the extent to which natural disasters lead to an increase in bilateral aid allocation is a dependent upon the strategic relations between countries. They examine this relationship using dyadic data, and a novel measure of strategic interest. I find the discussion of potential theoretical mechanisms surrounding the impact of natural disasters upon aid allocation to be well executed and rather common sense. Therefore I think the main contribution of the paper is its empirical analysis, particularly with respect to the effect of strategic interest. Thus I would suggest a revise and resubmit.
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		Insert great response.
+		Thank you for your comments!
 		}}
 	\end{itemize}	
 	\item One key empirical part of the paper is the introduction of the new measure of strategic interest. I think this measure is a good addition to the literature. However there is one methodological concern that it raises, which is that this measure of strategic interest is an estimate with uncertainty. This introduces a statistical bias akin to measurement error. Therefore the statistical models need to take this into account.
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		Insert great response.
+		Below we show results when taking into account uncertainty in the latent variable compared with our original estimates. We do this by simulating 1000 values of each latent variable estimate from the underlying distribution. From this we create 1000 versions of our dataset in which for each dataset we have a different sampled value of the strategic interest variable. We then run each of our models on those 1000 datasets and combine the parameter estimates using Rubin's rules \citep{rubin:1987}. We present the results of this analysis juxtaposed against our original model in the figure below. 
 		}}
+	
+        \begin{figure}[h!]
+        	\centering
+        	\includegraphics[width=1\textwidth]{graphics/intCoef_latVarUncert.pdf}
+        	\caption{Effect of accounting for uncertainty in latent variable.}
+        	\label{fig:devIntCoef}
+        \end{figure}		
+        \FloatBarrier
+		
 	\end{itemize}
 	\item Another concern is that strategic interest as operationalised is correlated with factors such as trade and FDI, i.e. economic interests. In the case of the impact of natural disasters on aid, and development assistance in particular, I would think it's exactly such economic linkages that would be relevant for donors. For example to help rebuild infrastructure that facilitates trade between them. Therefore this economic interdependence needs to be incorporated in the empirical specification.
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		With regards to FDI data, dyadic data does exist from OECD and UNCTAD but there is a lot of missing data in these datasets and they start, at the very earliest, around 2001. As such, it unfortunately doesn't make sensse to use dyadic FDI data for our analysis.
+		With regards to FDI data, dyadic data does exist from OECD and UNCTAD but there is a significant amount of missing data in these datasets and they start, at the very earliest, around 2001. As such, we do not see it as feasible to use dyadic FDI data for our analysis. However, we can control for the trading relationships between countries in our analysis. Below we show the results of our model when including trade as a control. The results are largely robust to the simpler specification that we present in the paper. We have not yet included this analysis in the appendix but are happy to do so upon request.
 		}}
+		
+        \begin{figure}[h!]
+        	\centering
+        	\includegraphics[width=1\textwidth]{graphics/intCoef_trade.pdf}
+        	\caption{Effect of Including trade in model specification.}
+        	\label{fig:devIntCoef}
+        \end{figure}
+        \FloatBarrier
+            
 	\end{itemize}
 	\item I also have other comments/suggestions related to the use of this measure of strategic interest:
 	\begin{itemize}
 		\item It would be interesting to see how much better this measure is at explaining variation in aid commitments compared to existing bilateral approaches. e.g. compare the latent space measure of alliances to the simple measure of whether the countries share an alliance or not.
 		\begin{itemize}
 			\item \textcolor{blue}{ \emph{
-			Insert great response.
+			To answer this question we set up two different versions of our general specification, one in which we use our strategic interest measure and another in which we use a raw measure of alliance. We then perform a 30-fold cross validation procedure. This works by randomly assigning each unit in our dataset to one of thirty folds, running the model excluding a fold, and then generating predictions for the fold that was left out. Once we have generated out-of-sample predictions in this manner for every fold, we then calculate the root mean squared error (RMSE) for models using the raw alliance measure and models using the strategic interest measure. The results are presented in the table below.  In general we see a very small decrease in RMSE when incorporating our measure versus a raw measure of alliance. Thus the improvement in predictive fit for the various aid dependent variables from incorporating our measure is minimal. 
 			}}
+			
+            \begin{table}[ht]
+            \centering
+            \begin{tabular}{lcc}
+              \hline
+             & Latent Space Measure & Raw Alliance Measure \\ 
+              \hline
+                Humanitarian Aid & 5.037 & 5.042 \\ 
+                Development Aid & 5.030 & 5.035 \\ 
+                Civil Society Aid & 4.368 & 4.371 \\ 
+               \hline
+            \end{tabular}
+            \caption{Out-of-sample RMSE statistics based on a 30-fold cross validation.}
+            \end{table}			
+			
 		\end{itemize}
 		\item  I'd be interested to see which aspects of strategic interest drive the results. Therefore it would be nice to see the results from simply including each of the latent space measures in the model, to potentially see their relative importance.
 		\begin{itemize}
 			\item \textcolor{blue}{ \emph{
-			Insert great response.
+			In the figure below, we present results when using the individual latent distance measures from our analysis instead of the aggregated version we present in our paper. However, we believe that there is value from generating a single measure of strategic interest for conceptual reasons, thus we focus on that for the paper. In future research, exploring the different roles that these measures can play is definitely of interest to us. Currently, we do not have a specific theory about the varying effects that these measures may have on aid or more broadly. 
 			}}
+			
+        \begin{figure}[h!]
+        	\centering
+        	\includegraphics[width=1\textwidth]{graphics/intCoef_indivLatVars.pdf}
+        	\caption{Effect of individual latent variables. Standardized regression estimates provided.}
+        	\label{fig:devIntCoef}
+        \end{figure}
+        \FloatBarrier			
+			
 		\end{itemize}				
 	\end{itemize}
 	\item I have further concerns about the empirical specification used in the paper:
@@ -41,32 +83,49 @@
 		\item Aid tends to have pretty strong temporal dependence, particularly within dyads. However no efforts are taken to model this dependence. Therefore it's important to ensure the results are robust to models that take this into account, such as including a lagged dependent variable or more elaborate specifications such as an Error Correction Model.
 		\begin{itemize}
 			\item \textcolor{blue}{ \emph{
-			Insert great response.
+			Below we show that our results are robust to the inclusion of lagged versions of the dependent variables. Given that our results are robust to the inclusion of a lagged DV, we opt for the more parsimonious specification in the model that we present in our paper. We have not yet included this analysis in the appendix but are happy to do so upon request.
 			}}
+			
+        \begin{figure}[h!]
+        	\centering
+        	\includegraphics[width=1\textwidth]{graphics/intCoef_lagDV.pdf}
+        	\caption{Effect of accounting for uncertainty in latent variable.}
+        	\label{fig:devIntCoef}
+        \end{figure}		
+        \FloatBarrier
+			
 		\end{itemize}
 		\item There should be discussion of why fixed effects models aren't estimated, given their common use in the aid literature and given that unobserved unit heterogeneity is likely correlated with the right hand side variables. At least FE models should be estimated as a robustness test.
 		\begin{itemize}
-			\item \textcolor{blue}{ \emph{
-			Insert great response.
-			}}
+    		\item \textcolor{blue}{ \emph{
+    		We have rerun the analysis using a fixed effects specification and show the results below. The results remain broadly the same and a Hausman test indicates that a random effects specification is preferred. 
+    		}}
+
+            \begin{figure}[h!]
+            	\centering
+            	\includegraphics[width=1\textwidth]{graphics/intCoef_fe_re_compare.pdf}
+            	\caption{Comparison between parameter estimates using fixed and random effects.}
+            	\label{fig:devIntCoef}
+            \end{figure}
+            \FloatBarrier
 		\end{itemize}	
 		\item Any justification for why the independent variables are lagged by one year?			
 		\begin{itemize}
 			\item \textcolor{blue}{ \emph{
-			Insert great response.
+	       We use one year lags because while our natural disaster data is pinpointed to the day, we do not have correspondingly fine-grained data on foreign aid distributions. Thus we take a conservative approach and lag by one year to guarantee that the aid is committed after the incidence of a natural disaster. In general we are following standard practices here with regards to why we lag our control variables by one year. However, we do agree that exploring differing lag structures is often of interest, and this is why we examine the persistence of foreign aid allocation over time with regards to our primary parameters of interest (strategic distance and number of disasters) in the manuscript. 
 			}}
 		\end{itemize}			
 	\end{itemize}	
 	\item Regarding the dependent variable could there be an issue of countries committing more to non-strategically aligned countries, with the expectation that they will not accept all of this money? Some information on how the relationship between commitments and disbursements varies according to strategic interest would be useful.
 	\begin{itemize}
 		\item \textcolor{blue}{ \emph{
-		Insert great response.
+		Thanks for this comment. We initially decided to use aid commitments as our preferred for a number of reasons i) coverage of data for aid commitments is better than for aid disbursements ii) this is the measure most commonly used in the literature and thus using it will allow our findings to better speak to existing findings. Meanwhile, other work has found that donors generally do disburse the aid they have committed to a high degree, including with regards to humanitarian aid in particular \citep{hudson:2013}.
 		}}
 	\end{itemize}	
-	\item Finally as a presentational issue I think that presenting the marginal effects in addition to the predicted values would be useful, at least in an appendix.
-	\begin{itemize}
-		\item \textcolor{blue}{ \emph{
-		Insert great response.
-		}}
-	\end{itemize}	
+% 	\item Finally as a presentational issue I think that presenting the marginal effects in addition to the predicted values would be useful, at least in an appendix.
+% 	\begin{itemize}
+% 		\item \textcolor{blue}{ \emph{
+% 		Insert great response.
+% 		}}
+% 	\end{itemize}	
 \end{enumerate}
