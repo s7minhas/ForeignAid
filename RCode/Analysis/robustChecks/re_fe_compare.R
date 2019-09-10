@@ -63,6 +63,31 @@ reMods = lapply(reMods, function(mod){
 ################################################################
 
 ################################################################
+# make table for fe results
+varDefTab = varDef
+
+loadPkg('xtable')
+names(feMods) = dvNames
+lapply(feMods, function(x){
+  rownames(x) = x$var
+  x = x[,-which(names(x) %in% c('t','var'))]
+  x = x[c(1:3,nrow(x),4:(nrow(x)-1)),]
+  x = data.matrix(x)
+  x = round(x, 2)
+  colnames(x) = c('Estimate', 'Std. Error', 'P-value')
+  rownames(x) = varDef[match(rownames(x),varDef[,1]),2]
+  rownames(x)[1] = 'Lagged DV'
+  out = print.xtable(
+    xtable( x,
+      align=c('lccc')
+      ),
+  sanitize.rownames.function=identity
+  )
+  return(out)
+  } )
+################################################################
+
+################################################################
 modSumm=list(
   feMods[[1]][match(varDef[,1], feMods[[1]]$var),],
   reMods[[1]][match(varDef[,1], reMods[[1]]$var),],
