@@ -100,6 +100,19 @@ plotRes = function(modSumm){
 intGG = plotRes(intModSumm)
 ggsave(intGG, 
   file=paste0(pathGraphics, '/intCoef.pdf'), width=8, height=6)
+
+# make black and white figure
+coefp_colors = c("Positive"=rgb(0, 0, 0, maxColorValue=255), 
+  "Negative"= rgb(0, 0, 0, maxColorValue=255),
+  "Positive at 90"=rgb(0, 0, 0, maxColorValue=255), 
+  "Negative at 90"= rgb(0, 0, 0, maxColorValue=255),
+  "Insig" = rgb(150, 150, 150, maxColorValue=255))
+
+intGGbw = plotRes(intModSumm)
+ggsave(intGGbw, 
+  file=paste0(pathGraphics, '/intCoef_bw.pdf'), width=8, height=6)
+
+
 #########################################################
 
 #########################################################

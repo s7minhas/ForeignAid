@@ -1,0 +1,87 @@
+\section*{Analysis}
+\label{empirics}
+
+\subsection*{Estimation Method}
+
+To model aid flows using our directed-dyadic panel dataset, we utilize a hierarchical model. We include random intercepts in our model for every dyad and year. More concretely, we fit the following model: 
+
+\begin{align*}
+  Log(Aid)_{sr,t} &= \beta_{1}(Pol. \; Strat.  \; Distance_{sr,t-1})  \\
+  & \;+\; \beta_{2}(Colony_{sr,t-1}) \;+\; \beta_{3}(Polity_{r,t-1}) \\
+  & \;+\; \beta_{4}Log(GDP \; per \; capita_{r,t-1}) \;+\; \beta_{5}(Life \;Expect_{r,t-1}) \\  
+  & \;+\; \beta_{6}(No. \; Disasters_{r,t-1}) \;+\; \beta_{7}(Civil \; War_{r,t-1}) \\
+  & \;+\; \beta_{8}(Pol. \; Strat.  \; Interest_{sr,t-1} \times No. \; Disasters_{r,t-1}) \\
+   & \;+\; \delta_{s,r}  \;+\; \rho_{t} \\
+\end{align*}
+\FloatBarrier
+
+\noindent Where $\delta_{s,r}$ and $\rho_t$ are the sender-receiver and year random effects respectively.\footnote{In terms of the model, we find that our results hold when we estimating the model with donor and year fixed effects, though the results from a Hausman test suggest that a random effects model is still a better fit for our data (see Figure \ref{fig:devIntCoef_fixed}).} We use one year lags because while our natural disaster data is pinpointed to the day, we do not have correspondingly fine-grained data on foreign aid distributions. Thus we take a conservative approach and lag by one year to guarantee that the aid is committed after the incidence of a natural disaster.
+
+The results of this analysis are shown below in a coefficient plot in Figure \ref{fig:intCoef}. We test Hypotheses 1A, 1B and 1C using ``Humanitarian Aid'' as the dependent variable. The results show a positive and statistically significant relationship between the interaction of \textit{Strategic Distance} and the \textit{No. Disasters}. To interpret these results, we turn to Figure \ref{fig:simEffects} (``Humanitarian Aid'' panel) where we plot the substantive effect of this interaction term on humanitarian aid over the range of \textit{Strategic Distance} for different levels of natural disaster severity. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{intCoef.pdf}
+	\caption{Coefficient plots for the main analyses with interaction terms across each dependent variable, humanitarian aid, civil society aid and development aid.  Coefficients that are significant at the 5\% level are shaded in blue if the coefficient is positive and red if the coefficient is negative. Coefficients that are not significant at the 5\% level are shaded in gray. }
+	\label{fig:intCoef}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{simComboPlot.pdf}
+	\caption{Simulated substantive effect plots for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
+	\label{fig:simEffects}
+\end{figure}
+\FloatBarrier
+
+These results suggest that the greater the number of natural disasters a country experiences, the more likely it is to receive humanitarian aid from a strategic adversary. This is apparent in the rising slope between strategic interest and humanitarian aid as the number of natural disasters increases. As such, these results are consistent with H1C, which suggests that donors may be more likely to dispense humanitarian aid to their strategic adversaries because such disasters present unique opportunities to improve bilateral relations. Notably when natural disasters are particularly severe, donors may dispense a great deal more aid to strategic opponents compared to strategic allies to further their strategic interests.  
+
+Conversely, support for H1A is missing. In particular, we would have expected there be a downward sloping relationship between strategic interest and humanitarian aid when there are no natural disasters. However, if natural disasters had a humanizing effect on strategic opponents, then we would have expected the slope between strategic interest and humanitarian aid to flatten as the number of natural disasters increased, which we do not find. 
+
+Support for H1B is also lacking.  To find support for H1B, which hypothesizes that donors are more likely to give to their strategic allies in the wake of a natural disaster to further their own self-interest, we would have expected the parameter estimate for the interaction term between strategic interest and natural disasters to be negative, which it is not. Moreover, we would have expected to observe a downward sloping relationship between strategic interest and humanitarian interest as the number of natural disasters increases. This is clearly not evidenced in the ``Humanitarian Aid'' panel in Figure \ref{fig:simEffects}. 
+
+Meanwhile, we test H2 by examining the effect of the interaction between strategic interest and natural disasters on civil society aid. In Figure \ref{fig:intCoef}, we find a positive and significant relationship between this interaction and civil society aid. The substantive effects plot (in the ``Civil Society Aid'' panel in Figure \ref{fig:simEffects}) meanwhile also suggests that donors are more likely to target aid to civil society in their strategic adversaries the more natural disasters that country experiences, supporting H2. These results provide support for the idea that donors may be acting to take advantage of vulnerable recipients to mold the relationship to their interests. 
+
+Finally, we test H3 by analyzing how the interaction between strategic interest and natural disasters affects development aid allocation. From, Figure  \ref{fig:intCoef}, we can see that this coefficient is not statistically significant. However, examining the substantive significance in Figure \ref{fig:simEffects} (``Development Aid'' panel) we can see that the relationship between strategic interest and development aid allocation is consistently downward sloping. This suggests that donors tend to give more development aid to strategic allies rather than strategic opponents, showing strong support for H3.  These results indicate that irrespective of natural disaster intensity, development aid is reserved for strategic allies of donor countries and does not alter the strategic calculus donor countries undertake. 
+
+Overall, we believe that we have found strong evidence showing how the role of strategic interest can be heavily conditioned by context. That is, we find donors are more likely to give both more humanitarian and civil society aid to strategic opponents in the face of natural disasters. Our findings are consistent with the argument that they do so in order to take advantage of the opportunities natural disasters provide to improve their relationships with strategic opponents. These results are all the more interesting given that, consistent with the existing literature, we also find that donors are more likely to give development aid to strategic allies irrespective of the number of natural disasters a recipient country experiences. This suggests that donor countries strategically use different types of aid to further their interests in different contexts. 
+
+\subsection*{Persistence of foreign aid allocation over time}
+
+How persistent are these estimated effects? To answer this question, we re-estimate the original models for different lag lengths of the main interaction and constituent terms\footnote{The controls are measured using a one-year lag throughout.}. These models are estimated separately for each lag length (lags of 1, 3, and 5 years). The simulation results when using different lags for the interactions and constituent terms are shown in Figures \ref{fig:humanIntCoef}, \ref{fig:civIntCoef}, and \ref{fig:devIntCoef} for the outcome variables humanitarian aid, civil society aid and development aid, respectively.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{simComboPlot_lag_hAid.pdf}
+	\caption{Simulated substantive effect plots for humanitarian aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	\label{fig:humanIntCoef}
+\end{figure}
+
+From Figure \ref{fig:humanIntCoef}, we can see that the interaction between strategic interest and natural disasters is persistent until approximately five years after a natural disaster. This suggests that donors seek to use natural disasters as a tactic to improve relations with strategic opponents for a number of years after the initial disaster  (supporting H1C).
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{simComboPlot_lag_cAid.pdf}
+	\caption{Simulated substantive effect plots for civil society aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	\label{fig:civIntCoef}
+\end{figure}
+
+Figure \ref{fig:civIntCoef} shows that while the interaction between strategic interest and natural disasters positively affects the allocation of civil society aid, this effect is only consistent for a short time following a natural disaster. One way to interpret these results is that donors recognize the difficulty of trying to influence domestic politics through civil society aid relatively quickly, and thus waste relatively little time in pursuing such attempts. Another interpretation is that civil society aid is actually rather effective and as such, recipients governments are likely to push back against allowing it in fairly short order. Teasing out the exact mechanism would be a fruitful area for future research.
+
+Last, Figure \ref{fig:devIntCoef} extends the earlier finding that the interaction between strategic interest and natural disasters has little effect on development aid across a variety of different lags. This result further suggests that there is strong support for H3, that is donor counties focus on reserving development aid for strategic allies.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{simComboPlot_lag_dAid.pdf}
+	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure.}
+	\label{fig:devIntCoef}
+\end{figure}
+
+\subsection{Robustness Checks}
+
+We also ran a number of checks to test the robustness of our findings. We discuss these checks briefly here and invite readers to learn more in the Online Appendix. In particular, we find that our findings are robust to different operationalizations of the disaster variable, including when using a binary variable for the number of disasters (see Figure~\ref{fig:binaryDisasterSimulation} in the Online Appendix) as well as when using the number killed in natural disasters (see Figure~\ref{fig:killedSim}).
+
+Finally, we also examined whether our results hold across different sub-samples of our data. For instance, \citet{bermeo:2017,bermeo:2018}'s recent work suggests that in the post 2001 era, it is increasingly in the donor's self interest to promote development against negative spillovers from developing countries. If a similar logic predominates in the event of a natural disaster, then we would expect it to wash out any consideration of more traditional self interest on the part of the donor. That is, if the prevention of negative spillovers were donor's only concerns, then we would expect donors to give most to countries for whom the potential negative spillovers from natural disasters would be greatest and thus would not expect to find any statistically significant relationship between more traditional strategic interest concerns and humanitarian aid in the event of a natural disaster. Given that, we test whether our findings hold when we restrict our sample to the post 2001 era and find that they do (see Figure \ref{fig:post2001Sim} in the Online Appendix). Numerous works also suggest that aid became less tied to security concerns after the end of the Cold War \citep{fleck:kilby:2010, clist:2009}. As such, we also investigate whether our results are based on a similar dynamic by examining how our findings fare when we restrict our analysis to after the Cold War and find them to be robust (see Figure \ref{fig:postColdWarSim} in the Online Appendix).
+
+Note, a potentially important covariate that we do not control for in our analysis is the role of media and public opinion. While \citet{eisensee:2007} and \citet{stromberg:2007} find that news coverage of a natural disaster is a big factor in shaping US humanitarian aid allocation, \citet{olsen:2003} find that media coverage has only a limited effect on shaping humanitarian aid  across a larger cross-section of donors. Other studies suggest that public opinion can help shape aid allocation \citep{bryant_etal:2018}, including whether aid is given bilaterally or multilaterally \citep{milner:2013}.  This work strengthens our findings to the extent they suggest that increased media coverage and public opinion pushes donors to give purely for humanitarian motivations, in line with H1A. If so then this should have made it our findings in support of H1C less likely, as opposed to more likely, to have been found. All of these studies have either been conducted on select countries or select cross sections of time however; the relevant data to test these propositions over a large panel of countries over time is unfortunately not available and prohibitively costly to collect. Further research on how media coverage and public opinion affect aid allocation following a natural disaster however, will be an important avenue for future research.  
