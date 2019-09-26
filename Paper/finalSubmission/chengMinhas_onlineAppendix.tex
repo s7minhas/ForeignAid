@@ -1,0 +1,120 @@
+\documentclass[doublespaced,bibtex]{cupjournal}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% % -------------------- defaults -------------------- %
+% % load lots o' packages
+
+% % tables
+\usepackage{tabularx}
+\usepackage{multirow}
+
+
+% % to colorize links in document. See color specification below
+\usepackage[x11names]{xcolor}
+
+% % load the hyper-references package and set document info
+\usepackage[pdftex]{hyperref}
+
+% % graphics stuff
+\usepackage{graphicx}
+\usepackage[section]{placeins} % prevents floats from moving past a \FloatBarrier or section
+\usepackage{amssymb}
+
+% % define clickable links and their colors
+\hypersetup{
+	unicode=false,          % non-Latin characters in Acrobat's bookmarks
+	pdftoolbar=true,        % show Acrobat's toolbar?
+	pdfmenubar=true,        % show Acrobat's menu?
+	pdffitwindow=false,     % window fit to page when opened
+	pdfstartview={FitH},    % fits the width of the page to the window
+	pdfnewwindow=true,%
+	colorlinks,%
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=RoyalBlue4%
+	}
+ 
+
+% -------------------- customizations -------------------- %
+
+\graphicspath{
+	{/Volumes/Samsung_X5/Research/ForeignAid/graphics/},
+	{/Users/s7m/Research/ForeignAid/graphics/},
+	{/Users/cindycheng/Documents/Papers/ForeignAid/graphics/},
+	{/Users/cindycheng/Documents/Papers/ForeignAid/}
+	}
+\makeatletter
+\def\input@path{
+	{/Volumes/Samsung_X5/Research/ForeignAid/graphics/},
+	{/Users/s7m/Research/ForeignAid/graphics/},
+	{/Users/cindycheng/Documents/Papers/ForeignAid/graphics/},
+	{/Users/cindycheng/Documents/Papers/ForeignAid/}
+	}
+ \makeatother
+
+
+% easy commands for number propers
+\newcommand{\first}{$1^{\text{st}}$}
+\newcommand{\second}{$2^{\text{nd}}$}
+\newcommand{\third}{$3^{\text{rd}}$}
+\newcommand{\nth}[1]{${#1}^{\text{th}}$}
+
+% easy command for boldface math symbols
+\newcommand{\mbs}[1]{\boldsymbol{#1}}
+
+
+% customize hypotheses
+\usepackage{enumitem}
+\newlist{inparaenum}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenum]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumi}\Alph*: }% labels for top level
+\setlist[inparaenum,2]{label=\arabic{inparaenumi}\alph*:) }% labels for second level
+
+
+\newlist{inparaenumb}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenumb]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumbi}B: }% labels for top level
+\setlist[inparaenumb,2]{label=\arabic{inparaenumbi}\alph*:) }% labels for second level
+
+\newlist{inparaenumc}{enumerate}{2}% allow two levels of nesting in an enumerate-like environment
+\setlist[inparaenumc]{itemsep=0pt,leftmargin=10em,label=\textsc{Hypothesis} \arabic{inparaenumci}C: }% labels for top level
+\setlist[inparaenumc,2]{label=\arabic{inparaenumci}\alph*:) }% labels for second level
+
+
+% % -------------------- title -------------------- %
+% \title{Keeping Friends Close, But Enemies Closer: Foreign Aid Responses to Natural Disasters}
+% \author{	Cindy Cheng \and Shahryar Minhas \footnote{Alphabetical order signifies equal authorship, all mistakes are our own. We are grateful for the helpful comments that we have received from Tim B{\"uthe}, Tobias Rommel, Gina Reinhardt, Tobias Heinrich, Alice Iannantuoni and Matthew Winters. Earlier versions of this paper were presented at the International Political Economy Society Conference 2018; the Midwest Political Science Association, 2018 and; the International and Studies Association Annual Convention 2015 and we are grateful for the helpful feedback that we received there. We would also like to thank the comments and suggestions we got from our three anonymous reviewers on how to strengthen this paper. Cindy Cheng is the corresponding author and can be reached at \textit{cindy.cheng@hfp.tum.de}. Replication material and instructions are available at \url{https://github.com/s7minhas/foreignAid} and in the BJPS Data Archive on Dataverse (\url{http://thedata.harvard.edu/dvn/dv/jop}}}
+% \date{\today}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\markboth{Cheng and Minhas}{Keeping Enemies Close}
+\journalname{Research Article Submission to B.J.Pol.S.}
+\journalvolume{XX}
+\journalyear{2019}
+\pagecount{X--XX}
+\doinumber{XXX}
+
+% \maketitle
+
+%%%% Appendix %%%%%
+\input{Paper/7_fAidAppendix}
+%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\bibliographystyle{chicago}
+\bibliography{Paper/fAidRefs.bib}
+
+\end{document} 
