@@ -265,6 +265,9 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/tex-gyre/ts1-qtmr.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Italic-tlf-t1.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/txfonts/t1xtt.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Bold-tlf-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /Users/s7m/Research/ForeignAid/Paper/finalSubmission/Paper/1_fAidIntro.tex
@@ -273,9 +276,6 @@ INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxsups.fd
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxsups.fd
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntxsups-Regular-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntxsups-Regular-t1.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
-INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/newtx/t1ntxtt.fd
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/txfonts/t1xtt.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Italic-tlf-t1.tfm
 INPUT /Users/s7m/Research/ForeignAid/graphics/US_Iran_aid.pdf
 INPUT /Users/s7m/Research/ForeignAid/graphics/US_Iran_aid.pdf
