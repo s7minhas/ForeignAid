@@ -28,7 +28,6 @@ First, we perform a simple bivariate OLS with and with year fixed effects to eva
 
 \begin{table}[h!]
 \small
-\caption{Validation of Political Strategic Interest Variable against S scores and Kendall's $\tau_b$}
 \begin{center}
 \begin{tabular}{l c c c c c c }
 \hline
@@ -49,6 +48,7 @@ Year FE? 	   & No 		& Yes 		& No		& Yes	& No		& Yes\\
 \end{tabular}
 \label{table:polval}
 \end{center}
+\caption{Validation of Political Strategic Interest Variable against S scores and Kendall's $\tau_b$}
 \end{table}
 \FloatBarrier
 
@@ -132,6 +132,73 @@ With regards to other potential measures, the EM-DAT database provides the data 
 
 \clearpage
 \subsection*{Substantive Results when using Fixed Effects}
+
+In the tables below, we present the results of our analysis when using fixed effects. 
+
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Thu Sep 26 11:12:57 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccc}
+  \hline
+ & Estimate & Std. Error & P-value \\ 
+  \hline
+Strategic Distance$_{sr,t-1}$ & 0.04 & 0.04 & 0.40 \\ 
+  No. Disasters$_{r,t-1}$ & -0.31 & 0.05 & 0.00 \\ 
+  Strategic Distance$_{sr,t-1}$
+ $\times$ No. Disasters$_{r,t-1}$ & 0.11 & 0.01 & 0.00 \\ 
+  Former Colony$_{sr,t-1}$ & 0.42 & 0.14 & 0.00 \\ 
+  Polity$_{r,t-1}$ & 0.01 & 0.01 & 0.02 \\ 
+  Log(GDP per capita)$_{r,t-1}$ & -0.53 & 0.04 & 0.00 \\ 
+  Life Expectancy$_{r,t-1}$ & 0.03 & 0.01 & 0.00 \\ 
+  Civil War$_{r,t-1}$ & 1.73 & 0.08 & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{Fixed effect regression results for Humanitarian Aid.} 
+\end{table}
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Thu Sep 26 11:12:57 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccc}
+  \hline
+ & Estimate & Std. Error & P-value \\ 
+  \hline
+Strategic Distance$_{sr,t-1}$ & -0.39 & 0.04 & 0.00 \\ 
+  No. Disasters$_{r,t-1}$ & 0.01 & 0.05 & 0.91 \\ 
+  Strategic Distance$_{sr,t-1}$
+ $\times$ No. Disasters$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
+  Former Colony$_{sr,t-1}$ & 1.75 & 0.14 & 0.00 \\ 
+  Polity$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
+  Log(GDP per capita)$_{r,t-1}$ & -0.42 & 0.05 & 0.00 \\ 
+  Life Expectancy$_{r,t-1}$ & 0.01 & 0.01 & 0.16 \\ 
+  Civil War$_{r,t-1}$ & -0.39 & 0.08 & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{Fixed effect regression results for Civil Society Aid.} 
+\end{table}
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Thu Sep 26 11:12:57 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccc}
+  \hline
+ & Estimate & Std. Error & P-value \\ 
+  \hline
+Strategic Distance$_{sr,t-1}$ & -0.05 & 0.04 & 0.17 \\ 
+  No. Disasters$_{r,t-1}$ & -0.35 & 0.04 & 0.00 \\ 
+  Strategic Distance$_{sr,t-1}$
+ $\times$ No. Disasters$_{r,t-1}$ & 0.14 & 0.01 & 0.00 \\ 
+  Former Colony$_{sr,t-1}$ & 0.98 & 0.13 & 0.00 \\ 
+  Polity$_{r,t-1}$ & 0.06 & 0.00 & 0.00 \\ 
+  Log(GDP per capita)$_{r,t-1}$ & -0.30 & 0.04 & 0.00 \\ 
+  Life Expectancy$_{r,t-1}$ & 0.02 & 0.00 & 0.00 \\ 
+  Civil War$_{r,t-1}$ & 0.11 & 0.07 & 0.13 \\ 
+   \hline
+\end{tabular}
+\caption{Fixed effect regression results for Development Aid.} 
+\end{table}
+\FloatBarrier
 
 In Figure~\ref{fig:devIntCoef_fixed} below we present the results of our analysis when using fixed effects. The results remain broadly the same as those shown in Figure 4 of the paper. Additionally, when running a Hausman specification test for our models we fail to reject the null hypothesis at both the 90 and 95\% confidence intervals, providing at least some initial evidence that we are justified in our choice \citep{greene:2008}.
 

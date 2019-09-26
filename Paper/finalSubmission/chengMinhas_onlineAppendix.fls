@@ -259,6 +259,7 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam1
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Bold-tlf-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/vf/public/newtx/ntxmi.vf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/txfonts/txmi.tfm
@@ -270,8 +271,6 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/vf/public/newtx/ntxmi7.vf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/rtxmi7.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/rntxmi7.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-sc-t1.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-sc-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-ot1.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntxmi.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntxsy.tfm
@@ -283,6 +282,8 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntxexa.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-sc-t1.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-sc-t1.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/vf/public/newtx/ntxmi.vf
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/txfonts/txmi.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/newtx/rntxmi.tfm
@@ -368,10 +369,11 @@ INPUT /Users/s7m/Research/ForeignAid/Paper/finalSubmission/chengMinhas_onlineApp
 INPUT /Users/s7m/Research/ForeignAid/Paper/finalSubmission/chengMinhas_onlineAppendix.out
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/ec.enc
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf-sc.enc
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/ntxsups-Regular.pfb
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/tex-gyre/qtmb.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/tex-gyre/qtmri.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/newtx/rntxmi.pfb

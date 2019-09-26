@@ -181,10 +181,4 @@ simComboPlot=grid.arrange(
 
 ggsave(simComboPlot, file=paste0(
   pathGraphics, '/simComboPlot_fe.pdf'), width=8, height=8)
-ggsave(simPlots[[1]], file=paste0(
-  pathGraphics, '/simHumanitarianPlot_fe.pdf'), width = 7, height = 4)
-ggsave(simPlots[[2]], file=paste0(
-  pathGraphics, '/simDevelopmentPlot_fe.pdf'), width = 7, height = 4)
-ggsave(simPlots[[3]], file=paste0(
-  pathGraphics, '/simCivilPlot_fe.pdf'), width = 7, height = 4)
 #########################################################
