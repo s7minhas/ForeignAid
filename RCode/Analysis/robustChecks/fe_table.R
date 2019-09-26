@@ -98,7 +98,7 @@ stopCluster(cl)
 
 # org for coef plot in re_fe_compare.R
 feMods = lapply(
-  list(humModFE, devModFE, civModFE),
+  list(humModFE,devModFE,civModFE),
   function(impMods){
     coefSumm=lapply(impMods, function(mod){
       summ = summary(mod)$'coefficients'  
