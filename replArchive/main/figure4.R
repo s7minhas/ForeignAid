@@ -6,12 +6,14 @@ loadPkg('gridExtra')
 # Load
 load('intake/iDataDisagg_wLags_v3.rda')
 load('mods/mainMod.rda')
+
+##
+dvNames = paste0(
+  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 #########################################################
 
 #########################################################
 # sub effects
-dvNames = paste0(
-  c('Humanitarian', 'Development', 'Civil Society'), ' Aid')
 regData = iData[[1]]
 noDisast = 4
 simPlots = lapply(1:length(stratMuIntMods), function(i){
