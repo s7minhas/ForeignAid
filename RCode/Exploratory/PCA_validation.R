@@ -12,8 +12,8 @@ if (Sys.info()['user'] == 'cindy'){
 
 if (Sys.info()['user'] == 's7m'){
   pathCode="~/Research/ForeignAid/RCode";
-  pathResults = "~//Dropbox/Research/ForeignAid/Results"
-  pathData = "~//Dropbox/Research/ForeignAid/data"
+  pathResults = "/Volumes/Samsung_X5/Dropbox/Research/ForeignAid/Results"
+  pathData = "/Volumes/Samsung_X5/Dropbox/Research/ForeignAid/data"
 }
 
 # load packages
