@@ -111,8 +111,6 @@ coefp_colors = c("Positive"=rgb(0, 0, 0, maxColorValue=255),
 intGGbw = plotRes(intModSumm)
 ggsave(intGGbw, 
   file=paste0(pathGraphics, '/intCoef_bw.pdf'), width=8, height=6)
-
-
 #########################################################
 
 #########################################################
@@ -200,10 +198,4 @@ simComboPlot=grid.arrange(
 
 ggsave(simComboPlot, file=paste0(
   pathGraphics, '/simComboPlot.pdf'), width=8, height=8)
-ggsave(simPlots[[1]], file=paste0(
-  pathGraphics, '/simHumanitarianPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[2]], file=paste0(
-  pathGraphics, '/simDevelopmentPlot.pdf'), width = 7, height = 4)
-ggsave(simPlots[[3]], file=paste0(
-  pathGraphics, '/simCivilPlot.pdf'), width = 7, height = 4)
 #########################################################

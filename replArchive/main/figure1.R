@@ -1,11 +1,17 @@
 source('setup.R')
+################################################################
 
+################################################################
 sender = 'United States'
 receiver = 'Iran'
+################################################################
 
+################################################################
 # Create Figure 1
 load('intake/aidDataDisagg.rda')
+################################################################
 
+################################################################
 aidDataDisaggLong = reshape(
   aidData[, c('Receiver', 'Sender', 'year', names(aidData)[grep('Total', names(aidData))][1:3])],
   varying = names(aidData)[grep('Total', names(aidData))][1:3],
@@ -49,3 +55,4 @@ usiran = ggplot(subAidDataRaw, aes(x = year, y = aidAmt, group= aidLabel)) +
 	theme(legend.key.width = unit(3,"cm"))
  
 ggsave(usiran, file='floats/figure1.pdf', width=8, height=4)
+################################################################
