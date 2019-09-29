@@ -12,7 +12,6 @@
 *.ps
 *.gz
 *.pyc
-*.rda
 *.csv
 *.xlsx
 *.xls
