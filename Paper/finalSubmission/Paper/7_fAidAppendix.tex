@@ -111,7 +111,7 @@ We have also run our analysis using a dummy variable for whether a natural disas
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.9\textwidth]{graphics/simComboPlot_bin_disaster.pdf}
-	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and whether or not a recipient country experienced a natural disaster across the range of the strategic distance measure.}
+	\caption{Simulated substantive effect plots for each dependent variable (humanitarian aid, civil society aid, and development aid) and by whether or not a recipient country experienced a natural disaster across the range of the strategic distance measure.}
 	\label{fig:binaryDisasterSimulation}
 \end{figure}			
 \FloatBarrier
@@ -121,7 +121,7 @@ We have also run our analysis using the number killed from a natural disaster in
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{graphics/simComboPlot_no_killed.pdf}
-	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity (specifically, the log of the number killed) across the range of the strategic distance measure.}
+	\caption{Simulated substantive effect plots for different levels of natural disaster severity (specifically, the log of the number killed) across the range of the strategic distance measure.}
 	\label{fig:killedSim}
 \end{figure}	
 \FloatBarrier		
@@ -165,28 +165,6 @@ Strategic Distance$_{sr,t-1}$ & 0.04 & 0.04 & 0.40 \\
   \hline
  & Estimate & Std. Error & P-value \\ 
   \hline
-Strategic Distance$_{sr,t-1}$ & -0.39 & 0.04 & 0.00 \\ 
-  No. Disasters$_{r,t-1}$ & 0.01 & 0.05 & 0.91 \\ 
-  Strategic Distance$_{sr,t-1}$
- $\times$ No. Disasters$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
-  Former Colony$_{sr,t-1}$ & 1.75 & 0.14 & 0.00 \\ 
-  Polity$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
-  Log(GDP per capita)$_{r,t-1}$ & -0.42 & 0.05 & 0.00 \\ 
-  Life Expectancy$_{r,t-1}$ & 0.01 & 0.01 & 0.16 \\ 
-  Civil War$_{r,t-1}$ & -0.39 & 0.08 & 0.00 \\ 
-   \hline
-\end{tabular}
-\caption{Fixed effect regression results for Civil Society Aid.} 
-\end{table}
-
-% latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Thu Sep 26 11:45:24 2019
-\begin{table}[ht]
-\centering
-\begin{tabular}{lccc}
-  \hline
- & Estimate & Std. Error & P-value \\ 
-  \hline
 Strategic Distance$_{sr,t-1}$ & -0.05 & 0.04 & 0.17 \\ 
   No. Disasters$_{r,t-1}$ & -0.35 & 0.04 & 0.00 \\ 
   Strategic Distance$_{sr,t-1}$
@@ -202,6 +180,38 @@ Strategic Distance$_{sr,t-1}$ & -0.05 & 0.04 & 0.17 \\
 \end{table}
 \FloatBarrier
 
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Thu Sep 26 11:45:24 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccc}
+  \hline
+ & Estimate & Std. Error & P-value \\ 
+  \hline
+Strategic Distance$_{sr,t-1}$ & -0.39 & 0.04 & 0.00 \\ 
+  No. Disasters$_{r,t-1}$ & 0.01 & 0.05 & 0.91 \\ 
+  Strategic Distance$_{sr,t-1}$
+ $\times$ No. Disasters$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
+  Former Colony$_{sr,t-1}$ & 1.75 & 0.14 & 0.00 \\ 
+  Polity$_{r,t-1}$ & 0.04 & 0.01 & 0.00 \\ 
+  Log(GDP per capita)$_{r,t-1}$ & -0.42 & 0.05 & 0.00 \\ 
+  Life Expectancy$_{r,t-1}$ & 0.01 & 0.01 & 0.16 \\ 
+  Civil War$_{r,t-1}$ & -0.39 & 0.08 & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{Fixed effect regression results for Civil Society Aid.} 
+\end{table}
+
+In Figure~\ref{fig:devIntCoef_fixed} below we present the results of our analysis when using fixed effects. The results remain broadly the same as those shown in Figure~\ref{fig:simEffects} of the paper. Additionally, when running a Hausman specification test for our models we fail to reject the null hypothesis at both the 90 and 95\% confidence intervals, providing at least some initial evidence that we are justified in our choice \citep{greene:2008}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{graphics/simComboPlot_fe.pdf}
+	\caption{Simulated substantive effect plots when estimating using a fixed effects framework for each dependent variable (humanitarian aid, civil society aid, and development aid) for different levels of natural disaster severity across the range of the strategic distance measure. A rug plot is provided below each panel.}
+	\label{fig:devIntCoef_fixed}
+\end{figure}
+\FloatBarrier
+
 \clearpage
 \subsection*{Temporal variation in patterns of aid}
 
@@ -210,7 +220,7 @@ A limitation of our study is that it ends in 2005 because we face the constraint
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{graphics/simComboPlot_post_coldwar.pdf}
-	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for the post Cold War period.}
+	\caption{Simulated substantive effect plots for each dependent variable (humanitarian aid, civil society aid, and development aid) for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for the post Cold War period.}
 	\label{fig:postColdWarSim}
 \end{figure}	
 \FloatBarrier
@@ -220,7 +230,7 @@ Additionally, we also run our models using only data from 2002-2005 (post-2001 p
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{graphics/simComboPlot_post_2001.pdf}
-	\caption{Simulated substantive effect plots for development aid for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for 2001-2005.}
+	\caption{Simulated substantive effect plots for each dependent variable (humanitarian aid, civil society aid, and development aid) for varying lags of variables of interest and different levels of natural disaster severity across the range of the strategic distance measure for 2001-2005.}
 	\label{fig:post2001Sim}
 \end{figure}	
 \FloatBarrier

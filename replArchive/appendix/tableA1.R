@@ -1,4 +1,4 @@
-source('setup.R')
+source('setupAppendix.R')
 loadPkg('texreg')
 #############################################################
 

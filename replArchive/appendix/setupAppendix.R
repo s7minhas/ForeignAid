@@ -37,6 +37,6 @@ library(countrycode)
 set.seed(6886)
 
 # Source scripts
-source('intake/misc.R')
-source('intake/imputationHelpers.R')
-source('intake/tsHelpers.R')
+source('../main/intake/misc.R')
+source('../main/intake/imputationHelpers.R')
+source('../main/intake/tsHelpers.R')
