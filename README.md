@@ -2,7 +2,7 @@
 
 Authors
 ---
-[Cindy Cheng](http://cindyyawencheng.com/), [Shahryar Minhas](http://s7minhas.com/)
+[Cindy Cheng](http://cindyyawencheng.com/) & [Shahryar Minhas](http://s7minhas.com/)
 
 Abstract
 ---
