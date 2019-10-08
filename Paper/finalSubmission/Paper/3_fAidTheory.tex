@@ -96,7 +96,7 @@ To estimate a measure of strategic interest across these dimensions, we take a n
 
 $Y$ here is a $n \times n$ undirected sociomatrix in which $y_{ij}$ designates whether there exists a link (e.g., an alliance) between $i$ and $j$. The goal of the model is to provide a projection of the systematic variation in $Y$ into a two-dimensional social space.\footnote{The latent factor model we utilize here is based on an eigvenvalue decomposition that seeks to represent relations between countries as the weighted inner-product of country-specific vectors of latent characteristics. In this application, we project our $n \times n$ sociomatrix into a $n \times 2$ matrix of country positions in a latent social space.} More precisely, the types of systematic variation that we are interested in include the concepts of (a) transitivity, (b) balance and (c) clusterability. Formally, a set of three countries $ijk$ is said to be transitive, if for whenever $y_{ij} = 1$ and $y_{jk} = 1$, we also observe that $y_{ik} = 1$. This follows the logic of `` a friend of a friend is a friend''. Meanwhile, the relationships between $ijk$ are said to be balanced if $y_{ij} \times y_{jk} \times y_{ki} >0$. Conceptually, if the relationship between $i$ and $j$ is ``positive'', then both will relate to another unit $k$ identically, either both positive or both negative. Finally, relationships between $ijk$ are said to be clusterable if it is balanced or all the relations are all negative. It is a relaxation of the concept of balance and seeks to capture groups where the measurements are positive within groups and negative between groups.
 
-Thus third order dependencies suggest that ``knowing something about the relationship between $i$ and $j$ as well as between $i$ and $k$ may reveal something about the relationship between $i$ and $k$, even when we do not directly observe it'' \citep[141]{hoff_ward:2008}. Such dependences would seem especially relevant for our purposes, as one cannot understand the strategic relationship between two countries without taking into account their respective relationships with other countries. The importance for accounting for these dynamics have long been acknowledged in the foreign aid literature. \citet[877]{trumbull:1994} for example, note that, ``donors do make their decisions with knowledge of what each other are doing, and may actually act cooperatively. Any study that ignores the interrelationship of donor behavior risks problems with simultaneity bias.'' However, we find that until now, this critique has largely gone unaddressed by  existing analyses. 
+Third order dependencies suggest that information about the way a pair of actors interact with some third actor, tells us something about their relationship as well even if we cannot directly observe it \citep{minhas:etal:2019}. Such dependences would seem especially relevant for our purposes, as one cannot understand the strategic relationship between two countries without taking into account their respective relationships with other countries. The importance for accounting for these dynamics have long been acknowledged in the foreign aid literature. \citet[877]{trumbull:1994} for example, note that, ``donors do make their decisions with knowledge of what each other are doing, and may actually act cooperatively. Any study that ignores the interrelationship of donor behavior risks problems with simultaneity bias.'' However, we find that until now, this critique has largely gone unaddressed by  existing analyses. 
 
 The main advantage of calculating the latent space of different dyadic variables as opposed to using alternative specifications such as the S Score algorithm\footnote{\citet{leeds:2007}, for example, measure a states ``threat environment'' as the set of all states for which ones is contiguous with or which is a major power and with an S score below the population median.} is that it allows us to better account for indirect ties that states share. Indirect ties are accounted for within this framework because the latent factor model takes patterns such as transitivity into account. As a result, the relation between two actors can be inferred even if no
 direct interaction between them is observed.
@@ -105,24 +105,24 @@ We employ this latent factor model on every year for each of our three measures.
 
 \begin{figure}[h!] 
 \centering
-	\begin{minipage}{.33\linewidth}
+	\begin{minipage}{.45\linewidth}
 		\centering
 		\label{fig:ally}
-		\includegraphics[width = 1.1\textwidth]{\detokenize{ally_2005.jpg}}
+		\includegraphics[width = 1.1\textwidth]{\detokenize{figure2_ally.jpg}}
 		\caption*{(a) Alliances}
 		\end{minipage}
 		\hspace{0.2in}
-		\begin{minipage}{.33\linewidth}
+		\begin{minipage}{.45\linewidth}
 		\centering
 		\label{fig:un}
-		\includegraphics[width = 1.1\textwidth]{\detokenize{un_2005.jpg}}
+		\includegraphics[width = 1.1\textwidth]{\detokenize{figure2_un.jpg}}
 		\caption*{(b) UN voting}
 		\end{minipage}
 		%\hspace{.2in}
-		\begin{minipage}{.33\linewidth}
+		\begin{minipage}{.45\linewidth}
 		\centering
 		\label{fig:igo}
-		\includegraphics[width = 1.1\textwidth]{\detokenize{igo_2005.jpg}}
+		\includegraphics[width = 1.1\textwidth]{\detokenize{figure2_igo.jpg}}
 		\caption*{(c) IGO membership}
 	\end{minipage}
     \caption{Latent Spaces for components of Strategic Interest Measure during 2005}
@@ -131,5 +131,5 @@ We employ this latent factor model on every year for each of our three measures.
 
 \indent\indent Countries that cluster together in this two-dimensional latent space are more likely to interact with each other. The plots for alliances, UN voting and IGO membership suggest that there is distinct clustering among countries. Moreover, these clusters are different across the three measures, suggesting that each variable is indeed capturing different aspects of strategic interest.
 
-\indent\indent After estimating the latent spaces for these components, we estimate the distance between each dyadic pair for the three components for each year. We then combine them in a principal components analysis (PCA) to reduce the dimensionality of our measure while retaining as much variance as possible to maximize our explanatory power. We estimate the PCA of these variables for each year separately\footnote{For each year, we conduct a bootstrap PCA of 1000 subsamples.} and use the first principal component for each year as our measure of strategic interest. For more information about how this PCA was conducted, please see the Online Appendix. The end result of this process is a measure of strategic interest that takes into account indirect ties while also accounting for multiple dimensions in which states interact with one another.\footnote{With regards to the strategic interest measure, we also estimate a model in which we incorporate the uncertainty in the estimation of our latent variable (see Figure \ref{fig:latVarUncert} in the Online Appendix).} 
+\indent\indent After estimating the latent spaces for these components, we estimate the distance between each dyadic pair for the three components for each year. We then combine them in a principal components analysis (PCA) to reduce the dimensionality of our measure while retaining as much variance as possible to maximize our explanatory power. We estimate the PCA of these variables for each year separately\footnote{For each year, we conduct a bootstrap PCA of 1000 subsamples.} and use the first principal component for each year as our measure of strategic interest. For more information about how this PCA was conducted, please see the Online Appendix. The end result of this process is a measure of strategic interest that takes into account indirect ties while also accounting for multiple dimensions in which states interact with one another.\footnote{With regards to the strategic interest measure, we also estimate a model in which we incorporate the uncertainty in the estimation of our latent variable (see the Online Appendix).} 
  
