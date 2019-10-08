@@ -28,6 +28,6 @@ texreg(list(s_p, s_y_p, sWt_p,sWt_y_p, t_p, t_y_p),
        custom.model.names=c(
          "Unweighted S Scores","Unweighted S Scores","Weighted S Scores",
          "Weighted S Scores", "Tau-B", "Tau-B"),
-       file='floats/table1.tex'
+       file='floats/tableA1.tex'
 )
 ############################################################
