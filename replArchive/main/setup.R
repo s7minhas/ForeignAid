@@ -7,7 +7,7 @@ toLoad=c(
   'reshape2', 'dplyr', 'devtools',
 	'ggplot2', 'latex2exp', 'grid',
   'foreach', 'doParallel',
-	'lme4', 'MASS'
+	'lme4', 'MASS', 'gridExtra'
   )
 
 #' function to install and/or load packages

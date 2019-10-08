@@ -7,7 +7,7 @@ load('intake/stratInterestMatrices.rda')
 
 ################################################################
 # lat space plotter
-latSpaceGen = function(var){
+latSpaceGen = function(var,bw=TRUE){
   # read in gen out for dims
   outName = paste0("intake/",var,"_2005_OUT")
   OUT<-read.table(outName,header=T)             #read in output
@@ -66,7 +66,12 @@ latSpaceGen = function(var){
   abline(h=0,lty=2);abline(v=0,lty=2)
   
   # add points to show variance
-  for(i in 1:n) { points( PZ[i,1,],PZ[i,2,],pch=46,col=rgb(r[i],g[i],b[i]) ) }
+  if(!bw){
+    for(i in 1:n) { points( PZ[i,1,],PZ[i,2,],pch=46,col=rgb(r[i],g[i],b[i]) ) }
+  }
+  if(bw){
+    for(i in 1:n) { points( PZ[i,1,],PZ[i,2,],pch=46,col='lightgrey' ) }
+  }
   
   # add in country abbreviations
   cntries = countrycode(

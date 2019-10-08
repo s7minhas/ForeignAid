@@ -42,4 +42,9 @@ coefp_colors = c(
   "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
   "Insig" = rgb(150, 150, 150, maxColorValue=255)
 )
+
+#
+coefp_colors_grey = coefp_colors
+coefp_colors_grey[1:2] = 'grey30'
+coefp_colors_grey[3:4] = 'grey50'
 ################################################################

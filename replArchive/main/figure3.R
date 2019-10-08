@@ -97,7 +97,7 @@ plotRes = function(modSumm){
     geom_point() +
     geom_linerange(aes(ymin=lo95,ymax=up95), size=.3) +
     geom_linerange(aes(ymin=lo90,ymax=up90), size=1) +
-    scale_color_manual(values=coefp_colors) +
+    scale_color_manual(values=coefp_colors_grey) +
     scale_x_discrete('',labels=xlabels) +    
     coord_flip() +
     facet_wrap(~dvClean, ncol=4, scales='free_x') +
