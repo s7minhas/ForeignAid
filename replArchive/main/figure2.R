@@ -1,5 +1,7 @@
 setwd('C:/Users/Owner/Research/foreignAid/replArchive/main/')
 source('setup.R')
+loadPkg('cshapes')
+loadPkg('broom')
 ################################################################
 
 ################################################################
@@ -8,9 +10,10 @@ load('intake/stratInterestMatrices.rda')
 var = names(mats)[1]
 bw=FALSE
 geo=TRUE
+makeMap=TRUE
 ################################################################
 # lat space plotter
-latSpaceGen = function(var, bw=FALSE, geo=TRUE){
+# latSpaceGen = function(var){
   # read in gen out for dims
   outName = paste0("intake/",var,"_2005_OUT")
   OUT<-read.table(outName,header=T)             #read in output
@@ -55,95 +58,117 @@ latSpaceGen = function(var, bw=FALSE, geo=TRUE){
   rownames(panel) = panel$ccode
   panel = panel[rownames(mats[[var]]), ]
 
-  # empty plot with dims
-  par(mfrow=c(1,1))
-  plot(
-    Z.pm[,1],Z.pm[,2],
-    xlab="",ylab="",type="n",
-    xlim=range(PZ[,1,]),
-    ylim=range(PZ[,2,]),
-    axes=FALSE
-    )
-  abline(h=0,lty=2);abline(v=0,lty=2)
+  #
+  cmap = wmap = cshp(date=as.Date('2001-1-1'))
+  coords=coordinates(wmap)
+  rownames(coords)=wmap$ISO1AL3
 
-  # add points to show variance
-  if(!bw){
-    # colors for plotting
-    r<-atan2(Z.pm[,2],Z.pm[,1])
-    r<-r+abs(min(r))
-    r<-r/max(r)
-    g<-1-r
-    b<-(Z.pm[,2]^2+Z.pm[,1]^2)
-    b<-b/max(b)
-    for(i in 1:n) { points( PZ[i,1,],PZ[i,2,],pch=46,col=rgb(r[i],g[i],b[i]) ) }
-  }
-  if(bw){
-    for(i in 1:n) { points( PZ[i,1,],PZ[i,2,],pch=46,col='lightgrey' ) }
-  }
-  if(!bw & geo){
+  # Create colors
+  rlon = pi*coords[,1]/180
+  rlat = pi*coords[,2]/180
 
-    loadPkg('cshapes')
-    cmap = wmap = cshp(date=as.Date('2001-1-1'))
-    coords=coordinates(wmap)
-    rownames(coords)=wmap$ISO1AL3
+  slon =  (rlon-min(rlon))/(max(rlon)-min(rlon))
+  slat =  (rlat-min(rlat))/(max(rlat)-min(rlat))
+  ccols = rgb( slon^2,slat^2,(1-sqrt(slon*slat))^2)
+  names(ccols) = rownames(coords)
+  cmap$mcolor = ccols
+  head(Z.pm)
 
-    # Create colors
-    rlon = pi*coords[,1]/180
-    rlat = pi*coords[,2]/180
-
-    slon =  (rlon-min(rlon))/(max(rlon)-min(rlon))
-    slat =  (rlat-min(rlat))/(max(rlat)-min(rlat))
-    ccols = rgb( slon^2,slat^2,(1-sqrt(slon*slat))^2)
-    cmap$mcolor = ccols
-
-    # Generate legend map
-    fname=paste0('floats/map',var,'.jpg')
-    jpeg(file=fname)
-    plot(cmap, col=cmap$mcolor)
-    dev.off()
-
-    #
-    cmap$cname = countrycode(
-      char(cmap$CNTRY_NAME),
-      'country.name', 'country.name' )
-
-    panel$mcolor = cmap$mcolor[match(panel$cname, cmap$cname)]
-    panel$mcolor[is.na(panel$mcolor)] = 'grey'
-    panel$abb = char(cmap$ISO1AL3)[match(panel$cname, cmap$cname)]
-    panel$abb[is.na(panel$abb)] = ''
-
-    # empty plot with dims
-    par(mfrow=c(1,1))
-    plot(
-      Z.pm[,1],Z.pm[,2],
-      xlab="",ylab="",type="n",
-      xlim=range(PZ[,1,]),
-      ylim=range(PZ[,2,]),
-      axes=FALSE
+  # Generate legend map
+  ggmap = suppressWarnings(tidy(cmap, region='ISO1AL3'))
+  map=ggplot() +
+    geom_polygon(
+      data=ggmap,
+      aes(
+        x=long,
+        y=lat,
+        group=group,
+        fill=id
       )
-    abline(h=0,lty=2);abline(v=0,lty=2)
-
-    # add points to show variance
-    for(i in 1:n) { points(
-      PZ[i,1,],PZ[i,2,],
-      pch=46,
-      col=alpha(panel$mcolor[i], .4) ) }
-  }
+    ) +
+    coord_fixed(1.3) +
+    theme_void() +
+    scale_fill_manual(values=ccols) +
+    guides(fill='none')
 
   #
-  text(
-    Z.pm[,1],
-    Z.pm[,2],
-    panel$abb, cex=.5, col='black')
+  cmap$cname = countrycode(
+    char(cmap$CNTRY_NAME),
+    'country.name', 'country.name' )
 
-}
+  #
+  panel$mcolor = cmap$mcolor[match(panel$cname, cmap$cname)]
+  panel$mcolor[is.na(panel$mcolor)] = 'grey'
+  panel$abb = char(cmap$ISO1AL3)[match(panel$cname, cmap$cname)]
+  panel$abb[is.na(panel$abb)] = ''
+
+  #
+rownames(mats[[1]])
+length(rownames(mats[[1]]))
+dim(PZ)
+  head(panel)
+  dimnames(PZ)[[1]] = panel$abb[match(rownames(mats[[var]]), panel$ccode)]
+  dimnames(PZ)[[2]] = c('X1', 'X2')
+  toDrop=which(dimnames(PZ)[[1]]=='')
+  PZ = PZ[-toDrop,,]
+
+  #
+  ggPos = lapply(
+    dimnames(PZ)[[1]], function(ctry){
+      slice=t(PZ[ctry,,])
+      slice = data.frame(slice, stringsAsFactors=FALSE)
+      slice$abb = ctry
+      return(slice) } ) %>%
+    do.call('rbind', .)
+
+  #
+  ggPos$abb = factor(ggPos$abb)
+  ccols = ccols[levels(ggPos$abb)]
+
+  #
+  ggPosAvg = ggPos %>%
+    dplyr::group_by(abb) %>%
+    dplyr::summarize(
+      X1=mean(X1),
+      X2=mean(X2)
+    )
+
+  #
+  latMap = ggplot(
+    data=ggPos, aes(x=X1, y=X2, group=abb)) +
+    geom_point(
+      aes(color=abb),
+      alpha=.05
+    ) +
+    scale_color_manual(values=ccols) +
+    geom_text(
+      data=ggPosAvg,
+      aes(
+        x=X1,y=X2,
+        label=abb
+      )
+    ) +
+    guides(
+      color='none'
+    ) +
+    theme_void()
+
+#   return(list(map,latMap))
+# }
+latMap
+map
 ################################################################
 
 ################################################################
 # run fn to get lat space plots
-for(v in names(mats)){
-  jpeg(paste0('floats/figure2_',v,'.jpg'))
-  latSpaceGen(v, bw=FALSE)
-  dev.off()
-}
+pps = lapply(names(mats), function(v){
+  latSpaceGen(v)
+})
+
+lats = list(
+  pps[[1]][[2]],
+  pps[[2]][[2]],
+  pps[[3]][[2]]
+)
+map = pps[[1]][[1]]
 ################################################################
